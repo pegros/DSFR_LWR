@@ -6,7 +6,7 @@ export default class DsfrBadgeDsp extends LightningElement {
     // Configuration parameters
     //-----------------------------------------------------
     @api badgeValue;
-    @api badgeSize = 'medium';
+    @api badgeSize = 'medium'; // trest
     @api badgeVariant; 
     @api showIcon = false; 
     @api isDebug = false; 
