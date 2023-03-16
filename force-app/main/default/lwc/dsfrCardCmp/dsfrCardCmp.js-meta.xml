@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Carte 🚧</masterLabel>
+    <description>Affichage d'une carte du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="cardImage"
+                        label="Image"
+                        type="String"
+                        description="Nom du fichier asset de l'image" />
+
+            <property   name="cardBadge"
+                        label="Badge"
+                        type="String"
+                        description="Libellé du badge" />
+            <property   name="cardBadgeVariant"
+                        label="Variante du Badge"
+                        type="String"
+                        datasource="standard,success,warning,error,info,new"
+                        default="standard"
+                        description="Variante du badge" />
+
+            <property   name="cardTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre de la carte" />
+            <property   name="cardDescription"
+                        label="Description"
+                        type="String"
+                        description="Description de la carte" />
+
+            <property   name="cardStartDetails"
+                        label="Details (haut)"
+                        type="String"
+                        description="Informations complémentaires en haut de la carte" />
+            <property   name="cardStartIcon"
+                        label="Icone pour Details (haut)"
+                        type="String"
+                        default="warning-fill"
+                        description="Nom d'icône du DSFR ajouoté devant les informations" />
+
+            <property   name="cardEndDetails"
+                        label="Détails (bas)"
+                        type="String"
+                        description="Informations complémentaires en haut de la carte" />
+            <property   name="cardEndIcon"
+                        label="Icone pour Details (bas)"
+                        type="String"
+                        description="Nom d'icône du DSFR ajouoté devant les informations" />
+
+            <property   name="cardTags"
+                        label="Tags"
+                        type="String"
+                        description="Libellé(s) des tags (avec séparateur ';')" />
+
+            <property   name="cardTarget"
+                        label="Cible"
+                        type="String"
+                        description="Salesforce page reference (JSON)" />
+
+            <property   name="cardSize"
+                        label="Taille"
+                        type="String"
+                        datasource="small,medium,large"
+                        default="medium"
+                        description="Taille de la carte" />    
+            <property   name="isVertical"
+                        label="Carte verticale?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de la variante verticale de la carte" />
+            <property   name="cardCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la classe (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="cardImage"
+                        label="Image"
+                        type="String"
+                        role="inputOnly"
+                        description="Nom du fichier asset de l'image" />
+
+            <property   name="cardBadge"
+                        label="Badge"
+                        type="String"
+                        role="inputOnly"
+                        description="Libellé du badge" />
+            <property   name="cardBadgeVariant"
+                        label="Variante du Badge"
+                        type="String"
+                        role="inputOnly"
+                        default="standard"
+                        description="Variante du badge (standard,success,warning,error,info,new)" />
+
+            <property   name="cardTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre de la carte" />
+            <property   name="cardDescription"
+                        label="Description"
+                        type="String"
+                        role="inputOnly"
+                        description="Description de la carte" />
+
+            <property   name="cardStartDetails"
+                        label="Details (haut)"
+                        type="String"
+                        role="inputOnly"
+                        description="Informations complémentaires en haut de la carte" />
+            <property   name="cardStartIcon"
+                        label="Icone pour Details (haut)"
+                        type="String"
+                        role="inputOnly"
+                        default="warning-fill"
+                        description="Nom d'icône du DSFR ajouoté devant les informations" />
+
+            <property   name="cardEndDetails"
+                        label="Détails (bas)"
+                        type="String"
+                        role="inputOnly"
+                        description="Informations complémentaires en haut de la carte" />
+            <property   name="cardEndIcon"
+                        label="Icone pour Details (bas)"
+                        type="String"
+                        role="inputOnly"
+                        description="Nom d'icône du DSFR ajouoté devant les informations" />
+
+            <property   name="cardTags"
+                        label="Tags"
+                        type="String"
+                        role="inputOnly"
+                        description="Libellé(s) des tags (avec séparateur ';')" />
+
+            <property   name="cardSize"
+                        label="Taille"
+                        type="String"
+                        role="inputOnly"
+                        default="medium"
+                        description="Taille de la carte (small,medium,large)" /> 
+            <property   name="isVertical"
+                        label="Carte verticale?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de la variante verticale de la carte" />
+            <property   name="cardCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de la classe (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

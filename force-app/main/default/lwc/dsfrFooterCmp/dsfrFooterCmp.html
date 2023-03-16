@@ -1,0 +1,44 @@
+<template>
+    <footer class="fr-footer" role="contentinfo" id="footer">
+        <div class="fr-container">
+            <div class="fr-footer__body">
+                <div class="fr-footer__brand fr-enlarge-link">
+                    <lightning-formatted-rich-text class="fr-logo dsfrFooterLogo" value={logoTitle}>
+                    </lightning-formatted-rich-text>
+                </div>
+                <div class="fr-footer__content">
+                    <p class="fr-footer__content-desc">
+                        <lightning-formatted-rich-text class="fr-footer__content-desc" value={footerTop}>
+                        </lightning-formatted-rich-text>
+                    </p>
+                    <ul class="fr-footer__content-list">
+                        <template for:each={topMenuItems} for:item="item">
+                            <li class="fr-footer__content-item" key={item.label} >
+                                <a  class="fr-footer__content-link" href="#" target="_blank" data-value={item.label} onclick={handleTopClick} >
+                                    {item.label}
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+            <div class="fr-footer__bottom">
+                <ul class="fr-footer__bottom-list">
+                    <template for:each={bottomMenuItems} for:item="item">
+                        <li class="fr-footer__bottom-item" key={item.label} >
+                            <a  class="fr-footer__bottom-link" href="#" data-value={item.label} onclick={handleBottomClick} >
+                                {item.label}
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+                <div class="fr-footer__bottom-copy">
+                    <p>
+                        <lightning-formatted-rich-text class="fr-footer__bottom-copy" value={footerBottom}>
+                        </lightning-formatted-rich-text>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</template>

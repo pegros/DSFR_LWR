@@ -1,0 +1,27 @@
+.dsfrFooterLogo {
+    line-height: 1.0317460317em !important;
+}
+.fr-footer__content-link, .fr-footer__top-cat {
+    color: var(--text-title-grey) !important;
+}
+.fr-footer__bottom-link {
+    color: var(--text-mention-grey) !important;
+}
+.fr-footer {
+    width: 100vw !important;
+    margin-left: min(600px - 50vw , 0px) !important;
+    /*margin-left: min(624px - 50vw , 0px) !important;*/
+    /*margin-left: auto !important;
+    margin-right: auto !important;*/
+}
+/*.fr-container {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}*/
+.fr-footer__bottom-copy p {
+    margin: var(--text-spacing) !important; 
+}
+/*.fr-footer__bottom-copy p a {
+    color: var(--text-mention-grey) !important; 
+}*/
+

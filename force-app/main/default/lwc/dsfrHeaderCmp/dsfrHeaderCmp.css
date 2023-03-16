@@ -1,0 +1,21 @@
+.dsfrHeaderLogo {
+    line-height: 1.0317460317em !important;
+}
+.fr-header__service-title {
+    color: var(--text-default-grey) !important;
+}
+.fr-btn--search {
+    color: var(--text-default-grey) !important;
+}
+.fr-header {
+    width: 100vw !important;
+    margin-left: min(600px - 50vw , 0px) !important;
+    
+    /*margin-left: min(624px - 50vw , 0px) !important;*/
+    /*margin-left: auto !important;
+    margin-right: auto !important;*/
+}
+/*.fr-container {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}*/

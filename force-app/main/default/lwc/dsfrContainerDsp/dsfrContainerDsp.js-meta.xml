@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Content Container</masterLabel>
+    <description>Section de contenu avec un titre et un message</description>
+    <targets>
+        <target>lightningCommunity__Default</target>  
+        <target>lightningCommunity__Page</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="title"
+                        label="Titre"
+                        type="String"
+                        default="Titre du composant"
+                        description="Titre du composant (text simple)." />
+            <property   name="titleClass"
+                        label="Variante du titre"
+                        type="String"
+                        datasource="fr-h1,fr-h2,fr-h3,fr-h4"
+                        default="fr-h2"
+                        description="Style d'affichage du titre" />
+
+            <property   name="message"
+                        label="Message"
+                        type="String"
+                        description="Contenu richtext à afficher." />
+            <property   name="messageClass"
+                        label="Variante"
+                        type="String"
+                        datasource="fr-text--lead,fr-text--lg,fr-text,fr-text--sm,fr-text--xs"
+                        default="fr-text"
+                        description="Style d'affichage du message" />
+
+            <property   name="wrappingClass"
+                        label="Style du Conteneur"
+                        type="String"
+                        default="fr-container"
+                        description="Classe appliquée à la div globale" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="title"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre du composant (text simple)." />
+            <property   name="titleClass"
+                        label="Variante du titre"
+                        type="String"
+                        role="inputOnly"
+                        datasource="fr-h1,fr-h2,fr-h3,fr-h4"
+                        default="fr-h2"
+                        description="Style d'affichage du titre" />
+
+            <property   name="message"
+                        label="Message"
+                        type="String"
+                        role="inputOnly"
+                        description="Contenu richtext à afficher." />
+            <property   name="messageClass"
+                        label="Variante"
+                        type="String"
+                        role="inputOnly"
+                        default="fr-text"
+                        description="Style d'affichage du message (fr-text--lead,fr-text--lg,fr-text,fr-text--sm,fr-text--xs)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

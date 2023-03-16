@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Badge</masterLabel>
+    <description>Affichage d'une icône du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="badgeValue"
+                        label="Libellé"
+                        type="String"
+                        description="Libellé du badge" />
+            <property   name="badgeSize"
+                        label="Taille"
+                        type="String"
+                        datasource="small,medium"
+                        default="medium"
+                        description="Taille du badge" />
+            <property   name="badgeVariant"
+                        label="Variante"
+                        type="String"
+                        datasource="standard,success,warning,error,info,new"
+                        default="standard"
+                        description="Variante du badge" />
+            <property   name="showIcon"
+                        label="Avec Icône?"
+                        type="Boolean"
+                        default="false"
+                        description="Affichage ou non d'une icône dans le badge" />
+            
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="badgeValue"
+                        label="Libellé"
+                        type="String"
+                        role="inputOnly"
+                        description="Libellé du badge" />
+            <property   name="badgeSize"
+                        label="Taille"
+                        type="String"
+                        role="inputOnly"
+                        default="medium"
+                        description="Taille du badge (small,medium)" />
+            <property   name="badgeVariant"
+                        label="Variante"
+                        type="String"
+                        role="inputOnly"
+                        default="standard"
+                        description="Variante du badge (standard,success,warning,error,info,new)" />
+            <property   name="showIcon"
+                        label="Avec Icône?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Affichage ou non d'une icône dans le badge" />
+            
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

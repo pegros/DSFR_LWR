@@ -1,0 +1,60 @@
+<template>
+    <div class="fr-tabs"  >
+        <!-- Tab title list and Selection -->
+        <ul class="fr-tabs__list" role="tablist" aria-label="Liste d'onglets" >
+            <li if:true={title1} role="presentation">
+                <button class={titleClass1}
+                        tabindex={tabIndex1}    role="tab"  aria-selected={isOpen1}
+                        value="1" onclick={toggleSection} >
+                    {title1}
+                </button>
+            </li>
+            <li if:true={title2} role="presentation">
+                <button class={titleClass2}
+                        tabindex={tabIndex2}    role="tab"  aria-selected={isOpen2}
+                        value="2" onclick={toggleSection} >
+                    {title2}
+                </button>
+            </li>
+            <li if:true={title3} role="presentation">
+                <button class={titleClass3}
+                        tabindex={tabIndex3}    role="tab"  aria-selected={isOpen3}
+                        value="3" onclick={toggleSection} >
+                    {title3}
+                </button>
+            </li>
+            <li if:true={title4} role="presentation">
+                <button class={titleClass4}
+                        tabindex={tabIndex4}   role="tab"  aria-selected={isOpen4}
+                        value="4" onclick={toggleSection} >
+                    {title4}
+                </button>
+            </li>
+            <li if:true={title5} role="presentation">
+                <button class={titleClass5}
+                        tabindex={tabIndex5}    role="tab"  aria-selected={isOpen5}
+                        value="5" onclick={toggleSection} >
+                    {title5}
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab content Display -->
+        <div if:true={isOpen1} class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" tabindex="0" >
+            <slot name="section1"></slot>
+        </div>
+        <div if:true={isOpen2} class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" tabindex="0" >
+            <slot name="section2"></slot>
+        </div>
+        <div if:true={isOpen3} class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" tabindex="0" >
+            <slot name="section3"></slot>
+        </div>
+        <div if:true={isOpen4} class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" tabindex="0" >
+            <slot name="section4"></slot>
+        </div>
+        <div if:true={isOpen5} class="fr-tabs__panel fr-tabs__panel--selected" role="tabpanel" tabindex="0" >
+            <slot name="section5"></slot>
+        </div>
+    </div>
+    
+</template>

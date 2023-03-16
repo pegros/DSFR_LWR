@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Onglets</masterLabel>
+    <description>Structuration de page en mode onglets DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="openTab"
+                        label="Onglet Ouvert"
+                        type="String"
+                        default="1"
+                        datasource="1,2,3,4,5"
+                        description="Onglet ouvert par défaut." />
+                        
+            <property   name="title1"
+                        label="Titre #1"
+                        type="String"
+                        default="Onglet #1"
+                        description="Titre de la section #1." />
+            <property   name="titleIcon1"
+                        label="Icône #1"
+                        type="String"
+                        default="checkbox-line"
+                        description="Nom de l'icône DSFR du titre de la section #1" />
+            <property   name="title2"
+                        label="Titre #2"
+                        type="String"
+                        default="Onglet #2"
+                        description="Titre de la section #2." />
+            <property   name="titleIcon2"
+                        label="Icône #2"
+                        type="String"
+                        description="Nom de l'icône DSFR du titre de la section #2" />
+            <property   name="title3"
+                        label="Titre #3"
+                        type="String"
+                        description="Titre de la section #3." />
+            <property   name="titleIcon3"
+                        label="Icône #3"
+                        type="String"
+                        description="Nom de l'icône DSFR du titre de la section #3" />
+            <property   name="title4"
+                        label="Titre #4"
+                        type="String"
+                        description="Titre de la section #4." />
+            <property   name="titleIcon4"
+                        label="Icône #4"
+                        type="String"
+                        description="Nom de l'icône DSFR du titre de la section #4" />
+            <property   name="title5"
+                        label="Titre #5"
+                        type="String"
+                        description="Titre de la section #5." />
+            <property   name="titleIcon5"
+                        label="Icône #5"
+                        type="String"
+                        description="Nom de l'icône DSFR du titre de la section #5" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Callout</masterLabel>
+    <description>Affichage d'une Mise en Avant du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="calloutTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre de la mise en avant" />
+            <property   name="calloutDescription"
+                        label="Description"
+                        type="String"
+                        default="Description mise en avant"
+                        description="Description de la mise en avant" />
+            <property   name="calloutVariant"
+                        label="Variante"
+                        type="String" 
+                        datasource=",green-tilleul-verveine,green-bourgeon,green-emeraude,green-menthe,green-archipel,blue-ecume,blue-cumulus,purple-glycine,pink-macaron,pink-tuile,yellow-tournesol,yellow-moutarde,orange-terre-battue,brown-cafe-creme,brown-caramel,brown-opera,beige-gris-galet"
+                        description="Variante (couleurs) de la mise en avant" />
+            <property   name="actionLabel"
+                        label="Bouton"
+                        type="String"
+                        description="Libellé du bouton d'action" />
+            <property   name="actionTarget"
+                        label="Cible"
+                        type="String"
+                        description="Salesforce page reference (JSON)" />
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="calloutTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre de la mise en avant" />
+            <property   name="calloutDescription"
+                        label="Description"
+                        type="String"
+                        role="inputOnly"
+                        description="Description de la mise en avant" />
+            <property   name="calloutVariant"
+                        label="Variante"
+                        type="String" 
+                        role="inputOnly"
+                        datasource=",green-tilleul-verveine,green-bourgeon,green-emeraude,green-menthe,green-archipel,blue-ecume,blue-cumulus,purple-glycine,pink-macaron,pink-tuile,yellow-tournesol,yellow-moutarde,orange-terre-battue,brown-cafe-creme,brown-caramel,brown-opera,beige-gris-galet"
+                        description="Variante (couleurs) de la mise en avant" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

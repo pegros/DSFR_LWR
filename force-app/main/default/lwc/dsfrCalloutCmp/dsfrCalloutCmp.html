@@ -1,0 +1,7 @@
+<template>
+    <div class={calloutClass} >
+        <h3 if:true={calloutTitle} class="fr-callout__title">{calloutTitle}</h3>
+        <p class="fr-callout__text">{calloutDescription}</p>
+        <c-dsfr-button-dsp if:true={actionTarget} button-target={actionTarget} button-label={actionLabel} is-debug={isDebug}></c-dsfr-button-dsp>
+    </div>
+</template>

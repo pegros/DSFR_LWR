@@ -1,0 +1,59 @@
+<template>
+    <div class="fr-accordions-group">
+        <section if:true={title1} class="fr-accordion">
+            <h3 class="fr-accordion__title">
+                <button class="fr-accordion__btn"   aria-expanded={isOpen1}
+                        value="isOpen1"             onclick={toggleSection} >
+                    {title1}
+                </button>
+            </h3>
+            <div if:true={isOpen1} class="fr-collapse fr-collapse--expanded">
+                <slot name="section1"></slot>
+            </div>
+        </section>
+        <section if:true={title2} class="fr-accordion">
+            <h3 class="fr-accordion__title">
+                <button class="fr-accordion__btn"   aria-expanded={isOpen2}
+                        value="isOpen2"             onclick={toggleSection}>
+                    {title2}
+                </button>
+            </h3>
+            <div if:true={isOpen2} class="fr-collapse fr-collapse--expanded">
+                <slot name="section2"></slot>
+            </div>
+        </section>
+        <section if:true={title3} class="fr-accordion">
+            <h3 class="fr-accordion__title">
+                <button class="fr-accordion__btn"   aria-expanded={isOpen3}
+                        value="isOpen3"             onclick={toggleSection}>
+                    {title3}
+                </button>
+            </h3>
+            <div if:true={isOpen3} class="fr-collapse fr-collapse--expanded">
+                <slot name="section3"></slot>
+            </div>
+        </section>
+        <section if:true={title4} class="fr-accordion">
+            <h3 class="fr-accordion__title">
+                <button class="fr-accordion__btn"   aria-expanded={isOpen4}
+                        value="isOpen4"             onclick={toggleSection}>
+                    {title4}
+                </button>
+            </h3>
+            <div if:true={isOpen4} class="fr-collapse fr-collapse--expanded">
+                <slot name="section4"></slot>
+            </div>
+        </section>
+        <section if:true={title5} class="fr-accordion">
+            <h3 class="fr-accordion__title">
+                <button class="fr-accordion__btn"   aria-expanded={isOpen5}
+                        value="isOpen5"             onclick={toggleSection}>
+                    {title5}
+                </button>
+            </h3>
+            <div if:true={isOpen5} class="fr-collapse fr-collapse--expanded">
+                <slot name="section5"></slot>
+            </div>
+        </section>
+    </div>
+</template>

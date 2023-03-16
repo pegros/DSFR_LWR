@@ -1,0 +1,7 @@
+.fr-accordion__btn[aria-expanded=false] {
+    font-weight: 400;
+}
+
+.fr-collapse--expanded {
+    --collapse-max-height:none;
+}

@@ -1,0 +1,15 @@
+<template>/
+    <div class={alertClass}>
+        <h3 if:true={alertTitle} class="fr-alert__title">
+            <lightning-formatted-text value={alertTitle} class="fr-alert__title" >
+            </lightning-formatted-text>
+        </h3>
+        <p if:true={alertMessage}>
+            <lightning-formatted-text value={alertMessage} class="fr-display-md" >
+            </lightning-formatted-text>
+        </p>
+        <p if:true={alertActionLabel}>
+            <a href="#"  target="_blank" rel="noopener" onclick={openTarget} >{alertActionLabel}</a>
+        </p>
+    </div>
+</template>

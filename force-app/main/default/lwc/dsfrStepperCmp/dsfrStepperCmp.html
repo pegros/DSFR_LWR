@@ -1,0 +1,12 @@
+<template>
+    <div class="fr-stepper">
+        <h2 class="fr-stepper__title">
+            <span class="fr-stepper__state">{currentStateLabel}</span>
+            {currentStep}
+        </h2>
+        <div class="fr-stepper__steps" data-fr-current-step={currentIndex} data-fr-steps={stepCount}></div>
+        <p if:true={nextStep} class="fr-stepper__details">
+            <span class="fr-text--bold">{nextStateLabel}</span> {nextStep}
+        </p>
+    </div>
+</template>

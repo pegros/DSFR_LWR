@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>dsfrStepperStateMessage</fullName>
+        <categories>DSFR Component LWC Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message indiquant la progression des étapes</shortDescription>
+        <value>Étape {0} sur {1}</value>
+    </labels>
+    <labels>
+        <fullName>dsfrStepperNextStateLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé pour l'indication de l'étape suivante</shortDescription>
+        <value>Étape suivante :</value>
+    </labels>
+    <labels>
+        <fullName>dsfrHeaderLoginLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton pour se connecter</shortDescription>
+        <value>M'identifier</value>
+    </labels>
+    <labels>
+        <fullName>dsfrHeaderLogoutLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton pour se déconnecter</shortDescription>
+        <value>Me déconnecter</value>
+    </labels>
+    <labels>
+        <fullName>dsfrHeaderSearchLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du titre du bouton de recherche</shortDescription>
+        <value>Rechercher</value>
+    </labels>
+    <labels>
+        <fullName>dsfrHeaderMenuLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du titre du bouton de menu</shortDescription>
+        <value>Menu</value>
+    </labels>
+    <labels>
+        <fullName>dsfrHeaderCloseLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du titre du bouton close de menu</shortDescription>
+        <value>Fermer</value>
+    </labels>
+</CustomLabels>

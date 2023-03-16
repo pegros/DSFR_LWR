@@ -1,0 +1,13 @@
+<template>
+    <div class={tileClass}>
+        <div class="fr-tile__body">
+            <h4 class="fr-tile__title">
+                <a class="fr-tile__link" href="#" onclick={openTarget}>{tileTitle}</a>
+            </h4>
+            <p if:true={tileDescription} class="fr-tile__desc">{tileDescription}</p>
+        </div>
+        <div if:true={tileImage} class="fr-tile__img">
+            <img src={imageSrc} class="fr-responsive-img" alt="" >
+        </div>
+    </div>
+</template>

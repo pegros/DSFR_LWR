@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Tuile</masterLabel>
+    <description>Affichage d'une tuile du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="tileImage"
+                        label="Image"
+                        type="String"
+                        description="Nom du fichier asset de l'image de la tuile" />
+            <property   name="tileTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre de la tuile" />
+            <property   name="tileDescription"
+                        label="Description"
+                        type="String"
+                        description="Description de la tuile" />
+            <property   name="tileTarget"
+                        label="Cible"
+                        type="String"
+                        description="Salesforce page reference (JSON)" />
+            <property   name="isVertical"
+                        label="Tuile verticale?"
+                        type="Boolean"
+                        default="true"
+                        description="Activation de la variante verticale de la tuile" />
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="tileImage"
+                        label="Image"
+                        type="String"
+                        role="inputOnly"
+                        description="Nom du fichier asset de l'image de la tuile" />
+            <property   name="tileTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre de la tuile" />
+            <property   name="tileDescription"
+                        label="Description"
+                        type="String"
+                        role="inputOnly"
+                        description="Description de la tuile" />
+            <property   name="isVertical"
+                        label="Tuile verticale?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="true"
+                        description="Activation de la variante verticale de la tuile" />
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

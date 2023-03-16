@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Accordéon</masterLabel>
+    <description>Structuration de page en mode accordéon DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="title1"
+                        label="Titre #1"
+                        type="String"
+                        description="Titre de la section #1." />
+            <property   name="isOpen1"
+                        label="Ouvrir #1?"
+                        type="Boolean"
+                        default="false"
+                        description="Etat par défault de la section #1." />
+            <property   name="title2"
+                        label="Titre #2"
+                        type="String"
+                        description="Titre de la section #2." />
+            <property   name="isOpen2"
+                        label="Ouvrir #2?"
+                        type="Boolean"
+                        default="false"
+                        description="Etat par défault de la section #2." />
+            <property   name="title3"
+                        label="Titre #3"
+                        type="String"
+                        description="Titre de la section #3." />
+            <property   name="isOpen3"
+                        label="Ouvrir #3?"
+                        type="Boolean"
+                        default="false"
+                        description="Etat par défault de la section #3." />
+            <property   name="title4"
+                        label="Titre #4"
+                        type="String"
+                        description="Titre de la section #4." />
+            <property   name="isOpen4"
+                        label="Ouvrir #4?"
+                        type="Boolean"
+                        default="false"
+                        description="Etat par défault de la section #4." />
+            <property   name="title5"
+                        label="Titre #5"
+                        type="String"
+                        description="Titre de la section #5." />
+            <property   name="isOpen5"
+                        label="Ouvrir #5?"
+                        type="Boolean"
+                        default="false"
+                        description="Etat par défault de la section #5." />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

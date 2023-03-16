@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Header 🚧</masterLabel>
+    <description>Entête de page standard DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target> 
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="logoTitle"
+                        label="Intitulé Officiel"
+                        type="String"
+                        default="Intitulé Officiel"
+                        description="Libellé du ministère/service pour lequel le site est configuré" />
+            <property   name="siteTitle"
+                        label="Nom du Site / Service"
+                        type="String"
+                        default="Nom du Site / Service"
+                        description="Nom du Site / Service" />
+            <property   name="siteTagline"
+                        label="Précisions sur l'organisation"
+                        type="String"
+                        default="Précisions sur l'organisation"
+                        description="Précision sur l'organisation" />
+
+            <property   name="topMenu"
+                        label="Menu supérieur"
+                        type="String"
+                        default=""
+                        description="Master Label du menu de navigation du site fournissant le menu supérieur" />
+            <property   name="mainMenu"
+                        label="Menu principal"
+                        type="String"
+                        default="Default Navigation"
+                        description="Master Label du menu de navigation du site fournissant les onglets de navigation" />
+            <property   name="showSearch"
+                        label="Inclure Recherche ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation d'une barre de recherche dans le header" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+            <property   name="loginUrl"
+                        label="OBSOLETE"
+                        type="String" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

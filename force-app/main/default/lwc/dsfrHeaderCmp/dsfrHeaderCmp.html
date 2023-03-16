@@ -1,0 +1,96 @@
+<template>
+    <header role="banner" class="fr-header">
+        <div class="fr-header__body">
+            <div class="fr-container">
+                <div class="fr-header__body-row">
+                    <div class="fr-header__brand fr-enlarge-link">
+                        <div class="fr-header__brand-top">
+                            <div class="fr-header__logo" >
+                                <!--<p class="fr-logo">{logoTitle}</p>-->
+                                <lightning-formatted-rich-text class="fr-logo dsfrHeaderLogo" value={logoTitle}>
+                                </lightning-formatted-rich-text>
+                            </div>
+                            <div class="fr-header__navbar">
+                                <template lwc:if={showSearch}>
+                                    <button class="fr-btn--search fr-btn" data-modal="search" data-fr-opened="false" aria-haspopup="search" title={searchLabel} onclick={toggleModal}>
+                                        {searchLabel}
+                                    </button>
+                                </template>
+                                <button class="fr-btn--menu fr-btn" data-modal="menu" data-fr-opened="false" aria-haspopup="menu" title={menuLabel} onclick={toggleModal}>
+                                    {menuLabel}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="fr-header__service">
+                            <a href="/" title={siteTitle}>
+                                <p class="fr-header__service-title">{siteTitle}</p>
+                            </a>
+                            <p class="fr-header__service-tagline">{siteTagline}</p>
+                        </div>
+                    </div>
+                    <div class="fr-header__tools">
+                        <div class="fr-header__tools-links">
+                            <ul class="fr-btns-group">
+                                <template lwc:if={isGuestUser}>
+                                    <li>
+                                        <a class="fr-btn fr-icon-account-circle-line" href="#" onclick={handleLogin} >{loginLabel}</a>
+                                    </li>
+                                </template>
+                                <template lwc:else>
+                                    <template for:each={topMenuItems} for:item="item">
+                                        <li key={item.label} >
+                                            <a  class={item.class} href="#" data-value={item.label} onclick={handleTopClick} >
+                                                {item.label}
+                                            </a>
+                                        </li>
+                                    </template>
+                                    <li>
+                                        <a class="fr-btn fr-icon-logout-box-r-line" href="#" onclick={handleLogout} >{logoutLabel}</a>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                        <div lwc:if={showSearch} data-modal="search" class="fr-header__search fr-modal" >
+                            <div class="fr-container fr-container-lg--fluid">
+                                <button data-modal="search" class="fr-btn--close fr-btn" aria-controls="search" title={closeLabel} onclick={toggleModal}>
+                                    {closeLabel}
+                                </button>
+                                <div class="fr-search-bar" role="search">
+                                    <label class="fr-label" for="search-input">
+                                        {searchLabel}
+                                    </label>
+                                    <input class="fr-input" placeholder={searchLabel} type="search" name="search-input" >
+                                    <button class="fr-btn" title={searchLabel} onclick={handleSearch}>
+                                        {searchLabel}
+                                    </button>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-modal="menu" class="fr-header__menu fr-modal" aria-labelledby="menu">
+            <div class="fr-container">
+                <button data-modal="menu" class="fr-btn--close fr-btn" aria-controls="menu" title={closeLabel} onclick={toggleModal}>
+                    {closeLabel}
+                </button>
+                <div class="fr-header__menu-links">
+                </div>
+                <nav class="fr-nav" role="navigation" aria-label="Menu principal">
+                    <ul class="fr-nav__list">
+                        <template for:each={mainMenuItems} for:item="item">
+                            <li key={item.label} class="fr-nav__item">
+                                <!-- {item.isCurrent} -->
+                                <a  class="fr-nav__link" href="#" target="_self" data-value={item.label} onclick={handleMainClick} >
+                                    {item.label}
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </nav>
+            </div>
+            
+        </div>
+    </header>
+</template>

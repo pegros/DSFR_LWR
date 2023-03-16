@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Alerte</masterLabel>
+    <description>Affichage d'une Alerte du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="alertType"
+                        label="Type"
+                        type="String"
+                        datasource="error,success,info,warning"
+                        default="error"
+                        description="Type d'alerte" />
+            <property   name="alertSize"
+                        label="Taille"
+                        type="String"
+                        datasource="small,medium"
+                        default="medium"
+                        description="Taille d'alerte" />
+
+            <property   name="alertTitle"
+                        label="Titre"
+                        type="String" />
+            <property   name="alertMessage"
+                        label="Message"
+                        type="String" />
+            <property   name="alertActionLabel"
+                        label="Lien"
+                        type="String"
+                        description="Libellé du lien d'action de l'alerte" />
+            <property   name="alertAction"
+                        label="Action"
+                        type="String"
+                        description="Reference de page cible pour l'action de l'alerte (JSON)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="alertType"
+                        label="Type"
+                        type="String"
+                        role="inputOnly"
+                        datasource="error,success,info,warning"
+                        default="error"
+                        description="Type d'alerte (error,success,info,warning)" />
+            <property   name="alertSize"
+                        label="Taille"
+                        type="String"
+                        default="medium"
+                        role="inputOnly"
+                        description="Taille d'alerte (small,medium)" />
+
+            <property   name="alertTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly" />
+            <property   name="alertMessage"
+                        label="Message"
+                        type="String"
+                        role="inputOnly" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
