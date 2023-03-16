@@ -1,18 +1,36 @@
-# Salesforce DX Project: Next Steps
+# **DSFR** Components for LWR Experience Sites
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+## Introduction
 
-## How Do You Plan to Deploy Your Changes?
+This package contains a set of configurable  LWC component implementing various
+HTML components defined in the French Government Design System
+([Système de Design de l'État](https://www.systeme-de-design.gouv.fr/))
+for Salesforce Experience Sites.
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+⚠️ These components aim at reproducing as well as possible the expected DSFR Page 
+Layout and Styling within **LWR Build Your Own** template based Experience Sites.   
 
-## Configure Your Salesforce DX Project
+⚠️ This is a first draft version which will progressively enhanced and extended
+for a first live implementation.
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+These components are built/maintained as contributions/examples for ongoing Advisory assignments by 
+[Pierre-Emmanuel Gros](https://github.com/pegros). Please reach out if you want to contribute to
+this initiative.
 
-## Read All About It
+⚠️ This package is based on the v1.7.2 release of the DSFR (see [here](https://www.systeme-de-design.gouv.fr/comment-utiliser-le-dsfr/developpeurs/prise-en-main-du-dsfr) to download a newer version).
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+## Package Content
+
+It provides different sets of LWC Components:
+* Pure layout components (accordion and tabs of sections)
+* Complex Components (header and footer implementing responsibe)
+* Aggregated Components (card, tiles, alerts...)
+* Individual Display Components (tags, buttons...)
+
+## Technical Details
+
+These components leverage the latest capabilities of LWR Experience Sites and will probably not
+work in Aura based ones.
+
+A wide number of components are also usable within Flows in order to be reused for 
+Page Flow processes within Experience Sites.
