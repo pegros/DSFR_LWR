@@ -30,8 +30,6 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     @api showSearch = false;
 
     @api isDebug = false;
-
-    @api loginUrl; 
     
     //-----------------------------------
     // Contextual Parameters
