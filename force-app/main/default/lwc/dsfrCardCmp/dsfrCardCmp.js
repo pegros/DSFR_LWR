@@ -42,7 +42,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         return 'Image pour ' + this.cardTitle;
     }
     get tagList() {
-        return (this.cardTags ? (this.cardTags.includes(';') ? this.cardTags.split(';') : [this.cardTags]) : null);
+        return (((this.cardTags) && (typeof this.cardTags === 'string')) ? (this.cardTags.includes(';') ? this.cardTags.split(';') : [this.cardTags]) : null);
     }
     get cardStartClass() {
         return (this.cardStartIcon ? 'fr-card__detail fr-icon-' + this.cardStartIcon : 'fr-card__detail');
@@ -76,7 +76,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('connected: card description ',this.cardDescription);
             console.log('connected: card start details ',this.cardStartDetails);
             console.log('connected: card end details ',this.cardEndDetails);
-            console.log('connected: card tags ',this.cardTags);
+            console.log('connected: card tags ',JSON.stringify(this.cardTags));
             console.log('connected: card image ',this.cardImage);
             console.log('connected: card target ',this.cardTarget);
             console.log('connected: vertical variant? ', this.isVertical);
