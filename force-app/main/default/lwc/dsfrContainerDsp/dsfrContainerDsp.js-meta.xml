@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Content Container</masterLabel>
+    <masterLabel>DSFR Contenu 🇫🇷</masterLabel>
     <description>Section de contenu avec un titre et un message</description>
     <targets>
         <target>lightningCommunity__Default</target>  

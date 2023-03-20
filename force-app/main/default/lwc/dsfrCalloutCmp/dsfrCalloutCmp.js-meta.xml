@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Callout</masterLabel>
-    <description>Affichage d'une Mise en Avant du DSFR</description>
+    <masterLabel>DSFR Mise en avant 🇫🇷</masterLabel>
+    <description>Affichage d'une Mise en Avant (Callout) du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
@@ -33,6 +33,11 @@
                         label="Cible"
                         type="String"
                         description="Salesforce page reference (JSON)" />
+            <property   name="calloutCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la mise en avant (par ex. fr-m-2v)" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
@@ -56,6 +61,11 @@
                         role="inputOnly"
                         datasource=",green-tilleul-verveine,green-bourgeon,green-emeraude,green-menthe,green-archipel,blue-ecume,blue-cumulus,purple-glycine,pink-macaron,pink-tuile,yellow-tournesol,yellow-moutarde,orange-terre-battue,brown-cafe-creme,brown-caramel,brown-opera,beige-gris-galet"
                         description="Variante (couleurs) de la mise en avant" />
+            <property   name="calloutCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de la mise en avant (par ex. fr-m-2v)" />
 
             <property   name="isDebug"
                         label="Debug ?"

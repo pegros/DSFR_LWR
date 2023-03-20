@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Carte 🚧</masterLabel>
-    <description>Affichage d'une carte du DSFR</description>
+    <masterLabel>DSFR Carte 🇫🇷</masterLabel>
+    <description>Affichage d'une carte (Card) du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
@@ -79,7 +79,7 @@
             <property   name="cardCss"
                         label="CSS additionnelle"
                         type="String"
-                        description="Classes pour modifier le style de la classe (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
+                        description="Classes pour modifier le style de la carte (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
 
             <property   name="isDebug"
                         label="Debug ?"
@@ -162,7 +162,7 @@
                         label="CSS additionnelle"
                         type="String"
                         role="inputOnly"
-                        description="Classes pour modifier le style de la classe (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
+                        description="Classes pour modifier le style de la carte (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
 
             <property   name="isDebug"
                         label="Debug ?"

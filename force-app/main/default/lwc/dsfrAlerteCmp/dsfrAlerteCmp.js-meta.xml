@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Alerte</masterLabel>
+    <masterLabel>DSFR Alerte 🇫🇷</masterLabel>
     <description>Affichage d'une Alerte du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
@@ -39,6 +39,11 @@
                         type="String"
                         description="Reference de page cible pour l'action de l'alerte (JSON)" />
 
+            <property   name="alertCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de l'alerte' (par ex. fr-m-2v)" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
@@ -68,6 +73,12 @@
                         label="Message"
                         type="String"
                         role="inputOnly" />
+
+            <property   name="alertCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de l'alerte' (par ex. fr-m-2v)" />
 
             <property   name="isDebug"
                         label="Debug ?"

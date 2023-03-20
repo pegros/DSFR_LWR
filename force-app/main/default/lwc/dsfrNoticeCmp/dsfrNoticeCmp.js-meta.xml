@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Notice</masterLabel>
+    <masterLabel>DSFR Notice 🇫🇷</masterLabel>
     <description>Affichage d'une Notice du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
@@ -22,6 +22,10 @@
                         label="Action"
                         type="String"
                         description="Reference de page cible pour l'action de la notice (JSON)" />
+            <property   name="noticeCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la notice (par ex. fr-m-2v)" />
 
             <property   name="isDebug"
                         label="Debug ?"
@@ -34,6 +38,10 @@
                         label="Titre"
                         type="String"
                         role="inputOnly" />
+            <property   name="noticeCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la notice (par ex. fr-m-2v)" />
 
             <property   name="isDebug"
                         label="Debug ?"

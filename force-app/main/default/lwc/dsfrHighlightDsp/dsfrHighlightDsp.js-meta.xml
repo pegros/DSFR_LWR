@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Highlight</masterLabel>
-    <description>Affichage d'une Mise en Exergue du DSFR</description>
+    <masterLabel>DSFR Exergue 🇫🇷</masterLabel>
+    <description>Affichage d'une Mise en Exergue (Highlight) du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
@@ -28,6 +28,11 @@
                         datasource=",green-tilleul-verveine,green-bourgeon,green-emeraude,green-menthe,green-archipel,blue-ecume,blue-cumulus,purple-glycine,pink-macaron,pink-tuile,yellow-tournesol,yellow-moutarde,orange-terre-battue,brown-cafe-creme,brown-caramel,brown-opera,beige-gris-galet"
                         description="Couleur de bordure de la mise en exergue" />
             
+            <property   name="highlightCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la mise en exergue (par ex. fr-m-2v)" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
@@ -53,7 +58,13 @@
                         role="inputOnly"
                         datasource=",green-tilleul-verveine,green-bourgeon,green-emeraude,green-menthe,green-archipel,blue-ecume,blue-cumulus,purple-glycine,pink-macaron,pink-tuile,yellow-tournesol,yellow-moutarde,orange-terre-battue,brown-cafe-creme,brown-caramel,brown-opera,beige-gris-galet"
                         description="Couleur de bordure de la mise en exergue" />
-            
+
+            <property   name="highlightCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de la mise en exergue (par ex. fr-m-2v)" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"

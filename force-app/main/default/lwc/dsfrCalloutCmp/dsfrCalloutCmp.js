@@ -12,13 +12,15 @@ export default class DsfrCalloutCmp extends LightningElement {
     @api actionLabel;
     @api actionTarget;
     
+    @api calloutCss;
+
     @api isDebug = false;       // Flag to activate debug information
 
     //-----------------------------------------------------
     // Custom getters
     //-----------------------------------------------------
     get calloutClass() {
-        return  (this.calloutVariant ? 'fr-callout fr-fi-information-line fr-callout--' + this.calloutVariant : 'fr-callout fr-fi-information-line');
+        return  (this.calloutVariant ? 'fr-callout fr-fi-information-line fr-callout--' + this.calloutVariant : 'fr-callout fr-fi-information-line') + (this.calloutCss ? ' ' + this.calloutCss  : '');
     }
 
     //-----------------------------------------------------

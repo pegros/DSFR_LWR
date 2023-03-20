@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Footer 🚧</masterLabel>
-    <description>Pied de page standard DSFR</description>
+    <masterLabel>DSFR Pied de page 🚧</masterLabel>
+    <description>Pied de page (Footer) standard DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target> 

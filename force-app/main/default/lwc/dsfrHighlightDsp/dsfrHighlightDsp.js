@@ -8,6 +8,7 @@ export default class DsfrHighlightDsp extends LightningElement {
     @api message;
     @api messageSize;            
     @api borderColor;            
+    @api highlightCss;
     //@api backgroundColor;
     
     @api isDebug = false;       // Flag to activate debug information
@@ -16,7 +17,7 @@ export default class DsfrHighlightDsp extends LightningElement {
     // Custom getters
     //-----------------------------------------------------
     get highlightClass() {
-        return  (this.borderColor ? 'fr-highlight fr-highlight--' + this.borderColor : 'fr-highlight');
+        return  (this.borderColor ? 'fr-highlight fr-highlight--' + this.borderColor : 'fr-highlight') + (this.highlightCss ? ' ' + this.highlightCss : '');
         //    +   (this.backgroundColor ? 'fr-callout--' + this.backgroundColor : '');
     }
     get textClass() {
