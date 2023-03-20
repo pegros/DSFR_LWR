@@ -94,11 +94,6 @@ style standard Salesforce components (if used).
 </style>
 ```
 
-### Guest Usage
-
-
-
-
 ## Technical Details
 
 These components leverage the latest capabilities of LWR Experience Sites and will probably not
