@@ -27,6 +27,78 @@ It provides different sets of LWC Components:
 * Aggregated Components (card, tiles, alerts...)
 * Individual Display Components (tags, buttons...)
 
+## Configuration Details
+
+### Experience Site Template
+
+This package has been tested only in **Build Your Own (LWR)**
+Experience Sites.
+
+### Administration Preferences
+
+`Àllow guest users to access public APIs` and
+`Let guest users view asset files and CMS content available to the site`
+settings should be activated if guest usage is supported.
+
+Guest Usage also equires various elements to be configured to let them
+properly access CMS Content, Objects, List Views (e.g. for the standard
+**Grid** component), Flows... This is done via feature specific settings
+(CMS, Flow) and Guest User profile configuration.
+
+### Security & Privacy
+
+For the time being, it is required to set the CSP to the
+`Relaxed CSP: Permit Access to Inline Scripts and Allowed Hosts` value
+with the local **domain** URL allowed (e.g. `https:/<mydomain>.sandbox.my.site.com/`)
+in order to let the component properly load especially when included in Flows.
+
+### Site Head Markup (Advanced Settings)
+
+The DSFR static resource should be loaded via the head marketup for the styles, fonts, icons,
+pictograms... to be properly displayed. Some custom overrides are also required to properly
+style standard Salesforce components (if used).
+
+```
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Community Title</title>
+
+<!-- DSFR Styling -->
+<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfr/dsfr.min.css" />
+<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfr/utility/utility.min.css" />
+
+<!-- Salesforce Styling -->
+<link rel="stylesheet" href="{ basePath }/assets/styles/styles.css?{ versionKey }" />
+<link rel="stylesheet" href="{ basePath }/assets/styles/salesforce-lightning-design-system.min.css?{ versionKey }" />
+<link rel="stylesheet" href="{ basePath }/assets/styles/dxp-site-spacing-styling-hooks.min.css?{ versionKey }" />
+<link rel="stylesheet" href="{ basePath }/assets/styles/dxp-styling-hooks.min.css?{ versionKey }" />
+<link rel="stylesheet" href="{ basePath }/assets/styles/dxp-slds-extensions.min.css?{ versionKey }" />
+
+<!-- Salesforce Styling Overrides (with DSFR values)-->
+<style>
+   :root {
+      /** set the font for all root/body text **/
+      --dxp-g-root-font-family: 'Marianne', arial, sans-serif;
+      --dxp-s-body-font-family: 'Marianne', arial, sans-serif;
+      --dxp-s-body-small-font-family: 'Marianne', arial, sans-serif;
+
+      /** set the font for headings **/
+      --dxp-g-heading-font-family: 'Marianne', arial, serif;
+      --dxp-s-text-heading-medium-font-family: 'Marianne', arial, sans-serif;
+
+       /** set the font for headings **/
+       --dxp-s-form-element-label-font-size : 12px;
+       
+	  --ul-type: 'disc' !important;
+   }
+</style>
+```
+
+### Guest Usage
+
+
+
+
 ## Technical Details
 
 These components leverage the latest capabilities of LWR Experience Sites and will probably not
