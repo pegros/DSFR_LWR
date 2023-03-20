@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Pictogramme 🇫🇷</masterLabel>
+    <description>Affichage d'un pictogramme du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="pictoName"
+                        label="Pictogramme"
+                        type="String"
+                        default="system/success"
+                        description="Chemin de l'icone (dossier/fichier sans extension)" />
+            <property   name="pictoSize"
+                        label="Taille"
+                        type="String"
+                        datasource="x-small,small,medium,large,x-large,none"
+                        default="medium"
+                        description="Taille du pictogramme" />
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="pictoName"
+                        label="Pictogramme"
+                        type="String"
+                        role="inputOnly"
+                        default="system/success"
+                        description="Chemin de l'icone (dossier/fichier sans extension)" />
+            <property   name="pictoSize"
+                        label="Taille"
+                        type="String"
+                        role="inputOnly"
+                        default="medium"
+                        description="Taille du pictogramme (x-small,small,medium,large,x-large,none)" />
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
