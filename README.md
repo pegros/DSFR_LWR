@@ -94,6 +94,13 @@ style standard Salesforce components (if used).
 </style>
 ```
 
+### Theme and Branding
+
+In the site theme, the `Set max content width` setting should be checked and the
+`Max Content Width` set to 1200 (px) to be consistent with DSFR break points.
+
+All section padding, gutters... should be also set to 0 at site level.
+
 ## Technical Details
 
 These components leverage the latest capabilities of LWR Experience Sites and will probably not
