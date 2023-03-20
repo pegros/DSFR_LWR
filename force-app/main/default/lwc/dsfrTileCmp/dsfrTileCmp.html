@@ -7,7 +7,13 @@
             <p if:true={tileDescription} class="fr-tile__desc">{tileDescription}</p>
         </div>
         <div if:true={tileImage} class="fr-tile__img">
-            <img src={imageSrc} class="fr-responsive-img" alt="" >
+            <template lwc:if={pictoSrc}>
+                <c-dsfr-pictogramme-dsp picto-name={pictoSrc} picto-size="none" picto-class="fr-responsive-img" is-debug={isDebug} >
+                </c-dsfr-pictogramme-dsp>
+            </template>
+            <template lwc:else>
+                <img class="fr-responsive-img" src={imageSrc} alt="" >
+            </template>
         </div>
     </div>
 </template>

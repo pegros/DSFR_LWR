@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Onglets</masterLabel>
+    <masterLabel>DSFR Onglets 🇫🇷</masterLabel>
     <description>Structuration de page en mode onglets DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  

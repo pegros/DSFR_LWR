@@ -11,6 +11,7 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     @api tileDescription;
     @api tileTarget;
     @api isVertical = false;
+    @api tileCss;
     @api isDebug = false;       // Flag to activate debug information
 
     //-----------------------------------------------------
@@ -18,10 +19,13 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
 
     get imageSrc() {
-        return '/file-asset/' + this.tileImage;
+        return (this.tileImage?.includes('/') ? null : '/file-asset/' + this.tileImage);
+    }
+    get pictoSrc() {
+        return (this.tileImage?.includes('/') ? this.tileImage : null);
     }
     get tileClass() {
-        return "fr-tile fr-enlarge-link" + (this.isVertical? '' : " fr-tile--horizontal");
+        return "fr-tile fr-enlarge-link" + (this.isVertical? '' : " fr-tile--horizontal") + (this.tileCss ? ' ' + this.tileCss : '');
     }
 
     //-----------------------------------------------------

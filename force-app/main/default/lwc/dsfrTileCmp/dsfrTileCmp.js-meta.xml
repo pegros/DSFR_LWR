@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Tuile</masterLabel>
+    <masterLabel>DSFR Tuile 🇫🇷</masterLabel>
     <description>Affichage d'une tuile du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
@@ -32,6 +32,10 @@
                         type="Boolean"
                         default="true"
                         description="Activation de la variante verticale de la tuile" />
+            <property   name="tileCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la tuile (par ex. fr-m-2v)" />
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
@@ -60,6 +64,11 @@
                         role="inputOnly"
                         default="true"
                         description="Activation de la variante verticale de la tuile" />
+            <property   name="tileCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de la tuile (par ex. fr-m-2v)" />
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"

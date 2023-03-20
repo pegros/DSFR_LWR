@@ -12,6 +12,7 @@ export default class DsfrStepperCmp extends LightningElement {
     @api steps          = [];       // enables to provide a step list directly (for Flows)
     @api stepsConfig    = null;     // enables to provide a JSON string instead of a step list as input (for Sites)
     @api currentStep    = null;
+    @api stepsCss;
 
     @api isDebug = false;       // Flag to activate debug information
 
@@ -28,9 +29,8 @@ export default class DsfrStepperCmp extends LightningElement {
     //-----------------------------------------------------
     // Custom getter
     //-----------------------------------------------------
-
-    get alertClass() {
-        return 'fr-alert fr-alert--' + this.alertType + (this.alertSize === 'small' ? ' fr-alert--sm' : '');
+    get stepperClass() {
+        return 'fr-stepper ' + (this.stepsCss || '');
     }
 
     //-----------------------------------------------------

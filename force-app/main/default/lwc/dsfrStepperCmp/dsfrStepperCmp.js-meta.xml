@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Stepper</masterLabel>
+    <masterLabel>DSFR Stepper 🇫🇷</masterLabel>
     <description>Indicateur d'étapes du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
@@ -19,7 +19,11 @@
                         label="Etape courante"
                         type="String"
                         description="Libellé de l'étape courante" />
-            
+            <property   name="stepsCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de l'indicateur (par ex. fr-m-2v)" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
@@ -42,7 +46,12 @@
                         type="String"
                         role="inputOnly"
                         description="Libellé de l'étape courante" />
-            
+            <property   name="stepsCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de l'indicateur (par ex. fr-m-2v)" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
