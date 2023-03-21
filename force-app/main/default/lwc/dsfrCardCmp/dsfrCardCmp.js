@@ -33,10 +33,10 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
 
     get imageSrc() {
-        return (this.cardImage?.includes('/') ? null : '/file-asset/' + this.cardImage);
+        return (this.cardImage?.includes('delivery/media') ? this.cardImage : '/file-asset/' + this.cardImage);
     }
     get pictoSrc() {
-        return (this.cardImage?.includes('/') ? this.cardImage : null);
+        return (((this.cardImage?.includes('/')) && (!this.cardImage?.includes('delivery/media'))) ? this.cardImage : null);
     }
     get imageTitle() {
         return 'Image pour ' + this.cardTitle;

@@ -19,10 +19,10 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
 
     get imageSrc() {
-        return (this.tileImage?.includes('/') ? null : '/file-asset/' + this.tileImage);
+        return (this.tileImage?.includes('delivery/media') ? this.tileImage : '/file-asset/' + this.tileImage);
     }
     get pictoSrc() {
-        return (this.tileImage?.includes('/') ? this.tileImage : null);
+        return (((this.tileImage?.includes('/')) && (!this.tileImage?.includes('delivery/media'))) ? this.tileImage : null);
     }
     get tileClass() {
         return "fr-tile fr-enlarge-link" + (this.isVertical? '' : " fr-tile--horizontal") + (this.tileCss ? ' ' + this.tileCss : '');
