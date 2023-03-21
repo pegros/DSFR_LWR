@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Fil d'Ariane 🚧</masterLabel>
+    <description>Fil d'ariane (Breadcrumb) standard DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target> 
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="breadcrumbConfig"
+                        label="Configuration"
+                        type="String"
+                        default='[{"label":"Home","target":{"type":"comm__namedPage","attributes":{"name":"Home"}}}]'
+                        description="Configuration des éléments du fil d'ariane (liste JSON de {label:itemLabel,'target:pageRef}" />
+            <property   name="breadcrumbCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style du fil d'ariane (par ex. fr-m-2v)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

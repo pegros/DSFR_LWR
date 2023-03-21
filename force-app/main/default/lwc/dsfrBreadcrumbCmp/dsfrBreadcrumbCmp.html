@@ -1,0 +1,23 @@
+<template>
+    <template lwc:if={breadcrumbItems}>
+        <nav role="navigation" class={breadcrumbClass} aria-label={breadcrumbAriaLabel}>
+            <button class="fr-breadcrumb__button" aria-expanded="false" onclick={toggleModal} >{breadcrumbExpandLabel}</button>
+            <div class="fr-collapse">
+                <ol class="fr-breadcrumb__list">
+                    <template iterator:it={breadcrumbItems}>
+                        <template lwc:if={it.last}>
+                            <li key={it.value.label}>
+                                <a class="fr-breadcrumb__link" data-value={it.value.label} aria-current="page">{it.value.label}</a>
+                            </li>
+                        </template>
+                        <template lwc:else>
+                            <li key={it.value.label}>
+                                <a class="fr-breadcrumb__link" href="#" data-value={it.value.label} onclick={openTarget} >{it.value.label}</a>
+                            </li>
+                        </template>
+                    </template>
+                </ol>
+            </div>
+        </nav>
+    </template>
+</template>

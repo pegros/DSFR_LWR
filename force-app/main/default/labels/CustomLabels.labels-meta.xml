@@ -56,4 +56,20 @@
         <shortDescription>Libellé du titre du bouton close de menu</shortDescription>
         <value>Fermer</value>
     </labels>
+    <labels>
+        <fullName>dsfrBreadcrumbExpandLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton d'ouverture du fil d'ariane</shortDescription>
+        <value>Voir le fil d’Ariane</value>
+    </labels>
+    <labels>
+        <fullName>dsfrBreadcrumbAriaLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé descriptif du fil d'ariane</shortDescription>
+        <value>Vous êtes ici :</value>
+    </labels>
 </CustomLabels>
