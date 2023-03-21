@@ -108,3 +108,11 @@ work in Aura based ones.
 
 A wide number of components are also usable within Flows in order to be reused for 
 Page Flow processes within Experience Sites.
+
+### Use Cards and Tiles with CMS Content
+
+When using Cards and Tiles with CMS Collections (via the standard **Grid** component), it is possible 
+to inject the following properties in the DSFR components:
+* `{!Item.name}`for card/tile title
+* `{!Item.body.contentBody.excerpt}` for card/tile description
+* `{!Item.body.contentBody.bannerImage.url}` for card/tile image
