@@ -33,13 +33,26 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     connectedCallback() {
         if (this.isDebug) {
-            console.log('connected: START card for ',this.tileTitle);
+            console.log('connected: START tile for ',this.tileTitle);
             console.log('connected: tile description ',this.tileDescription);
             console.log('connected: tile image ',this.tileImage);
             console.log('connected: tile target ',this.tileTarget);
             console.log('connected: vertical variant? ', this.isVertical);
-            console.log('connected: END card');
         }
+        //Handling strange LWR inputs for fields reset to empty (object value instead of null)
+        this.resetInput();
+        if (this.isDebug) console.log('connected: END tile');
+    }
+
+    renderedCallback() {
+        if (this.isDebug) {
+            console.log('rendered: START tile for ',this.tileTitle);
+            console.log('rendered: tile description ',this.tileDescription);
+            console.log('rendered: tile image ',this.tileImage);
+        }
+        // Handling strange LWR inputs for fields reset to empty (object value instead of null)
+        this.resetInput();
+        if (this.isDebug) console.log('rendered: END tile');
     }
 
     //-----------------------------------------------------
@@ -64,5 +77,25 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
         else {
             if (this.isDebug) console.log('openTarget: END ignoring navigation');
         }
+    }
+
+    //-----------------------------------------------------
+    // Utilities
+    //-----------------------------------------------------
+    resetInput = () => {
+        if (this.isDebug)console.log('resetInput: START for tile');
+        if ((this.cardTitle) && (typeof this.cardTitle !== 'string')) {
+            this.tileTitle = null;
+            if (this.isDebug)console.log('resetInput: tile title reset ');
+        }
+        if ((this.tileDescription) && (typeof this.tileDescription !== 'string')) {
+            this.tileDescription = null;
+            if (this.isDebug)console.log('resetInput: tile description reset ');
+        }
+        if ((this.tileImage) && (typeof this.tileImage !== 'string')) {
+            this.tileImage = null;
+            if (this.isDebug)console.log('resetInput: tile image reset ');
+        }
+        if (this.isDebug)console.log('resetInput: END for tile');
     }
 }
