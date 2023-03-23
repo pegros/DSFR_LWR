@@ -56,9 +56,8 @@
                         label="Variante du titre"
                         type="String"
                         role="inputOnly"
-                        datasource="fr-h1,fr-h2,fr-h3,fr-h4"
                         default="fr-h2"
-                        description="Style d'affichage du titre" />
+                        description="Style d'affichage du titre (fr-h1,fr-h2,fr-h3,fr-h4)" />
 
             <property   name="message"
                         label="Message"
@@ -66,11 +65,18 @@
                         role="inputOnly"
                         description="Contenu richtext à afficher." />
             <property   name="messageClass"
-                        label="Variante"
+                        label="Variante du message"
                         type="String"
                         role="inputOnly"
                         default="fr-text"
                         description="Style d'affichage du message (fr-text--lead,fr-text--lg,fr-text,fr-text--sm,fr-text--xs)" />
+
+            <property   name="wrappingClass"
+                        label="Style du Conteneur"
+                        type="String"
+                        role="inputOnly"
+                        default="fr-container"
+                        description="Classe appliquée à la div globale" />
 
             <property   name="isDebug"
                         label="Debug ?"
