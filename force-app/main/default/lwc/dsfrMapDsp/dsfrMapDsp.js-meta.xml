@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Plan 🚧</masterLabel>
+    <description>Affichage d'un plan dans un media DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>  
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="mainTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre de la localisation principale" />
+            <property   name="mainDescription"
+                        label="Description"
+                        type="String"
+                        description="Description de la localisation principale" />
+            <property   name="mainLocation"
+                        label="Position"
+                        type="String"
+                        description="Position de la localisation principale (JSON)" />
+            <property   name="mapLegend"
+                        label="Légende"
+                        type="String"
+                        description="Légende de la carte" />
+            <property   name="mapRatio"
+                        label="Ratio d'affichage"
+                        type="String"
+                        datasource="16x9,4x3,1x1"
+                        default="1x1"
+                        description="Ratio d'affichage de la carte" />
+            <property   name="mapZoom"
+                        label="Niveau de zoom"
+                        type="Integer"
+                        min="1"
+                        max="20"
+                        default="10"
+                        description="Niveau de zoom selon le référentiel Google (1 - monde, 5 - continent, 10 - ville, 15 - rue, 20 - bâtiment)" />
+            <property   name="mapCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la carte (par ex. fr-m-2v)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'aalyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="mainTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre de la localisation principale" />
+            <property   name="mainDescription"
+                        label="Description"
+                        type="String"
+                        role="inputOnly"
+                        description="Description de la localisation principale" />
+            <property   name="mainLocation"
+                        label="Position"
+                        type="String"
+                        role="inputOnly"
+                        description="Position de la localisation principale (JSON)" />
+            <property   name="mapLegend"
+                        label="Légende"
+                        type="String"
+                        role="inputOnly"
+                        description="Légende de la carte" />
+            <property   name="mapRatio"
+                        label="Ratio d'affichage"
+                        type="String"
+                        role="inputOnly"
+                        default="1x1"
+                        description="Ratio d'affichage de la carte (16x9,4x3,1x1)" />
+            <property   name="mapZoom"
+                        label="Niveau de zoom"
+                        type="Integer"
+                        role="inputOnly"
+                        min="1"
+                        max="20"
+                        default="10"
+                        description="Niveau de zoom selon le référentiel Google (1 - monde, 5 - continent, 10 - ville, 15 - rue, 20 - bâtiment)" />
+            <property   name="mapCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de la carte (par ex. fr-m-2v)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
+                        description="Activation de détails pour l'aalyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

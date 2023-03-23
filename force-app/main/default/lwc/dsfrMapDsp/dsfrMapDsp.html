@@ -1,0 +1,17 @@
+<template>
+    <template lwc:if={mapMarkers}>
+        <figure class={mapClass} role="group" aria-label={mapLegend}>
+            <!-- r-content-media__img -->
+            <div class={mapCmpClass}>
+                <lightning-map  map-markers={mapMarkers}
+                                options={mapOptions} 
+                                zoom-level={mapZoom}
+                                class={mapCmpClass}>
+                </lightning-map>
+            </div>
+            <template lwc:if={mapLegend}>
+                <figcaption class="fr-content-media__caption">{mapLegend}</figcaption>
+            </template>
+        </figure>
+    </template>
+</template>
