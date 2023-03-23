@@ -117,12 +117,17 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('openTarget: target ',this.cardTarget);
         if (this.cardTarget) {
-            if (this.isDebug) console.log('handleLinkClick: navigating to target ');
+            if (this.isDebug) console.log('openTarget: navigating to target ');
 
             const newPageRef = JSON.parse(this.cardTarget);
-            if (this.isDebug) console.log('handleLinkClick: newPageRef init ',newPageRef);
+            if (this.isDebug) console.log('openTarget: newPageRef init ',newPageRef);
 
-            if (this.isDebug) console.log('handleLinkClick: END opening newPageRef');
+            /*this[NavigationMixin.GenerateUrl](newPageRef)
+            .then((url) => {
+                if (this.isDebug) console.log('openTarget: new url generated ',url);
+            });*/
+
+            if (this.isDebug) console.log('openTarget: END opening newPageRef');
             this[NavigationMixin.Navigate](newPageRef);
         }
         else {

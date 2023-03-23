@@ -66,12 +66,12 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('openTarget: target ',this.tileTarget);
         if (this.tileTarget) {
-            if (this.isDebug) console.log('handleLinkClick: navigating to target ');
+            if (this.isDebug) console.log('openTarget: navigating to target ');
 
             const newPageRef = JSON.parse(this.tileTarget);
-            if (this.isDebug) console.log('handleLinkClick: newPageRef init ',newPageRef);
+            if (this.isDebug) console.log('openTarget: newPageRef init ',newPageRef);
 
-            if (this.isDebug) console.log('handleLinkClick: END opening newPageRef');
+            if (this.isDebug) console.log('openTarget: END opening newPageRef');
             this[NavigationMixin.Navigate](newPageRef);
         }
         else {
