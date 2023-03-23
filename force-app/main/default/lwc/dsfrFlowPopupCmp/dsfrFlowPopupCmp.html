@@ -1,0 +1,35 @@
+<template>
+    <!-- Popup opening button -->
+    <button if:false={isInactive} class={buttonClass} onclick={toggleModal} title={buttonTitle} >
+        {buttonLabel}
+    </button>
+    <button if:true={isInactive} class={buttonClass} title={buttonTitle} disabled >
+        {buttonLabel}
+    </button>
+
+    <!-- Flow Modal Popup -->
+    <template lwc:if={isModalOpen}>
+        <dialog role="dialog" class="fr-modal fr-modal--opened">
+            <div class="fr-container fr-container--fluid fr-container-md">
+                <div class="fr-grid-row fr-grid-row--center">
+                    <div class="fr-col-12 fr-col-md-8">
+                        <div class="fr-modal__body">
+                            <div class="fr-modal__header">
+                                <button class="fr-link--close fr-link" title={closeTitle} onclick={toggleModal}>{closeLabel}</button>
+                            </div>
+                            <div class="fr-modal__content">
+                                <template lwc:if={modalTitle}>
+                                    <h1 class="fr-modal__title">{modalTitle}</h1>
+                                </template>
+                                <lightning-flow flow-api-name={flowName}
+                                                flow-input-variables={flowInput}
+                                                onstatuschange={handleStatusChange} >
+                                </lightning-flow>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </dialog>
+    </template>
+</template>

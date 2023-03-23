@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Modale de Processus 🚧</masterLabel>
+    <description>Affichage d'un bouton DSFR déclenchant un Flow en modale</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="buttonLabel"
+                        label="Libellé"
+                        type="String"
+                        description="Libellé du bouton" />
+            <property   name="buttonTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre du bouton" />
+            <property   name="buttonSize"
+                        label="Taille"
+                        type="String"
+                        datasource="small,medium,large"
+                        default="medium"
+                        description="Taille du bouton" />
+            <property   name="buttonVariant"
+                        label="Variante"
+                        type="String"
+                        datasource="primary,secondary,tertiary,tertiary-no-outline"
+                        default="primary"
+                        description="Variante d'affichage du bouton" />
+            <property   name="buttonIcon"
+                        label="Icône"
+                        type="String"
+                        description="Nom de l'icone DFSR à afficher (e.g. checkbox-circle-line)" />
+            <property   name="buttonIconPosition"
+                        label="Position de l'icône"
+                        type="String"
+                        datasource="left,right"
+                        default="left"
+                        description="Position de l'icone par rapport au libellé du bouton" />
+            <property   name="buttonInactive"
+                        label="Inactif ?"
+                        type="String"
+                        default="false"
+                        description="Statut du bouton" />
+
+            <property   name="modalTitle"
+                        label="Titre modale"
+                        type="String"
+                        description="Libélle supérieur dans la modale" />
+            <property   name="flowName"
+                        label="Processus"
+                        type="String"
+                        description="Nom technique du Flow à exécuter dans la modale" />
+            <property   name="flowParameters"
+                        label="Paramètres de processus"
+                        type="String"
+                        description="Paramètres d'entrée du Flow (format JSON)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

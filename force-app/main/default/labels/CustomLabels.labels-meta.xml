@@ -72,4 +72,20 @@
         <shortDescription>Libellé descriptif du fil d'ariane</shortDescription>
         <value>Vous êtes ici :</value>
     </labels>
+    <labels>
+        <fullName>dsfrFlowPopupCloseTitle</fullName>
+        <categories>DSFR Component LWC Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de fermeture de le modale de Flow</shortDescription>
+        <value>Fermer la fenêtre modale du processus</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFlowPopupCloseLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton de fermeture de le modale de Flow</shortDescription>
+        <value>Fermer</value>
+    </labels>
 </CustomLabels>
