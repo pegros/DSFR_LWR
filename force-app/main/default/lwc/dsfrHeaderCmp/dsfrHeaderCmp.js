@@ -31,6 +31,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
     @api isDebug = false;
     
+    //@api loginUrl; // OBSOLETE
     //-----------------------------------
     // Contextual Parameters
     //-----------------------------------
@@ -359,7 +360,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         event.stopPropagation();
         event.preventDefault();
 
-        let loginPage = {type:'standard__webPage',attributes: {url:'/login'}};
+        let loginPage = {type:"comm__namedPage",attributes:{name:"Login"}};
+        //let loginPage = {type:'standard__webPage',attributes: {url:'/login'}};
         //let loginPage = {type: 'comm__loginPage',attributes: {actionName: 'login'};
         if (this.isDebug) console.log('handleSearch: loginPage init ', JSON.stringify(loginPage));
 
@@ -371,11 +373,27 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         event.stopPropagation();
         event.preventDefault();
 
-        let logoutPage = {type:'standard__webPage',attributes: {url:'/secur/logout.jsp'}};
+        //if (this.isDebug) console.log('handleSearch: location fetched ', window?.location);
+        //if (this.isDebug) console.log('handleSearch: hostname fetched ', window?.location?.hostname);
+        if (this.isDebug) console.log('handleSearch: basePathName fetched ', basePathName);
+        const sitePrefix = basePathName.replace(/\/s$/i, ""); // site prefix is the site base path without the trailing "/s"
+        const baseUrl = sitePrefix.slice(0,sitePrefix.indexOf('/',1));
+        let logoutUrl = baseUrl + "/secur/logout.jsp";
+
+        //let baseUrl = basePathName.slice(0,basePathName.indexOf('/',1));
+        //if (this.isDebug) console.log('handleSearch: baseUrl extracted ', baseUrl);
+        //let logoutUrl = baseUrl + 'vforcesite/secur/logout.jsp?retUrl=' + encodeURI(basePathName);
+        if (this.isDebug) console.log('handleSearch: logoutUrl init ', logoutUrl);
+        
+        /*let logoutPage = {type:'standard__webPage',attributes: {url: logoutUrl}};
+        //https://menjs--devpgro.sandbox.my.site.com/RecrutLWRvforcesite/servlet/networks/switch?startURL=%2Fsecur%2Flogout.jsp
+        //https://menjs--devpgro.sandbox.my.site.com/RecrutLWRvforcesite/servlet/networks/switch?startURL=%2Fsecur%2Flogout.jsp
+        //let logoutPage = {type:'standard__webPage',attributes: {url:'/secur/logout.jsp'}};
         //let logoutPage = {type: 'comm__loginPage',attributes: {actionName: 'logout'};
         if (this.isDebug) console.log('handleSearch: logoutPage init ', JSON.stringify(logoutPage));
 
-        this[NavigationMixin.Navigate](logoutPage);
+        this[NavigationMixin.Navigate](logoutPage);*/
+        window.open(logoutUrl, '_self');
         if (this.isDebug) console.log('handleLogout: END / navigation triggered');
     }
     handleSearch(event){
