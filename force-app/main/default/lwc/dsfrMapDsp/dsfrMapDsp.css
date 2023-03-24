@@ -1,4 +1,16 @@
 .dsfrMap {
     margin-top: 0px;
     margin-bottom: 0px;
+   /* margin-left: 0px;
+    margin-right: 0px;*/
+    overflow:hidden;
+    max-width:100%;
 }
+/*.dsfrMapCmp {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}*/
+/*.slds-map, * .slds-map {
+    min-width:0px;
+}*/

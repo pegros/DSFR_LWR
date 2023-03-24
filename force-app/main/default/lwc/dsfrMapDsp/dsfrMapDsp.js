@@ -51,7 +51,7 @@ export default class DsfrMapDsp extends LightningElement {
     }
 
     get mapCmpClass() {
-        return 'fr-responsive-vid fr-responsive-vid--' + this.mapRatio;
+        return 'dsfrMapCmp fr-responsive-vid fr-responsive-vid--' + this.mapRatio;
     }
 
     //-----------------------------------------------------
