@@ -5,12 +5,23 @@
     margin-right: 0px;*/
     overflow:hidden;
     max-width:100%;
+    min-width:0;
 }
-/*.dsfrMapCmp {
-    display: block;
+.dsfrMapCmp {
+    max-width:100%;
+    min-width:0;
     margin-left: auto;
     margin-right: auto;
-}*/
+}
+.dsfrMapCmp-1x1 {
+    max-height: 300px;
+}
+.dsfrMapCmp-4x3 {
+    max-height: 250px;
+} 
+.dsfrMapCmp-16x9 {
+    max-height: 200px;
+} 
 /*.slds-map, * .slds-map {
     min-width:0px;
 }*/
