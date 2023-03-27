@@ -65,6 +65,9 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 return  cardClass;
         }
     }
+    get cardImageClass() {
+        return 'fr-responsive-img fr-responsive-img--16x9 cardImage-' + this.cardSize;
+    }
 
     //-----------------------------------------------------
     // Initialisation

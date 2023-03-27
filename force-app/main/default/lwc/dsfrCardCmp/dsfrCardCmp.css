@@ -1,3 +1,12 @@
 .fr-card__desc {
     color: var(--text-default-grey) !important;
 }
+.cardImage-small {
+    max-height: 200px;
+}
+.cardImage-medium {
+    max-height: 250px;
+}
+.cardImage-large {
+    max-height: 300px;
+}
