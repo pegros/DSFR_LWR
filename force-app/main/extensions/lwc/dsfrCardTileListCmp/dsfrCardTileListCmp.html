@@ -1,0 +1,134 @@
+<template>
+
+    <!-- DXata Loading Utility -->
+    <c-sfpeg-list-cmp   object-api-name={objectApiName} 
+                        record-id={recordId} user-id={currentUserId}
+                        config-name={configName}
+                        parent-context={listContext}
+                        onload={handleRecordLoad}
+                        is-debug={isDebug}
+                        is-debug-fine={isDebug}
+                        class="listLoader">
+    </c-sfpeg-list-cmp>
+
+
+    <!--
+    fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2
+    fr-grid-row-top
+    -->
+    <div class={wrappingCss} lwc:if={isReady}>
+        <h2 class="fr-h3">{headerTitle}</h2>
+        <div class="fr-container--fluid">
+            <div class="fr-grid-row fr-grid-row--gutters fr-grid-row-top">
+                <template lwc:if={isCard}>
+                    <template for:each={recordList} for:item="item">
+                        <div key={item.Id} class="fr-col-12 fr-col-md-6 fr-col-xl-4">
+                            <c-dsfr-card-cmp    card-image={item.image}
+                                                card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
+                                                card-title={item.title}                 card-description={item.description}
+                                                card-start-details={item.startDetails}  card-start-icon={item.startIcon}
+                                                card-end-details={item.endDetails}      card-end-icon={item.endIcon}
+                                                card-tags={item.tags}                   card-target={item.target}
+                                                card-size={item.size}                   is-vertical={item.isVertical}
+                                                card-css={elementCss}>
+                            </c-dsfr-card-cmp></div>
+                    </template>
+                </template>
+                <template lwc:elseif={isTile}>
+                    <template for:each={recordList} for:item="item">
+                        <div key={item.Id} class="fr-col-12 fr-col-md-6 fr-col-xl-4">
+                            <c-dsfr-tile-cmp    tile-image={item.image}
+                                                tile-title={item.title} tile-description={item.description}
+                                                tile-target={item.target}
+                                                is-vertical={item.isVertical}
+                                                tile-css={elementCss} >
+                            </c-dsfr-tile-cmp>
+                        </div>
+                    </template>
+                </template>
+                <template lwc:elseif={isContainer}>
+                    <template for:each={recordList} for:item="item">
+                        <div key={item.Id} class="fr-col-12 fr-col-md-6 fr-col-xl-4">
+                            <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
+                                                    message={item.message}  message-class={item.messageClass}
+                                                    wrapping-class={elementCss} >
+                            </c-dsfr-container-dsp>
+                        </div>
+                    </template>
+                </template>
+                <template lwc:else>
+                    <p class="fr-icon-alert-fill text-default-error">Type de conteneur non supporté: {displayType}</p>
+                    <p class="">Seules valeurs autorisées: Card, Tile et Container</p>
+                </template>
+                <!--
+                <div class="fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2"><c-dsfr-tile-cmp tile-title="Tile Title" tile-image="environment/environment"></c-dsfr-tile-cmp></div>
+          <div class="fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2"><c-dsfr-card-cmp card-title="Card Title" card-image="environment/environment"></c-dsfr-card-cmp></div>
+          <div class="fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2"><c-dsfr-container-dsp title="Title" title-class="fr-h2" message="Message" message-class="fr-text"></c-dsfr-container-dsp></div>
+                -->
+            </div>
+        </div>
+    </div>
+
+
+    <!--
+    <nav role="navigation" class="fr-pagination" aria-label="Pagination">
+        <ul class="fr-pagination__list">
+            <li>
+                <a class="fr-pagination__link fr-pagination__link--first" aria-disabled="true" role="link">
+                    Première page
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link fr-pagination__link--prev fr-pagination__link--lg-label" aria-disabled="true" role="link">
+                    Page précédente
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link" aria-current="page" title="Page 1">
+                    1
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link" href="#" title="Page 2">
+                    2
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link fr-displayed-lg" href="#" title="Page 3">
+                    3
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link fr-displayed-lg">
+                    …
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link fr-displayed-lg" href="#" title="Page 130">
+                    130
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link fr-displayed-lg" href="#" title="Page 131">
+                    131
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link" href="#" title="Page 132">
+                    132
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link fr-pagination__link--next fr-pagination__link--lg-label" href="#">
+                    Page suivante
+                </a>
+            </li>
+            <li>
+                <a class="fr-pagination__link fr-pagination__link--last" href="#">
+                    Dernière page
+                </a>
+            </li>
+        </ul>
+    </nav>
+    -->
+</template>
