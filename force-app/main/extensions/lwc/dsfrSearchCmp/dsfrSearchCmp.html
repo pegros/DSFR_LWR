@@ -1,0 +1,36 @@
+<template>
+    <div class={wrappingClass}>
+        <template lwc:if={showSearch}>
+            <div class="fr-search-bar mainSearchDiv" role="search">
+                <label class="fr-label">Recherche</label>
+                <input class="fr-input mainSearch" placeholder="Rechercher" type="search" name="search" value={searchTerm}>
+                <button class="fr-btn" title="Rechercher" onclick={updateSearch}>
+                    Rechercher
+                </button>
+            </div>
+        </template>
+    
+        <template for:each={criteriaList} for:item="itemC">
+                <fieldset key={itemC.fullName} class="fr-fieldset fr-mb-5v" aria-labelledby="checkboxes-legend checkboxes-messages">
+                    <legend class="fr-fieldset__legend--regular fr-fieldset__legend" >
+                        {itemC.label}
+                    </legend>
+                    <template for:each={itemC.values} for:item="itemV">
+                        <div key={itemV.fullName} class="fr-fieldset__element">
+                            <div class="fr-checkbox-group">
+                                <input  class="selector" name={itemV.fullName} data-value={itemV.value} data-criteria={itemC.name} type="checkbox"
+                                        aria-describedby={itemV.fullName} checked={itemV.selected} >
+                                <label class="fr-label"  id={itemV.fullName} data-name={itemV.fullName} onclick={toggleSelect} >
+                                    {itemV.label}
+                                </label>
+                                <!--
+                                <div class="fr-messages-group" aria-live="assertive">
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                    </template>
+                </fieldset>
+        </template>
+    </div>
+</template>

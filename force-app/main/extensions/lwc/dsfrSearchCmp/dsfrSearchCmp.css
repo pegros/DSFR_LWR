@@ -1,0 +1,7 @@
+.mainSearchDiv {
+    margin-bottom: 2em;
+}
+/* iPhone input rounding bypass */
+input[type="search"] {
+    -webkit-appearance: none;
+}

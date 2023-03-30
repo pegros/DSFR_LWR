@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Recherche 🚧</masterLabel>
+    <description>Affichage d'un composant pour affiner une recherche</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="showSearch"
+                        label="Afficher Recherche?"
+                        type="Boolean"
+                        default="true"
+                        description="Flag pour afficher / masquer la section de recherche standard" />
+
+            <property   name="criteria"
+                        label="Critères"
+                        type="String"
+                        description="List de noms API de champs picklist fournissant la liste des valeurs possibles de chaque critère (au format liste JSON de Object.Field)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
