@@ -151,6 +151,11 @@ public with sharing class dsfrNavigationMenu_CTL {
                 ConnectApi.PublishStatus.Live, false, iterShowHome, EXCLUDED_TYPES);
             System.debug('getMenuItems: navigation Menu retrieved ' + iterMenu);
 
+            /*for (ConnectApi.NavigationMenuItem iterM : iterMenu.menuItems) {
+                System.debug('getMenuItems: unescaping Menu item ' + iterM);
+                iterM.label = (iterM.label).unescapeHtml4();
+            }*/
+
             resultMap.put(iter.MasterLabel,iterMenu.menuItems);
             System.debug('getMenuItems: menuItems registered ' + iterMenu.menuItems);
         }
