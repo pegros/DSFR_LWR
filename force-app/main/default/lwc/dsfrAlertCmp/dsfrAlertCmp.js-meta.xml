@@ -55,7 +55,6 @@
                         label="Type"
                         type="String"
                         role="inputOnly"
-                        datasource="error,success,info,warning"
                         default="error"
                         description="Type d'alerte (error,success,info,warning)" />
             <property   name="alertSize"

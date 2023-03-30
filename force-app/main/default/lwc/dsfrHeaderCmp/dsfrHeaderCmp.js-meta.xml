@@ -47,11 +47,10 @@
                         type="Boolean"
                         default="false"
                         description="Activation de détails pour l'analyse de problèmes" />
-                        <!--
+            <!-- OBSOLETE -->
             <property   name="loginUrl"
                         label="OBSOLETE"
                         type="String"/>
-                        -->
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

@@ -31,7 +31,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
     @api isDebug = false;
     
-    //@api loginUrl; // OBSOLETE
+    @api loginUrl; // OBSOLETE
     //-----------------------------------
     // Contextual Parameters
     //-----------------------------------
@@ -172,10 +172,16 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
             let topMenuData = data[this.topMenu] || [];
             let topMenuItems = [];
             topMenuData.forEach(item => {
+                if (this.isDebug) console.log('wiredHeaderMenus: processing top menu item ',item);
                 let newItem = {... item};
-                if (item.label?.includes('#')) {
-                    let labelParts = item.label.split('#');
-                    if (this.isDebug) console.log('wiredTopMenu: extracting icon name ', labelParts);
+                newItem.labelOrig = item.label;
+                if (newItem.label?.includes('&')) {
+                    if (this.isDebug) console.log('wiredHeaderMenus: unescaping label');
+                    newItem.label = this.htmlDecode(newItem.label);
+                }
+                if (newItem.label?.includes('#')) {
+                    let labelParts = newItem.label.split('#');
+                    if (this.isDebug) console.log('wiredHeaderMenus: extracting icon name ', labelParts);
                     newItem.class = 'fr-btn fr-icon-' + labelParts[1];
                     newItem.label = labelParts[0];
                 }
@@ -186,7 +192,20 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
             });
             this.topMenuItems = topMenuItems;
             if (this.isDebug) console.log('wiredHeaderMenus: topMenuItems updated',this.topMenuItems);
-            this.mainMenuItems = data[this.mainMenu] || [];
+
+            let mainMenuData = data[this.mainMenu] || [];
+            let mainMenuItems = [];
+            mainMenuData.forEach(item => {
+                if (this.isDebug) console.log('wiredHeaderMenus: processing main menu item ',item);
+                let newItem = {... item};
+                newItem.labelOrig = item.label;
+                if (newItem.label?.includes('&')) {
+                    if (this.isDebug) console.log('wiredHeaderMenus: unescaping label');
+                    newItem.label = this.htmlDecode(newItem.label);
+                }
+                mainMenuItems.push(newItem);
+            });
+            this.mainMenuItems = mainMenuItems;
             if (this.isDebug) console.log('wiredHeaderMenus: mainMenuItems updated',this.mainMenuItems);
             if (this.isDebug) console.log('wiredHeaderMenus: END / menus initialized');
         }
@@ -445,6 +464,10 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         }
         if (this.isDebug) console.log('toggleModal: END');
     }
+
+    //----------------------------------------------------------------
+    // Utilities
+    //----------------------------------------------------------------  
     collapseModals = function() {
         if (this.isDebug) console.log('collapseModals: START');
 
@@ -458,4 +481,13 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('collapseModals: END');
     }
+
+    htmlDecode = function(input) {
+        if (this.isDebug) console.log('htmlDecode: START with ',input);
+        const doc = new DOMParser().parseFromString(input, "text/html");
+        let result = doc.documentElement.textContent;
+        if (this.isDebug) console.log('htmlDecode: END with ',result);
+        return result;
+    }
+      
 }
