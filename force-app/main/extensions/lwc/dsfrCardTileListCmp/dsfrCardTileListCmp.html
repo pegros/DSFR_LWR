@@ -22,7 +22,7 @@
             <div class="fr-grid-row fr-grid-row--gutters fr-grid-row-top">
                 <template lwc:if={isCard}>
                     <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12 fr-col-md-6 fr-col-xl-4">
+                        <div key={item.Id} class="fr-col-12 fr-col-xl-6">
                             <c-dsfr-card-cmp    card-image={item.image}
                                                 card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
                                                 card-title={item.title}                 card-description={item.description}
@@ -36,7 +36,7 @@
                 </template>
                 <template lwc:elseif={isTile}>
                     <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12 fr-col-md-6 fr-col-xl-4">
+                        <div key={item.Id} class="fr-col-12 fr-col-xl-6">
                             <c-dsfr-tile-cmp    tile-image={item.image}
                                                 tile-title={item.title} tile-description={item.description}
                                                 tile-target={item.target}
@@ -48,7 +48,7 @@
                 </template>
                 <template lwc:elseif={isContainer}>
                     <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12 fr-col-md-6 fr-col-xl-4">
+                        <div key={item.Id} class="fr-col-12 fr-col-xl-6">
                             <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
                                                     message={item.message}  message-class={item.messageClass}
                                                     wrapping-class={elementCss} >

@@ -2,6 +2,7 @@ import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import userId from '@salesforce/user/Id';
 import sfpegMergeUtl from 'c/sfpegMergeUtl';
+import DefaultGroupNotificationFrequency from '@salesforce/schema/User.DefaultGroupNotificationFrequency';
 
 export default class DsfrCardTileListCmp extends LightningElement {
 
@@ -17,7 +18,27 @@ export default class DsfrCardTileListCmp extends LightningElement {
     }
     set listContext(value) {
         try {
-            this._listContext = JSON.parse(value);
+            let listContext = JSON.parse(value);
+            if (this.isDebug) console.log('set listContext: value parsed ', JSON.stringify(listContext));
+
+            for (let iter in listContext) {
+                if (this.isDebug) console.log('set listContext: processing iter ', JSON.stringify(iter));
+                if ((listContext[iter])?.WHERE) {
+                    if (this.isDebug) console.log('set listContext: evaluating iter', (listContext[iter]).WHERE);
+                    let condition = (listContext[iter]).WHERE;
+                    let finalCondition = this.buildWhere(condition);
+                    if (finalCondition) {
+                        if (this.isDebug) console.log('set listContext: updating iter', finalCondition);
+                        listContext[iter] = 'WHERE ' + finalCondition;
+                    }
+                    else {
+                        if (this.isDebug) console.log('set listContext: empty iter condition');
+                        listContext[iter] = '';
+                    }
+                }
+            }
+
+            this._listContext = listContext;
             if (this.isDebug) console.log('set listContext: value parsed ', this._listContext);
         }
         catch(error) {
@@ -168,5 +189,97 @@ export default class DsfrCardTileListCmp extends LightningElement {
         this.isReady = true;
         
         if (this.isDebug) console.log('handleRecordLoad: END for card/tile list');
+    }
+
+    //-----------------------------------------------------
+    // Utilities
+    //-----------------------------------------------------
+    buildWhere = function(condition) {
+        if (this.isDebug) console.log("buildWhere: START with ", condition);
+
+        if (condition.EQ) {
+            if (this.isDebug) console.log("buildWhere: processing EQ ");
+            if (condition.EQ.value) {
+                if (this.isDebug) console.log("buildWhere: END / building condition ");
+                return '(' + condition.EQ.field + (condition.EQ.not ? " != '": " = '") + condition.EQ.value + "')";
+            }
+            else {
+                if (this.isDebug) console.log("buildWhere: END / ignoring condition ");
+                return null;
+            }
+        }
+        else if (condition.IN) {
+            if (this.isDebug) console.log("buildWhere: processing IN ");
+            if (condition.IN.value) {
+                if (this.isDebug) console.log("buildWhere: END / building condition ");
+                let values = condition.IN.value.split(';');
+                return '(' + condition.IN.field + (condition.IN.not ? " NOT IN ('": " IN ('") + values.join("','") + "'))";
+            }
+            else {
+                if (this.isDebug) console.log("buildWhere: END / ignoring condition ");
+                return null;
+            }
+        }
+        else if (condition.OR) {
+            if (this.isDebug) console.log("buildWhere: processing OR ");
+            let unitConditions = [];
+            condition.OR.forEach(item =>{
+                if (this.isDebug) console.log("buildWhere: processing sub-condition ",item);
+                let itemCondition = this.buildWhere(item);
+                if (itemCondition) {
+                    if (this.isDebug) console.log("buildWhere: registering sub-condition ",itemCondition);
+                    unitConditions.push(itemCondition);
+                }
+                else {
+                    if (this.isDebug) console.log("buildWhere: sub-condition ignored");
+                }
+            });
+            if (unitConditions.length > 0) {
+                if (this.isDebug) console.log("buildWhere: END / grouping OR sub-conditions");
+                return "(" + unitConditions.join(') OR (') + ")";
+            }
+            else {
+                if (this.isDebug) console.log("buildWhere: END / ignoring OR condition (no sub-conditions)");
+            }
+        }
+        else if (condition.AND) {
+            if (this.isDebug) console.log("buildWhere: processing AND ");
+            let unitConditions = [];
+            condition.AND.forEach(item =>{
+                if (this.isDebug) console.log("buildWhere: processing sub-condition ",item);
+                let itemCondition = this.buildWhere(item);
+                if (itemCondition) {
+                    if (this.isDebug) console.log("buildWhere: registering sub-condition ",itemCondition);
+                    unitConditions.push(itemCondition);
+                }
+                else {
+                    if (this.isDebug) console.log("buildWhere: sub-condition ignored");
+                }
+            });
+            if (unitConditions.length > 0) {
+                if (this.isDebug) console.log("buildWhere: END / grouping AND sub-conditions");
+                return "(" + unitConditions.join(') AND (') + ")";
+            }
+            else {
+                if (this.isDebug) console.log("buildWhere: END / ignoring OR condition (no sub-conditions)");
+            }
+        }
+        /*
+        switch condition.type (
+            when 'AND':
+                if (this.isDebug) console.log("buildWhere: processing AND ");
+            when 'OR';
+                if (this.isDebug) console.log("buildWhere: processing OR ");
+            when 'IN';
+            when 'NIN';
+                if (this.isDebug) console.log("buildWhere: processing IN, NIN ");
+            when 'EQ';
+            when 'NEQ';
+                if (this.isDebug) console.log("buildWhere: processing EQ, NEQ ");
+                if (this.isDebug) console.log("buildWhere: processing NEQ ");
+            default;
+                console.warn("buildWhere: unknown NEQ ");
+            )
+        */
     }
 }
