@@ -19,3 +19,17 @@
     padding-left: 0px !important;
     padding-right: 0px !important;
 }*/
+/*
+.fr-modal.fr-modal--opened .toolsModal {
+    display: block !important;
+}
+.fr-modal .toolsModal {
+    display: hidden;
+}
+.fr-modal:not(.fr-modal--opened) {
+    background-color: red !important;
+}*/
+
+.fr-modal:not(.fr-modal--opened) .toolsModal {
+    display:none;
+}

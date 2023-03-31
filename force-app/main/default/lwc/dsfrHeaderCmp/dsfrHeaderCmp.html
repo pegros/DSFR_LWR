@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="fr-header__tools">
-                        <div class="fr-header__tools-links">
+                        <div class="fr-header__tools-links ">
                             <ul class="fr-btns-group">
                                 <template lwc:if={isGuestUser}>
                                     <li>
@@ -90,7 +90,27 @@
                     </ul>
                 </nav>
             </div>
-            
+            <div class="fr-container toolsModal">
+                <ul class="fr-btns-group">
+                    <template lwc:if={isGuestUser}>
+                        <li>
+                            <a class="fr-btn fr-icon-account-circle-line" href="#" onclick={handleLogin} >{loginLabel}</a>
+                        </li>
+                    </template>
+                    <template lwc:else>
+                        <template for:each={topMenuItems} for:item="item">
+                            <li key={item.label} class="fr-nav__item" >
+                                <a  class={item.class} href="#" data-value={item.label} onclick={handleTopClick} >
+                                    {item.label}
+                                </a>
+                            </li>
+                        </template>
+                        <li>
+                            <a class="fr-btn fr-icon-logout-box-r-line" href="#" onclick={handleLogout} >{logoutLabel}</a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
         </div>
     </header>
 </template>
