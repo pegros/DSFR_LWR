@@ -142,35 +142,35 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     // Utilities
     //-----------------------------------------------------
     resetInput = () => {
-        if (this.isDebug)console.log('resetInput: START for card');
+        if (this.isDebug) console.log('resetInput: START for card');
         if ((this.cardTitle) && (typeof this.cardTitle !== 'string')) {
             this.cardTitle = null;
-            if (this.isDebug)console.log('resetInput: card title reset ');
+            if (this.isDebug) console.log('resetInput: card title reset ');
         }
         if ((this.cardBadge) && (typeof this.cardBadge !== 'string')) {
             this.cardBadge = null;
-            if (this.isDebug)console.log('resetInput: card badge reset ');
+            if (this.isDebug) console.log('resetInput: card badge reset ');
         }
         if ((this.cardDescription) &&  (typeof this.cardDescription !== 'string')) {
             this.cardDescription = null;
-            if (this.isDebug)console.log('resetInput: card description reset ');
+            if (this.isDebug) console.log('resetInput: card description reset ');
         }
         if ((this.cardStartDetails) &&  (typeof this.cardStartDetails !== 'string')) {
             this.cardStartDetails = null;
-            if (this.isDebug)console.log('resetInput: card start detail reset ');
+            if (this.isDebug) console.log('resetInput: card start detail reset ');
         }
         if ((this.cardEndDetails) && (typeof this.cardEndDetails !== 'string')) {
             this.cardEndDetails = null;
-            if (this.isDebug)console.log('resetInput: card end detail reset ');
+            if (this.isDebug) console.log('resetInput: card end detail reset ');
         }
         if ((this.cardTags) && (typeof this.cardTags !== 'string')) {
             this.cardTags = null;
-            if (this.isDebug)console.log('resetInput: card tags reset ');
+            if (this.isDebug) console.log('resetInput: card tags reset ');
         }
         if ((this.cardImage) && (typeof this.cardImage !== 'string')) {
             this.cardImage = null;
-            if (this.isDebug)console.log('resetInput: card image reset ');
+            if (this.isDebug) console.log('resetInput: card image reset ');
         }
-        if (this.isDebug)console.log('resetInput: END for card');
+        if (this.isDebug) console.log('resetInput: END for card');
     }
 }
