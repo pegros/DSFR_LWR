@@ -59,7 +59,7 @@
                                     <label class="fr-label" for="search-input">
                                         {searchLabel}
                                     </label>
-                                    <input class="fr-input" placeholder={searchLabel} type="search" name="search-input" >
+                                    <input class="fr-input" placeholder={searchLabel} type="search" name="search-input" onkeyup={handleSearchKey} >
                                     <button class="fr-btn" title={searchLabel} onclick={handleSearch}>
                                         {searchLabel}
                                     </button>

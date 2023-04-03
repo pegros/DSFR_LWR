@@ -393,6 +393,14 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     }
 
     // Search button action
+    handleSearchKey(event) {
+        if (this.isDebug) console.log('handleSearchKey: START',event);
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            if (this.isDebug) console.log('handleSearchKey: triggering search');
+            this.handleSearch(event);
+        }
+        if (this.isDebug) console.log('handleSearchKey: END');
+    }
     handleSearch(event){
         if (this.isDebug) console.log('handleSearch: START');
         event.stopPropagation();
