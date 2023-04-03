@@ -327,8 +327,9 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     }
 
     //----------------------------------------------------------------
-    // Event handlers (main navigation actions)
-    //----------------------------------------------------------------      
+    // Event handlers
+    //----------------------------------------------------------------
+    // Navigation links
     handleTopClick(event){
         if (this.isDebug) console.log('handleTopClick: START for header menu ',this.topMenu);
         if (this.isDebug) console.log('handleTopClick: event received ',event);
@@ -348,32 +349,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleMainClick: END for header menu',this.topMenu);
     }
 
-    navigate = function(event,menuItems) {
-        if (this.isDebug) console.log('navigate: START for menu ', JSON.stringify(menuItems));
-
-        this.collapseModals();
-        if (this.isDebug) console.log('navigate: modal closed');
-
-        const selectedLink = event.target.dataset.value;
-        if (this.isDebug) console.log('navigate: selectedLink identified ',selectedLink);
-
-        const selectedItem = menuItems.find(item => item.label === selectedLink);
-        if (this.isDebug) console.log('navigate: selectedItem found ',JSON.stringify(selectedItem));
-
-        const newPageRef = {
-            type: 'standard__webPage',
-            attributes: {
-                url: selectedItem.actionValue
-            }
-        };
-        if (this.isDebug) console.log('navigate: newPageRef prepared ',JSON.stringify(newPageRef));
-        
-
-        this[NavigationMixin.Navigate](newPageRef);
-        if (this.isDebug) console.log('navigate: END for navigation menu / Navigation triggered');
-        return;
-    }
-
+    // Login & logout buttons
     handleLogin(event) {
         if (this.isDebug) console.log('handleLogin: START');
         event.stopPropagation();
@@ -415,6 +391,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         window.open(logoutUrl, '_self');
         if (this.isDebug) console.log('handleLogout: END / navigation triggered');
     }
+
+    // Search button action
     handleSearch(event){
         if (this.isDebug) console.log('handleSearch: START');
         event.stopPropagation();
@@ -437,10 +415,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleSearch: END / navigation triggered');
     }
 
-    //----------------------------------------------------------------
-    // Event handlers (modals open/close)
-    //----------------------------------------------------------------  
-    // top menu links not displayed (and login.logout not displayed)  
+    // Expand/collapse of modals when in mobile/narrow mode
     toggleModal(event) {
         if (this.isDebug) console.log('toggleModal: START');
         if (this.isDebug) console.log('toggleModal: event',event);
@@ -468,6 +443,32 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     //----------------------------------------------------------------
     // Utilities
     //----------------------------------------------------------------  
+    navigate = function(event,menuItems) {
+        if (this.isDebug) console.log('navigate: START for menu ', JSON.stringify(menuItems));
+
+        this.collapseModals();
+        if (this.isDebug) console.log('navigate: modal closed');
+
+        const selectedLink = event.target.dataset.value;
+        if (this.isDebug) console.log('navigate: selectedLink identified ',selectedLink);
+
+        const selectedItem = menuItems.find(item => item.label === selectedLink);
+        if (this.isDebug) console.log('navigate: selectedItem found ',JSON.stringify(selectedItem));
+
+        const newPageRef = {
+            type: 'standard__webPage',
+            attributes: {
+                url: selectedItem.actionValue
+            }
+        };
+        if (this.isDebug) console.log('navigate: newPageRef prepared ',JSON.stringify(newPageRef));
+        
+
+        this[NavigationMixin.Navigate](newPageRef);
+        if (this.isDebug) console.log('navigate: END for navigation menu / Navigation triggered');
+        return;
+    }
+
     collapseModals = function() {
         if (this.isDebug) console.log('collapseModals: START');
 

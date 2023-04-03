@@ -10,26 +10,12 @@
 .fr-header {
     width: 100vw !important;
     margin-left: min(600px - 50vw , 0px) !important;
-    
-    /*margin-left: min(624px - 50vw , 0px) !important;*/
-    /*margin-left: auto !important;
-    margin-right: auto !important;*/
 }
-/*.fr-container {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-}*/
-/*
-.fr-modal.fr-modal--opened .toolsModal {
-    display: block !important;
-}
-.fr-modal .toolsModal {
-    display: hidden;
-}
-.fr-modal:not(.fr-modal--opened) {
-    background-color: red !important;
-}*/
-
+/* hide second top menu in modal when it is not open */
 .fr-modal:not(.fr-modal--opened) .toolsModal {
     display:none;
+}
+/* iPhone input rounding bypass */
+input[type="search"] {
+    -webkit-appearance: none;
 }
