@@ -288,19 +288,19 @@ export default class DsfrCardTileListCmp extends LightningElement {
             if (item.field != selectedLink) {
                 item.selected = false;
                 item.up = true;
-                item.class = '';
+                //item.class = '';
             }
             else {
                 if (item.selected) {
                     if (this.isDebug) console.log('selectSort: inverting current sort direction ');
                     item.up = !item.up;
-                    item.class = (item.up ? 'fr-icon-arrow-up-line' : 'fr-icon-arrow-down-line');
+                    //item.class = (item.up ? 'fr-icon-arrow-up-line' : 'fr-icon-arrow-down-line');
                 }
                 else {
                     if (this.isDebug) console.log('selectSort: selecting new sorting field ');
                     item.selected = true;
                     item.up = true;
-                    item.class = 'fr-icon-arrow-up-line';
+                    //item.class = 'fr-icon-arrow-up-line';
                 }
                 selectedSort = item;
             }

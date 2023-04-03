@@ -18,9 +18,9 @@
     -->
     <div class={wrappingCss} lwc:if={isReady}>
         <!-- HEADER with Sorting -->
-        <lightning-layout multiple-rows="true" vertical-align="start" class="listHeader">
+        <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
             <lightning-layout-item flexibility="auto" >
-                <h2 class="fr-h3 listTitle">{headerTitle}</h2>
+                <h3 class="fr-h3 listTitle">{headerTitle}</h3>
             </lightning-layout-item>
             <template lwc:if={hasSort} >
                 <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
