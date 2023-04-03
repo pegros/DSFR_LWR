@@ -1,8 +1,13 @@
 import { LightningElement, api } from 'lwc';
-import { NavigationMixin } from 'lightning/navigation';
-import userId from '@salesforce/user/Id';
-import sfpegMergeUtl from 'c/sfpegMergeUtl';
-import DefaultGroupNotificationFrequency from '@salesforce/schema/User.DefaultGroupNotificationFrequency';
+//import { NavigationMixin } from 'lightning/navigation';
+import userId       from '@salesforce/user/Id';
+import sfpegJsonUtl from 'c/sfpegJsonUtl';
+//import DefaultGroupNotificationFrequency from '@salesforce/schema/User.DefaultGroupNotificationFrequency';
+import SORT_TITLE from '@salesforce/label/c.dsfrCardTileListSortTitle';
+import TYPE_ERROR from '@salesforce/label/c.dsfrCardTileListError';
+import SORT_DEFAULT from '@salesforce/label/c.dsfrCardTileListSortDefault';
+import SORT_PREFIX from '@salesforce/label/c.dsfrCardTileListSortPrefix';
+
 
 export default class DsfrCardTileListCmp extends LightningElement {
 
@@ -62,6 +67,11 @@ export default class DsfrCardTileListCmp extends LightningElement {
     elementCss = '';
     isReady = false;
 
+    //-----------------------------------
+    // Custom Labels
+    //-----------------------------------
+    sortTitle = SORT_TITLE;
+    typeError = TYPE_ERROR;
 
     //-----------------------------------------------------
     // Custom Getters
@@ -81,6 +91,25 @@ export default class DsfrCardTileListCmp extends LightningElement {
     get headerTitle() {
         return '' + (this.recordList?.length || 0) + ' ' + this.listTitle;
     }
+    get hasSort() {
+        //if (this.isDebug) console.log('hasSort: ',(this.configDetails?.display?.sort || false));
+        return (this.configDetails?.display?.sort || false);
+    }
+    get currentSort() {
+        if (this.isDebug) console.log('currentSort: START');
+        /*if (!this.hasSort) {
+            console.warn('currentSort: END KO / issue with sort init ');
+            return {label: 'Issue!!!'};
+        }*/
+        let currentSort = this.configDetails.display.sort.find(item => {return item.selected;});
+        if (this.isDebug) console.log('currentSort: currentSort found ',JSON.stringify(currentSort));
+        if (currentSort) {
+            if (this.isDebug) console.log('currentSort: END / returning current ');
+            return {label: SORT_PREFIX + currentSort.label, class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line')};
+        }
+        if (this.isDebug) console.log('currentSort: END / returning default ');
+        return {label: SORT_DEFAULT};
+    }
 
     //-----------------------------------------------------
     // Initialisation
@@ -94,6 +123,15 @@ export default class DsfrCardTileListCmp extends LightningElement {
             console.log('connected: recordId ', this.recordId);
             console.log('connected: userId ', this.userId);
             console.log('connected: END for card/tile list');
+        }
+    }
+
+    renderedCallback() {
+        if (this.isDebug) {
+            console.log('rendered: START for card/tile list');
+            console.log('rendered: configName ', this.configName);
+            console.log('rendered: sort context ', this.configDetails?.display?.sort);
+            console.log('rendered: END for card/tile list');
         }
     }
 
@@ -132,6 +170,14 @@ export default class DsfrCardTileListCmp extends LightningElement {
                 if (this.isDebug) console.log('handleRecordLoad: all tokens extracted',targetTokens);
                 this.targetTokens = targetTokens;
             }
+            if (this.configDetails?.display?.sort) {
+                if (this.isDebug) console.log('handleRecordLoad: initializing sort');
+                this.configDetails.display.sort.forEach(item => {
+                    item.selected = false;
+                    item.up = true;
+                });
+            }
+
             if (this.isDebug) console.log('handleRecordLoad: configDetails init ',JSON.stringify(this.configDetails));
         }
 
@@ -145,6 +191,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
             baseRecordList.forEach(item => {
                 if (this.isDebug) console.log('handleRecordLoad: processing row ',JSON.stringify(item));
                 let newItem = {... (this.configDetails?.display?.base)};
+                //newItem._source = item;
                 if (this.configDetails?.display?.row) {
                     if (this.isDebug) console.log('handleRecordLoad: processing row fields');
                     for (let fieldItem in this.configDetails.display.row) {
@@ -153,6 +200,16 @@ export default class DsfrCardTileListCmp extends LightningElement {
                         if (this.isDebug) console.log('handleRecordLoad: fieldItemSrc fetched ',fieldItemSrc);
                         newItem[fieldItem] =  item[fieldItemSrc];
                     }
+                    if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
+                }
+                if (this.configDetails?.display?.sort) {
+                    if (this.isDebug) console.log('handleRecordLoad: copying sort field values');
+                    this.configDetails.display.sort.forEach(itemSort => {
+                        if (this.isDebug) console.log('handleRecordLoad: processing sort item ',itemSort.field);
+                        let itemSortTgt = '_' + itemSort.field;
+                        if (this.isDebug) console.log('handleRecordLoad: registered as ',itemSortTgt);
+                        newItem[itemSortTgt] = item[itemSort.field];
+                    });
                     if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
                 }
                 if (this.targetTokens) {
@@ -181,14 +238,100 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     if (this.isDebug) console.log('handleRecordLoad: no row target merge required');
                 }
                 
+                
                 if (this.isDebug) console.log('handleRecordLoad: newItem prepared ',JSON.stringify(newItem));
                 targetRecordList.push(newItem);
             });
         }
         this.recordList = targetRecordList;
+        if (this.isDebug) console.log('handleRecordLoad: recordList init ',JSON.stringify(this.recordList));
         this.isReady = true;
         
         if (this.isDebug) console.log('handleRecordLoad: END for card/tile list');
+    }
+
+    toggleSort(event) {
+        if (this.isDebug) console.log('toggleSort: START for card/tile list',event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        let sortMenu = this.template.querySelector("div[data-menu='sort']");
+        if (this.isDebug) console.log('toggleSort: sortMenu found ',sortMenu);
+
+        if (sortMenu) {
+            if (this.isDebug) console.log('toggleSort: current Menu classList ',sortMenu.classList);
+            if (sortMenu.classList.contains('fr-collapse--expanded')) {
+                if (this.isDebug) console.log('toggleSort: closing menu');
+                sortMenu.classList.remove('fr-collapse--expanded');
+            }
+            else {
+                if (this.isDebug) console.log('toggleSort: opening menu');
+                sortMenu.classList.add('fr-collapse--expanded');
+            }
+            if (this.isDebug) console.log('toggleSort: Menu classList updated ',sortMenu.classList);
+        }
+
+        if (this.isDebug) console.log('toggleSort: END for card/tile list');
+    }
+
+    selectSort(event){
+        if (this.isDebug) console.log('selectSort: START for card/tile list',event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        const selectedLink = event.target.dataset.name;
+        if (this.isDebug) console.log('selectSort: selectedLink identified ',selectedLink);
+
+        let selectedSort;
+        this.configDetails.display.sort.forEach(item => {
+            if (this.isDebug) console.log('selectSort: processing sort option ',item);
+            if (item.field != selectedLink) {
+                item.selected = false;
+                item.up = true;
+                item.class = '';
+            }
+            else {
+                if (item.selected) {
+                    if (this.isDebug) console.log('selectSort: inverting current sort direction ');
+                    item.up = !item.up;
+                    item.class = (item.up ? 'fr-icon-arrow-up-line' : 'fr-icon-arrow-down-line');
+                }
+                else {
+                    if (this.isDebug) console.log('selectSort: selecting new sorting field ');
+                    item.selected = true;
+                    item.up = true;
+                    item.class = 'fr-icon-arrow-up-line';
+                }
+                selectedSort = item;
+            }
+        });
+        if (this.isDebug) console.log('selectSort: sorting entries updated ',JSON.stringify(this.configDetails.display.sort));
+       
+        this.toggleSort(event);
+
+        if (selectedSort) {
+            if (this.isDebug) console.log('selectSort: sorting by ',JSON.stringify(selectedSort));
+            let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
+            if (this.isDebug) console.log('selectSort: list fetch component retrieved ',listCmp);
+
+            /*listCmp.doSort(selectedSort.field,(selectedSort.up?'asc':'desc'));
+            if (this.isDebug) console.log('selectSort: sorting triggered');
+            */
+            let results2sort = [...this.recordList];
+            if (this.isDebug) console.log('selectSort: results2sort init ', JSON.stringify(results2sort));
+            if (this.isDebug) console.log('selectSort: sort by field ', ('_' + selectedSort.field));
+            if (this.isDebug) console.log('selectSort: revers sorting? ', !selectedSort.up);
+            sfpegJsonUtl.sfpegJsonUtl.isDebug = this.isDebug;
+            results2sort.sort(sfpegJsonUtl.sfpegJsonUtl.sortBy(('_' + selectedSort.field), !selectedSort.up));
+            if (this.isDebug) console.log('handleSort: results2sort sorted ',results2sort);
+            this.recordList = results2sort;
+            if (this.isDebug) console.log('selectSort: recordList sorted ',JSON.stringify(this.recordList));
+        }
+        else {
+            console.warn('selectSort: no selected sorting field');
+        }
+        
+        if (this.isDebug) console.log('selectSort: END for card/tile list');        
     }
 
     //-----------------------------------------------------

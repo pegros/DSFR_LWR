@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>dsfrCardTileListSortDefault</fullName>
+        <categories>DSFR Component LWC Button Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé par défaut du bouton de tri</shortDescription>
+        <value>Tri par défaut</value>
+    </labels>
+    <labels>
+        <fullName>dsfrCardTileListSortPrefix</fullName>
+        <categories>DSFR Component LWC Button Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Début du libellé du bouton de tri avant sélection</shortDescription>
+        <value>Tri par</value>
+    </labels>
+    <labels>
+        <fullName>dsfrCardTileListSortTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de tri</shortDescription>
+        <value>Triez vos enregistrements</value>
+    </labels>
+    <labels>
+        <fullName>dsfrCardTileListError</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de tri</shortDescription>
+        <value>Type de conteneur non supporté</value>
+    </labels>
+</CustomLabels>

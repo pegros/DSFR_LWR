@@ -1,6 +1,6 @@
 <template>
 
-    <!-- DXata Loading Utility -->
+    <!-- DATA LOAD UTILITY -->
     <c-sfpeg-list-cmp   object-api-name={objectApiName} 
                         record-id={recordId} user-id={currentUserId}
                         config-name={configName}
@@ -17,12 +17,55 @@
     fr-grid-row-top
     -->
     <div class={wrappingCss} lwc:if={isReady}>
-        <h2 class="fr-h3">{headerTitle}</h2>
+        <!-- HEADER with Sorting -->
+        <lightning-layout multiple-rows="true" vertical-align="start" class="listHeader">
+            <lightning-layout-item flexibility="auto" >
+                <h2 class="fr-h3 listTitle">{headerTitle}</h2>
+            </lightning-layout-item>
+            <template lwc:if={hasSort} >
+                <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
+                    <nav role="navigation" class="fr-nav">
+                        <div class="fr-nav__item sortMenu">
+                        <!--
+                        <ul class="fr_nav__list">
+                            <li class="fr-nav__item sortMenu">
+                        -->
+                                <!--
+                                <button class="fr-btn fr-btn-tertiary-no-outline fr-btn-icon-right fr-icon-arrow-down-s-fill" title="Triez vos enregistrements" onclick={toggleSort}>
+                                -->
+                                <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
+                                    <span class={currentSort.class}>{currentSort.label}</span>
+                                </button>
+                                <div class="fr-collapse fr-menu" data-menu="sort">
+                                    <ul class="fr-menu__list">
+                                        <template for:each={configDetails.display.sort} for:item="iterSort">
+                                            <li key={iterSort.name}>
+                                                <template lwc:if={iterSort.selected}>
+                                                    <a class="fr-nav__link" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                </template>
+                                                <template lwc:else>
+                                                    <a class="fr-nav__link" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                </template>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                        <!--
+                            </li>
+                        </ul>
+                        -->
+                        </div>
+                    </nav>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+
+        <!-- LIST DISPLAY -->
         <div class="fr-container--fluid">
             <div class="fr-grid-row fr-grid-row--gutters fr-grid-row-top">
                 <template lwc:if={isCard}>
                     <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12 fr-col-xl-6">
+                        <div key={item.Id} class="fr-col-12">
                             <c-dsfr-card-cmp    card-image={item.image}
                                                 card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
                                                 card-title={item.title}                 card-description={item.description}
@@ -36,7 +79,7 @@
                 </template>
                 <template lwc:elseif={isTile}>
                     <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12 fr-col-xl-6">
+                        <div key={item.Id} class="fr-col-12">
                             <c-dsfr-tile-cmp    tile-image={item.image}
                                                 tile-title={item.title} tile-description={item.description}
                                                 tile-target={item.target}
@@ -48,7 +91,7 @@
                 </template>
                 <template lwc:elseif={isContainer}>
                     <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12 fr-col-xl-6">
+                        <div key={item.Id} class="fr-col-12">
                             <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
                                                     message={item.message}  message-class={item.messageClass}
                                                     wrapping-class={elementCss} >
@@ -57,8 +100,7 @@
                     </template>
                 </template>
                 <template lwc:else>
-                    <p class="fr-icon-alert-fill text-default-error">Type de conteneur non supporté: {displayType}</p>
-                    <p class="">Seules valeurs autorisées: Card, Tile et Container</p>
+                    <p class="fr-icon-alert-fill text-default-error">{typeError}: {displayType}</p>
                 </template>
                 <!--
                 <div class="fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2"><c-dsfr-tile-cmp tile-title="Tile Title" tile-image="environment/environment"></c-dsfr-tile-cmp></div>
@@ -68,67 +110,4 @@
             </div>
         </div>
     </div>
-
-
-    <!--
-    <nav role="navigation" class="fr-pagination" aria-label="Pagination">
-        <ul class="fr-pagination__list">
-            <li>
-                <a class="fr-pagination__link fr-pagination__link--first" aria-disabled="true" role="link">
-                    Première page
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link fr-pagination__link--prev fr-pagination__link--lg-label" aria-disabled="true" role="link">
-                    Page précédente
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link" aria-current="page" title="Page 1">
-                    1
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link" href="#" title="Page 2">
-                    2
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link fr-displayed-lg" href="#" title="Page 3">
-                    3
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link fr-displayed-lg">
-                    …
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link fr-displayed-lg" href="#" title="Page 130">
-                    130
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link fr-displayed-lg" href="#" title="Page 131">
-                    131
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link" href="#" title="Page 132">
-                    132
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link fr-pagination__link--next fr-pagination__link--lg-label" href="#">
-                    Page suivante
-                </a>
-            </li>
-            <li>
-                <a class="fr-pagination__link fr-pagination__link--last" href="#">
-                    Dernière page
-                </a>
-            </li>
-        </ul>
-    </nav>
-    -->
 </template>
