@@ -95,8 +95,6 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         this.searchTerm = this.currentState.term || '';
         if (this.isDebug) console.log('wiredPageRef: search term updated ', this.searchTerm);
 
-        
-
         if (this.isDebug) console.log('wiredPageRef: END for search');
     }
 
@@ -109,7 +107,6 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('connected: criteria ', this.criteria);
 
         if (this.criteria) {
-
             try {
                 this.fieldList = JSON.parse(this.criteria);
                 if (this.isDebug) console.log('connected: criteria parsed ', this.fieldList);
@@ -125,6 +122,35 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     // Event Handlers
     //-----------------------------------------------------
+    toggleExpand(event) {
+        if (this.isDebug) console.log('toggleExpand: START accordeon');
+        if (this.isDebug) console.log('toggleExpand: event ',event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        let currentTarget = event.target?.value;
+        if (this.isDebug) console.log('toggleExpand: current target fetched ', currentTarget);
+
+        let currentStatus =  event.target?.ariaExpanded;
+        if (this.isDebug) console.log('toggleExpand: current status fetched ', currentStatus);
+
+        let currentSection = this.template.querySelector("div.fr-collapse[data-name='" + currentTarget + "']");
+        if (this.isDebug) console.log('toggleExpand: current section fetched ', currentSection);
+        
+        if (currentStatus == "true") {
+            if (this.isDebug) console.log('toggleExpand: collapsing section');
+            currentSection.classList?.remove("fr-collapse--expanded");
+            event.target.ariaExpanded = "false";
+        }
+        else {
+            if (this.isDebug) console.log('toggleExpand: expanding section');
+            currentSection.classList.add("fr-collapse--expanded");
+            event.target.ariaExpanded = "true";
+        }
+
+        if (this.isDebug) console.log('toggleExpand: END accordeon');
+    }
+
     toggleSelect(event) {
         if (this.isDebug) console.log('toggleSelect: START for search');
         event.stopPropagation();
@@ -136,6 +162,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
         const selectName = event.srcElement.dataset.name;
         if (this.isDebug) console.log('toggleSelect: selected Name ', selectName);
+        /*const selectParentName = event.srcElement.dataset.parentName;
+        if (this.isDebug) console.log('toggleSelect: selected parent Name ', selectParentName);*/
         
         let selectInput = this.template.querySelector("input.selector[name='" + selectName + "']");
         if (this.isDebug) console.log('updateSearch: selectInput found ', selectInput);
@@ -144,13 +172,38 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             let selectState = selectInput.checked;
             if (this.isDebug) console.log('toggleSelect: selectInput check state ',selectState);
             selectInput.checked = !selectState;
+            /*if (this.isDebug) console.log('toggleSelect: selectInput check state updated ',selectState);
+            if (selectState) {
+                if (this.isDebug) console.log('toggleSelect: removing selection from tags');
+                let selectTag = this.template.querySelector("p.fr-tag[data-name='" + selectName + "']");
+                if (this.isDebug) console.log('toggleSelect: tag fetched ', selectTag);
+                let tagContainer = selectTag.parentNode;
+                if (this.isDebug) console.log('toggleSelect: tagContainer fetched ', tagContainer);
+                tagContainer.removeChild(selectTag);
+                if (this.isDebug) console.log('toggleSelect: tag removed');
+            }
+            else {
+                if (this.isDebug) console.log('toggleSelect: adding selection to tags');
+                let selectTagList = this.template.querySelector("ul.fr-tags-group[data-name='" + selectParentName + "']");
+                if (this.isDebug) console.log('toggleSelect: tag list fetched ', selectTagList);
+            }*/
         }
         else {
             console.warn('toggleSelect: selectInput not found ', selectName);
         }
+
         if (this.isDebug) console.log('toggleSelect: END for search');
     }
 
+    handleSearchKey(event) {
+        if (this.isDebug) console.log('handleSearchKey: START',event);
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            if (this.isDebug) console.log('handleSearchKey: triggering search');
+            this.updateSearch(event);
+        }
+        if (this.isDebug) console.log('handleSearchKey: END');
+    }
+    
     updateSearch(event) {
         if (this.isDebug) console.log('updateSearch: START for search');
 
@@ -183,6 +236,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         let searchPage = {type:"standard__search",state:searchState};
         //let searchPage = {type: 'comm__namedPage',attributes:{name: 'Search'},state: {term:"test"}}
         if (this.isDebug) console.log('handleSearch: searchPage init ', JSON.stringify(searchPage));
+
+        if (this.isDebug) console.log('handleSearch: previous State ', JSON.stringify(this.currentState));
 
         this[NavigationMixin.Navigate](searchPage);
 

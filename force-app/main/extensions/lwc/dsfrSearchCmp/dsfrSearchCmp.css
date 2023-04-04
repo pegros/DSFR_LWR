@@ -1,7 +1,17 @@
 .mainSearchDiv {
     margin-bottom: 2em;
 }
+.fr-collapse--expanded {
+    --collapse-max-height:20rem;
+    overflow-y: auto !important;
+}
 /* iPhone input rounding bypass */
 input[type="search"] {
     -webkit-appearance: none;
+}
+.selectionTag {
+    margin-bottom: 0px !important;
+}
+.selectionItem {
+    line-height: 1,5rem !important;
 }

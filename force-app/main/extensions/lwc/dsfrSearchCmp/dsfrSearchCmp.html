@@ -3,34 +3,57 @@
         <template lwc:if={showSearch}>
             <div class="fr-search-bar mainSearchDiv" role="search">
                 <label class="fr-label">Recherche</label>
-                <input class="fr-input mainSearch" placeholder="Rechercher" type="search" name="search" value={searchTerm}>
+                <input class="fr-input mainSearch" placeholder="Rechercher" type="search" name="search" value={searchTerm} onkeyup={handleSearchKey}>
                 <button class="fr-btn" title="Rechercher" onclick={updateSearch}>
                     Rechercher
                 </button>
             </div>
         </template>
     
-        <template for:each={criteriaList} for:item="itemC">
-                <fieldset key={itemC.fullName} class="fr-fieldset fr-mb-5v" aria-labelledby="checkboxes-legend checkboxes-messages">
+
+        <div class="fr-accordions-group fr-mb-5v" lwc:if={criteriaList}>
+            <h5 class="fr-h5">Affiner la recherche par</h5>
+            <template for:each={criteriaList} for:item="itemC" >
+                <section class="fr-accordion" key={itemC.fullName} >
+                    <h3 class="fr-accordion__title">
+                        <button class="fr-accordion__btn" aria-expanded="false" value={itemC.fullName} onclick={toggleExpand}>{itemC.label}</button>
+                        <!--<ul class="fr-tags-group" data-name={itemC.fullName}>
+                            <template for:each={itemC.values} for:item="itemVal">
+                                <template lwc:if={itemVal.selected}>
+                                    <li key={itemVal.fullName} class="selectionItem">
+                                        <p class="fr-tag fr-tag--sm selectionTag" data-name={itemVal.fullName} >{itemVal.label}</p>
+                                    </li>
+                                </template>
+                            </template>
+                        </ul>-->
+                    </h3>
+                    <div class="fr-collapse" data-name={itemC.fullName}>
+                        <!--
+                    <fieldset key={itemC.fullName} class="fr-fieldset fr-mb-5v" aria-labelledby="checkboxes-legend checkboxes-messages">
                     <legend class="fr-fieldset__legend--regular fr-fieldset__legend" >
                         {itemC.label}
                     </legend>
-                    <template for:each={itemC.values} for:item="itemV">
-                        <div key={itemV.fullName} class="fr-fieldset__element">
-                            <div class="fr-checkbox-group">
-                                <input  class="selector" name={itemV.fullName} data-value={itemV.value} data-criteria={itemC.name} type="checkbox"
-                                        aria-describedby={itemV.fullName} checked={itemV.selected} >
-                                <label class="fr-label"  id={itemV.fullName} data-name={itemV.fullName} onclick={toggleSelect} >
-                                    {itemV.label}
-                                </label>
-                                <!--
-                                <div class="fr-messages-group" aria-live="assertive">
+                    -->
+                        <fieldset class="fr-fieldset">
+                            <template for:each={itemC.values} for:item="itemV">
+                                <div key={itemV.fullName} class="fr-fieldset__element">
+                                    <div class="fr-checkbox-group">
+                                        <input  class="selector" name={itemV.fullName} data-value={itemV.value} data-criteria={itemC.name} type="checkbox"
+                                                aria-describedby={itemV.fullName} checked={itemV.selected} >
+                                        <label  class="fr-label"  id={itemV.fullName} data-name={itemV.fullName} data-parent-name={itemC.fullName}  onclick={toggleSelect} >
+                                                {itemV.label}
+                                        </label>
+                                        <!--
+                                        <div class="fr-messages-group" aria-live="assertive">
+                                        </div>
+                                        -->
+                                    </div>
                                 </div>
-                                -->
-                            </div>
-                        </div>
-                    </template>
-                </fieldset>
-        </template>
+                            </template>
+                        </fieldset>
+                    </div>
+                </section>
+            </template>
+        </div>
     </div>
 </template>
