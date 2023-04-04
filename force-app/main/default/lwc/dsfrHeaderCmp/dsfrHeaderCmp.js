@@ -21,6 +21,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     // Configuration Parameters
     //-----------------------------------
     @api logoTitle = 'Nom du Ministère';
+    @api loginUrl; // Obsolete name, now corresponding to the main logo URL
     @api siteTitle = 'Titre du Site';
     @api siteTagline = 'Précisions sur l\'organisation';
 
@@ -31,7 +32,6 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
     @api isDebug = false;
     
-    @api loginUrl; // OBSOLETE
     //-----------------------------------
     // Contextual Parameters
     //-----------------------------------
@@ -330,6 +330,21 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     // Event handlers
     //----------------------------------------------------------------
     // Navigation links
+    handleLogoClick(event) {
+        if (this.isDebug) console.log('handleLogoClick: START for logo link ');
+        event.stopPropagation();
+        event.preventDefault();
+        let newPageRef = {
+            type: 'standard__webPage',
+            attributes: {
+                url: this.loginUrl
+            }
+        };
+        if (this.isDebug) console.log('handleLogoClick: newPageRef prepared ',JSON.stringify(newPageRef));
+        
+        this[NavigationMixin.Navigate](newPageRef);
+        if (this.isDebug) console.log('handleLogoClick: END for logo link');
+    }
     handleTopClick(event){
         if (this.isDebug) console.log('handleTopClick: START for header menu ',this.topMenu);
         if (this.isDebug) console.log('handleTopClick: event received ',event);

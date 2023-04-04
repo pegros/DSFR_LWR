@@ -15,6 +15,10 @@
                         type="String"
                         default="Intitulé Officiel"
                         description="Libellé du ministère/service pour lequel le site est configuré" />
+            <property   name="loginUrl"
+                        label="URL du Logo"
+                        type="String"
+                        description="URL de redirection sur le logo principal de l'entête (par ex. https://xxx.yyy.zzz)."/>
             <property   name="siteTitle"
                         label="Nom du Site / Service"
                         type="String"
@@ -47,10 +51,6 @@
                         type="Boolean"
                         default="false"
                         description="Activation de détails pour l'analyse de problèmes" />
-            <!-- OBSOLETE -->
-            <property   name="loginUrl"
-                        label="OBSOLETE"
-                        type="String"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

@@ -6,8 +6,7 @@
                     <div class="fr-header__brand fr-enlarge-link">
                         <div class="fr-header__brand-top">
                             <div class="fr-header__logo" >
-                                <!--<p class="fr-logo">{logoTitle}</p>-->
-                                <lightning-formatted-rich-text class="fr-logo dsfrHeaderLogo" value={logoTitle}>
+                                <lightning-formatted-rich-text class="fr-logo dsfrHeaderLogo" value={logoTitle} >
                                 </lightning-formatted-rich-text>
                             </div>
                             <div class="fr-header__navbar">
@@ -22,9 +21,14 @@
                             </div>
                         </div>
                         <div class="fr-header__service">
-                            <a href="/" title={siteTitle}>
+                            <template lwc:if={loginUrl}>
+                                <a href="#" title={siteTitle} onclick={handleLogoClick}>
+                                    <p class="fr-header__service-title">{siteTitle}</p>
+                                </a>
+                            </template>
+                            <template lwc:else>
                                 <p class="fr-header__service-title">{siteTitle}</p>
-                            </a>
+                            </template>
                             <p class="fr-header__service-tagline">{siteTagline}</p>
                         </div>
                     </div>
