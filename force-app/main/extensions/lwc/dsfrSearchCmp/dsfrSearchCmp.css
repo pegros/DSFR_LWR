@@ -1,16 +1,37 @@
 .mainSearchDiv .criteriaDiv {
     margin-top: 2em;
 }
-.fr-menu.fr-collapse--expanded {
+.fr-collapse--expanded {
     --collapse-max-height:20rem;
     overflow-y: auto !important;
+}
+.fr-menu.fr-collapse--expanded {
     background-color: white;
-    z-index: 1000;
+    z-index: 1500;
     padding-left:  0.1rem !important;
     padding-right:  0.1rem !important;
     margin-left:  0rem !important;
     margin-right:  0rem !important;
 }
+/*.selectMenu {
+    position: relative !important;
+    margin-bottom: var(--title-spacing) !important;
+}
+.fr-menu.fr-collapse--expanded {
+    --collapse-max-height:20rem;
+    display: inline-block  !important;
+    overflow-y: auto !important;
+    background-color: white;
+    z-index: 1000;
+    position: absolute !important;
+    margin-top:  0.1rem !important;
+    padding-left:  0.1rem !important;
+    padding-right:  0.1rem !important;
+    margin-left:  0rem !important;
+    margin-right:  0rem !important;
+    top:  2.75rem !important;
+    right: 0rem !important;
+}*/
 .fr-nav__link:hover {
     background-color: var(--hover-tint);
 }

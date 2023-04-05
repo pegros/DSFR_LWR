@@ -177,16 +177,25 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('toggleMenuSelect: event ',event);
         if (this.isDebug) console.log('toggleMenuSelect: event detail ',event.detail);
         if (this.isDebug) console.log('toggleMenuSelect: selected Name ',event.srcElement.dataset.name);
-        if (this.isDebug) console.log('toggleMenuSelect: situation ', event.srcElement.ariaCurrent);
+        if (this.isDebug) console.log('toggleMenuSelect: previous situation ', event.srcElement.ariaCurrent);
+
+        let srcCmp = this.template.querySelector("a.menuSelector[data-name='"+ event.srcElement.dataset.name +"']");
+        if (this.isDebug) console.log('toggleMenuSelect: srcCmp fetched ', srcCmp);
+        if (this.isDebug) console.log('toggleMenuSelect: with attributes ',srcCmp.getAttributeNames());
 
         if (event.srcElement.ariaCurrent) {
             if (this.isDebug) console.log('toggleMenuSelect: deselecting item');
-            delete event.srcElement.ariaCurrent;
+            srcCmp.removeAttribute('aria-current');
+            // delete srcCmp.ariaCurrent
+            //event.srcElement.ariaCurrent = '';
         }
         else {
             if (this.isDebug) console.log('toggleMenuSelect: selecting item');
-            event.srcElement.ariaCurrent = 'page';
+            srcCmp.ariaCurrent = 'selection';
         }
+
+        //if (this.isDebug) console.log('toggleMenuSelect: new situation ', event.srcElement.ariaCurrent);
+        if (this.isDebug) console.log('toggleMenuSelect: new situation ', srcCmp.ariaCurrent);
 
         this.activateApply(false);
         if (this.isDebug) console.log('toggleMenuSelect: END for search');
