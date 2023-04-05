@@ -16,10 +16,15 @@
                         default="true"
                         description="Flag pour afficher / masquer la section de recherche standard" />
 
-            <property   name="criteria"
-                        label="Critères"
+            <property   name="mainCriteria"
+                        label="Critères principaux"
                         type="String"
-                        description="List de noms API de champs picklist fournissant la liste des valeurs possibles de chaque critère (au format liste JSON de Object.Field)" />
+                        description="Liste de noms API de champs picklist fournissant la liste des valeurs possibles de chaque critère (au format liste JSON de Object.Field)" />
+
+            <property   name="criteria"
+                        label="Critères complémentaires"
+                        type="String"
+                        description="Liste de noms API de champs picklist fournissant la liste des valeurs possibles de chaque critère (au format liste JSON de Object.Field)" />
 
             <property   name="isDebug"
                         label="Debug ?"

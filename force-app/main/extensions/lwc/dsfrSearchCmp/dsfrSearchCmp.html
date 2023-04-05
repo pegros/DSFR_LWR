@@ -1,59 +1,117 @@
 <template>
     <div class={wrappingClass}>
+
+        <!-- MAIN SEARCH BAR DISPLAY -->
         <template lwc:if={showSearch}>
-            <div class="fr-search-bar mainSearchDiv" role="search">
+            <div class="fr-search-bar fr-search-bar--lg mainSearchDiv" role="search">
                 <label class="fr-label">Recherche</label>
-                <input class="fr-input mainSearch" placeholder="Rechercher" type="search" name="search" value={searchTerm} onkeyup={handleSearchKey}>
+                <input  class="fr-input mainSearch" placeholder="Rechercher"
+                        type="search"               name="search"
+                        value={searchTerm}          onkeyup={handleSearchKey}>
+                <template for:each={mainCriteriaList} for:item="iterC" >
+                    <!--
+                    <div key={iterC.fullName} class="fr-input fr-select-group">
+                        <label class="fr-label" >{iterC.label}</label>
+                        <select class="fr-select" multiple>
+                            <option value="" selected disabled hidden>Selectionnez une option</option>
+                            <template for:each={iterC.values} for:item="iterV" >
+                                <option key={iterV.fullName} value={iterV.value} selected={iterV.selected}>{iterV.label}</option>   
+                            </template>
+                        </select>
+                    </div>
+                    -->
+                    <div key={iterC.fullName} class="fr-nav__item selectMenu">
+                        <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton" aria-expanded="false" value={iterC.fullName} onclick={expandCollapse}>
+                            {iterC.label}
+                        </button>
+                        <div class="fr-collapse fr-menu" data-name={iterC.fullName}>
+                            <ul class="fr-menu__list">
+                                <template for:each={iterC.values} for:item="iterVal">
+                                    <li key={iterVal.fullName}>
+                                        <template lwc:if={iterVal.selected}>
+                                            <a  class="fr-nav__link menuSelector"   href="#"                        
+                                                data-name={iterVal.fullName}
+                                                data-value={iterVal.value}          data-criteria={iterC.name}
+                                                aria-current="page"                 onclick={toggleMenuSelect}>
+                                                {iterVal.label}
+                                            </a>
+                                        </template>
+                                        <template lwc:else>
+                                            <a  class="fr-nav__link menuSelector"   href="#"
+                                                data-name={iterVal.fullName}
+                                                data-value={iterVal.value}          data-criteria={iterC.name}
+                                                onclick={toggleMenuSelect}>
+                                                {iterVal.label}
+                                            </a>
+                                        </template>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>    
+                    </div>
+                </template>
                 <button class="fr-btn" title="Rechercher" onclick={updateSearch}>
                     Rechercher
                 </button>
             </div>
         </template>
     
-
-        <div class="fr-accordions-group fr-mb-5v" lwc:if={criteriaList}>
-            <h5 class="fr-h5">Affiner la recherche par</h5>
-            <template for:each={criteriaList} for:item="itemC" >
-                <section class="fr-accordion" key={itemC.fullName} >
+        <!-- ADDITIONAL CRITERIA DISPLAY -->
+        <div class="fr-accordions-group criteriaDiv" lwc:if={criteriaList}>
+            <h5 class="fr-h5">Affiner la recherche</h5>
+            <template for:each={criteriaList} for:item="iterC" >
+                <section class="fr-accordion" key={iterC.fullName} >
                     <h3 class="fr-accordion__title">
-                        <button class="fr-accordion__btn" aria-expanded="false" value={itemC.fullName} onclick={toggleExpand}>{itemC.label}</button>
-                        <!--<ul class="fr-tags-group" data-name={itemC.fullName}>
-                            <template for:each={itemC.values} for:item="itemVal">
-                                <template lwc:if={itemVal.selected}>
-                                    <li key={itemVal.fullName} class="selectionItem">
-                                        <p class="fr-tag fr-tag--sm selectionTag" data-name={itemVal.fullName} >{itemVal.label}</p>
+                        <button class="fr-accordion__btn"   aria-expanded="false"
+                                value={iterC.fullName}      onclick={expandCollapse}>
+                                {iterC.label}
+                        </button>
+                    </h3>
+                    <div class="fr-collapse" data-name={iterC.fullName}>
+
+                        <!-- Tag list mode display -->
+                        <template lwc:if={iterC.isTag}>
+                            <ul class="fr-tags-group">
+                                <template for:each={iterC.values} for:item="iterVal">
+                                    <li key={iterVal.fullName} class="selectionItem">
+                                        <!--<p class="fr-tag fr-tag--sm selectionTag" data-name={itemVal.fullName} >{itemVal.label}</p>-->
+                                        <button class="fr-tag fr-tag--sm tagSelector"
+                                                data-name={iterVal.fullName}
+                                                data-value={iterVal.value}      data-criteria={iterC.name}
+                                                aria-pressed={iterVal.selected} onclick={toggleTagSelect}>
+                                                {iterVal.label}
+                                        </button>
                                     </li>
                                 </template>
-                            </template>
-                        </ul>-->
-                    </h3>
-                    <div class="fr-collapse" data-name={itemC.fullName}>
-                        <!--
-                    <fieldset key={itemC.fullName} class="fr-fieldset fr-mb-5v" aria-labelledby="checkboxes-legend checkboxes-messages">
-                    <legend class="fr-fieldset__legend--regular fr-fieldset__legend" >
-                        {itemC.label}
-                    </legend>
-                    -->
-                        <fieldset class="fr-fieldset">
-                            <template for:each={itemC.values} for:item="itemV">
-                                <div key={itemV.fullName} class="fr-fieldset__element">
-                                    <div class="fr-checkbox-group">
-                                        <input  class="selector" name={itemV.fullName} data-value={itemV.value} data-criteria={itemC.name} type="checkbox"
-                                                aria-describedby={itemV.fullName} checked={itemV.selected} >
-                                        <label  class="fr-label"  id={itemV.fullName} data-name={itemV.fullName} data-parent-name={itemC.fullName}  onclick={toggleSelect} >
-                                                {itemV.label}
-                                        </label>
-                                        <!--
-                                        <div class="fr-messages-group" aria-live="assertive">
+                            </ul>
+                        </template>
+
+                         <!-- Checkbox list mode display -->
+                        <template lwc:else>
+                            <fieldset class="fr-fieldset">
+                                <template for:each={iterC.values} for:item="iterVal">
+                                    <div key={iterVal.fullName} class="fr-fieldset__element">
+                                        <div class="fr-checkbox-group">
+                                            <input  class="checkSelector"       type="checkbox"
+                                                    name={iterVal.fullName}     aria-describedby={iterVal.fullName}
+                                                    data-value={iterVal.value}  data-criteria={iterC.name}  
+                                                    checked={iterVal.selected} >
+                                            <label  class="fr-label"                    data-name={iterVal.fullName}
+                                                    data-parent-name={iterC.fullName}   onclick={toggleCheckSelect} >
+                                                    {iterVal.label}
+                                            </label>
                                         </div>
-                                        -->
                                     </div>
-                                </div>
-                            </template>
-                        </fieldset>
+                                </template>
+                            </fieldset>
+                        </template>
                     </div>
                 </section>
             </template>
+            <button class="fr-btn fr-btn--tertiary-no-outline applyButton"
+                    disabled    onclick={updateSearch}>
+                    Appliquer les changements
+            </button>
         </div>
     </div>
 </template>
