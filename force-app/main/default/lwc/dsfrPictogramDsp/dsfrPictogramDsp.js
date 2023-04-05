@@ -19,7 +19,7 @@ export default class DsfrPictogrammeDsp extends LightningElement {
     }
     get pictoCss() {
         //(this.pictoClass || '') + 
-        return  (this.pictoSize == 'none' ? this.pictoClass : this.pictoClass + ' dsfrPicto-' + this.pictoSize) ;
+        return  (this.pictoSize == 'none' ? this.pictoClass : this.pictoClass + ' dsfrPicto dsfrPicto-' + this.pictoSize) ;
     }
 
     //-----------------------------------------------------

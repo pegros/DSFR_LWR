@@ -10,3 +10,6 @@
 .cardImage-large {
     max-height: 300px;
 }
+.imageContainer {
+    text-align: center;
+}

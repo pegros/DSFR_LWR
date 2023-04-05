@@ -59,7 +59,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 return  cardClass;
             case 'small':
                 return cardClass + ' fr-card--sm';
-            case 'small':
+            case 'large':
                 return cardClass + ' fr-card--lg';
             default:
                 return  cardClass;
@@ -67,6 +67,18 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     }
     get cardImageClass() {
         return 'fr-responsive-img fr-responsive-img--16x9 cardImage-' + this.cardSize;
+    }
+    get pictoSize() {
+        switch (this.cardSize) {
+            case 'medium':
+                return  'large';
+            case 'small':
+                return 'medium';
+            case 'large':
+                return 'x-large';
+            default:
+                return  'large';
+        }
     }
 
     //-----------------------------------------------------
