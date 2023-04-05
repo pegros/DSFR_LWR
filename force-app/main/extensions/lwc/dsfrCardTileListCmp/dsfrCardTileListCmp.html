@@ -39,7 +39,7 @@
                                 <div class="fr-collapse fr-menu" data-menu="sort">
                                     <ul class="fr-menu__list">
                                         <template for:each={configDetails.display.sort} for:item="iterSort">
-                                            <li key={iterSort.name}>
+                                            <li key={iterSort.name} >
                                                 <template lwc:if={iterSort.selected}>
                                                     <a class="fr-nav__link" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
                                                 </template>

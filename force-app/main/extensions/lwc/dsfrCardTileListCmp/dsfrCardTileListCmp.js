@@ -22,34 +22,43 @@ export default class DsfrCardTileListCmp extends LightningElement {
         return this._listContext;
     }
     set listContext(value) {
+        let listContext;
         try {
-            let listContext = JSON.parse(value);
+            if (this.isDebug) console.log('set listContext: value provided ', JSON.stringify(value));
+            listContext = JSON.parse(value);
             if (this.isDebug) console.log('set listContext: value parsed ', JSON.stringify(listContext));
-
-            for (let iter in listContext) {
-                if (this.isDebug) console.log('set listContext: processing iter ', JSON.stringify(iter));
-                if ((listContext[iter])?.WHERE) {
-                    if (this.isDebug) console.log('set listContext: evaluating iter', (listContext[iter]).WHERE);
-                    let condition = (listContext[iter]).WHERE;
-                    let finalCondition = this.buildWhere(condition);
-                    if (finalCondition) {
-                        if (this.isDebug) console.log('set listContext: updating iter', finalCondition);
-                        listContext[iter] = 'WHERE ' + finalCondition;
-                    }
-                    else {
-                        if (this.isDebug) console.log('set listContext: empty iter condition');
-                        listContext[iter] = '';
-                    }
-                }
-            }
-
-            this._listContext = listContext;
-            if (this.isDebug) console.log('set listContext: value parsed ', this._listContext);
         }
         catch(error) {
             console.warn('set listContext: value parsing failed ', error);
             this._listContext = null;
+            return;
         }
+
+        for (let iter in listContext) {
+            if (this.isDebug) console.log('set listContext: processing iter ', JSON.stringify(iter));
+            if ((listContext[iter])?.WHERE) {
+                if (this.isDebug) console.log('set listContext: evaluating iter', (listContext[iter]).WHERE);
+                let condition = (listContext[iter]).WHERE;
+                let finalCondition;
+                try {
+                    finalCondition = this.buildWhere(condition);
+                }
+                catch(error) {
+                    console.warn('set listContext: iter evaluation failed ', error);
+                }    
+                if (finalCondition) {
+                    if (this.isDebug) console.log('set listContext: updating iter', finalCondition);
+                    listContext[iter] = 'WHERE ' + finalCondition;
+                }
+                else {
+                    if (this.isDebug) console.log('set listContext: empty iter condition');
+                    listContext[iter] = '';
+                }
+            }
+        }
+
+        this._listContext = listContext;
+        if (this.isDebug) console.log('set listContext: value set ', JSON.stringify(this._listContext));
     }
     @api wrappingCss;
 
@@ -363,6 +372,18 @@ export default class DsfrCardTileListCmp extends LightningElement {
                 return null;
             }
         }
+        else if (condition.INCL) {
+            if (this.isDebug) console.log("buildWhere: processing INCL ");
+            if (condition.INCL.value) {
+                if (this.isDebug) console.log("buildWhere: END / building condition ");
+                let values = condition.INCL.value.split(';');
+                return '(' + condition.INCL.field + (condition.INCL.not ? " EXCLUDES ('": " INCLUDES ('") + values.join("','") + "'))";
+            }
+            else {
+                if (this.isDebug) console.log("buildWhere: END / ignoring condition ");
+                return null;
+            }
+        }
         else if (condition.OR) {
             if (this.isDebug) console.log("buildWhere: processing OR ");
             let unitConditions = [];
@@ -423,6 +444,10 @@ export default class DsfrCardTileListCmp extends LightningElement {
             default;
                 console.warn("buildWhere: unknown NEQ ");
             )
+
+            includes for multi-picklist
+            Select id, name from Account where MSP1__c includes('AAA;BBB','CCC')
+
         */
     }
 }
