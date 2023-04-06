@@ -91,6 +91,10 @@ style standard Salesforce components (if used).
        
 	  --ul-type: 'disc' !important;
    }
+
+   .slds-input {
+        border-bottom: 2px solid var(--border-plain-grey);
+    }
 </style>
 ```
 
