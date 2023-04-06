@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Sélecteur de Fichier 🚧</masterLabel>
+    <description>Affichage d'un composant de rattachement de fichier</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="label"
+                        label="Libellé"
+                        type="String"
+                        description="Libellé du composant d'ajout."/>
+            <property   name="comment"
+                        label="Explication"
+                        type="String"
+                        description="Texte explicatif du composant d'ajout." />
+
+            <property   name="configName"
+                        label="Configuration de liste"
+                        type="String"
+                        description="Nom du custom metadata sfpegList utilisé pour récupérer les fichiers" />
+            <property   name="context"
+                        label="Contexte de liste"
+                        type="String"
+                        description="Contexte d'utilisation de la configuration de liste" />
+
+            <property   name="disabled"
+                        label="Inactif?"
+                        type="String"
+                        default="false"
+                        description="Déactivation (dynamique) du composant (valeur booléenne true/false)." />
+            <property   name="wrappingClass"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style de la tuile (par ex. fr-m-2v)" />
+
+            <property   name="objectApiName"
+                        label="Object Name"
+                        type="String"
+                        description="API Name de l'objet lié" />
+            <property   name="recordId"
+                        label="ID de l'enregistrement lié"
+                        type="String"
+                        description="ID Salesforce de l'ernegistrement auquel le fichier sera rattaché" />
+            
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="label"
+                        label="Libellé"
+                        type="String"
+                        role="inputOnly"
+                        description="Libellé du composant d'ajout."/>
+            <property   name="comment"
+                        label="Explication"
+                        type="String"
+                        role="inputOnly"
+                        description="Texte explicatif du composant d'ajout." />
+
+            <property   name="configName"
+                        label="Configuration de liste"
+                        type="String"
+                        role="inputOnly"
+                        description="Nom du custom metadata sfpegList utilisé pour récupérer les fichiers" />
+            <property   name="context"
+                        label="Contexte de liste"
+                        type="String"
+                        role="inputOnly"
+                        description="Contexte d'utilisation de la configuration de liste" />
+
+            <property   name="disabled"
+                        label="Inactif?"
+                        type="String"
+                        default="false"
+                        role="inputOnly"
+                        description="Déactivation (dynamique) du composant (valeur booléenne true/false)." />
+            <property   name="wrappingClass"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de la tuile (par ex. fr-m-2v)" />
+
+            <property   name="objectApiName"
+                        label="Object Name"
+                        type="String"
+                        role="inputOnly"
+                        description="API Name de l'objet courant" />
+            <property   name="recordId"
+                        label="ID de l'enregistrement lié"
+                        type="String"
+                        role="inputOnly"
+                        description="ID Salesforce de l'ernegistrement auquel le fichier sera rattaché" />
+            
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

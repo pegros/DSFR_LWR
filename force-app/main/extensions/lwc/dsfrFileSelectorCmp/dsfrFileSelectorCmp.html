@@ -1,0 +1,45 @@
+<template>
+
+    <!-- DATA LOAD UTILITY -->
+    <template if:false={isDisabled}>
+        <c-sfpeg-list-cmp   object-api-name={objectApiName} 
+                            record-id={recordId} user-id={currentUserId}
+                            config-name={configName}
+                            parent-context={contextJson}
+                            onload={handleRecordLoad}
+                            is-debug={isDebug}
+                            is-debug-fine={isDebug}
+                            class="listLoader">
+        </c-sfpeg-list-cmp>
+    </template>
+
+    <!-- COMPONENT DISPLAY -->
+    <div class={mainClass} > 
+        <label class="fr-label">
+            {label}
+            <template lwc:if={comment}>
+                <span class="fr-hint-text">{comment}</span>
+            </template>
+        </label>
+
+        <template lwc:if={hasFiles}>
+            <select class="fr-select" name="fileSelect" onchange={handleSelect}>
+                <option value="" selected disabled hidden>Selectionnez un fichier</option>
+                <template for:each={fileList} for:item="iterFile">
+                    <option key={iterFile.ContentDocumentId} value={iterFile.ContentDocument.LatestPublishedVersionId}>{iterFile.ContentDocument.Title}</option>
+                </template>
+            </select>
+        </template>
+        <template lwc:else>
+            <select class="fr-select" name="select" disabled>
+                <option value="" selected disabled hidden>Aucun fichier disponible</option>
+            </select>
+        </template>
+
+        <template lwc:if={message}>
+            <p class={messageClass}>
+                {message}
+            </p>
+        </template>
+    </div>
+</template>
