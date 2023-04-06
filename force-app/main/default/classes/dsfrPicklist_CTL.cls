@@ -1,9 +1,9 @@
 /***
-* @description  Lightning controller to fetch the details of an
-*               Experience Site navigation menu.
-*               Part of the PEG_LWR package.
+* @description  Lightning controller to fetch the list of values of
+*               multiple picklist fields at once.
+*               Part of the DSFR_LWR package.
 * @author       P-E GROS
-* @date         Feb 2023
+* @date         March 2023
 *
 * Legal Notice
 * 
