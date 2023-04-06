@@ -1,0 +1,49 @@
+<template>
+
+    <!-- MAIN TITLE -->
+    <template lwc:if={title}>
+        <h3 class="fr-h3 fr-px-2v">{title}</h3>
+    </template>
+
+    <!-- LDS FORM -->
+    <lightning-record-edit-form object-api-name={objectApiName} record-id={recordId} record-type-id={recordTypeId} onload={handleLoad}>
+        <!-- INPUT FIELD LIST -->
+        <lightning-layout multiple-rows="true" >
+            <template for:each={fieldList} for:item="iter" >
+                <lightning-layout-item key={iter.name} size="12" large-device-size={iter.size} class="fr-p-2v">
+                    <div class="fr-input-group">
+                        <label class="fr-label">{iter.label}</label>
+                        <template lwc:if={iter.disabled}>
+                            <lightning-input-field class="fr-input dsfrInput" field-name={iter.name} variant="label-hidden" disabled>
+                            </lightning-input-field>
+                        </template>
+                        <template lwc:else>
+                            <lightning-input-field class="fr-input dsfrInput" field-name={iter.name} variant="label-hidden" required={iter.required} >
+                            </lightning-input-field>
+                        </template>
+                        <!--
+                        <p id="text-input-valid-desc-valid" class="fr-valid-text">
+                            Texte de validation
+                        </p>
+                        -->
+                    </div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+
+        <!-- FORM BUTTONS -->
+        <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--center fr-mt-4v">
+            <li>
+                <button class="fr-btn fr-btn--secondary" onclick={handleCancel}>
+                    Annuler
+                </button>
+            </li>
+            <li>
+                <button class="fr-btn" type="submit">
+                    Sauvegarder
+                </button>
+            </li>
+        </ul>
+    </lightning-record-edit-form>
+
+</template>

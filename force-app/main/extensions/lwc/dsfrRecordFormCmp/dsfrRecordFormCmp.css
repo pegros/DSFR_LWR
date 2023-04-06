@@ -1,0 +1,7 @@
+.dsfrInput {
+    --slds-c-input-color-background : transparent;
+    --slds-c-input-color-background-focus : transparent;
+    --slds-c-input-color-border:  transparent;
+    --slds-c-input-color-border-focus: transparent;
+    --slds-c-input-radius-border: 0px;
+}

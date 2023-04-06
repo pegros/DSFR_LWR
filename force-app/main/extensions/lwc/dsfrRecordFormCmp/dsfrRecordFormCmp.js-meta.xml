@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Formulaire 🚧</masterLabel>
+    <description>Affichage d'un formulaire pour éditer un enregistrement</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="title"
+                        label="Titre"
+                        type="String"
+                        description="Libellé de titre du formulaire" />
+            <property   name="objectApiName"
+                        label="Objet"
+                        type="String"
+                        default="{!Route.objectApiName}"
+                        description="API Name de l'objet pour lequel le formulaire est affiché" />
+            <property   name="recordId"
+                        label="ID"
+                        type="String"
+                        default="{!Route.recordId}"
+                        description="ID de l'enregistrement pour lequel le formulaire est affiché (mode création si vide)" />
+            <property   name="fieldConfig"
+                        label="Configuration"
+                        type="String"
+                        description="Configuration des champs à afficher (format JSON)" />
+
+            <property   name="defaultSize"
+                        label="Taille par défaut"
+                        type="Integer"
+                        default="6"
+                        min="1"
+                        max="12"
+                        description="Taille par défaut des champs (sur une base de 12 colonnes)" />
+                        
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
