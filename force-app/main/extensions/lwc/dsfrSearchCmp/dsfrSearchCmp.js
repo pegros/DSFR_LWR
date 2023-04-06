@@ -276,7 +276,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         for (let item of menuSelectors) {
             if (this.isDebug) console.log('updateSearch: processing menu option ',item);
             if (!criteriaSelections[item.dataset.criteria]) criteriaSelections[item.dataset.criteria] = [];
-            if (item.ariaCurrent === 'page') {
+            if (item.ariaCurrent === 'selection') {
                 (criteriaSelections[item.dataset.criteria]).push(item.dataset.value);
             }
         }
