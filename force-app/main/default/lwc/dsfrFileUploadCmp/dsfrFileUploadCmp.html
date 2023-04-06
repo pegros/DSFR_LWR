@@ -1,0 +1,19 @@
+<template>
+    <!-- " -->
+    <div class={mainClass} > 
+        <label class="fr-label">
+            {label}
+            <template lwc:if={comment}>
+                <span class="fr-hint-text">{comment}</span>
+            </template>
+        </label>
+        <input  class="fr-upload"   type="file"
+                name="fileUpload"   accept={accept}
+                onchange={handleUpload}>
+        <template lwc:if={message}>
+            <p class={messageClass}>
+                {message}
+            </p>
+        </template>
+    </div>
+</template>
