@@ -75,6 +75,8 @@ style standard Salesforce components (if used).
 <link rel="stylesheet" href="{ basePath }/assets/styles/dxp-slds-extensions.min.css?{ versionKey }" />
 
 <!-- Salesforce Styling Overrides (with DSFR values)-->
+<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfrSlds" />
+
 <style>
    :root {
       /** set the font for all root/body text **/
