@@ -122,5 +122,5 @@
     display: none !important;
 }
 .slds-combobox__input {
-    padding-left: 1rem;
+    padding-left: 1rem !important;
 }

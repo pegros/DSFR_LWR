@@ -134,9 +134,9 @@ export default class DsfrFileSelectorCmp extends LightningElement {
                     if (this.isDebug) console.log('handleSelect: file registered as ', JSON.stringify(result));
                     this.message =  'Le fichier a bien été sélectionné!';
                     this.isError =  false;
-                    let fileSelect = this.template.querySelector("select[name='fileSelect']");
-                    if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
-                    fileSelect.disabled = false;
+                    //let fileSelect = this.template.querySelector("select[name='fileSelect']");
+                    //if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
+                    //fileSelect.disabled = false;
                     if (this.isDebug) console.log('handleSelect: END for file selector');
                 })
                 .catch(error => {

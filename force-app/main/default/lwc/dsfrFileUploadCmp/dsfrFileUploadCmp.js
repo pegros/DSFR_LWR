@@ -68,6 +68,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
 
         if (!selectedFile) {
             if (this.isDebug) console.log('handleUpload: END / no file selected');
+            fileInput.disabled = false;
             return;
         }
         if (this.isDebug) console.log('handleUpload: disabling fileInput ',fileInput);
@@ -122,7 +123,6 @@ export default class DsfrFileUploadCmp extends LightningElement {
             console.warn('registerFile: END KO / upload failed ',error);
             this.message = JSON.stringify(error);
             this.isError = true;
-            
         }
     }
 }
