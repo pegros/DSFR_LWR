@@ -52,6 +52,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
 
     handleLoad(event) {
         if (this.isDebug) console.log('handleLoad: START for recordForm',event);
+        this.toggleSpinner(false);
 
         if (!this.recordTypeId) {
             this.recordTypeId = (event.detail.records)[this.recordId].recordTypeId;
@@ -78,9 +79,64 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleLoad: END for recordForm');
     }
 
-    handleCancel(event){
-        if (this.isDebug) console.log('handleCancel: START for recordForm');
-        if (this.isDebug) console.log('handleCancel: END for recordForm');
+    handleSubmit(event) {
+        if (this.isDebug) console.log('handleSubmit: START for recordForm',event);
+        this.toggleSpinner(true);
+        if (this.isDebug) console.log('handleSubmit: END for recordForm');
+    }
+
+    handleSuccess(event) {
+        if (this.isDebug) console.log('handleSuccess: START for recordForm',event);
+        this.toggleSpinner(false);
+        if (this.isDebug) console.log('handleSuccess: END for recordForm');
+    }
+
+    handleError(event) {
+        if (this.isDebug) console.log('handleError: START for recordForm',event);
+        this.toggleSpinner(false);
+        if (this.isDebug) console.log('handleError: END for recordForm');
     }
     
+    handleCancel(event){
+        if (this.isDebug) console.log('handleCancel: START for recordForm',event);
+
+        const inputFields = this.template.querySelectorAll('lightning-input-field');
+        if (this.isDebug) console.log('handleCancel: inputFields fetched',inputFields);
+
+        if (inputFields) {
+            inputFields.forEach(iter => {iter.reset();});
+        }
+
+        if (this.isDebug) console.log('handleCancel: END for recordForm');
+    }
+
+    //-----------------------------------------------------
+    // Utilities
+    //-----------------------------------------------------
+    toggleSpinner = function(isShown) {
+        if (this.isDebug) console.log('toggleSpinner: START with',isShown);
+
+        let spinner = this.template.querySelector('lightning-spinner');
+        if (this.isDebug) console.log('toggleSpinner: spinner found',spinner);
+
+        let buttons = this.template.querySelectorAll('button.formButton');
+        if (this.isDebug) console.log('toggleSpinner: buttons found',buttons);
+
+        if (isShown) {
+            if (this.isDebug) console.log('toggleSpinner: showing spinner');
+            spinner.classList.remove('slds-hide');
+            buttons.forEach(item => {
+                item.disabled = true;
+            });
+        }
+        else {
+            if (this.isDebug) console.log('toggleSpinner: hiding spinner');
+            spinner.classList.add('slds-hide');
+            buttons.forEach(item => {
+                item.disabled = false;
+            });
+        }
+        
+        if (this.isDebug) console.log('toggleSpinner: END');
+    }
 }
