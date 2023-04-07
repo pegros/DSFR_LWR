@@ -118,10 +118,11 @@ export default class DsfrFileSelectorCmp extends LightningElement {
         if (this.isDebug) console.log('handleSelect: START for file selector',event);
 
         let fileSelect = this.template.querySelector("select[name='fileSelect']");
-        if (this.isDebug) console.log('handleSelect: file selector fetched ',fileSelect);
         if (this.isDebug) console.log('handleSelect: file selector value ',fileSelect?.value);
 
         if (fileSelect?.value) {
+            if (this.isDebug) console.log('handleSelect: disabling file selector ',fileSelect);
+            fileSelect.disabled = true;
             const linkData = {
                 fileId: fileSelect?.value,
                 recordId: this.recordId,
@@ -133,9 +134,15 @@ export default class DsfrFileSelectorCmp extends LightningElement {
                     if (this.isDebug) console.log('handleSelect: file registered as ', JSON.stringify(result));
                     this.message =  'Le fichier a bien été sélectionné!';
                     this.isError =  false;
+                    let fileSelect = this.template.querySelector("select[name='fileSelect']");
+                    if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
+                    fileSelect.disabled = false;
                     if (this.isDebug) console.log('handleSelect: END for file selector');
                 })
                 .catch(error => {
+                    let fileSelect = this.template.querySelector("select[name='fileSelect']");
+                    if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
+                    fileSelect.disabled = false;
                     console.warn('handleSelect: END KO / file registration failed ', JSON.stringify(error));
                     this.message = JSON.stringify(error);
                     this.isError = true;

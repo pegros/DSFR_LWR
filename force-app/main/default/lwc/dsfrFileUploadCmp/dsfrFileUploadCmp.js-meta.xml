@@ -29,9 +29,9 @@
                         description="Metadonnées à positionner sur le fichier (JSON)" />
             <property   name="disabled"
                         label="Inactif?"
-                        type="String"
+                        type="Boolean"
                         default="false"
-                        description="Déactivation (dynamique) du composant (valeur booléenne true/false)." />
+                        description="Désactivation du composant." />
             <property   name="wrappingClass"
                         label="CSS additionnelle"
                         type="String"
@@ -71,10 +71,10 @@
                         description="Metadonnées à positionner sur le fichier (JSON)" />
             <property   name="disabled"
                         label="Inactif?"
-                        type="String"
+                        type="Boolean"
                         default="false"
                         role="inputOnly"
-                        description="Déactivation (dynamique) du composant (valeur booléenne true/false)." />
+                        description="Désactivation du composant." />
             <property   name="wrappingClass"
                         label="CSS additionnelle"
                         type="String"
