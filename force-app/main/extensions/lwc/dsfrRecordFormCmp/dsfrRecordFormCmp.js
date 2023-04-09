@@ -54,7 +54,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleLoad: START for recordForm',event);
         this.toggleSpinner(false);
 
-        if (!this.recordTypeId) {
+        if ((!this.recordTypeId) && (this.recordId)){
             this.recordTypeId = (event.detail.records)[this.recordId].recordTypeId;
             if (this.isDebug) console.log('handleLoad: recordTypeId init ', this.recordTypeId);
         }
@@ -69,6 +69,9 @@ export default class DsfrRecordFormCmp extends LightningElement {
                 if (this.isDebug) console.log('handleLoad: processing field ',item.name);
                 if (!item.label) {
                     item.label = objectFields[item.name]?.label;
+                }
+                if (objectFields[item.name]?.inlineHelpText) {
+                    item.help = objectFields[item.name]?.inlineHelpText;
                 }
                 if (this.isDebug) console.log('handleLoad: label set for field ',item.label);
             });

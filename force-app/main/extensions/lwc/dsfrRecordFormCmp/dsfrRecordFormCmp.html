@@ -3,6 +3,7 @@
     <!-- MAIN TITLE -->
     <template lwc:if={title}>
         <h3 class="fr-h3 fr-px-2v">{title}</h3>
+        <p class="fr-text">HELLO WORLD</p>
     </template>
 
     <!-- LDS FORM -->
@@ -12,10 +13,22 @@
                                 onsuccess={handleSuccess}   onerror={handleError}>
         <!-- INPUT FIELD LIST -->
         <lightning-layout multiple-rows="true" >
+            <lightning-layout-item size="12" class="fr-p-2v">
+                <div class="fr-input-group">
+                    <label class="fr-label" for="text-input-groups1">Label
+                        <span class="fr-hint-text">Help</span>
+                    </label>
+                    <input class="fr-input" type="text">
+                </div>
+            </lightning-layout-item>
             <template for:each={fieldList} for:item="iter" >
                 <lightning-layout-item key={iter.name} size="12" large-device-size={iter.size} class="fr-p-2v">
                     <div class="fr-input-group">
-                        <label class="fr-label">{iter.label}</label>
+                        <label class="fr-label">{iter.label}
+                            <template lwc:if={iter.help}>
+                                <span class="fr-hint-text">{iter.help}</span>
+                            </template>
+                        </label>
                         <template lwc:if={iter.disabled}>
                             <lightning-input-field class="fr-input dsfrInput" field-name={iter.name} variant="label-hidden" disabled>
                             </lightning-input-field>
