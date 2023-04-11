@@ -15,6 +15,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     @api wrappingClass;
 
     @api recordId;
+    @api recordIds;
     @api fileId;
 
     @api isDebug = false;       // Flag to activate debug information
@@ -94,10 +95,22 @@ export default class DsfrFileUploadCmp extends LightningElement {
         if (this.isDebug) console.log('registerFile: START');
 
         try {
+            let recordIds = [];
+            if (this.recordId) {
+                if (this.isDebug) console.log('registerFile: registering main recordId ',this.recordId);
+                recordIds.push(this.recordId);
+            }
+            if (this.recordIds) {
+                if (this.isDebug) console.log('registerFile: registering other recordIds ',this.recordIds);
+                let otherIDs = JSON.parse(this.recordIds);
+                recordIds.push(...otherIDs);
+            }
+            if (this.isDebug) console.log('registerFile: recordIds init ',recordIds);
+
             const uploadData = {
                 name: this.fileName,
                 content: this.fileContent,
-                recordId: this.recordId,
+                recordIds: recordIds,
                 meta: JSON.parse(this.contentMeta),
                 sharing: this.shareMode
             };
@@ -113,12 +126,20 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 fileInput.disabled = false;
 
                 if (this.isDebug) console.log('registerFile: END');
+            }).catch(error => {
+                console.warn('registerFile: upload failed',error);
+                let fileInput = this.template.querySelector('input.fr-upload');
+                if (this.isDebug) console.log('handleUpload: reactivating fileInput ',fileInput);
+                fileInput.disabled = false;
+                console.warn('registerFile: END KO / upload failed ',error);
+                this.message = JSON.stringify(error);
+                this.isError = true;
             });
             if (this.isDebug) console.log('registerFile: upload triggered');
         }
         catch (error) {
             let fileInput = this.template.querySelector('input.fr-upload');
-            if (this.isDebug) console.log('handleUpload: reactivating fileInput ',fileInput);
+            if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
             fileInput.disabled = false;
             console.warn('registerFile: END KO / upload failed ',error);
             this.message = JSON.stringify(error);

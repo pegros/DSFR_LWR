@@ -37,7 +37,7 @@ public with sharing class dsfrFileUpload_CTL {
     *               automatically link it to a record (as new ContentDocumentLink).
     * @param        content     File content encoded in Base64
     * @param        name        Name of the ContentDocument to be created 
-    * @param        recordId    ID of the record to which the new ContentDocument should be linked 
+    * @param        recordIds   List of IDs of the records to which the new ContentDocument should be linked 
     * @param        meta        List of field values to be set on the created ContentDocument.
     * @param        sharing     Sharing mode to be set for the link (should be 'V' (Viewer), 'C' (Collaborator) or 'I' (Inferred))
     * @return       Map<String,Object>  Map with details about the ContentVersion (file) and the 
@@ -45,9 +45,9 @@ public with sharing class dsfrFileUpload_CTL {
     * @exception    Various exceptions in case of wrong context or execution failure.
     ***/
     @AuraEnabled
-    public static Map<String,Object> uploadFile(final String content, final String name, final String recordId, final Object meta, final String sharing) {
+    public static Map<String,Object> uploadFile(final String content, final String name, final List<String> recordIds, final Object meta, final String sharing) {
         System.debug('uploadFile: START for file ' + name);
-        System.debug('uploadFile: for record ID ' + recordId);
+        System.debug('uploadFile: for record ID ' + recordIds);
         System.debug('uploadFile: with meta ' + meta);
         System.debug('uploadFile: and content ' + content);
 
@@ -63,11 +63,12 @@ public with sharing class dsfrFileUpload_CTL {
             throw new System.AuraHandledException('File registration failure');
         }
 
+        
         try {
-            ContentDocumentLink newLink = registerLink(newFile.Id, recordId, sharing);
-            System.debug('uploadFile: new Link init ' + newLink);
-            if (newLink != null) {
-                result.put('link',newLink);
+            list<ContentDocumentLink> newLinks = registerLinks(newFile.Id, recordIds, sharing);
+            System.debug('uploadFile: new Links init ' + newLinks);
+            if (newLinks != null) {
+                result.put('links',newLinks);
             }
         }
         catch (exception e) {
@@ -95,9 +96,9 @@ public with sharing class dsfrFileUpload_CTL {
         System.debug('linkFile: and sharing ' + sharing);
 
         try {
-            ContentDocumentLink newLink = registerLink(fileId, recordId, sharing);            
-            System.debug('linkFile: END with ' + newLink);
-            return newLink;
+            List<ContentDocumentLink> newLinks = registerLinks(fileId, new List<String>{recordId}, sharing);            
+            System.debug('linkFile: END with ' + newLinks);
+            return newLinks[0];
         }
         catch (exception e) {
             System.debug(LoggingLevel.ERROR, 'linkFile: END KO / link registration failure ' + e);
@@ -138,14 +139,14 @@ public with sharing class dsfrFileUpload_CTL {
     /***
     * @description  Utility method to build and insert a new ContentDocumentLink.
     * @param        fileId      ID of the ContentVersion record to be linked 
-    * @param        recordId    ID of the record to which the new ContentDocument should be linked 
+    * @param        recordIds   List of IDs of the records to which the new ContentDocument should be linked 
     * @param        sharing     Sharing mode to be set for the link (should be 'V' (Viewer), 'C' (Collaborator) or 'I' (Inferred))
     * @return       ContentDocumentLink  Created record
     * @exception    Various exceptions in case of  wrong context.
     ***/
-    private static ContentDocumentLink registerLink(final String fileId, final String recordId, final String sharing) {
+    private static List<ContentDocumentLink> registerLinks(final String fileId, final List<String> recordIds, final String sharing) {
         System.debug('registerLink: START for file ' + fileId);
-        System.debug('registerLink: and record ' + recordId);
+        System.debug('registerLink: and record ' + recordIds);
         System.debug('registerLink: with sharing ' + sharing);
 
         if (String.IsBlank(sharing)) {
@@ -153,22 +154,34 @@ public with sharing class dsfrFileUpload_CTL {
             throw new System.StringException('Missing Sharing mode for file');
         }
 
-        if (recordId == null) {
+        if ((recordIds == null) || (recordIds.isEmpty())) {
             System.debug('registerLink: END / no link to register');
             return null;
         }
 
-        ContentDocumentLink newLink = new ContentDocumentLink();
-        newLink.ContentDocumentId = [   SELECT ContentDocumentId 
-                                        FROM ContentVersion 
-                                        WHERE Id =: fileId    ].ContentDocumentId;
-        newLink.LinkedEntityId = recordId;
-        newLink.ShareType = sharing;
+        ContentVersion fileCV = [   SELECT ContentDocumentId
+                                    FROM ContentVersion 
+                                    WHERE Id =: fileId    ];
+        if (fileCV  == null) {
+            System.debug(LoggingLevel.ERROR, 'uploadFile: END KO / file not found ');
+            throw new System.StringException('Missing file mode for sharing');
+        }
+        System.debug('registerLink: file ContentDocumentId fetched ' + fileCV);
 
-        System.debug('registerLink: inserting ContentDocumentLink ' + newLink);
-        insert newLink;
+        List<ContentDocumentLink> newLinks = new List<ContentDocumentLink>();
+        for (String iterId : recordIds) {
+            System.debug('registerLink: linking file to record ID ' + iterId);
+            ContentDocumentLink newLink = new ContentDocumentLink();
+            newLink.ContentDocumentId = fileCV.ContentDocumentId;
+            newLink.LinkedEntityId = iterId;
+            newLink.ShareType = sharing;
+            newLinks.add(newLink);
+        }
 
-        System.debug('registerLink: END with ' + newLink);
-        return newLink;
+        System.debug('registerLink: inserting ContentDocumentLinks ' + newLinks);
+        insert newLinks;
+
+        System.debug('registerLink: END with ' + newLinks);
+        return newLinks;
     }
 }

@@ -39,9 +39,14 @@
             <property   name="recordId"
                         label="ID de l'enregistrement lié"
                         type="String"
-                        description="ID Salesforce de l'ernegistrement auquel le fichier sera rattaché" />
+                        description="ID Salesforce de l'enregistrement auquel le fichier sera rattaché" />
+            <property   name="recordIds"
+                        label="ID d'autres enregistrements liés"
+                        type="String"
+                        description="ID d'autres l'enregistrements auquel le fichier sera rattaché (liste JSON)" />            
+
             <property   name="fileId"
-                        label="ID de fichier existant"
+                        label="ID de fichier existant 🚫"
                         type="String"
                         description="ID Salesforce d'un fichier pour lequel une nouvelle version doit être chargée" />
             <property   name="isDebug"
@@ -85,8 +90,13 @@
                         type="String"
                         role="inputOnly"
                         description="ID Salesforce de l'ernegistrement auquel le fichier sera rattaché" />
+            <property   name="recordIds"
+                        label="ID d'autres enregistrements liés"
+                        type="String"
+                        role="inputOnly"
+                        description="ID d'autres l'enregistrements auquel le fichier sera rattaché (liste JSON)" />
             <property   name="fileId"
-                        label="ID de fichier existant"
+                        label="ID de fichier existant 🚫"
                         type="String"
                         description="ID Salesforce du fichier chargé ou du fichier pour lequel une nouvelle version doit être chargée" />
             <property   name="isDebug"
