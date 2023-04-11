@@ -1,4 +1,7 @@
 import { LightningElement, api } from 'lwc';
+import CANCEL_LABEL from '@salesforce/label/c.dsfrRecordFormCancel';
+import SAVE_LABEL   from '@salesforce/label/c.dsfrRecordFormSave';
+import EDIT_LABEL   from '@salesforce/label/c.dsfrRecordFormEdit';
 
 export default class DsfrRecordFormCmp extends LightningElement {
 
@@ -10,6 +13,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
     @api recordId;
     @api fieldConfig;
     @api defaultSize = 6;
+    @api isEditMode = false;
 
     @api isDebug = false;
 
@@ -20,6 +24,15 @@ export default class DsfrRecordFormCmp extends LightningElement {
     fieldList;
     labelOk = false;
     recordTypeId;
+    message;
+
+    //-----------------------------------------------------
+    // Custom Labels 
+    //-----------------------------------------------------
+
+    cancelLabel = CANCEL_LABEL;
+    saveLabel   = SAVE_LABEL;
+    editLabel   = EDIT_LABEL;
 
     //-----------------------------------------------------
     // Initialisation
@@ -82,8 +95,17 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleLoad: END for recordForm');
     }
 
+    handleEdit(event) {
+        if (this.isDebug) console.log('handleEdit: START for recordForm',event);
+        this.message = null;
+        this.isEditMode = true;
+        this.toggleSpinner(false);
+        if (this.isDebug) console.log('handleEdit: END for recordForm');
+    }
+
     handleSubmit(event) {
         if (this.isDebug) console.log('handleSubmit: START for recordForm',event);
+        this.message = null;
         this.toggleSpinner(true);
         if (this.isDebug) console.log('handleSubmit: END for recordForm');
     }
@@ -91,17 +113,29 @@ export default class DsfrRecordFormCmp extends LightningElement {
     handleSuccess(event) {
         if (this.isDebug) console.log('handleSuccess: START for recordForm',event);
         this.toggleSpinner(false);
+        this.message = {
+            type: "info",
+            title: "Opération effectuée",
+            details: "Vos changements ont bien été sauvegardées."
+        }
+        this.isEditMode = false;
         if (this.isDebug) console.log('handleSuccess: END for recordForm');
     }
 
     handleError(event) {
         if (this.isDebug) console.log('handleError: START for recordForm',event);
         this.toggleSpinner(false);
+        this.message = {
+            type: "error",
+            title: "Echec de l'opération",
+            details: "La sauvegarde de vos modifications n'a pas pu être réalisée."
+        }
         if (this.isDebug) console.log('handleError: END for recordForm');
     }
     
     handleCancel(event){
         if (this.isDebug) console.log('handleCancel: START for recordForm',event);
+        this.message = null;
 
         const inputFields = this.template.querySelectorAll('lightning-input-field');
         if (this.isDebug) console.log('handleCancel: inputFields fetched',inputFields);
@@ -125,19 +159,24 @@ export default class DsfrRecordFormCmp extends LightningElement {
         let buttons = this.template.querySelectorAll('button.formButton');
         if (this.isDebug) console.log('toggleSpinner: buttons found',buttons);
 
-        if (isShown) {
-            if (this.isDebug) console.log('toggleSpinner: showing spinner');
-            spinner.classList.remove('slds-hide');
-            buttons.forEach(item => {
-                item.disabled = true;
-            });
+        if (spinner) {
+            if (isShown) {
+                if (this.isDebug) console.log('toggleSpinner: showing spinner');
+                spinner.classList.remove('slds-hide');
+                buttons.forEach(item => {
+                    item.disabled = true;
+                });
+            }
+            else {
+                if (this.isDebug) console.log('toggleSpinner: hiding spinner');
+                spinner.classList.add('slds-hide');
+                buttons.forEach(item => {
+                    item.disabled = false;
+                });
+            }
         }
         else {
-            if (this.isDebug) console.log('toggleSpinner: hiding spinner');
-            spinner.classList.add('slds-hide');
-            buttons.forEach(item => {
-                item.disabled = false;
-            });
+            if (this.isDebug) console.log('toggleSpinner: no spinner displayed');
         }
         
         if (this.isDebug) console.log('toggleSpinner: END');

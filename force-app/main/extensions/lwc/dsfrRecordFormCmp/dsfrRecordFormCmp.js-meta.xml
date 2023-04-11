@@ -28,6 +28,10 @@
                         label="Configuration"
                         type="String"
                         description="Configuration des champs à afficher (format JSON)" />
+            <property   name="isEditMode"
+                        label="Statut Edition?"
+                        type="Boolean"
+                        description="Flag pour afficher le composant en mode edit directement." />
 
             <property   name="defaultSize"
                         label="Taille par défaut"

@@ -12,3 +12,10 @@
     top: 20px;
     left: 10px;
 }
+.formTitle {
+    min-width: 50%;
+    margin-bottom: 0px !important;
+}
+.formHeader {
+    margin-bottom: 0.75rem;
+}

@@ -32,4 +32,28 @@
         <shortDescription>Titre du bouton de tri</shortDescription>
         <value>Type de conteneur non supporté</value>
     </labels>
+    <labels>
+        <fullName>dsfrRecordFormSave</fullName>
+        <categories>DSFR Component LWC Button Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton de sauvegarde</shortDescription>
+        <value>Sauvegarder</value>
+    </labels>
+    <labels>
+        <fullName>dsfrRecordFormCancel</fullName>
+        <categories>DSFR Component LWC Button Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton d'annulation</shortDescription>
+        <value>Annuler</value>
+    </labels>
+    <labels>
+        <fullName>dsfrRecordFormEdit</fullName>
+        <categories>DSFR Component LWC Button Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton d'édition</shortDescription>
+        <value>Modifier</value>
+    </labels>
 </CustomLabels>
