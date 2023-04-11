@@ -1,20 +1,15 @@
 <template>
 
     <!-- MAIN TITLE -->
-    <lightning-layout multiple-rows="true" vertical-align="end" class="formHeader">
+    <lightning-layout multiple-rows="true" vertical-align="center" class="formHeader">
         <template lwc:if={title}>
             <lightning-layout-item flexibility="auto" >
                 <h3 class="fr-h3 fr-px-2v formTitle">{title}</h3>
             </lightning-layout-item>
         </template>
         <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
-            <template lwc:if={isEditMode}>
-                <button class="fr-btn fr-btn--secondary editButton" disabled >
-                    {editLabel}
-                </button>
-            </template>
-            <template lwc:else>
-                <button class="fr-btn fr-btn--secondary editButton fr-px-2v" onclick={handleEdit}>
+            <template if:false={isEditMode}>
+                <button class="fr-btn fr-btn--secondary editButton fr-mx-2v fr-my-1v" onclick={handleEdit}>
                     {editLabel}
                 </button>
             </template>
@@ -32,6 +27,7 @@
     </template>
 
     <!-- LDS FORM -->
+    <template lwc:if={recordId}>
     <lightning-record-edit-form class="mainForm"            object-api-name={objectApiName}
                                 record-id={recordId}        record-type-id={recordTypeId}
                                 onload={handleLoad}         onsubmit={handleSubmit}
@@ -115,5 +111,5 @@
             </ul>
         </template>
     </lightning-record-edit-form>
-
+    </template>
 </template>
