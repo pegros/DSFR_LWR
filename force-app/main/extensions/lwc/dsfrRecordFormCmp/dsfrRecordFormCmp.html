@@ -14,7 +14,7 @@
                 </button>
             </template>
             <template lwc:else>
-                <button class="fr-btn fr-btn--secondary editButton" onclick={handleEdit}>
+                <button class="fr-btn fr-btn--secondary editButton fr-px-2v" onclick={handleEdit}>
                     {editLabel}
                 </button>
             </template>
@@ -27,7 +27,7 @@
                             alert-size="small"
                             alert-title={message.title}
                             alert-message={message.details}
-                            alert-css="fr-p-2v">
+                            alert-css="fr-m-2v">
         </c-dsfr-alert-cmp>
     </template>
 
