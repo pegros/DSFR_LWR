@@ -10,7 +10,7 @@
         <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
             <template if:false={isReadOnly}>
                 <template if:false={isEditMode}>
-                    <button class="fr-btn fr-btn--secondary editButton fr-mx-2v fr-my-1v"
+                    <button class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line editButton fr-mx-2v fr-my-1v"
                             onclick={handleEdit}>
                         {editLabel}
                     </button>
@@ -94,7 +94,8 @@
 
         <!-- FORM BUTTONS -->
         <template lwc:if={isEditMode}>
-            <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--center fr-mt-4v">
+            <!-- fr-btn--icon-left  fr-icon-close-circle-line fr-icon-checkbox-circle-line -->
+            <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
                 <li>
                     <button class="fr-btn fr-btn--secondary formButton" onclick={handleCancel}>
                         {cancelLabel}

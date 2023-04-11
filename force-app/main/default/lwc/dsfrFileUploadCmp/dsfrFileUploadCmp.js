@@ -33,7 +33,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     //-----------------------------------------------------
 
     get mainClass() {
-        return (this.isError ? 'fr-upload-group fr-input-group--error ' : 'fr-upload-group ') + (this.wrappingClass || '');
+        return (this.wrappingClass || '') + (this.isError ? ' fr-upload-group fr-input-group--error' : ' fr-upload-group');
     }
     get messageClass() {
         return (this.isError ? 'fr-error-text' : 'fr-valid-text');
