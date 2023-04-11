@@ -1,5 +1,5 @@
 <template>
-
+    <div class={formClass}>
     <!-- MAIN TITLE -->
     <lightning-layout multiple-rows="true" vertical-align="center" class="formHeader">
         <template lwc:if={title}>
@@ -8,10 +8,13 @@
             </lightning-layout-item>
         </template>
         <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
-            <template if:false={isEditMode}>
-                <button class="fr-btn fr-btn--secondary editButton fr-mx-2v fr-my-1v" onclick={handleEdit}>
-                    {editLabel}
-                </button>
+            <template if:false={isReadOnly}>
+                <template if:false={isEditMode}>
+                    <button class="fr-btn fr-btn--secondary editButton fr-mx-2v fr-my-1v"
+                            onclick={handleEdit}>
+                        {editLabel}
+                    </button>
+                </template>
             </template>
         </lightning-layout-item>
     </lightning-layout>
@@ -112,4 +115,5 @@
         </template>
     </lightning-record-edit-form>
     </template>
+    </div>
 </template>

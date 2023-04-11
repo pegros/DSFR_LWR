@@ -13,7 +13,9 @@ export default class DsfrRecordFormCmp extends LightningElement {
     @api recordId;
     @api fieldConfig;
     @api defaultSize = 6;
+    @api isReadOnly = false;
     @api isEditMode = false;
+    @api formClass;
 
     @api isDebug = false;
 
