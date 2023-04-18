@@ -101,10 +101,10 @@ export default class DsfrFlowPopupCmp extends LightningElement {
     toggleModal(event) {
         if (this.isDebug) console.log('toggleModal: START from ',this.isModalOpen);
         if (!this.isModalOpen) {
-            if (this.isDebug) console.log('toggleModal: revising flowVInput for ', this.flowName);
+            if (this.isDebug) console.log('toggleModal: revising flow Input for ', this.flowName);
             try {
-                this.flowInput = JSON.parse(this.flowParameters);
-                if (this.isDebug) console.log('toggleModal: flowVInput updated ', JSON.stringify(this.flowInput));
+                this.flowInput = JSON.parse(this.flowParameters || "[]");
+                if (this.isDebug) console.log('toggleModal: flow Input updated ', JSON.stringify(this.flowInput));
             }
             catch (error) {
                 console.warn('toggleModal: flowVInput parsing failed ', error);
