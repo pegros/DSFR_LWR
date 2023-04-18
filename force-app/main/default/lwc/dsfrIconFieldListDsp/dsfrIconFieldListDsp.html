@@ -1,0 +1,14 @@
+<template>
+    <template lwc:if={values}>
+        <ul class={wrappingClass}>
+            <template for:each={values} for:item="iter">
+                <li key={iter.icon}  >
+                    <c-dsfr-icon-field-dsp  value={iter.value} icon-name={iter.icon}
+                                            wrapping-class={fieldClass} icon-class={iconClass}
+                                            is-debug={isDebug}>
+                    </c-dsfr-icon-field-dsp>
+                </li>
+            </template>
+        </ul>
+    </template>
+</template>

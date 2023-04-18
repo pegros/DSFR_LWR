@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Liste d'Icônes et Textes 🇫🇷</masterLabel>
+    <description>Affichage d'une liste de champs textuels avec ioône devant</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>  
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="values"
+                        label="Valeurs à afficher"
+                        type="String"
+                        description='Liste de contenus et icônes à afficher (sous la forme de liste JSON ([{"icon":"xxx","value":"yyy"},...])' />
+            
+            <property   name="wrappingClass"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pur ajouter une marge)" />
+            <property   name="fieldClass"
+                        label="CSS des éléments"
+                        type="String"
+                        description="Classe DSFR à appliquer à chaque composant Icône + Texte" />
+            <property   name="iconClass"
+                        label="CSS des icônes"
+                        type="String"
+                        description="Classe DSFR à appliquer à toutes les icônes (e.g. fr-text-title--blue-france pour changer la couleur)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'aalyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="values"
+                        label="Valeurs à afficher"
+                        type="String"
+                        role="inputOnly"
+                        description='Liste de contenus et icônes à afficher (sous la forme de liste JSON ([{"icon":"xxx","value":"yyy"},...])' />
+            
+            <property   name="wrappingClass"
+                        label="CSS additionnelle"
+                        type="String"
+                        role="inputOnly"
+                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pur ajouter une marge)" />
+            <property   name="fieldClass"
+                        label="CSS des éléments"
+                        type="String"
+                        role="inputOnly"
+                        description="Classe DSFR à appliquer à chaque composant Icône + Texte" />
+            <property   name="iconClass"
+                        label="CSS des icônes"
+                        type="String"
+                        role="inputOnly"
+                        description="Classe DSFR à appliquer à toutes les icônes (e.g. fr-text-title--blue-france pour changer la couleur)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
+                        description="Activation de détails pour l'aalyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

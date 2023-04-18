@@ -1,0 +1,9 @@
+<template>
+    <template lwc:if={value}>
+        <div class={wrappingClass}>
+            <span class={iconClass}>&nbsp;</span>
+            <lightning-formatted-rich-text class="fr-text" value={value}>
+            </lightning-formatted-rich-text>
+        </div>
+    </template>
+</template>
