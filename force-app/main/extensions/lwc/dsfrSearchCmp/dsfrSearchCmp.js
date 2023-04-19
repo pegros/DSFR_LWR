@@ -98,7 +98,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         this.currentState = data.state;
         if (this.isDebug) console.log('wiredPageRef: current state set ', JSON.stringify(this.currentState));
 
-        this.searchTerm = this.currentState.term || '';
+        this.searchTerm = (this.currentState.term || '').trim();
         if (this.isDebug) console.log('wiredPageRef: search term updated ', this.searchTerm);
 
         if (this.isDebug) console.log('wiredPageRef: END for search');

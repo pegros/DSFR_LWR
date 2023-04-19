@@ -1,6 +1,11 @@
 .mainSearchDiv .criteriaDiv {
     margin-top: 2em;
 }
+
+.fr-menu__list {
+    box-shadow: inset 0 1px 0 0 var(--border-open-blue-france);
+    background-color: rgb(255,255,255);
+}
 .fr-collapse--expanded {
     --collapse-max-height:20rem;
     overflow-y: auto !important;
@@ -17,6 +22,10 @@
     pointer-events: auto !important;
     padding-left:  0.1rem !important;
     padding-right:  0.1rem !important;
+    filter: drop-shadow(var(--overlap-shadow));
+    pointer-events: none;
+    position: absolute;
+    top: 100%;
 }
 /*.selectMenu {
     position: relative !important;
@@ -62,4 +71,26 @@ input[type="search"] {
 }
 .applyButton {
     margin-top: 1em;
+}
+
+.mainSearch {
+    /*height: 2rem;*/
+    /*min-width: 50%;*/
+    line-height: 1.75rem;
+    min-height: 3rem;
+}
+.mainSearchLayout {
+    width:100%;
+}
+.selectButton {
+    /*inset -1px var(--border-default-grey),*/
+    min-height: 3rem;
+    box-shadow:  inset 0 -2px 0 0 var(--border-action-high-blue-france), inset 1px 1px 0 0 var(--border-default-grey)  ;
+    border-top-right-radius: 0px;
+    /*border: 1px solid var(--border-default-grey);
+    margin: -1px;*/
+    max-width: 100% !important;
+}
+.searchButton {
+    min-height: 3rem !important;
 }

@@ -4,55 +4,61 @@
         <!-- MAIN SEARCH BAR DISPLAY -->
         <template lwc:if={showSearch}>
             <div class="fr-search-bar fr-search-bar--lg mainSearchDiv" role="search">
-                <label class="fr-label">Recherche</label>
-                <input  class="fr-input mainSearch" placeholder="Rechercher"
+                <lightning-layout  multiple-rows="true" vertical-align="top" class="mainSearchLayout">
+                    <!-- slds-grid_vertical-stretch flexibility="auto"  alignment-bump="right"  horizontal-align="spread" -->
+                    <lightning-layout-item size="9" large-device-size="5" class="slds-order_1 " >
+                        <label class="fr-label">Recherche</label>
+                        <input  class="fr-input mainSearch" placeholder="Rechercher"
                         type="search"               name="search"
-                        value={searchTerm}          onkeyup={handleSearchKey}>
-                <template for:each={mainCriteriaList} for:item="iterC" >
-                    <!--
-                    <div key={iterC.fullName} class="fr-input fr-select-group">
-                        <label class="fr-label" >{iterC.label}</label>
-                        <select class="fr-select" multiple>
-                            <option value="" selected disabled hidden>Selectionnez une option</option>
-                            <template for:each={iterC.values} for:item="iterV" >
-                                <option key={iterV.fullName} value={iterV.value} selected={iterV.selected}>{iterV.label}</option>   
-                            </template>
-                        </select>
-                    </div>
-                    -->
-                    <div key={iterC.fullName} class="fr-nav__item selectMenu">
-                        <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton" aria-expanded="false" value={iterC.fullName} onclick={expandCollapse}>
-                            {iterC.label}
-                        </button>
-                        <div class="fr-collapse fr-menu" data-name={iterC.fullName}>
-                            <ul class="fr-menu__list">
-                                <template for:each={iterC.values} for:item="iterVal">
-                                    <li key={iterVal.fullName}>
-                                        <template lwc:if={iterVal.selected}>
-                                            <a  class="fr-nav__link menuSelector"   href="#"                        
-                                                data-name={iterVal.fullName}
-                                                data-value={iterVal.value}          data-criteria={iterC.name}
-                                                aria-current="selection"            onclick={toggleMenuSelect}>
-                                                {iterVal.label}
-                                            </a>
-                                        </template>
-                                        <template lwc:else>
-                                            <a  class="fr-nav__link menuSelector"   href="#"
-                                                data-name={iterVal.fullName}
-                                                data-value={iterVal.value}          data-criteria={iterC.name}
-                                                onclick={toggleMenuSelect}>
-                                                {iterVal.label}
-                                            </a>
-                                        </template>
-                                    </li>
+                                value={searchTerm}          onkeyup={handleSearchKey}>
+                    </lightning-layout-item>
+                    <template lwc:if={mainCriteriaList}>
+                        <lightning-layout-item size="9" large-device-size="5" class="slds-order_3 slds-large-order_2"  >
+                            <lightning-layout  multiple-rows="true" vertical-align="top">
+                                <template for:each={mainCriteriaList} for:item="iterC" >
+                                    <lightning-layout-item  flexibility="auto,no-shrink" key={iterC.fullName}>
+                                        <div key={iterC.fullName} class="fr-nav__item selectMenu">
+                                            <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton" aria-expanded="false" value={iterC.fullName} onclick={expandCollapse}>
+                                                {iterC.label}
+                                            </button>
+                                            <!--   -->
+                                            <div class="fr-collapse fr-menu" data-name={iterC.fullName}>
+                                                <ul class="fr-menu__list">
+                                                    <template for:each={iterC.values} for:item="iterVal">
+                                                        <li key={iterVal.fullName}>
+                                                <template lwc:if={iterVal.selected}>
+                                                    <a  class="fr-nav__link menuSelector"   href="#"                        
+                                                        data-name={iterVal.fullName}
+                                                        data-value={iterVal.value}          data-criteria={iterC.name}
+                                                        aria-current="selection"            onclick={toggleMenuSelect}>
+                                                        {iterVal.label}
+                                                    </a>
+                                                </template>
+                                                <template lwc:else>
+                                                    <a  class="fr-nav__link menuSelector"   href="#"
+                                                        data-name={iterVal.fullName}
+                                                        data-value={iterVal.value}          data-criteria={iterC.name}
+                                                        onclick={toggleMenuSelect}>
+                                                        {iterVal.label}
+                                                    </a>
+                                                </template>
+                                                        </li>
+                                                    </template>
+                                                </ul>
+                                            </div>    
+                                        </div>
+                                    </lightning-layout-item>
                                 </template>
-                            </ul>
-                        </div>    
-                    </div>
-                </template>
-                <button class="fr-btn" title="Rechercher" onclick={updateSearch}>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                    </template>
+                    <!-- flexibility="no-shrink,no-grow" -->
+                    <lightning-layout-item size="3" large-device-size="2" class="slds-order_2 slds-large-order_3">
+                        <button class="fr-btn searchButton" title="Rechercher" onclick={updateSearch}>
                     Rechercher
-                </button>
+                        </button>
+                    </lightning-layout-item>
+                </lightning-layout>
             </div>
         </template>
     
