@@ -1,7 +1,7 @@
 <template>
     <div class={cardClass}>
-        <div class="fr-card__header">
-            <div class="fr-card__img imageContainer">
+        <div lwc:if={hasHeader} class="fr-card__header">
+            <div lwc:if={cardImage}  class="fr-card__img imageContainer">
                 <template lwc:if={pictoSrc}>
                     <!--<c-dsfr-pictogram-dsp picto-name={pictoSrc} picto-size="none" picto-class={cardImageClass} is-debug={isDebug}>-->
                     <c-dsfr-pictogram-dsp   picto-name={pictoSrc}   picto-size={pictoSize}
@@ -12,37 +12,43 @@
                     <img class={cardImageClass} src={imageSrc} alt={imageTitle} >
                 </template>
             </div>
-            <ul if:true={cardBadge} class="fr-badges-group">
-                <li>
-                    <c-dsfr-badge-dsp   badge-value={cardBadge} badge-variant={cardBadgeVariant}
-                                        show-icon="true" is-debug={isDebug}>
-                    </c-dsfr-badge-dsp>
-                </li>
-            </ul>
+            <template lwc:if={cardBadge}>
+                <ul class="fr-badges-group">
+                    <li>
+                        <c-dsfr-badge-dsp   badge-value={cardBadge} badge-variant={cardBadgeVariant}
+                                            show-icon="true" is-debug={isDebug}>
+                        </c-dsfr-badge-dsp>
+                    </li>
+                </ul>
+            </template>
         </div>
         <div class="fr-card__body">
             <div class="fr-card__content">
                 <h3 class="fr-card__title">
                     <a href="#" onclick={openTarget} >{cardTitle}</a>
                 </h3>
-                <p class="fr-card__desc">
+                <p lwc:if={cardDescription} class="fr-card__desc">
                     <lightning-formatted-rich-text class="fr-card__desc" value={cardDescription}>
                     </lightning-formatted-rich-text>
                 </p>
-                <div class="fr-card__start">
-                    <ul if:true={tagList} class="fr-tags-group">
-                        <template for:each={tagList} for:item="item">
-                            <li key={item}>
-                                <c-dsfr-tag-dsp tag-label={item}></c-dsfr-tag-dsp>
-                            </li>
-                        </template>
-                    </ul>
-                    <p if:true={cardStartDetails} class={cardStartClass}>
-                        <lightning-formatted-rich-text class="fr-card__detail" value={cardStartDetails}>
-                        </lightning-formatted-rich-text>
-                    </p>
+                <div lwc:if={hasStart} class="fr-card__start">
+                    <template lwc:if={tagList}>
+                        <ul class="fr-tags-group">
+                            <template for:each={tagList} for:item="item">
+                                <li key={item}>
+                                    <c-dsfr-tag-dsp tag-label={item}></c-dsfr-tag-dsp>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:if={cardStartDetails}>
+                        <p class={cardStartClass}>
+                            <lightning-formatted-rich-text class="fr-card__detail" value={cardStartDetails}>
+                            </lightning-formatted-rich-text>
+                        </p>
+                    </template>
                 </div>
-                <div if:true={cardEndDetails} class="fr-card__end">
+                <div lwc:if={cardEndDetails} class="fr-card__end">
                     <p class={cardEndClass}>
                         <lightning-formatted-rich-text class="fr-card__detail" value={cardEndDetails}>
                         </lightning-formatted-rich-text>

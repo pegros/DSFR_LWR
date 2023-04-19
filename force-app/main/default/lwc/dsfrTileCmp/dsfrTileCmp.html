@@ -6,7 +6,7 @@
             </h4>
             <p if:true={tileDescription} class="fr-tile__desc">{tileDescription}</p>
         </div>
-        <div if:true={tileImage} class="fr-tile__img">
+        <div lwc:if={tileImage} class="fr-tile__img">
             <template lwc:if={pictoSrc}>
                 <c-dsfr-pictogram-dsp picto-name={pictoSrc} picto-size="none" picto-class="fr-responsive-img" is-debug={isDebug} >
                 </c-dsfr-pictogram-dsp>

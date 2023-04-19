@@ -7,7 +7,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     // Configuration parameters
     //-----------------------------------------------------
-    @api cardImage = 'logo'; // should be asset file name or picto name
+    @api cardImage; // should be asset file name or picto name
     @api cardBadge;
     @api cardBadgeVariant;
     @api cardTitle;
@@ -79,6 +79,12 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             default:
                 return  'large';
         }
+    }
+    get hasStart() {
+        return this.tagList || this.cardStartDetails;
+    }
+    get hasHeader() {
+        return this.cardImage || this.cardBadge;
     }
 
     //-----------------------------------------------------
