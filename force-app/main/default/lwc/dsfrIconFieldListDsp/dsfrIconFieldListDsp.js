@@ -51,7 +51,7 @@ export default class DsfrIconFieldListDsp extends LightningElement {
         }
     }
 
-    @api wrappingClass;
+    @api wrappingClass = 'horizontalUL';
     @api fieldClass;
     @api iconClass;
 
@@ -61,14 +61,21 @@ export default class DsfrIconFieldListDsp extends LightningElement {
     // Component Initialisation
     //-----------------------------------------------------
     connectedCallback() {
+        this.wrappingClass = this.wrappingClass || 'horizontalUL'; 
         if (this.isDebug) console.log('connected: START for icon field list');
         if (this.isDebug) console.log('connected: values ', this.values);
+        if (this.isDebug) console.log('connected: wrappingClass ', this.wrappingClass);
+        if (this.isDebug) console.log('connected: fieldClass ', this.fieldClass);
+        if (this.isDebug) console.log('connected: iconClass ', this.iconClass);
         if (this.isDebug) console.log('connected: END for icon field list');
     }
 
     renderedCallback() {
         if (this.isDebug) console.log('rendered: START for icon field list');
         if (this.isDebug) console.log('rendered: values ', this.values);
+        if (this.isDebug) console.log('rendered: wrappingClass ', this.wrappingClass);
+        if (this.isDebug) console.log('rendered: fieldClass ', this.fieldClass);
+        if (this.isDebug) console.log('rendered: iconClass ', this.iconClass);
         if (this.isDebug) console.log('rendered: END for icon field list');
     }
 }

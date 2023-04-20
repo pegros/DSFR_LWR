@@ -26,12 +26,13 @@ export default class DsfrPictogrammeDsp extends LightningElement {
     // Initialisation
     //-----------------------------------------------------
     connectedCallback() {
+        this.pictoName = this.pictoName?.trim();
         if (this.isDebug) {
-            console.log('connected: START icon');
+            console.log('connected: START pictogram');
             console.log('connected: picto name ', this.pictoName);
             console.log('connected: picto size ', this.pictoSize);
             console.log('connected: picto class ', this.pictoClass);
-            console.log('connected: END icon');
+            console.log('connected: END pictogram');
         }
     }
 }

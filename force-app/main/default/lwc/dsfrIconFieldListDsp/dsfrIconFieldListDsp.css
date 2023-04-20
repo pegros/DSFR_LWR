@@ -1,0 +1,11 @@
+ul.horizontalUL li {
+    display: inline-block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding-right: 1em;   
+}
+ul.horizontalUL li:last-child {
+    padding-right: 0em; 
+}

@@ -5,7 +5,7 @@
                 <template lwc:if={pictoSrc}>
                     <!--<c-dsfr-pictogram-dsp picto-name={pictoSrc} picto-size="none" picto-class={cardImageClass} is-debug={isDebug}>-->
                     <c-dsfr-pictogram-dsp   picto-name={pictoSrc}   picto-size={pictoSize}
-                                            picto-class="fr-pt-2v" is-debug={isDebug}>
+                                            picto-class="fr-pt-2v"  is-debug={isDebug}>
                     </c-dsfr-pictogram-dsp>
                 </template>
                 <template lwc:else>
@@ -32,8 +32,9 @@
                     </lightning-formatted-rich-text>
                 </p>
                 <p lwc:if={cardDescriptionFields} class="fr-card__desc">
-                    <c-dsfr-icon-field-list-dsp values={cardDescriptionFields} wrapping-class={fieldClass}
-                                                field-class="fr-card__desc" icon-class={iconClass} >
+                    <c-dsfr-icon-field-list-dsp values={cardDescriptionFields}  wrapping-class={fieldClass}
+                                                field-class="fr-card__desc"     icon-class={iconClass}
+                                                is-debug={isDebug}>
                     </c-dsfr-icon-field-list-dsp>
                 </p>
                 <div lwc:if={hasStart} class="fr-card__start">
