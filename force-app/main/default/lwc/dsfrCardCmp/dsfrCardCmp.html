@@ -31,6 +31,11 @@
                     <lightning-formatted-rich-text class="fr-card__desc" value={cardDescription}>
                     </lightning-formatted-rich-text>
                 </p>
+                <p lwc:if={cardDescriptionFields} class="fr-card__desc">
+                    <c-dsfr-icon-field-list-dsp values={cardDescriptionFields} wrapping-class={fieldClass}
+                                                field-class="fr-card__desc" icon-class={iconClass} >
+                    </c-dsfr-icon-field-list-dsp>
+                </p>
                 <div lwc:if={hasStart} class="fr-card__start">
                     <template lwc:if={tagList}>
                         <ul class="fr-tags-group">

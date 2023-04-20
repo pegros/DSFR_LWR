@@ -12,6 +12,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api cardBadgeVariant;
     @api cardTitle;
     @api cardDescription;
+    @api cardDescriptionFields;
     @api cardStartDetails;
     @api cardStartIcon;
     @api cardEndDetails;
@@ -20,6 +21,8 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api cardTarget;
     @api cardSize = 'medium';
     @api cardCss;
+    @api fieldClass;
+    @api iconClass;
     @api isVertical = false; 
     @api isDebug = false;       // Flag to activate debug information
 
@@ -95,6 +98,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('connected: START card for ',this.cardTitle);
             console.log('connected: card badge ',this.cardBadge);
             console.log('connected: card description ',this.cardDescription);
+            console.log('connected: card description fields ',this.cardDescriptionFields);
             console.log('connected: card start details ',this.cardStartDetails);
             console.log('connected: card end details ',this.cardEndDetails);
             console.log('connected: card tags ',JSON.stringify(this.cardTags));
@@ -113,6 +117,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('rendered: START card for ',this.cardTitle);
             console.log('rendered: card badge ',this.cardBadge);
             console.log('rendered: card description ',this.cardDescription);
+            console.log('rendered: card description fields ',this.cardDescriptionFields);
             console.log('rendered: card start details ',this.cardStartDetails);
             console.log('rendered: card end details ',this.cardEndDetails);
             console.log('rendered: card tags ',JSON.stringify(this.cardTags));

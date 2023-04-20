@@ -35,6 +35,10 @@
                         label="Description"
                         type="String"
                         description="Description de la carte" />
+            <property   name="cardDescriptionFields"
+                        label="Description détaillée"
+                        type="String"
+                        description='Description détaillée de la carte via icônes + champs (sous la forme de liste JSON ([{"icon":"xxx","prefix":"yyy","value":"yyy"},...])' />
 
             <property   name="cardStartDetails"
                         label="Details (haut)"
@@ -76,10 +80,20 @@
                         type="Boolean"
                         default="false"
                         description="Activation de la variante verticale de la carte" />
+
             <property   name="cardCss"
                         label="CSS additionnelle"
                         type="String"
                         description="Classes pour modifier le style de la carte (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
+            <property   name="fieldClass"
+                        label="CSS additionnelle (desc. détaillée)"
+                        type="String"
+                        description="Classes pour modifier le style de la liste de la Description détaillée." />
+            <property   name="iconClass"
+                        label="CSS additionnelle (icônes)"
+                        type="String"
+                        description="Classes pour modifier le style des icônes de la Description détaillée (par ex. fr-text-title--blue-france)" />
+
 
             <property   name="isDebug"
                         label="Debug ?"
@@ -116,6 +130,11 @@
                         type="String"
                         role="inputOnly"
                         description="Description de la carte" />
+            <property   name="cardDescriptionFields"
+                        label="Description détaillée"
+                        type="String"
+                        role="inputOnly"
+                        description='Description détaillée de la carte via icônes + champs (sous la forme de liste JSON ([{"icon":"xxx","prefix":"yyy","value":"yyy"},...])' />
 
             <property   name="cardStartDetails"
                         label="Details (haut)"
@@ -163,6 +182,16 @@
                         type="String"
                         role="inputOnly"
                         description="Classes pour modifier le style de la carte (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
+            <property   name="fieldClass"
+                        label="CSS additionnelle (desc. détaillée)"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style de la liste de la Description détaillée." />
+            <property   name="iconClass"
+                        label="CSS additionnelle (icônes)"
+                        type="String"
+                        role="inputOnly"
+                        description="Classes pour modifier le style des icônes de la Description détaillée (par ex. fr-text-title--blue-france)" />
 
             <property   name="isDebug"
                         label="Debug ?"
