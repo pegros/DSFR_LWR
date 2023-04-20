@@ -34,7 +34,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
             return;
         }
 
-        for (let iter in listContext) {
+        /*for (let iter in listContext) {
             if (this.isDebug) console.log('set listContext: processing iter ', JSON.stringify(iter));
             if ((listContext[iter])?.WHERE) {
                 if (this.isDebug) console.log('set listContext: evaluating iter', (listContext[iter]).WHERE);
@@ -55,7 +55,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     listContext[iter] = '';
                 }
             }
-        }
+        }*/
 
         this._listContext = listContext;
         if (this.isDebug) console.log('set listContext: value set ', JSON.stringify(this._listContext));
@@ -346,6 +346,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
+    /*
     buildWhere = function(condition) {
         if (this.isDebug) console.log("buildWhere: START with ", condition);
 
@@ -428,26 +429,6 @@ export default class DsfrCardTileListCmp extends LightningElement {
                 if (this.isDebug) console.log("buildWhere: END / ignoring OR condition (no sub-conditions)");
             }
         }
-        /*
-        switch condition.type (
-            when 'AND':
-                if (this.isDebug) console.log("buildWhere: processing AND ");
-            when 'OR';
-                if (this.isDebug) console.log("buildWhere: processing OR ");
-            when 'IN';
-            when 'NIN';
-                if (this.isDebug) console.log("buildWhere: processing IN, NIN ");
-            when 'EQ';
-            when 'NEQ';
-                if (this.isDebug) console.log("buildWhere: processing EQ, NEQ ");
-                if (this.isDebug) console.log("buildWhere: processing NEQ ");
-            default;
-                console.warn("buildWhere: unknown NEQ ");
-            )
-
-            includes for multi-picklist
-            Select id, name from Account where MSP1__c includes('AAA;BBB','CCC')
-
-        */
     }
+    */
 }

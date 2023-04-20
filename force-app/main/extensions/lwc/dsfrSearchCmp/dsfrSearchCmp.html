@@ -16,8 +16,8 @@
                         <lightning-layout-item size="9" large-device-size="5" class="slds-order_3 slds-large-order_2"  >
                             <lightning-layout  multiple-rows="true" vertical-align="top">
                                 <template for:each={mainCriteriaList} for:item="iterC" >
-                                    <lightning-layout-item  flexibility="auto,no-shrink" key={iterC.fullName}>
-                                        <div key={iterC.fullName} class="fr-nav__item selectMenu">
+                                    <lightning-layout-item flexibility="auto,no-shrink" key={iterC.fullName}>
+                                        <div  class="fr-nav__item selectMenu">
                                             <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton" aria-expanded="false" value={iterC.fullName} onclick={expandCollapse}>
                                                 {iterC.label}
                                             </button>
