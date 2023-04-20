@@ -14,7 +14,7 @@
             <property   name="values"
                         label="Valeurs à afficher"
                         type="String"
-                        description='Liste de contenus et icônes à afficher (sous la forme de liste JSON ([{"icon":"xxx","value":"yyy"},...])' />
+                        description='Liste de contenus et icônes à afficher (sous la forme de liste JSON ([{"icon":"xxx","prefix":"yyy","value":"zzz"},...])' />
             
             <property   name="wrappingClass"
                         label="CSS additionnelle"
@@ -40,7 +40,7 @@
                         label="Valeurs à afficher"
                         type="String"
                         role="inputOnly"
-                        description='Liste de contenus et icônes à afficher (sous la forme de liste JSON ([{"icon":"xxx","value":"yyy"},...])' />
+                        description='Liste de contenus et icônes à afficher (sous la forme de liste JSON ([{"icon":"xxx","prefix":"yyy","value":"yyy"},...])' />
             
             <property   name="wrappingClass"
                         label="CSS additionnelle"

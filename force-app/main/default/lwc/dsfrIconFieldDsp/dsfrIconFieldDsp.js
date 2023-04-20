@@ -21,6 +21,7 @@ export default class DsfrIconFieldDsp extends LightningElement {
         }
     }
     @api iconName;
+    @api valuePrefix;
     @api iconClass;
     @api wrappingClass;
 

@@ -15,6 +15,10 @@
                         label="Texte"
                         type="String"
                         description="Contenu du texte principal à afficher" />
+            <property   name="valuePrefix"
+                        label="Préfixe"
+                        type="String"
+                        description="Préfixe du contenu à ajouter (si celui-ci est renseigné)" />
             <property   name="iconName"
                         label="Icône"
                         type="String"
@@ -42,6 +46,11 @@
                         type="String"
                         role="inputOnly"
                         description="Contenu du texte principal à afficher" />
+            <property   name="valuePrefix"
+                        label="Préfixe"
+                        type="String"
+                        role="inputOnly"
+                        description="Préfixe du contenu à ajouter (si celui-ci est renseigné)" />
             <property   name="iconName"
                         label="Icône"
                         type="String"
