@@ -1,7 +1,5 @@
 /* STANDARD lightning-input-field OVERRIDES */
 
-/* STANDARD lightning-input-field OVERRIDES */
-
 /* STANDARD input FIELD matched to fr-input */
 .slds-input {
     border-radius: 0.25rem 0.25rem 0 0;
@@ -419,3 +417,19 @@ button.slds-combobox__input-value {
         margin-bottom: 1rem !important;
         padding-left: .5rem !important;
     }
+    
+    
+    /* CARD fixes for lightning-formatted-richtext*/
+    
+    [class*=" fr-icon-"]:before {
+    	vertical-align: calc((0.75rem - var(--icon-size))*.5) !important;
+	}
+    
+    .fr-card__desc span {
+    	line-height: 1.5rem !important;
+    	font-size: .875rem !important;
+	}
+	.fr-card__detail span {
+    	line-height: 1.25rem !important;
+    	font-size: .75rem !important;
+	}

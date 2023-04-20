@@ -88,10 +88,25 @@ style standard Salesforce components (if used).
       --dxp-g-heading-font-family: 'Marianne', arial, serif;
       --dxp-s-text-heading-medium-font-family: 'Marianne', arial, sans-serif;
 
-       /** set the font for headings **/
-       --dxp-s-form-element-label-font-size : 12px;
+      /** set the font for headings **/
+      --dxp-s-form-element-label-font-size : 1rem;
+      --dxp-s-body-small-font-size : 0.75rem;
        
-	  --ul-type: 'disc' !important;
+      /* Error color overrides */
+      --slds-g-color-error-base-40 : var(--text-default-error);
+      --lwc-colorTextError : var(--text-default-error);
+       
+      /* Checkbox colors overrides */
+      --sds-c-checkbox-color-background : white;
+      --sds-c-checkbox-color-background-checked : rgb(0,0,145);
+      --slds-c-checkbox-shadow: rgb(22,22,22) 0px 0px 0px 1px inset;
+      --sds-c-checkbox-radius-border: .25rem;
+
+      /* Error color overrides */
+      --slds-c-radio-shadow : inset 0 0 0 1px var(--border-action-high-grey), inset 0 0 0 18px var(--background-default-grey);
+       
+      /* ul styling reset */
+	   --ul-type: 'disc' !important;
    }
 
 </style>
