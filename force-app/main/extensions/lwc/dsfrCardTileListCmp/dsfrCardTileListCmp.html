@@ -66,25 +66,25 @@
                 <template lwc:if={isCard}>
                     <template for:each={recordList} for:item="item">
                         <div key={item.Id} class="fr-col-12">
-                            <c-dsfr-card-cmp    card-image={item.image}
+                            <c-dsfr-card-cmp    card-image={item.image}                 card-title={item.title}
                                                 card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
-                                                card-title={item.title}                 card-description={item.description}
+                                                card-description={item.description}     card-description-fields={item.iconFields}
                                                 card-start-details={item.startDetails}  card-start-icon={item.startIcon}
                                                 card-end-details={item.endDetails}      card-end-icon={item.endIcon}
                                                 card-tags={item.tags}                   card-target={item.target}
                                                 card-size={item.size}                   is-vertical={item.isVertical}
-                                                card-css={elementCss}>
+                                                card-css={elementCss}                   field-class={cardFieldClass}
+                                                icon-class={cardIconClass} >
                             </c-dsfr-card-cmp></div>
                     </template>
                 </template>
                 <template lwc:elseif={isTile}>
                     <template for:each={recordList} for:item="item">
                         <div key={item.Id} class="fr-col-12">
-                            <c-dsfr-tile-cmp    tile-image={item.image}
-                                                tile-title={item.title} tile-description={item.description}
+                            <c-dsfr-tile-cmp    tile-image={item.image}         tile-title={item.title}
+                                                tile-description={item.description}
                                                 tile-target={item.target}
-                                                is-vertical={item.isVertical}
-                                                tile-css={elementCss} >
+                                                is-vertical={item.isVertical}   tile-css={elementCss} >
                             </c-dsfr-tile-cmp>
                         </div>
                     </template>

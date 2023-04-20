@@ -13,7 +13,7 @@
 .imageContainer {
     text-align: center;
 }
-/* DSFR styling enforcement */
+/* DSFR styling enforcement 
 .fr-card__desc + .fr-card__desc {
     margin-top: 0px !important;
-}
+}*/

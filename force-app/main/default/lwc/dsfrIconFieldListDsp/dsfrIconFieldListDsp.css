@@ -9,3 +9,6 @@ ul.horizontalUL li {
 ul.horizontalUL li:last-child {
     padding-right: 0em; 
 }
+ul.horizontalUL {
+    line-height: 0.5rem;
+}

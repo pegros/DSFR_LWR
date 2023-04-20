@@ -72,7 +72,10 @@ export default class DsfrCardTileListCmp extends LightningElement {
     currentUserId = userId;
     recordList;
     configDetails;
+
+    iconFieldsTokens;
     targetTokens;
+
     elementCss = '';
     isReady = false;
 
@@ -119,6 +122,12 @@ export default class DsfrCardTileListCmp extends LightningElement {
         if (this.isDebug) console.log('currentSort: END / returning default ');
         return {label: SORT_DEFAULT};
     }
+    get cardFieldClass() {
+        return this.configDetails?.display?.fieldClass || '';
+    }
+    get cardIconClass() {
+        return this.configDetails?.display?.iconClass || '';        
+    }
 
     //-----------------------------------------------------
     // Initialisation
@@ -155,29 +164,11 @@ export default class DsfrCardTileListCmp extends LightningElement {
             let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
             if (this.isDebug) console.log('handleRecordLoad: fetching listCmp ',listCmp);
             this.configDetails =  listCmp.configuration;
+
             if (this.configDetails?.display?.target) {
                 if (this.isDebug) console.log('handleRecordLoad: extracting tokens from target ', this.configDetails.display.target);
-                let pattern = /\{!([\w_]+).([\w_]+)\}/gi;
-                let keyMatch;
-                let targetTokens = [];
-                const tokenSet = new Set();
-                while (keyMatch = pattern.exec(this.configDetails.display.target))  {
-                    if (this.isDebug) console.log('handleRecordLoad: key extracted ', keyMatch);
-                    if (this.isDebug) console.log('handleRecordLoad: global key ', keyMatch[0]);
-                    if (this.isDebug) console.log('handleRecordLoad: origin ', keyMatch[1]);
-                    if (this.isDebug) console.log('handleRecordLoad: field ', keyMatch[2]);
-
-                    if (tokenSet.has(keyMatch[0])) {
-                        if (this.isDebug) console.log('handleRecordLoad: ignoring token already found ', keyMatch[0]);
-                    }
-                    else {
-                        if (this.isDebug) console.log('handleRecordLoad: registering token ', keyMatch[0]);
-                        targetTokens.push({token:keyMatch[0], type: keyMatch[1], field: keyMatch[2]});
-                        tokenSet.add(keyMatch[0]);
-                    }
-                }
-                if (this.isDebug) console.log('handleRecordLoad: all tokens extracted',targetTokens);
-                this.targetTokens = targetTokens;
+                this.targetTokens = this.extractTokens(this.configDetails.display.target);
+                if (this.isDebug) console.log('handleRecordLoad: all target tokens extracted');
             }
             if (this.configDetails?.display?.sort) {
                 if (this.isDebug) console.log('handleRecordLoad: initializing sort');
@@ -197,10 +188,12 @@ export default class DsfrCardTileListCmp extends LightningElement {
         if (baseRecordList) {
             if (this.isDebug) console.log('handleRecordLoad: processing list');
             if (this.isDebug) console.log('handleRecordLoad: configDetails ',this.configDetails);
+
             baseRecordList.forEach(item => {
                 if (this.isDebug) console.log('handleRecordLoad: processing row ',JSON.stringify(item));
                 let newItem = {... (this.configDetails?.display?.base)};
                 //newItem._source = item;
+
                 if (this.configDetails?.display?.row) {
                     if (this.isDebug) console.log('handleRecordLoad: processing row fields');
                     for (let fieldItem in this.configDetails.display.row) {
@@ -211,6 +204,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     }
                     if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
                 }
+
                 if (this.configDetails?.display?.sort) {
                     if (this.isDebug) console.log('handleRecordLoad: copying sort field values');
                     this.configDetails.display.sort.forEach(itemSort => {
@@ -221,6 +215,24 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     });
                     if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
                 }
+
+                if (this.configDetails?.display?.iconFields) {
+                    if (this.isDebug) console.log('handleRecordLoad: initialising iconFields');
+
+                    let iconFields = [];
+                    this.configDetails.display.iconFields.forEach(itemField => {
+                        if (this.isDebug) console.log('handleRecordLoad: processing iconField ',JSON.stringify(itemField));
+                        if (itemField.field) {
+                            let targetField = {... itemField};
+                            targetField.value = item[itemField.field];
+                            if (this.isDebug) console.log('handleRecordLoad: registering icon field ',JSON.stringify(targetField));
+                            iconFields.push(targetField);
+                        }
+                    });
+                    if (this.isDebug) console.log('handleRecordLoad: iconFields init ', JSON.stringify(iconFields));
+                    newItem.iconFields = iconFields;
+                }
+
                 if (this.targetTokens) {
                     if (this.isDebug) console.log('handleRecordLoad: merging row target');
 
@@ -243,10 +255,6 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     if (this.isDebug) console.log('handleRecordLoad: target merged ',JSON.stringify(mergedTarget));
                     newItem.target = mergedTarget;
                 }
-                else {
-                    if (this.isDebug) console.log('handleRecordLoad: no row target merge required');
-                }
-                
                 
                 if (this.isDebug) console.log('handleRecordLoad: newItem prepared ',JSON.stringify(newItem));
                 targetRecordList.push(newItem);
@@ -346,6 +354,31 @@ export default class DsfrCardTileListCmp extends LightningElement {
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
+    extractTokens = function(template) {
+        if (this.isDebug) console.log('extractTokens: START for template ', template);
+    
+        let pattern = /\{!([\w_]+).([\w_]+)\}/gi;
+        let keyMatch;
+        let targetTokens = [];
+        const tokenSet = new Set();
+        while (keyMatch = pattern.exec(template))  {
+            if (this.isDebug) console.log('extractTokens: key extracted ', keyMatch);
+            if (this.isDebug) console.log('extractTokens: global key ', keyMatch[0]);
+            if (this.isDebug) console.log('extractTokens: origin ', keyMatch[1]);
+            if (this.isDebug) console.log('extractTokens: field ', keyMatch[2]);
+        
+            if (tokenSet.has(keyMatch[0])) {
+                if (this.isDebug) console.log('extractTokens: ignoring token already found ', keyMatch[0]);
+            }
+            else {
+                if (this.isDebug) console.log('extractTokens: registering token ', keyMatch[0]);
+                targetTokens.push({token:keyMatch[0], type: keyMatch[1], field: keyMatch[2]});
+                tokenSet.add(keyMatch[0]);
+            }
+        }
+        if (this.isDebug) console.log('extractTokens: END / all tokens extracted ', targetTokens);
+        return targetTokens;
+    }
     /*
     buildWhere = function(condition) {
         if (this.isDebug) console.log("buildWhere: START with ", condition);
@@ -431,4 +464,5 @@ export default class DsfrCardTileListCmp extends LightningElement {
         }
     }
     */
+
 }
