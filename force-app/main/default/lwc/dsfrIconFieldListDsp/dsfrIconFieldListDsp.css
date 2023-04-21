@@ -1,6 +1,6 @@
 ul.horizontalUL li {
     display: inline-block;
-    white-space:nowrap;
+    white-space:normal;
     overflow:hidden;
     text-overflow: ellipsis;
     max-width: 100%;
