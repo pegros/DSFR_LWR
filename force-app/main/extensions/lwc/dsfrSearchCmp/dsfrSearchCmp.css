@@ -85,7 +85,7 @@ input[type="search"] {
 .selectButton {
     /*inset -1px var(--border-default-grey),*/
     min-height: 3rem;
-    box-shadow:  inset 0 -2px 0 0 var(--border-action-high-blue-france), inset 1px 1px 0 0 var(--border-default-grey)  ;
+    box-shadow:  inset 0 -2px 0 0 var(--border-action-high-blue-france), inset 1px 1px 0 0 var(--border-default-grey), inset -1px 0 0 0 var(--border-default-grey)  ;
     border-top-right-radius: 0px;
     /*border: 1px solid var(--border-default-grey);
     margin: -1px;*/
