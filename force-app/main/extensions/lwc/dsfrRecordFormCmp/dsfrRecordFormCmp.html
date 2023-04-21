@@ -31,26 +31,53 @@
 
     <!-- LDS FORM -->
     <template lwc:if={recordId}>
-    <lightning-record-edit-form class="mainForm"            object-api-name={objectApiName}
-                                record-id={recordId}        record-type-id={recordTypeId}
-                                onload={handleLoad}         onsubmit={handleSubmit}
-                                onsuccess={handleSuccess}   onerror={handleError}>
-        <!-- INPUT FIELD LIST -->
-        <lightning-layout multiple-rows="true" >
-            <!--
-            <lightning-layout-item size="12" class="fr-p-2v">
+        <lightning-record-edit-form class="mainForm"            object-api-name={objectApiName}
+                                    record-id={recordId}        record-type-id={recordTypeId}
+                                    onload={handleLoad}         onsubmit={handleSubmit}
+                                    onsuccess={handleSuccess}   onerror={handleError}>
+            <!-- MAIN ERROR MESSAGES
+            <lightning-messages> </lightning-messages>
+            -->
+
+            <!-- INPUT FIELD LIST -->
+            <lightning-layout multiple-rows="true" >
+                <!--
+                <lightning-layout-item size="12" class="fr-p-2v">
                 <div class="fr-input-group">
                     <label class="fr-label" for="text-input-groups1">Label
                         <span class="fr-hint-text">Help</span>
                     </label>
                     <input class="fr-input" type="text">
                 </div>
-            </lightning-layout-item>
-            -->
-            <template for:each={fieldList} for:item="iter" >
-                <lightning-layout-item key={iter.name} size="12" large-device-size={iter.size} class="fr-px-2v">
-                    <template lwc:if={isEditMode}>
-                        <template lwc:if={iter.disabled} >
+                </lightning-layout-item>
+                -->
+                <template for:each={fieldList} for:item="iter" >
+                    <lightning-layout-item key={iter.name} size="12" large-device-size={iter.size} class="fr-px-2v">
+                        <template lwc:if={isEditMode}>
+                            <template lwc:if={iter.disabled} >
+                                <div class="fr-input-group fr-input-group--disabled">
+                                    <label class="fr-label">{iter.label}
+                                        <template lwc:if={iter.help}>
+                                            <span class="fr-hint-text">{iter.help}</span>
+                                        </template>
+                                    </label>
+                                    <lightning-input-field class="dsfrInput" field-name={iter.name} variant="label-hidden" disabled>
+                                    </lightning-input-field>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <div class="fr-input-group">
+                                    <label class="fr-label">{iter.label}
+                                        <template lwc:if={iter.help}>
+                                            <span class="fr-hint-text">{iter.help}</span>
+                                        </template>
+                                    </label>
+                                    <lightning-input-field class="dsfrInput" field-name={iter.name} variant="label-hidden" required={iter.required} >
+                                    </lightning-input-field>
+                                </div>
+                            </template>
+                        </template>
+                        <template lwc:else>
                             <div class="fr-input-group fr-input-group--disabled">
                                 <label class="fr-label">{iter.label}
                                     <template lwc:if={iter.help}>
@@ -60,61 +87,38 @@
                                 <lightning-input-field class="dsfrInput" field-name={iter.name} variant="label-hidden" disabled>
                                 </lightning-input-field>
                             </div>
-                        </template>
-                        <template lwc:else>
-                            <div class="fr-input-group">
-                                <label class="fr-label">{iter.label}
-                                    <template lwc:if={iter.help}>
-                                        <span class="fr-hint-text">{iter.help}</span>
-                                    </template>
-                                </label>
-                                <lightning-input-field class="dsfrInput" field-name={iter.name} variant="label-hidden" required={iter.required} >
-                                </lightning-input-field>
-                            </div>
-                        </template>
-                    </template>
-                    <template lwc:else>
-                        <div class="fr-input-group fr-input-group--disabled">
-                            <label class="fr-label">{iter.label}
-                                <template lwc:if={iter.help}>
-                                    <span class="fr-hint-text">{iter.help}</span>
-                                </template>
-                            </label>
-                            <lightning-input-field class="dsfrInput" field-name={iter.name} variant="label-hidden" disabled>
-                            </lightning-input-field>
-                        </div>
-                    </template>                    <!--
-                    <p id="text-input-valid-desc-valid" class="fr-valid-text">
-                        Texte de validation
-                    </p>
-                    -->
-                </lightning-layout-item>
-            </template>
-        </lightning-layout>
+                        </template>                    <!--
+                        <p id="text-input-valid-desc-valid" class="fr-valid-text">
+                            Texte de validation
+                        </p>
+                        -->
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
 
-        <!-- FORM BUTTONS -->
-        <template lwc:if={isEditMode}>
-            <!-- fr-btn--icon-left  fr-icon-close-circle-line fr-icon-checkbox-circle-line -->
-            <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
-                <li>
-                    <button class="fr-btn fr-btn--secondary formButton" onclick={handleCancel}>
-                        {cancelLabel}
-                    </button>
-                </li>
-                <li>
-                    <button class="fr-btn formButton" type="submit">
-                        {saveLabel}
-                    </button>
-                </li>
-                <li>
-                    <div class="slds-is-relative spinnerDiv">
-                        <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
-                        </lightning-spinner>
-                    </div>
-                </li>
-            </ul>
-        </template>
-    </lightning-record-edit-form>
+            <!-- FORM BUTTONS -->
+            <template lwc:if={isEditMode}>
+                <!-- fr-btn--icon-left  fr-icon-close-circle-line fr-icon-checkbox-circle-line -->
+                <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
+                    <li>
+                        <button class="fr-btn fr-btn--secondary formButton" onclick={handleCancel}>
+                            {cancelLabel}
+                        </button>
+                    </li>
+                    <li>
+                        <button class="fr-btn formButton" type="submit">
+                            {saveLabel}
+                        </button>
+                    </li>
+                    <li>
+                        <div class="slds-is-relative spinnerDiv">
+                            <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
+                            </lightning-spinner>
+                        </div>
+                    </li>
+                </ul>
+           </template>
+        </lightning-record-edit-form>
     </template>
     </div>
 </template>

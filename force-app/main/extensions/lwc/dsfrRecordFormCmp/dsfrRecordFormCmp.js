@@ -118,7 +118,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
         this.message = {
             type: "info",
             title: "Opération effectuée",
-            details: "Vos changements ont bien été sauvegardées."
+            details: "Vos changements ont bien été sauvegardés."
         }
         this.isEditMode = false;
         if (this.isDebug) console.log('handleSuccess: END for recordForm');
@@ -126,6 +126,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
 
     handleError(event) {
         if (this.isDebug) console.log('handleError: START for recordForm',event);
+        if (this.isDebug) console.log('handleError: event detail received ',JSON.stringify(event.detail));
         this.toggleSpinner(false);
         this.message = {
             type: "error",
