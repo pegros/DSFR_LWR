@@ -20,3 +20,9 @@
 .formHeader {
     margin-bottom: 0.75rem;
 }
+.requiredField {
+    color: var(--text-default-error);
+    font-size: 1rem;
+    padding-bottom: 4px;
+    padding-left: 4px;
+}

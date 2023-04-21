@@ -433,3 +433,50 @@ button.slds-combobox__input-value {
     	line-height: 1.25rem !important;
     	font-size: .75rem !important;
 	}
+
+    /* Header / Footer fixes for lightning-formatted-richtext*/
+
+    @media (min-width: 48em)
+	.fr-footer__brand .fr-logo span {
+    	font-size: 1.3125rem;
+    	margin: -1.25rem;
+    	padding: 1.25rem;
+    }
+
+    .fr-footer__brand .fr-logo span {
+    	font-size: 1.05rem;
+    	margin: -1rem;
+    	padding: 1rem;
+	}
+    
+    .fr-header__logo .fr-logo span {
+    	font-size: .7875rem;
+    	margin: -0.75rem;
+    	padding: 0.75rem;
+	}
+    
+    .fr-logo span {
+	    --text-spacing: 0;
+    	--underline-img: none;
+    	color: var(--text-title-grey);
+    	display: inline-block;
+    	font-size: 1.05rem;
+    	font-weight: 700;
+    	letter-spacing: -.01em;
+    	line-height: 1.0317460317em;
+    	text-indent: -0.1em;
+    	text-transform: uppercase;
+    	vertical-align: middle;
+    }
+
+    /* Flow required star position */ 
+    /* .slds-form-element__label span,  */
+    .flowruntime-input-label {
+        position:relative;
+    }
+    .slds-required {
+        position: absolute;
+        top: -0.25rem;
+        right: -0.25rem;
+        font-size: 1rem;
+    }

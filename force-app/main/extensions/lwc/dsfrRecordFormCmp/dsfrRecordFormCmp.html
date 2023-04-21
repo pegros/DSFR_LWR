@@ -37,7 +37,7 @@
                                     onsuccess={handleSuccess}   onerror={handleError}>
             <!-- MAIN ERROR MESSAGES
             <lightning-messages> </lightning-messages>
-            -->
+        -->
 
             <!-- INPUT FIELD LIST -->
             <lightning-layout multiple-rows="true" >
@@ -68,6 +68,9 @@
                             <template lwc:else>
                                 <div class="fr-input-group">
                                     <label class="fr-label">{iter.label}
+                                        <template lwc:if={iter.required}>
+                                            <span class="requiredField">*</span>
+                                        </template>
                                         <template lwc:if={iter.help}>
                                             <span class="fr-hint-text">{iter.help}</span>
                                         </template>
