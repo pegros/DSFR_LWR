@@ -38,4 +38,21 @@ export default class DsfrCalloutCmp extends LightningElement {
             console.log('connected: END callout');
         }
     }
+    renderedCallback() {
+        if (this.isDebug) {
+            console.log('rendered: START callout');
+            console.log('rendered: title ', this.calloutTitle);
+            console.log('rendered: description ', this.calloutDescription);
+            console.log('rendered: variant ', this.calloutVariant);
+            console.log('rendered: action label ', this.actionLabel);
+            console.log('rendered: action target ', this.actionTarget);
+        }
+
+        if ((this.calloutDescription) && (typeof this.calloutDescription !== 'string')) {
+            if (this.isDebug) console.log('rendered: erasing Description');
+            this.calloutDescription = null;
+        }
+
+        if (this.isDebug) console.log('rendered: END callout');
+    }
 }
