@@ -11,6 +11,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     // Configuration parameters
     //-----------------------------------------------------
     @api showSearch = false;    // Display search bar
+    @api searchPage;            // Search page name (if not standard one)
     @api mainCriteria;          // Main criteria configuration
     @api criteria;              // Additional criteria configuration
 
@@ -317,7 +318,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         if (this.isDebug) console.log('updateSearch: newState finalized ', JSON.stringify(newState));
 
-        let searchPage = {type:"standard__search",state:newState};
+        let searchPage = (this.searchPage ? {"type":"comm__namedPage","attributes":{"name":this.searchPage}} : {"type":"standard__search"});
+        searchPage.state = newState;
         if (this.isDebug) console.log('updateSearch: searchPage init ', JSON.stringify(searchPage));
 
         this[NavigationMixin.Navigate](searchPage);

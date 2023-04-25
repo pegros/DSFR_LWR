@@ -29,6 +29,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     @api mainMenu;
 
     @api showSearch = false;
+    @api searchPage;
 
     @api isDebug = false;
     
@@ -373,7 +374,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         let loginPage = {type:"comm__namedPage",attributes:{name:"Login"}};
         //let loginPage = {type:'standard__webPage',attributes: {url:'/login'}};
         //let loginPage = {type: 'comm__loginPage',attributes: {actionName: 'login'};
-        if (this.isDebug) console.log('handleSearch: loginPage init ', JSON.stringify(loginPage));
+        if (this.isDebug) console.log('handleLogin: loginPage init ', JSON.stringify(loginPage));
 
         this[NavigationMixin.Navigate](loginPage);                                                                      
         if (this.isDebug) console.log('handleLogin: END / navigation triggered');
@@ -383,24 +384,24 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         event.stopPropagation();
         event.preventDefault();
 
-        //if (this.isDebug) console.log('handleSearch: location fetched ', window?.location);
-        //if (this.isDebug) console.log('handleSearch: hostname fetched ', window?.location?.hostname);
-        if (this.isDebug) console.log('handleSearch: basePathName fetched ', basePathName);
+        //if (this.isDebug) console.log('handleLogout: location fetched ', window?.location);
+        //if (this.isDebug) console.log('handleLogout: hostname fetched ', window?.location?.hostname);
+        if (this.isDebug) console.log('handleLogout: basePathName fetched ', basePathName);
         const sitePrefix = basePathName.replace(/\/s$/i, ""); // site prefix is the site base path without the trailing "/s"
         const baseUrl = sitePrefix.slice(0,sitePrefix.indexOf('/',1));
         let logoutUrl = baseUrl + "/secur/logout.jsp";
 
         //let baseUrl = basePathName.slice(0,basePathName.indexOf('/',1));
-        //if (this.isDebug) console.log('handleSearch: baseUrl extracted ', baseUrl);
+        //if (this.isDebug) console.log('handleLogout: baseUrl extracted ', baseUrl);
         //let logoutUrl = baseUrl + 'vforcesite/secur/logout.jsp?retUrl=' + encodeURI(basePathName);
-        if (this.isDebug) console.log('handleSearch: logoutUrl init ', logoutUrl);
+        if (this.isDebug) console.log('handleLogout: logoutUrl init ', logoutUrl);
         
         /*let logoutPage = {type:'standard__webPage',attributes: {url: logoutUrl}};
         //https://menjs--devpgro.sandbox.my.site.com/RecrutLWRvforcesite/servlet/networks/switch?startURL=%2Fsecur%2Flogout.jsp
         //https://menjs--devpgro.sandbox.my.site.com/RecrutLWRvforcesite/servlet/networks/switch?startURL=%2Fsecur%2Flogout.jsp
         //let logoutPage = {type:'standard__webPage',attributes: {url:'/secur/logout.jsp'}};
         //let logoutPage = {type: 'comm__loginPage',attributes: {actionName: 'logout'};
-        if (this.isDebug) console.log('handleSearch: logoutPage init ', JSON.stringify(logoutPage));
+        if (this.isDebug) console.log('handleLogout: logoutPage init ', JSON.stringify(logoutPage));
 
         this[NavigationMixin.Navigate](logoutPage);*/
         window.open(logoutUrl, '_self');
@@ -430,7 +431,9 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         const searchValue = searchInput?.value;
         if (this.isDebug) console.log('handleSearch: searchValue extracted ',searchValue);
 
-        let searchPage = {"type":"standard__search","state":{"term":searchValue}};
+
+        let searchPage = (this.searchPage ? {"type":"comm__namedPage","attributes":{"name":this.searchPage}} : {"type":"standard__search"});
+        searchPage.state = {"term": searchValue};
         //let searchPage = {type: 'comm__namedPage',attributes:{name: 'Search'},state: {term:"test"}}
         if (this.isDebug) console.log('handleSearch: searchPage init ', JSON.stringify(searchPage));
 

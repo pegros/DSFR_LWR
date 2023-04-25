@@ -45,6 +45,10 @@
                         type="Boolean"
                         default="false"
                         description="Activation d'une barre de recherche dans le header" />
+            <property   name="searchPage"
+                        label="Page de Recherche"
+                        type="String"
+                        description="Nom de la page de recherche (si différente de la page de recherche standard)" />
 
             <property   name="isDebug"
                         label="Debug ?"

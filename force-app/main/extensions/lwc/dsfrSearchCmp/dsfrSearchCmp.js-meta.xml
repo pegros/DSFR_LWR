@@ -15,6 +15,10 @@
                         type="Boolean"
                         default="true"
                         description="Flag pour afficher / masquer la section de recherche standard" />
+            <property   name="searchPage"
+                        label="Page de Recherche"
+                        type="String"
+                        description="Nom de la page de recherche (si différente de la page de recherche standard)" />
 
             <property   name="mainCriteria"
                         label="Critères principaux"
