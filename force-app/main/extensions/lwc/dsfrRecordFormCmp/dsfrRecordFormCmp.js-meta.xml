@@ -24,6 +24,16 @@
                         type="String"
                         default="{!Route.recordId}"
                         description="ID de l'enregistrement pour lequel le formulaire est affiché (mode création si vide)" />
+
+            <property   name="relatedObjectApiName"
+                        label="Objet Cible"
+                        type="String"
+                        description="API Name de l'objet lié pour lequel le formulaire est affiché" />
+            <property   name="relatedRecordIdField"
+                        label="Champ ID Cible"
+                        type="String"
+                        description="Nom du champ ID de l'enregistrement lié pour lequel le formulaire est affiché." />
+                        
             <property   name="fieldConfig"
                         label="Configuration"
                         type="String"

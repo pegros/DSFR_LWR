@@ -30,14 +30,14 @@
     </template>
 
     <!-- LDS FORM -->
-    <template lwc:if={recordId}>
-        <lightning-record-edit-form class="mainForm"            object-api-name={objectApiName}
-                                    record-id={recordId}        record-type-id={recordTypeId}
+    <template lwc:if={isReady}>
+        <lightning-record-edit-form class="mainForm"            object-api-name={formObjectApiName}
+                                    record-id={formRecordId}    record-type-id={formRecordTypeId}
                                     onload={handleLoad}         onsubmit={handleSubmit}
                                     onsuccess={handleSuccess}   onerror={handleError}>
             <!-- MAIN ERROR MESSAGES
             <lightning-messages> </lightning-messages>
-        -->
+            -->
 
             <!-- INPUT FIELD LIST -->
             <lightning-layout multiple-rows="true" >

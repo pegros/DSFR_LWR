@@ -1,4 +1,5 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import CANCEL_LABEL from '@salesforce/label/c.dsfrRecordFormCancel';
 import SAVE_LABEL   from '@salesforce/label/c.dsfrRecordFormSave';
 import EDIT_LABEL   from '@salesforce/label/c.dsfrRecordFormEdit';
@@ -11,6 +12,10 @@ export default class DsfrRecordFormCmp extends LightningElement {
     @api title;
     @api objectApiName;
     @api recordId;
+
+    @api relatedObjectApiName;
+    @api relatedRecordIdField;
+
     @api fieldConfig;
     @api defaultSize = 6;
     @api isReadOnly = false;
@@ -23,9 +28,13 @@ export default class DsfrRecordFormCmp extends LightningElement {
     // Technical parameters
     //-----------------------------------------------------
 
+    relatedFieldList;
     fieldList;
+    formObjectApiName;
+    formRecordId;
+    formRecordTypeId;
+    isReady = false;
     labelOk = false;
-    recordTypeId;
     message;
 
     //-----------------------------------------------------
@@ -40,11 +49,50 @@ export default class DsfrRecordFormCmp extends LightningElement {
     // Initialisation
     //-----------------------------------------------------
 
+    @wire(getRecord, { recordId: '$recordId', fields: "$relatedFieldList"})
+    wiredRecord({data, error}) {
+        if (this.isDebug) console.log('wiredRecord: START for recordForm');
+
+        if (data) {
+            if (this.isDebug) console.log('wiredRecord: data received ', data);
+            this.formRecordId = getFieldValue(data,(this.relatedFieldList)[0]);
+            if (this.isDebug) console.log('wiredRecord: formRecordId init ', this.formRecordId);
+            if (this.formRecordId) {
+                this.isReady = true;
+            }
+            else {
+                // creation mode not supported for related record
+                console.warn('wiredRecord: no ID value provided');
+            }
+        }
+        else {
+            console.warn('wiredRecord: record data fetche failed ', error);
+            this.formRecordId = null;
+        }
+
+        if (this.isDebug) console.log('wiredRecord: END for recordForm');
+    }
+
     connectedCallback() {
         if (this.isDebug) console.log('connected: START for recordForm');
         if (this.isDebug) console.log('connected: objectApiName ', this.objectApiName);
         if (this.isDebug) console.log('connected: recordId ', this.recordId);
+        if (this.isDebug) console.log('connected: related objectApiName ', this.relatedObjectApiName);
+        if (this.isDebug) console.log('connected: related recordId field ', this.relatedRecordIdField);
         if (this.isDebug) console.log('connected: fieldConfig ', this.fieldConfig);
+
+        if (this.relatedRecordIdField) {
+            if (this.isDebug) console.log('connected: fetching related record ID');
+            this.formObjectApiName = this.relatedObjectApiName;
+            this.relatedFieldList = [ this.objectApiName + '.' + this.relatedRecordIdField ];
+            if (this.isDebug) console.log('connected: relatedFieldList init ', JSON.stringify(this.relatedFieldList));
+        }
+        else {
+            if (this.isDebug) console.log('connected: using current record ID');
+            this.formObjectApiName = this.objectApiName;
+            this.formRecordId = this.recordId;
+            this.isReady = true;
+        }
 
         try {
             let fieldList = JSON.parse(this.fieldConfig);
@@ -57,7 +105,12 @@ export default class DsfrRecordFormCmp extends LightningElement {
         }
         catch (error){
             console.warn('connected: recordForm fieldList parsing failed ', error);
+            this.isReady = false;
         }
+
+        if (this.isDebug) console.log('connected: formObjectApiName init ', this.formObjectApiName);
+        if (this.isDebug) console.log('connected: formRecordId init ', this.formRecordId);
+
         if (this.isDebug) console.log('connected: END for recordForm');
     }
 
@@ -69,16 +122,16 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleLoad: START for recordForm',event);
         this.toggleSpinner(false);
 
-        if ((!this.recordTypeId) && (this.recordId)){
-            this.recordTypeId = (event.detail.records)[this.recordId].recordTypeId;
-            if (this.isDebug) console.log('handleLoad: recordTypeId init ', this.recordTypeId);
+        if ((!this.formRecordTypeId) && (this.formRecordId)){
+            this.formRecordTypeId = (event.detail.records)[this.recordId]?.recordTypeId;
+            if (this.isDebug) console.log('handleLoad: formRecordTypeId init ', this.formRecordTypeId);
         }
 
         if (!this.labelOk) {
             if (this.isDebug) console.log('handleLoad: initialising labels');
             if (this.isDebug) console.log('handleLoad: details provided ',JSON.stringify(event.detail));
 
-            let objectFields = ((event.detail.objectInfos)[this.objectApiName])?.fields;
+            let objectFields = ((event.detail.objectInfos)[this.formObjectApiName])?.fields;
             if (this.isDebug) console.log('handleLoad: objectFields fetched ',JSON.stringify(objectFields));
             this.fieldList.forEach(item => {
                 if (this.isDebug) console.log('handleLoad: processing field ',item.name);
