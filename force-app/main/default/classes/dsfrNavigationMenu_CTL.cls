@@ -52,6 +52,7 @@ public with sharing class dsfrNavigationMenu_CTL {
     * @exception    Various exceptions in case of missing input or wrong context.
     ***/
 
+    /*
     @AuraEnabled(cacheable=true)
     public static List<ConnectApi.NavigationMenuItem> getMenuItems(String navLabel, Boolean showHome) {
         System.debug('getMenuItems: START for ' + navLabel);
@@ -88,12 +89,14 @@ public with sharing class dsfrNavigationMenu_CTL {
         System.debug('getMenuItems: END returning ' + navItems);
         return navItems;
     }
+    */
 
     /***
     * @description  Method to fetch the list of supported menu items included in a set of navigation menu given their master labels
     *               configured in for a Site.
     *               It assumes that the call is done from an Experience Site to retrieve its Network ID.
-    *               user ID is used to trigger a reevaluation of the menu when switching from guest to connected mode.
+    *               User ID is simply used to trigger a reevaluation of the menu when switching from guest to connected mode
+    *               (and bypass the cacheable setting) and nor actually used in the logic.
     * @param        navigationMenus Map of Navigation Menu Labels with a boolean indicating if Home should be included for each one.
     * @param        userId          User ID for which the navigation menu details should be requested.
     * @return       List<ConnectApi.NavigationMenuItem> List of supported menu items
@@ -110,7 +113,14 @@ public with sharing class dsfrNavigationMenu_CTL {
             throw new System.AuraHandledException('Missing Navigation Menus !');
         }
 
-        String networkId = Network.getNetworkId();
+        String networkId;
+        if (!Test.isRunningTest()) {
+            networkId = Network.getNetworkId();
+        }
+        else {
+            System.debug('getNavigations: setting networkId to userId for tests');
+            networkId = userId;
+        }
         if (String.isEmpty(networkId)) {
             System.debug(LoggingLevel.ERROR, 'getNavigations: END KO / No networkId');
             throw new System.AuraHandledException('Network ID not available!');
@@ -130,9 +140,27 @@ public with sharing class dsfrNavigationMenu_CTL {
         }
         System.debug('getNavigations: menuMap prepared ' + menuMap);
 
-        List<NavigationLinkSet> navigationLinkSets = [  SELECT DeveloperName, MasterLabel
-                                                        FROM NavigationLinkSet
-                                                        WHERE NetworkId = :networkId AND MasterLabel in :menuMap.keySet()];
+        List<NavigationLinkSet> navigationLinkSets;
+        if (!Test.isRunningTest()) {
+            navigationLinkSets= [   SELECT DeveloperName, MasterLabel
+                                    FROM NavigationLinkSet
+                                    WHERE NetworkId = :networkId AND MasterLabel in :menuMap.keySet()];
+        }
+        else {
+            System.debug(LoggingLevel.ERROR, 'getMenuItems: setting test navigation set');
+            navigationLinkSets = new List<NavigationLinkSet>();
+            for (String iter : menuMap.keySet()) {
+                if (iter != 'NONE') {
+                    System.debug(LoggingLevel.ERROR, 'getMenuItems: registering menu ' + iter);
+                    navigationLinkSets.add(new NavigationLinkSet(DeveloperName = iter, MasterLabel = iter));
+                }
+                else {
+                    System.debug(LoggingLevel.ERROR, 'getMenuItems: ignoring menu ' + iter);
+                    navigationLinkSets = null;
+                    break;
+                }
+            }
+        }
         if (navigationLinkSets == null) {
             System.debug(LoggingLevel.ERROR, 'getMenuItems: END KO / No navigation menus found with labels ' + menuMap.keySet() + ' on network ' + networkId);
             throw new System.AuraHandledException('Navigation menus not found!');
@@ -146,16 +174,30 @@ public with sharing class dsfrNavigationMenu_CTL {
             Boolean iterShowHome = menuMap.get(iter.MasterLabel);
             System.debug('getMenuItems: ShowHome? ' + iterShowHome);
 
-            ConnectApi.NavigationMenuItemCollection iterMenu = ConnectApi.NavigationMenu.getCommunityNavigationMenu(
-                networkId, null, iter.DeveloperName,
-                ConnectApi.PublishStatus.Live, false, iterShowHome, EXCLUDED_TYPES);
-            System.debug('getMenuItems: navigation Menu retrieved ' + iterMenu);
-
-            /*for (ConnectApi.NavigationMenuItem iterM : iterMenu.menuItems) {
-                System.debug('getMenuItems: unescaping Menu item ' + iterM);
-                iterM.label = (iterM.label).unescapeHtml4();
-            }*/
-
+            ConnectApi.NavigationMenuItemCollection iterMenu;
+            if (!Test.isRunningTest()) {
+                iterMenu =  ConnectApi.NavigationMenu.getCommunityNavigationMenu(
+                                    networkId, null, iter.DeveloperName,
+                                    ConnectApi.PublishStatus.Live, false, iterShowHome, EXCLUDED_TYPES);
+                System.debug('getMenuItems: navigation Menu retrieved ' + iterMenu);
+            }
+            else {
+                System.debug('getMenuItems: setting test navigation menu');
+                iterMenu = new ConnectApi.NavigationMenuItemCollection();
+                iterMenu.menuItems = new List<ConnectApi.NavigationMenuItem>();
+                ConnectApi.NavigationMenuItem newItem = new ConnectApi.NavigationMenuItem();
+                if (iterShowHome) {
+                    System.debug('getMenuItems: home option');
+                    newItem.Label = 'Home';
+                    newItem.actionValue = 'www.home.test';
+                }
+                else {
+                    System.debug('getMenuItems: no home option');
+                    newItem.Label = 'Other';
+                    newItem.actionValue = 'www.other.test';
+                }
+                iterMenu.menuItems.add(newItem);
+            }
             resultMap.put(iter.MasterLabel,iterMenu.menuItems);
             System.debug('getMenuItems: menuItems registered ' + iterMenu.menuItems);
         }
