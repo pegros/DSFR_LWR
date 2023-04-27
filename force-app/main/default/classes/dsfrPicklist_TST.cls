@@ -35,6 +35,42 @@
 @SuppressWarnings('PMD.ClassNamingConventions')
 public class  dsfrPicklist_TST {
 
+    /***
+	* @description Initializes the test context.
+	***/
+	@testSetup
+	static void testSetup() {
+		System.debug('testSetup: START');
+
+		String currentUserId = UserInfo.getUserId();
+		System.debug('testSetup: currentUserId fetched ' + currentUserId);
+
+		Map<ID,PermissionSet> dsfrPSets = new Map<ID,PermissionSet>([SELECT Name FROM PermissionSet WHERE Name LIKE 'dsfr%']);
+		System.debug('testSetup: dsfrPSets fetched ' + dsfrPSets);
+
+		List<PermissionSetAssignment> currentAssignments = [	select PermissionSetId from PermissionSetAssignment
+																where AssigneeId = :currentUserId and PermissionSetId in :dsfrPSets.keySet()];
+		System.debug('testSetup: currentAssignments fetched ' + currentAssignments);
+		for (PermissionSetAssignment iter : currentAssignments) {
+			System.debug('testSetup: removing PermissionSet ' + iter.PermissionSetId);
+			dsfrPSets.remove(iter.PermissionSetId);
+		}
+		System.debug('testSetup: dsfrPSets revised ' + dsfrPSets);
+
+		List<PermissionSetAssignment> newAssignments = new List<PermissionSetAssignment>();
+		for (PermissionSet iter : dsfrPSets.values()) {
+			System.debug('testSetup: sfpegPSets processing PSet ' + iter);
+			newAssignments.add(new PermissionSetAssignment(AssigneeId = currentUserId, PermissionSetId = iter.Id));
+		}
+		System.debug('testSetup: newAssignments init ' + newAssignments);
+
+		insert newAssignments;
+		System.debug('testSetup: newAssignments inserted ' + newAssignments);
+
+		System.debug('testSetup: END');
+	}
+
+
 	/***
 	* @description  Test method for the dsfrPicklist_CTL class, checking the "getPicklistValues" method
 	*               including all error cases.
