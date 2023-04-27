@@ -1,7 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 
 import { NavigationMixin } from 'lightning/navigation';
-import getMenuItems from '@salesforce/apex/dsfrNavigationMenu_CTL.getMenuItems';
 import getNavigations from '@salesforce/apex/dsfrNavigationMenu_CTL.getNavigations';
 
 import isGuest from '@salesforce/user/isGuest';

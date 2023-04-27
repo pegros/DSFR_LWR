@@ -3,7 +3,6 @@ import { LightningElement, api, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { CurrentPageReference } from 'lightning/navigation';
 import getNavigations from '@salesforce/apex/dsfrNavigationMenu_CTL.getNavigations';
-import getMenuItems from '@salesforce/apex/dsfrNavigationMenu_CTL.getMenuItems';
 
 import isGuest from '@salesforce/user/isGuest';
 import userId from '@salesforce/user/Id';
