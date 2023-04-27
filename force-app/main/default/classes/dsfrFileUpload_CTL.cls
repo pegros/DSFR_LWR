@@ -4,6 +4,7 @@
 *               Part of the DSFR_LWR package.
 * @author       P-E GROS
 * @date         April 2023
+* @see          DSFR_LWR package (https://github.com/pegros/DSFR_LWR)
 *
 * Legal Notice
 * 
@@ -115,6 +116,7 @@ public with sharing class dsfrFileUpload_CTL {
     * @return       ContentVersion  Created record
     * @exception    Various exceptions in case of  wrong context.
     ***/
+    @testVisible
     private static ContentVersion registerFile(final String content, final String name, final Object meta) {
         System.debug('registerFile: START for ' + name);
 
@@ -123,10 +125,15 @@ public with sharing class dsfrFileUpload_CTL {
         newFile.Title = name;
         newFile.PathOnClient = name;
 
-        Map<Object,Object> metaMap = (Map<Object,Object>) meta;
-        for(Object iter : metaMap.keySet()) {
-            System.debug('registerFile: adding meta field ' + iter);
-            newFile.put((String)iter,metaMap.get(iter));
+        if (meta != null) {
+            Map<Object,Object> metaMap = (Map<Object,Object>) meta;
+            for(Object iter : metaMap.keySet()) {
+                System.debug('registerFile: adding meta field ' + iter);
+                newFile.put((String)iter,metaMap.get(iter));
+            }
+        }
+        else {
+            System.debug('registerFile: no meta provided');
         }
 
         System.debug('registerFile: inserting ContentVersion ' + newFile);
@@ -145,32 +152,37 @@ public with sharing class dsfrFileUpload_CTL {
     * @exception    Various exceptions in case of  wrong context.
     ***/
     private static List<ContentDocumentLink> registerLinks(final String fileId, final List<String> recordIds, final String sharing) {
-        System.debug('registerLink: START for file ' + fileId);
-        System.debug('registerLink: and record ' + recordIds);
-        System.debug('registerLink: with sharing ' + sharing);
+        System.debug('registerLinks: START for file ' + fileId);
+        System.debug('registerLinks: and record ' + recordIds);
+        System.debug('registerLinks: with sharing ' + sharing);
 
         if (String.IsBlank(sharing)) {
-            System.debug(LoggingLevel.ERROR, 'uploadFile: END KO / missing sharing mode ');
+            System.debug(LoggingLevel.ERROR, 'registerLinks: END KO / missing sharing mode ');
             throw new System.StringException('Missing Sharing mode for file');
         }
 
         if ((recordIds == null) || (recordIds.isEmpty())) {
-            System.debug('registerLink: END / no link to register');
+            System.debug('registerLinks: END / no link to register');
             return null;
         }
 
-        ContentVersion fileCV = [   SELECT ContentDocumentId
-                                    FROM ContentVersion 
-                                    WHERE Id =: fileId    ];
-        if (fileCV  == null) {
-            System.debug(LoggingLevel.ERROR, 'uploadFile: END KO / file not found ');
-            throw new System.StringException('Missing file mode for sharing');
+        ContentVersion fileCV;
+        System.debug('registerLinks: fetching ContentDocument Id ');
+        try {
+            fileCV = [  SELECT ContentDocumentId
+                        FROM ContentVersion 
+                        WHERE Id =: fileId
+                        LIMIT 1];
         }
-        System.debug('registerLink: file ContentDocumentId fetched ' + fileCV);
+        catch( Exception e) {
+            System.debug(LoggingLevel.ERROR, 'registerLinks: END KO / file fetch failed ' + e.getMessage());
+            throw new System.StringException('File retrieval failed ' + e.getMessage());
+        }
+        System.debug('registerLinks: file ContentDocument Id fetched ' + fileCV);
 
         List<ContentDocumentLink> newLinks = new List<ContentDocumentLink>();
         for (String iterId : recordIds) {
-            System.debug('registerLink: linking file to record ID ' + iterId);
+            System.debug('registerLinks: linking file to record ID ' + iterId);
             ContentDocumentLink newLink = new ContentDocumentLink();
             newLink.ContentDocumentId = fileCV.ContentDocumentId;
             newLink.LinkedEntityId = iterId;
@@ -178,10 +190,10 @@ public with sharing class dsfrFileUpload_CTL {
             newLinks.add(newLink);
         }
 
-        System.debug('registerLink: inserting ContentDocumentLinks ' + newLinks);
+        System.debug('registerLinks: inserting ContentDocumentLinks ' + newLinks);
         insert newLinks;
 
-        System.debug('registerLink: END with ' + newLinks);
+        System.debug('registerLinks: END with ' + newLinks);
         return newLinks;
     }
 }
