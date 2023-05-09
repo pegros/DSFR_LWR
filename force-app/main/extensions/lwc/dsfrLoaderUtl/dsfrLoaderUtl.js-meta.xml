@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Styles 🚧</masterLabel>
+    <masterLabel>DSFR Styles</masterLabel>
     <description>Chargement des styles du DSFR</description>
     <targets>
         <target>lightning__FlowScreen</target>

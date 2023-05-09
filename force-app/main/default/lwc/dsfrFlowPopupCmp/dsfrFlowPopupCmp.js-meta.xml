@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Modale de Processus 🚧</masterLabel>
+    <masterLabel>DSFR Modale de Processus</masterLabel>
     <description>Affichage d'un bouton DSFR déclenchant un Flow en modale</description>
     <targets>
         <target>lightningCommunity__Page</target>  

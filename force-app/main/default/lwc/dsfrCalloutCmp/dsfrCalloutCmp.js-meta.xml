@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Mise en avant 🇫🇷</masterLabel>
+    <masterLabel>DSFR Mise en avant</masterLabel>
     <description>Affichage d'une Mise en Avant (Callout) du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  

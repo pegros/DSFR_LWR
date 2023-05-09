@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Entête 🚧</masterLabel>
+    <masterLabel>DSFR Entête</masterLabel>
     <description>Entête de page (Header) standard DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>

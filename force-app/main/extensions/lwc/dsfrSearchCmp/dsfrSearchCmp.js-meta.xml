@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Recherche 🚧</masterLabel>
+    <masterLabel>DSFR Recherche</masterLabel>
     <description>Affichage d'un composant pour affiner une recherche</description>
     <targets>
         <target>lightningCommunity__Page</target>  

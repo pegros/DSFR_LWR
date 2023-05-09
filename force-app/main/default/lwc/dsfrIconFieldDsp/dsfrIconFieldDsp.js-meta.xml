@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Icône et Texte 🇫🇷</masterLabel>
+    <masterLabel>DSFR Icône et Texte</masterLabel>
     <description>Affichage d'un champ textuel avec ioône devant</description>
     <targets>
         <target>lightningCommunity__Page</target>  

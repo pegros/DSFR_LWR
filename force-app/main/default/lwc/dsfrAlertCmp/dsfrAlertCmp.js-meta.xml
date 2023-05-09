@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Alerte 🇫🇷</masterLabel>
+    <masterLabel>DSFR Alerte</masterLabel>
     <description>Affichage d'une Alerte du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
