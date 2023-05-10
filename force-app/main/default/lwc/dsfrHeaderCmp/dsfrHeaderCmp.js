@@ -82,32 +82,33 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
                 if (this.mainMenuItems) {
                     if (this.isDebug) console.log('wiredPageRef: searching tab likeliness');
-                    let selectedTab = (this.mainMenuItems)?.reduce((bestMatch, item) => {
-                    if (this.isDebug) console.log('wiredPageRef: processing item ',item);
-                    if (this.isDebug) console.log('wiredPageRef: previous bestMatch ',bestMatch);
+                    let selectedTab = (this.mainMenuItems ?
+                        this.mainMenuItems.reduce((bestMatch, item) => {
+                            if (this.isDebug) console.log('wiredPageRef: processing item ',item);
+                            if (this.isDebug) console.log('wiredPageRef: previous bestMatch ',bestMatch);
 
-                    if (url.startsWith(item.actionValue)) {
-                        if (this.isDebug) console.log('wiredPageRef: matching item found');
-                        if (bestMatch) {
-                            if (bestMatch.actionValue.length > item.actionValue.length) {
-                                if (this.isDebug) console.log('wiredPageRef: keeping previous best match');
-                                return bestMatch;
+                            if (url.startsWith(item.actionValue)) {
+                                if (this.isDebug) console.log('wiredPageRef: matching item found');
+                                if (bestMatch) {
+                                    if (bestMatch.actionValue.length > item.actionValue.length) {
+                                        if (this.isDebug) console.log('wiredPageRef: keeping previous best match');
+                                        return bestMatch;
+                                    }
+                                    else {
+                                        if (this.isDebug) console.log('wiredPageRef: matching item found');
+                                        return item;
+                                    }
+                                }
+                                else {
+                                    if (this.isDebug) console.log('wiredPageRef: no previous best match');
+                                    return item;
+                                }
                             }
                             else {
-                                if (this.isDebug) console.log('wiredPageRef: matching item found');
-                                return item;
+                                if (this.isDebug) console.log('wiredPageRef: no match');
+                                return bestMatch;
                             }
-                        }
-                        else {
-                            if (this.isDebug) console.log('wiredPageRef: no previous best match');
-                            return item;
-                        }
-                    }
-                    else {
-                        if (this.isDebug) console.log('wiredPageRef: no match');
-                        return bestMatch;
-                    }
-                    });
+                        }) : null);
                     if (this.isDebug) console.log('wiredPageRef: tab searched ',selectedTab);
 
                     if ((selectedTab == this.mainMenuItems[0]) && (url !== selectedTab.actionValue)) {
