@@ -133,8 +133,6 @@ export default class DsfrCardTileListCmp extends LightningElement {
     // Initialisation
     //-----------------------------------------------------
     connectedCallback() {
-        console.log('connected: NEW');
-
         if (this.isDebug) {
             console.log('connected: START for card/tile list');
             console.log('connected: configName ', this.configName);
