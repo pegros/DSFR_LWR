@@ -1,0 +1,65 @@
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Liste de Fichiers Liés</masterLabel>
+    <description>Affichage d'un composant de présentation de fichiers liés</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="label"
+                        label="Libellé"
+                        type="String"
+                        description="Libellé du composant de liste."/>
+
+            <property   name="configName"
+                        label="Configuration de liste"
+                        type="String"
+                        description="Nom du custom metadata sfpegList utilisé pour récupérer les fichiers" />
+            <property   name="listContext"
+                        label="Contexte de liste"
+                        type="String"
+                        description="Contexte d'utilisation de la configuration de liste" />
+
+            <property   name="showUpload"
+                        label="Upload?"
+                        type="Boolean"
+                        default="false"
+                        description="Déactivation de la fonction d'upload de nouvelle version sur un fichier." />
+            <property   name="showDelete"
+                        label="Delete?"
+                        type="Boolean"
+                        default="false"
+                        description="Déactivation de la fonction de delete du lien fichier." />
+
+            <property   name="disabled"
+                        label="Inactif?"
+                        type="String"
+                        default="false"
+                        description="Déactivation (dynamique) des fonctions Upload/Delete (valeur booléenne true/false)." />
+
+            <property   name="wrappingClass"
+                        label="CSS additionnelle"
+                        type="String"
+                        default="fr-downloads-group fr-downloads-group--bordered"
+                        description="Classes pour modifier le style du composant (par ex. fr-m-2v)" />
+
+            <property   name="objectApiName"
+                        label="Object Name"
+                        type="String"
+                        description="API Name de l'objet de rattachement des fichiers" />
+            <property   name="recordId"
+                        label="ID de l'enregistrement lié"
+                        type="String"
+                        description="ID Salesforce de l'enregistrement de rattachement des fichiers" />
+            
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

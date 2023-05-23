@@ -1,5 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import uploadFile from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 
 export default class DsfrFileUploadCmp extends LightningElement {
 
@@ -121,6 +122,14 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 this.message =  this.fileName + ' file uploaded successfully!';
                 this.isError =  false;
 
+                if (recordIds && recordIds.length > 0) {
+                    if (this.isDebug) console.log('handleUpload: handling record data reload ',recordIds);
+                    let recordIdList = [];
+                    recordIds.forEach(item => {recordIdList.push({recordId: item})});
+                    if (this.isDebug) console.log('handleUpload: triggering reload on recordIdList ',recordIdList);
+                    notifyRecordUpdateAvailable(recordIdList);
+                }
+                
                 let fileInput = this.template.querySelector('input.fr-upload');
                 if (this.isDebug) console.log('handleUpload: reactivating fileInput ',fileInput);
                 fileInput.disabled = false;

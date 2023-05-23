@@ -179,7 +179,7 @@ public class  dsfrFileUpload_TST {
         System.debug('testLinkFile: TEST 2 - testing missing sharing');
 		try {
             Object outputLink = dsfrFileUpload_CTL.linkFile(testFile.Id,TST_RCD.Id,null);
-			System.debug('testLinkFile: returning link ' + outputLink);
+			System.debug(LoggingLevel.ERROR,'testLinkFile: returning link with missing sharing ' + outputLink);
 			Assert.fail('Missing sharing property should raise exception');
 		}
 		catch (Exception e) {
@@ -189,7 +189,7 @@ public class  dsfrFileUpload_TST {
         System.debug('testLinkFile: TEST 3 - testing missing recordId');
 		try {
             Object outputLink = dsfrFileUpload_CTL.linkFile(testFile.Id,null,'V');
-			System.debug('testLinkFile: returning link ' + outputLink);
+			System.debug(LoggingLevel.ERROR,'testLinkFile: returning link with missing recordId ' + outputLink);
 			Assert.fail('Missing recordId property should raise exception');
 		}
 		catch (Exception e) {
@@ -200,7 +200,7 @@ public class  dsfrFileUpload_TST {
         String tmpFileId = 'DUMMY';
 		try {
             Object outputLink = dsfrFileUpload_CTL.linkFile(tmpFileId,TST_RCD.Id,'V');
-			System.debug('testLinkFile: returning link ' + outputLink);
+			System.debug(LoggingLevel.ERROR,'testLinkFile: returning link with unknown file ID ' + outputLink);
 			Assert.fail('Unknown recordId property should raise exception');
 		}
 		catch (Exception e) {
@@ -209,5 +209,57 @@ public class  dsfrFileUpload_TST {
 
 		Test.stopTest();
 		System.debug('testLinkFile: END');
+	}
+
+	/***
+	* @description  Test method for the dsfrFileUpload_CTL class, checking the "unlinkFile" method
+	*               including all error cases.
+	* @see          dsfrFileUpload_CTL
+	***/
+
+	@isTest
+	static void testUnlinkFile() {
+		System.debug('testUnlinkFile: START');
+
+        if (TST_RCD == null) {
+            System.debug('testUnlinkFile: registering TEST_RCD ');
+            TST_RCD = new dsfrTest__c(Name = 'TEST');
+            insert TST_RCD;
+		    System.debug('testUnlinkFile: TEST_RCD inserted ' + TST_RCD);
+        }
+
+		Test.startTest();
+
+        // Registering test file
+        ContentVersion testFile = dsfrFileUpload_CTL.registerFile(EncodingUtil.base64Encode(TST_RSC.Body),'LinkTest',null);
+        System.debug('testUnlinkFile: testFile init ' + testFile);
+
+		ContentDocumentLink testLink = (ContentDocumentLink) dsfrFileUpload_CTL.linkFile(testFile.Id,TST_RCD.Id,'V');
+		System.debug('testUnlinkFile: link init ' + testLink);
+
+        // Testing passing case
+        System.debug('testUnlinkFile: TEST 1 - testing passing case');
+		try {
+            dsfrFileUpload_CTL.unlinkFile(testLink.Id);
+			System.debug('testUnlinkFile: unlink properly done');
+		}
+		catch (Exception e) {
+			System.debug(LoggingLevel.ERROR,'testUnlinkFile: error raised with correct link ' + e.getMessage());
+			Assert.fail('Unlinking correct link should not raise exception');
+		}
+
+        // Testing error case
+        System.debug('testUnlinkFile: TEST 2 - testing invalid link ID');
+		try {
+            dsfrFileUpload_CTL.unlinkFile(testLink.Id);
+			System.debug(LoggingLevel.ERROR,'testUnlinkFile: unlink done with invalid link ID');
+			Assert.fail('Invalid link ID should raise exception');
+		}
+		catch (Exception e) {
+			System.debug('testUnlinkFile: error properly raised with missing sharing ' + e.getMessage());
+		}
+
+		Test.stopTest();
+		System.debug('testUnlinkFile: END');
 	}
 }

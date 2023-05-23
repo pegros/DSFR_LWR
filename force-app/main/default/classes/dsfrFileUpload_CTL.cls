@@ -61,7 +61,7 @@ public with sharing class dsfrFileUpload_CTL {
         }
         catch (exception e) {
             System.debug(LoggingLevel.ERROR, 'uploadFile: END KO / file registration failure ' + e);
-            throw new System.AuraHandledException('File registration failure');
+            throw new System.AuraHandledException(Label.dsfrFileUploadRegistrationFailure);// 'File registration failure'
         }
 
         
@@ -74,7 +74,7 @@ public with sharing class dsfrFileUpload_CTL {
         }
         catch (exception e) {
             System.debug(LoggingLevel.ERROR, 'uploadFile: END KO / link registration failure ' + e);
-            throw new System.AuraHandledException('File Link registration failure');
+            throw new System.AuraHandledException(Label.dsfrFileUploadLinkFailure);
         }
 
         System.debug('uploadFile: END with ' + result);
@@ -103,7 +103,30 @@ public with sharing class dsfrFileUpload_CTL {
         }
         catch (exception e) {
             System.debug(LoggingLevel.ERROR, 'linkFile: END KO / link registration failure ' + e);
-            throw new System.AuraHandledException('File Link registration failure');
+            throw new System.AuraHandledException(Label.dsfrFileUploadLinkFailure); //  'File Link registration failure'
+        }
+    }
+
+    /***
+    * @description  Method to remove a new ContentDocumentLink between a ContentDocument and 
+    *               a record.
+    * @param        linkId      ID of the ContentDocumentLink record
+    * @exception    Various exceptions in case of wrong context or execution failure.
+    ***/
+    @AuraEnabled
+    public static void unlinkFile(final String linkId) {
+        System.debug('unlinkFile: START for link ID ' + linkId);
+
+        try {
+            Database.DeleteResult deleteResult = database.delete((ID)linkId,true);
+            System.debug('unlinkFile: link deleted with status ' +  deleteResult);
+
+            System.debug('unlinkFile: END OK');
+            return;
+        }
+        catch(Exception e) {
+            System.debug(LoggingLevel.ERROR, 'unlinkFile: END KO / deletion failure ' + e.getMessage());
+            throw new System.AuraHandledException(Label.dsfrFileUploadUnlinkFailure);
         }
     }
 

@@ -1,0 +1,45 @@
+<template>
+    <!-- DATA LOAD UTILITY -->
+    <c-sfpeg-list-cmp   object-api-name={objectApiName} 
+                        record-id={recordId} user-id={currentUserId}
+                        config-name={configName}
+                        parent-context={listContext}
+                        onload={handleRecordLoad}
+                        is-debug={isDebug}
+                        is-debug-fine={isDebug}
+                        class="listLoader">
+    </c-sfpeg-list-cmp>
+
+    <!-- COMPONENT DISPLAY -->
+    <div class={wrappingClass} >
+        <template lwc:if={label}>
+            <h4 class="fr-downloads-group__title fr-mb-2v">{label}</h4>
+        </template>
+        <template lwc:if={isReady}>
+            <ul>
+                <template for:each={fileList} for:item="iterFile">
+                    <li key={iterFile.ContentDocumentId}>
+                        <div class="fr-download">
+                            <p> <!-- download -->
+                                <a  href="#"  class="fr-download__link"
+                                    title={downloadTitle} name={iterFile.ContentDocumentId}
+                                    onclick={handleDownload}>
+                                        {iterFile.ContentDocument.Title}
+                                    <span class="fr-download__detail">
+                                        {iterFile.ContentDocument.FileType} - {iterFile.ContentDocument.ContentSize} octets
+                                    </span>                        
+                                </a>
+                                <!--<lightning-formatted-number class="fr-download__detail" value={iterFile.ContentDocument.ContentSize} format-style="decimal" maximum-significant-digits="5"></lightning-formatted-number>-->
+                                <template lwc:if={showDelete}>
+                                    <button class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-close-circle-line fr-py-0v"
+                                            title={deleteTitle} name={iterFile.Id} onclick={handleUnlink}>
+                                    </button>
+                                </template>
+                            </p>
+                        </div>                        
+                    </li>
+                </template>
+            </ul>
+        </template>
+    </div>
+</template>

@@ -37,7 +37,7 @@
             <property   name="wrappingClass"
                         label="CSS additionnelle"
                         type="String"
-                        description="Classes pour modifier le style de la tuile (par ex. fr-m-2v)" />
+                        description="Classes pour modifier le style du composant (par ex. fr-m-2v)" />
 
             <property   name="objectApiName"
                         label="Object Name"
@@ -46,7 +46,7 @@
             <property   name="recordId"
                         label="ID de l'enregistrement lié"
                         type="String"
-                        description="ID Salesforce de l'ernegistrement auquel le fichier sera rattaché" />
+                        description="ID Salesforce de l'enregistrement auquel le fichier sera rattaché" />
             
             <property   name="isDebug"
                         label="Debug ?"

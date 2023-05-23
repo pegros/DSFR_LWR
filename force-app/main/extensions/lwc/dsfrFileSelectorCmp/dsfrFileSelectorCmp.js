@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import userId       from '@salesforce/user/Id';
-import linkFile from '@salesforce/apex/dsfrFileUpload_CTL.linkFile';
+import linkFile     from '@salesforce/apex/dsfrFileUpload_CTL.linkFile';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 
 export default class DsfrFileSelectorCmp extends LightningElement {
 
@@ -134,6 +135,12 @@ export default class DsfrFileSelectorCmp extends LightningElement {
                     if (this.isDebug) console.log('handleSelect: file registered as ', JSON.stringify(result));
                     this.message =  'Le fichier a bien été sélectionné!';
                     this.isError =  false;
+
+                    if (this.recordId) {
+                        if (this.isDebug) console.log('handleUpload: triggering record data reload ',this.recordId);
+                        notifyRecordUpdateAvailable([{recordId: this.recordId}]);
+                    }
+
                     //let fileSelect = this.template.querySelector("select[name='fileSelect']");
                     //if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
                     //fileSelect.disabled = false;
@@ -144,7 +151,7 @@ export default class DsfrFileSelectorCmp extends LightningElement {
                     if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
                     fileSelect.disabled = false;
                     console.warn('handleSelect: END KO / file registration failed ', JSON.stringify(error));
-                    this.message = JSON.stringify(error);
+                    this.message = error.body?.message; //JSON.stringify(error);
                     this.isError = true;
                 });
             if (this.isDebug) console.log('handleSelect: link triggered');
