@@ -16,6 +16,7 @@
         <shortDescription>Libellé pour l'indication de l'étape suivante</shortDescription>
         <value>Étape suivante :</value>
     </labels>
+
     <labels>
         <fullName>dsfrHeaderLoginLabel</fullName>
         <categories>DSFR Component LWC Label</categories>
@@ -56,6 +57,7 @@
         <shortDescription>Libellé du titre du bouton close de menu</shortDescription>
         <value>Fermer</value>
     </labels>
+
     <labels>
         <fullName>dsfrBreadcrumbExpandLabel</fullName>
         <categories>DSFR Component LWC Label</categories>
@@ -72,12 +74,13 @@
         <shortDescription>Libellé descriptif du fil d'ariane</shortDescription>
         <value>Vous êtes ici :</value>
     </labels>
+
     <labels>
         <fullName>dsfrFlowPopupCloseTitle</fullName>
         <categories>DSFR Component LWC Title</categories>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Titre du bouton de fermeture de le modale de Flow</shortDescription>
+        <shortDescription>Titre du bouton de fermeture de la modale de Flow</shortDescription>
         <value>Fermer la fenêtre modale du processus</value>
     </labels>
     <labels>
@@ -85,7 +88,49 @@
         <categories>DSFR Component LWC Label</categories>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Libellé du bouton de fermeture de le modale de Flow</shortDescription>
+        <shortDescription>Libellé du bouton de fermeture de la modale de Flow</shortDescription>
+        <value>Fermer</value>
+    </labels>
+
+    <labels>
+        <fullName>dsfrFileUploadRegistrationFailure</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème de chargement d'un fichier</shortDescription>
+        <value>Echec de chargement du fichier</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileUploadLinkFailure</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème de rattachement d'un fichier</shortDescription>
+        <value>Echec de rattachement du fichier</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileUploadUnlinkFailure</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème de détachement d'un fichier</shortDescription>
+        <value>Echec de détachement du fichier</value>
+    </labels>
+
+    <labels>
+        <fullName>dsfrAlertPopupCloseTitle</fullName>
+        <categories>DSFR Component LWC Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de fermeture de la modale d'alerte</shortDescription>
+        <value>Fermer la fenêtre modale de l'alerte</value>
+    </labels>
+    <labels>
+        <fullName>dsfrAlertPopupCloseLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton de fermeture de la modale d'alerte</shortDescription>
         <value>Fermer</value>
     </labels>
 </CustomLabels>
