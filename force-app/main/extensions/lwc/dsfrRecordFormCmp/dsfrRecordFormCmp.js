@@ -138,7 +138,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
                 if (!item.label) {
                     item.label = objectFields[item.name]?.label;
                 }
-                if (objectFields[item.name]?.inlineHelpText) {
+                if ((!item.hideHelp) && (!item.help) && (objectFields[item.name]?.inlineHelpText)) {
                     item.help = objectFields[item.name]?.inlineHelpText;
                 }
                 if (this.isDebug) console.log('handleLoad: label set for field ',item.label);
@@ -191,15 +191,17 @@ export default class DsfrRecordFormCmp extends LightningElement {
     
     handleCancel(event){
         if (this.isDebug) console.log('handleCancel: START for recordForm',event);
+        event.preventDefault();
         this.message = null;
 
-        const inputFields = this.template.querySelectorAll('lightning-input-field');
+        /*const inputFields = this.template.querySelectorAll('lightning-input-field');
         if (this.isDebug) console.log('handleCancel: inputFields fetched',inputFields);
 
         if (inputFields) {
             inputFields.forEach(iter => {iter.reset();});
-        }
+        }*/
 
+        this.isEditMode = false;
         if (this.isDebug) console.log('handleCancel: END for recordForm');
     }
 

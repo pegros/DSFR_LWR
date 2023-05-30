@@ -101,7 +101,7 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
                 if (error.body?.output?.errors) {
                     alertConfig.header = error.body?.message;
                     error.body.output.errors.forEach(item => {
-                        alertConfig.alerts.push({type:'error', message:item.message});
+                        alertConfig.alerts.push({type:'error', message: item.message});
                     })
                 }
                 else {
