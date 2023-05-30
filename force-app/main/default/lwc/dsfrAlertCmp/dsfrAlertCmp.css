@@ -2,3 +2,6 @@
     overflow-wrap: break-word;
     /*word-break: break-all;*/
 }
+.alertMessage {
+    margin-bottom: 0.25rem !important;
+}

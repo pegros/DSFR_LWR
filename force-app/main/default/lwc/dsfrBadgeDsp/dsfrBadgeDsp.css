@@ -1,0 +1,3 @@
+.fr-badge::before {
+    vertical-align: calc((.75em - var(--icon-size)*.5));
+}

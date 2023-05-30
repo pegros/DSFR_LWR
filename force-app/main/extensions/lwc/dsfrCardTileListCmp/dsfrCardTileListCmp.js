@@ -216,6 +216,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
                 }
 
+                // Initialising Icon Fields for Cards
                 if (this.configDetails?.display?.iconFields) {
                     if (this.isDebug) console.log('handleRecordLoad: initialising iconFields');
 
@@ -233,6 +234,24 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     newItem.iconFields = iconFields;
                 }
 
+                // Initialising Badge List for Cards
+                if (this.configDetails?.display?.badgeList) {
+                    if (this.isDebug) console.log('handleRecordLoad: initialising badgeList');
+
+                    let badgeList = [];
+                    this.configDetails.display.badgeList.forEach(itemBadge => {
+                        if (this.isDebug) console.log('handleRecordLoad: processing itemBadge ',JSON.stringify(itemBadge));
+                        let badgeData = {... itemBadge};
+                        if (itemBadge.valueField) badgeData.value = item[itemBadge.valueField];
+                        if (itemBadge.variantField) badgeData.variant = item[itemBadge.variantField];
+                        if (this.isDebug) console.log('handleRecordLoad: registering badge data ',JSON.stringify(badgeData));
+                        badgeList.push(badgeData);
+                    });
+                    if (this.isDebug) console.log('handleRecordLoad: badgeList init ', JSON.stringify(badgeList));
+                    newItem.badgeList = badgeList;
+                }
+
+                // Merging Target Tokend in Actions
                 if (this.targetTokens) {
                     if (this.isDebug) console.log('handleRecordLoad: merging row target');
 

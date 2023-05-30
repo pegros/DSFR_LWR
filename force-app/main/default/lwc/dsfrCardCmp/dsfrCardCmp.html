@@ -38,7 +38,21 @@
                     </c-dsfr-icon-field-list-dsp>
                 </p>
                 <div lwc:if={hasStart} class="fr-card__start">
-                    <template lwc:if={tagList}>
+                    <template lwc:if={hasBadgeList}>
+                        <ul class="fr-badges-group">
+                            <template for:each={badgeList} for:item="item">
+                                <template lwc:if={item.value}>
+                                    <li key={item.value}>
+                                        <c-dsfr-badge-dsp   badge-value={item.value} badge-variant={item.variant}
+                                                            show-icon="true"        class="badgeListItem"
+                                                            is-debug={isDebug}>
+                                        </c-dsfr-badge-dsp>
+                                    </li>
+                                </template>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:if={cardTags}>
                         <ul class="fr-tags-group">
                             <template for:each={tagList} for:item="item">
                                 <li key={item}>
@@ -49,14 +63,14 @@
                     </template>
                     <template lwc:if={cardStartDetails}>
                         <p class={cardStartClass}>
-                            <lightning-formatted-rich-text class="fr-card__detail" value={cardStartDetails}>
+                            <lightning-formatted-rich-text class="fr-card__detail detailValue" value={cardStartDetails}>
                             </lightning-formatted-rich-text>
                         </p>
                     </template>
                 </div>
                 <div lwc:if={cardEndDetails} class="fr-card__end">
                     <p class={cardEndClass}>
-                        <lightning-formatted-rich-text class="fr-card__detail" value={cardEndDetails}>
+                        <lightning-formatted-rich-text class="fr-card__detail detailValue" value={cardEndDetails}>
                         </lightning-formatted-rich-text>
                     </p>
                 </div>

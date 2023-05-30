@@ -71,10 +71,11 @@
                                                 card-description={item.description}     card-description-fields={item.iconFields}
                                                 card-start-details={item.startDetails}  card-start-icon={item.startIcon}
                                                 card-end-details={item.endDetails}      card-end-icon={item.endIcon}
-                                                card-tags={item.tags}                   card-target={item.target}
+                                                card-tags={item.tags}                   card-badge-list-json={item.badgeList}
                                                 card-size={item.size}                   is-vertical={item.isVertical}
                                                 card-css={elementCss}                   field-class={cardFieldClass}
-                                                icon-class={cardIconClass} >
+                                                icon-class={cardIconClass}              card-target={item.target}
+                                                is-debug={isDebug}>
                             </c-dsfr-card-cmp></div>
                     </template>
                 </template>
@@ -84,7 +85,8 @@
                             <c-dsfr-tile-cmp    tile-image={item.image}         tile-title={item.title}
                                                 tile-description={item.description}
                                                 tile-target={item.target}
-                                                is-vertical={item.isVertical}   tile-css={elementCss} >
+                                                is-vertical={item.isVertical}   tile-css={elementCss}
+                                                is-debug={isDebug} >
                             </c-dsfr-tile-cmp>
                         </div>
                     </template>
@@ -94,7 +96,8 @@
                         <div key={item.Id} class="fr-col-12">
                             <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
                                                     message={item.message}  message-class={item.messageClass}
-                                                    wrapping-class={elementCss} >
+                                                    wrapping-class={elementCss} 
+                                                    is-debug={isDebug} >
                             </c-dsfr-container-dsp>
                         </div>
                     </template>

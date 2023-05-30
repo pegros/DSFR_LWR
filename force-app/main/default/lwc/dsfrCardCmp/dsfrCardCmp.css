@@ -20,3 +20,15 @@
 .cardHeader {
     min-height: 3.5rem !important;
 }
+.fr-badges-group {
+    vertical-align: middle !important;
+}
+.detailValue {
+    margin-bottom: 0 !important;
+}
+.badgeListItem {
+    display: flex !important;
+}
+p.[class*=" fr-icon-"]:before {
+    vertical-align: calc((0.5rem - var(--icon-size))*.5) !important;
+}

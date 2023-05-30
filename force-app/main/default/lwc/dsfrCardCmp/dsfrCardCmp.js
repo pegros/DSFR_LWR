@@ -17,6 +17,8 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api cardStartIcon;
     @api cardEndDetails;
     @api cardEndIcon;
+    @api cardBadgeList;
+    @api cardBadgeListJson;
     @api cardTags;
     @api cardTarget;
     @api cardSize = 'medium';
@@ -43,6 +45,12 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     }
     get imageTitle() {
         return 'Image pour ' + this.cardTitle;
+    }
+    get hasBadgeList() {
+        return (this.cardBadgeListJson || this.cardBadgeList);
+    }
+    get badgeList() {
+        return ((this.cardBadgeListJson) ? this.cardBadgeListJson : ((this.cardBadgeList) ? JSON.parse(this.cardBadgeList) : null));
     }
     get tagList() {
         return ((this.cardTags) ? (this.cardTags.includes(';') ? this.cardTags.split(';') : [this.cardTags]) : null);
@@ -84,7 +92,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         }
     }
     get hasStart() {
-        return this.tagList || this.cardStartDetails;
+        return this.tagList || this.cardStartDetails || this.cardBadgeListJson || this.cardBadgeList;
     }
     get hasHeader() {
         return this.cardImage || this.cardBadge;
@@ -102,6 +110,8 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('connected: card start details ',this.cardStartDetails);
             console.log('connected: card end details ',this.cardEndDetails);
             console.log('connected: card tags ',JSON.stringify(this.cardTags));
+            console.log('connected: card badge list ',this.cardBadgeList);
+            console.log('connected: card badge list JSON ',JSON.stringify(this.cardBadgeListJson));
             console.log('connected: card image ',this.cardImage);
             console.log('connected: card target ',this.cardTarget);
             console.log('connected: vertical variant? ', this.isVertical);
@@ -121,6 +131,8 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('rendered: card start details ',this.cardStartDetails);
             console.log('rendered: card end details ',this.cardEndDetails);
             console.log('rendered: card tags ',JSON.stringify(this.cardTags));
+            console.log('rendered: card badge list ',this.cardBadgeList);
+            console.log('rendered: card badge list JSON ',JSON.stringify(this.cardBadgeListJson));
             console.log('rendered: card image ',this.cardImage);
             console.log('rendered: card target ',this.cardTarget);
             console.log('rendered: vertical variant? ', this.isVertical);
