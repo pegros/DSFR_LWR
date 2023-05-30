@@ -301,6 +301,7 @@ button.slds-combobox__input-value {
     color: #929292;
     box-shadow: inset 0 -2px 0 0 #e5e5e5;
     background-color: var(--background-contrast-grey);
+    color: var(--text-disabled-grey);
     /*background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 24 24' %3E%3Cpath fill='%23929292' d='M12,13.1l5-4.9l1.4,1.4L12,15.9L5.6,9.5l1.4-1.4L12,13.1z'/%3E%3C/svg%3E");*/
 }
 
@@ -418,6 +419,11 @@ button.slds-combobox__input-value {
         padding-left: .5rem !important;
     }
     
+    /* Multi-Picklist **/
+    .slds-listbox__option {
+        padding-top: 0.125rem !important;
+        padding-bottom: 0.125rem !important;
+    }
     
     /* CARD fixes for lightning-formatted-richtext*/
     
@@ -433,8 +439,8 @@ button.slds-combobox__input-value {
     	line-height: 1.25rem !important;
     	font-size: .75rem !important;
 	}
-
-    /* Header / Footer fixes for lightning-formatted-richtext*/
+    
+	/* Header / Footer fixes for lightning-formatted-richtext*/
 
     @media (min-width: 48em)
 	.fr-footer__brand .fr-logo span {
@@ -468,7 +474,7 @@ button.slds-combobox__input-value {
     	text-transform: uppercase;
     	vertical-align: middle;
     }
-
+    
     /* Flow required star position */ 
     /* .slds-form-element__label span,  */
     .flowruntime-input-label {
