@@ -101,6 +101,7 @@ export default class DsfrFileSelectorCmp extends LightningElement {
             console.log('rendered: recordId ', this.recordId);
             console.log('rendered: context ', this.context);
             console.log('rendered: context parsed ', this.contextJson);
+            //console.log('rendered: file list fetched ', JSON.stringify(this.fileList));
             console.log('rendered: END for file selector');
         }
     }

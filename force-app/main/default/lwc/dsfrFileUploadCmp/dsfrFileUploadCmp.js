@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import uploadFile from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import UPLOAD_SUCCESS from '@salesforce/label/c.dsfrFileUploadSuccess';
 
 export default class DsfrFileUploadCmp extends LightningElement {
 
@@ -29,6 +30,11 @@ export default class DsfrFileUploadCmp extends LightningElement {
 
     fileName;
     fileContent;
+
+    //-----------------------------------------------------
+    // Technical parameters
+    //-----------------------------------------------------
+    uploadSuccess = UPLOAD_SUCCESS;
 
     //-----------------------------------------------------
     // Custom getter
@@ -119,7 +125,8 @@ export default class DsfrFileUploadCmp extends LightningElement {
             uploadFile(uploadData).then(result => {
                 if (this.isDebug) console.log('registerFile: file registered as ', JSON.stringify(result));
                 this.fileContent = null;
-                this.message =  this.fileName + ' file uploaded successfully!';
+                //this.message =  this.fileName + ' file uploaded successfully!';
+                this.message = this.uploadSuccess.replace('{0}', this.fileName);
                 this.isError =  false;
 
                 if (recordIds && recordIds.length > 0) {

@@ -50,6 +50,8 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     @api recordId;
     currentUserId = userId;
     fileList;
+    configDetails;
+
 
     isReady = false;
 
@@ -83,8 +85,75 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     //-----------------------------------------------------
     handleRecordLoad(event) {
         if (this.isDebug) console.log('handleRecordLoad: START for related files',event);
-        this.fileList =  event.detail;
+
+        if (!this.configDetails) {
+            let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
+            if (this.isDebug) console.log('handleRecordLoad: fetching listCmp ',listCmp);
+
+            this.configDetails =  listCmp.configuration?.display || {};
+            if (this.isDebug) console.log('handleRecordLoad: initial configDetails ',JSON.stringify(this.configDetails));
+            if (!this.configDetails.linkId) {
+                this.configDetails.linkId = ['Id'];
+            }
+            else {
+                this.configDetails.linkId = (this.configDetails.linkId).split('.');
+            }
+            if (!this.configDetails.contentId) {
+                this.configDetails.contentId = ['ContentDocumentId'];
+            }
+            else {
+                this.configDetails.contentId = (this.configDetails.contentId).split('.');
+            }
+            if (!this.configDetails.title) {
+                this.configDetails.title = ['ContentDocument','Title'];
+            }
+            else {
+                this.configDetails.title = (this.configDetails.title).split('.');
+            }
+            if (!this.configDetails.details) {
+                this.configDetails.details = [{value:['ContentDocument','FileType']},{value:['ContentDocument','ContentSize'],suffix:'octets'}];
+            }
+            else {
+                (this.configDetails.details).forEach( detailIter => {
+                    if (this.isDebug) console.log('handleRecordLoad: splitting detail ', JSON.stringify(detailIter));
+                    detailIter.value = (detailIter.value).split('.');
+                });
+            }
+            if (this.isDebug) console.log('handleRecordLoad: configDetails init ',JSON.stringify(this.configDetails));
+        }
+
+        let baseRecordList =  event.detail;
+        if (this.isDebug) console.log('handleRecordLoad: list loaded ',JSON.stringify(event.detail));
+
+        let targetRecordList = [];
+        if (baseRecordList) {
+            if (this.isDebug) console.log('handleRecordLoad: processing list');
+
+            baseRecordList.forEach(item => {
+                if (this.isDebug) console.log('handleRecordLoad: processing row ',JSON.stringify(item));
+                let newItem = {
+                    title: this.getValue(this.configDetails.title,item) || '???',
+                    linkId: this.getValue(this.configDetails.linkId,item) || '???',
+                    contentId: this.getValue(this.configDetails.contentId,item) || '???',
+                    details: []
+                };
+                if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
+                (this.configDetails.details).forEach(detailItem => {
+                    if (this.isDebug) console.log('handleRecordLoad: processing detailItem ',JSON.stringify(detailItem));
+                    let newItemDetail = {... detailItem};
+                    newItemDetail.value = this.getValue(detailItem.value,item);
+                    if (newItemDetail.value) {
+                        newItem.details.push(newItemDetail);
+                    }
+                });
+                if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
+                targetRecordList.push(newItem);
+            });
+        }
+
+        this.fileList =  targetRecordList;
         if (this.isDebug) console.log('handleRecordLoad: file list registered',JSON.stringify(this.fileList));
+
         this.isReady = true;
         if (this.isDebug) console.log('handleRecordLoad: END for related files');
     }
@@ -148,4 +217,11 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     // Utilities
     //-----------------------------------------------------
 
+    getValue = function(fieldPath,data) {
+        let fieldValue = data;
+        fieldPath.forEach(iter => {
+            fieldValue = fieldValue[iter];
+        });
+        return fieldValue;
+    }
 }

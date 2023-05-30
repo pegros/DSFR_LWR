@@ -93,6 +93,14 @@
     </labels>
 
     <labels>
+        <fullName>dsfrFileUploadSuccess</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message affiché après chargement d'un fichier</shortDescription>
+        <value>Votre fichier {0} a bien été chargé.</value>
+    </labels>
+    <labels>
         <fullName>dsfrFileUploadRegistrationFailure</fullName>
         <categories>DSFR Component LWC Error Message</categories>
         <language>en_US</language>

@@ -18,21 +18,28 @@
         <template lwc:if={isReady}>
             <ul>
                 <template for:each={fileList} for:item="iterFile">
-                    <li key={iterFile.ContentDocumentId}>
+                    <li key={iterFile.id}>
                         <div class="fr-download">
-                            <p> <!-- download -->
+                            <!-- download -->
+                            <p> 
                                 <a  href="#"  class="fr-download__link"
-                                    title={downloadTitle} name={iterFile.ContentDocumentId}
+                                    title={downloadTitle} name={iterFile.contentId}
                                     onclick={handleDownload}>
-                                        {iterFile.ContentDocument.Title}
+                                    {iterFile.title}
                                     <span class="fr-download__detail">
-                                        {iterFile.ContentDocument.FileType} - {iterFile.ContentDocument.ContentSize} octets
-                                    </span>                        
+                                        <template for:each={iterFile.details} for:item="item">
+                                            <span key={item.value} class="listItem">
+                                                <template lwc:if={item.prefix}>{item.prefix}&nbsp;</template>
+                                                {item.value}
+                                                <template lwc:if={item.suffix}>&nbsp;{item.suffix}</template>
+                                            </span>
+                                        </template>
+                                    </span>                       
                                 </a>
                                 <!--<lightning-formatted-number class="fr-download__detail" value={iterFile.ContentDocument.ContentSize} format-style="decimal" maximum-significant-digits="5"></lightning-formatted-number>-->
                                 <template lwc:if={showDelete}>
                                     <button class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-close-circle-line fr-py-0v"
-                                            title={deleteTitle} name={iterFile.Id} onclick={handleUnlink}>
+                                            title={deleteTitle} name={iterFile.linkId} onclick={handleUnlink}>
                                     </button>
                                 </template>
                             </p>
