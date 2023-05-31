@@ -421,10 +421,56 @@ button.slds-combobox__input-value {
     
     /* Multi-Picklist **/
     .slds-listbox__option {
-        padding-top: 0.125rem !important;
-        padding-bottom: 0.125rem !important;
+        padding-top: 0.0625rem !important;
+        padding-bottom: 0.0625rem !important;
     }
     
+    .slds-dueling-list__column .slds-form-element__label  {
+        font-size: .75rem !important;
+        line-height: 1.25rem !important;
+    }
+    
+    .slds-dueling-list__options {
+    	color: #161616;
+    	background-color: #eee;
+    	box-shadow: inset 0 -2px 0 0 #3a3a3a;
+	}
+    
+    .slds-dueling-list__options.slds-is-disabled {
+    	color: var(--text-disabled-grey);
+   		background-color: var(--background-contrast-grey);
+    	box-shadow: inset 0 -2px 0 0 var(--border-disabled-grey);
+	}
+    
+    .slds-dueling-list__options {
+        border-radius: 0.25rem 0.25rem 0 0;
+        border-width: 0px !important;
+    	/*border-bottom: 2px solid var(--border-plain-grey);*/
+    	font-size: 1rem;
+    	line-height: 1.5rem;
+    	/*padding: 0.5rem 1rem;*/
+    	margin-top: 0.5rem;
+    }
+    
+    .fr-input-group--disabled .dsfrInput * .slds-dueling-list__column .slds-form-element__label  {
+        color: var(--text-disabled-grey) !important;
+    }
+    
+    .slds-dueling-list__options.slds-is-disabled, .slds-dueling-list__options.slds-is-disabled ul li, .slds-dueling-list__options.slds-is-disabled ul li .slds-listbox__option {
+        color: var(--text-disabled-grey) !important;
+    	background-color: var(--background-contrast-grey) !important;
+    }
+    
+    .slds-listbox__option.slds-is-selected {
+        background-color: rgb(10,118,246) !important;
+        color: rgb(245, 255, 255) !important;
+    }
+    .slds-listbox__option:hover {
+        color: rgb(245, 245, 245) !important;
+        background-color: rgb(10,118,246) !important;
+    }
+    
+
     /* CARD fixes for lightning-formatted-richtext*/
     
     [class*=" fr-icon-"]:before {
