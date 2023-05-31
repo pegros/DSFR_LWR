@@ -51,6 +51,8 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
         if (this.isDebug) console.log('handleAction: START for button ',this.buttonLabel);
         if (this.isDebug) console.log('handleAction: event ',event);
 
+        this.toggleSpinner();
+
         if (this.isDebug) console.log('handleAction: action fetched ',this.buttonAction);
         if (this.buttonAction) {
             const actionDetails = JSON.parse(this.buttonAction);
@@ -95,6 +97,7 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
                     notifyRecordUpdateAvailable(actionDetails.reload);
                 }
                 else if (this.isDebug) console.log('handleAction: END');
+                this.toggleSpinner();
             }).catch(error => {
                 console.warn('handleAction: action failed ',error);
                 let alertConfig = {alerts:[],size:'small'};
@@ -114,9 +117,37 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
                 popupUtil.showAlert(alertConfig).then(() => {
                     if (this.isDebug) console.log('handleAction: END / popup closed');
                 });
+                this.toggleSpinner();
             });
             
             if (this.isDebug) console.log('handleAction: action trigered');
         }
+    }
+
+    //-----------------------------------------------------
+    // Utilities
+    //-----------------------------------------------------
+    toggleSpinner = function(isShown) {
+        if (this.isDebug) console.log('toggleSpinner: START with',isShown);
+
+        let spinner = this.template.querySelector('lightning-spinner');
+        if (this.isDebug) console.log('toggleSpinner: spinner found',spinner);
+        let button = this.template.querySelector('c-dsfr-button-dsp');
+        if (this.isDebug) console.log('toggleSpinner: button found',button);
+
+        if (isShown) {
+            if (this.isDebug) console.log('toggleSpinner: showing spinner');
+            spinner.classList.remove('slds-hide');
+            if (this.isDebug) console.log('toggleSpinner: disabling button');
+            button.buttonInactive = true;
+        }
+        else {
+            if (this.isDebug) console.log('toggleSpinner: hiding spinner');
+            spinner.classList.add('slds-hide');
+            if (this.isDebug) console.log('toggleSpinner: reactivating button');
+            button.buttonInactive = false;
+        }
+        
+        if (this.isDebug) console.log('toggleSpinner: END');
     }
 }

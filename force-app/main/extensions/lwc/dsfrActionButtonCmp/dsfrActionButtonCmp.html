@@ -6,6 +6,10 @@
                         ontrigger={handleAction}    button-inactive={buttonInactive} 
                         is-debug={isDebug}>
     </c-dsfr-button-dsp>
+    <div class="slds-hide slds-is-relative spinnerDiv">
+        <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
+        </lightning-spinner>
+    </div>
 
     <!-- Error notification Utility -->
     <c-dsfr-alert-popup-dsp is-debug={isDebug} >
