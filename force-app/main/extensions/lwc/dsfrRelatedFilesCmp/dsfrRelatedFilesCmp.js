@@ -92,34 +92,43 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
 
             this.configDetails =  listCmp.configuration?.display || {};
             if (this.isDebug) console.log('handleRecordLoad: initial configDetails ',JSON.stringify(this.configDetails));
-            if (!this.configDetails.linkId) {
-                this.configDetails.linkId = ['Id'];
+            
+            if (!this.configDetails.isReady) {
+                if (this.isDebug) console.log('handleRecordLoad: initialising configDetails');
+            
+                if (!this.configDetails.linkId) {
+                    this.configDetails.linkId = ['Id'];
+                }
+                else if (typeof this.configDetails.linkId === 'string') {
+                    this.configDetails.linkId = (this.configDetails.linkId).split('.');
+                }
+                if (!this.configDetails.contentId) {
+                    this.configDetails.contentId = ['ContentDocumentId'];
+                }
+                else if (typeof this.configDetails.contentId === 'string') {
+                    this.configDetails.contentId = (this.configDetails.contentId).split('.');
+                }
+                if (!this.configDetails.title) {
+                    this.configDetails.title = ['ContentDocument','Title'];
+                }
+                else if (typeof this.configDetails.title === 'string') {
+                    this.configDetails.title = (this.configDetails.title).split('.');
+                }
+                if (!this.configDetails.details) {
+                    this.configDetails.details = [{value:['ContentDocument','FileType']},{value:['ContentDocument','ContentSize'],suffix:'octets'}];
+                }
+                else {
+                    (this.configDetails.details).forEach( detailIter => {
+                        if (this.isDebug) console.log('handleRecordLoad: analysing detail ', JSON.stringify(detailIter));
+                        if (typeof detailIter.value === 'string') {
+                            if (this.isDebug) console.log('handleRecordLoad: splitting detail value');
+                            detailIter.value = (detailIter.value).split('.');
+                        }
+                    });
+                }
+                this.configDetails.isReady = true;
+                if (this.isDebug) console.log('handleRecordLoad: configDetails init ',JSON.stringify(this.configDetails));
             }
-            else {
-                this.configDetails.linkId = (this.configDetails.linkId).split('.');
-            }
-            if (!this.configDetails.contentId) {
-                this.configDetails.contentId = ['ContentDocumentId'];
-            }
-            else {
-                this.configDetails.contentId = (this.configDetails.contentId).split('.');
-            }
-            if (!this.configDetails.title) {
-                this.configDetails.title = ['ContentDocument','Title'];
-            }
-            else {
-                this.configDetails.title = (this.configDetails.title).split('.');
-            }
-            if (!this.configDetails.details) {
-                this.configDetails.details = [{value:['ContentDocument','FileType']},{value:['ContentDocument','ContentSize'],suffix:'octets'}];
-            }
-            else {
-                (this.configDetails.details).forEach( detailIter => {
-                    if (this.isDebug) console.log('handleRecordLoad: splitting detail ', JSON.stringify(detailIter));
-                    detailIter.value = (detailIter.value).split('.');
-                });
-            }
-            if (this.isDebug) console.log('handleRecordLoad: configDetails init ',JSON.stringify(this.configDetails));
         }
 
         let baseRecordList =  event.detail;
