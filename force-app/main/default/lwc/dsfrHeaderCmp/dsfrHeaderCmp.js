@@ -387,8 +387,10 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         //if (this.isDebug) console.log('handleLogout: location fetched ', window?.location);
         //if (this.isDebug) console.log('handleLogout: hostname fetched ', window?.location?.hostname);
         if (this.isDebug) console.log('handleLogout: basePathName fetched ', basePathName);
-        const sitePrefix = basePathName.replace(/\/s$/i, ""); // site prefix is the site base path without the trailing "/s"
-        const baseUrl = sitePrefix.slice(0,sitePrefix.indexOf('/',1));
+        const baseUrl = basePathName.match(/^\/\w+/i);
+        if (this.isDebug) console.log('handleLogout: baseUrl extracted ', baseUrl);
+        /*const sitePrefix = basePathName.replace(/\/s$/i, ""); // site prefix is the site base path without the trailing "/s"
+        const baseUrl = sitePrefix.slice(0,sitePrefix.indexOf('/',1));*/
         let logoutUrl = baseUrl + "/secur/logout.jsp";
 
         //let baseUrl = basePathName.slice(0,basePathName.indexOf('/',1));
