@@ -15,6 +15,7 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonInactive = 'false';
+    @api buttonAlign = 'right';
 
     @api buttonAction;
 

@@ -14,6 +14,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     @api buttonVariant = 'primary';
     @api buttonTarget;
     @api buttonInactive = 'false';
+    @api buttonAlign = 'right';
 
     @api isDebug = false;
 
@@ -22,6 +23,13 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     isInactive = false;
     buttonClass = 'fr-btn';
+
+    //-----------------------------------------------------
+    // Configuration parameters
+    //-----------------------------------------------------
+    get alignClass() {
+        return 'align-' + this.buttonAlign;
+    }
 
     //-----------------------------------------------------
     // Initialisation

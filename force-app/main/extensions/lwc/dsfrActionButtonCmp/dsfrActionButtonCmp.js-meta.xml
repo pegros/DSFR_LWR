@@ -45,6 +45,12 @@
                         type="String"
                         default="false"
                         description="Statut du bouton" />
+            <property   name="buttonAlign"
+                        label="Alignement"
+                        type="String"
+                        default="left"
+                        datasource="left,center,right"
+                        description="Positionnement du bouton dans son conteneur." />
 
             <property   name="buttonAction"
                         label="Action"
