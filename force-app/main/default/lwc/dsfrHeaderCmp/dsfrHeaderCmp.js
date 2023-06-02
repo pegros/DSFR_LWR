@@ -376,6 +376,9 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         //let loginPage = {type: 'comm__loginPage',attributes: {actionName: 'login'};
         if (this.isDebug) console.log('handleLogin: loginPage init ', JSON.stringify(loginPage));
 
+        this.collapseModals();
+        if (this.isDebug) console.log('handleLogin: modal closed');
+
         this[NavigationMixin.Navigate](loginPage);                                                                      
         if (this.isDebug) console.log('handleLogin: END / navigation triggered');
     }
@@ -404,8 +407,11 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         //let logoutPage = {type:'standard__webPage',attributes: {url:'/secur/logout.jsp'}};
         //let logoutPage = {type: 'comm__loginPage',attributes: {actionName: 'logout'};
         if (this.isDebug) console.log('handleLogout: logoutPage init ', JSON.stringify(logoutPage));
-
+        
         this[NavigationMixin.Navigate](logoutPage);*/
+        this.collapseModals();
+        if (this.isDebug) console.log('handleLogout: modal closed');
+
         window.open(logoutUrl, '_self');
         if (this.isDebug) console.log('handleLogout: END / navigation triggered');
     }
