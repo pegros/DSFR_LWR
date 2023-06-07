@@ -67,6 +67,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     //-----------------------------------------------------
     handleUpload(event) {
         if (this.isDebug) console.log('handleUpload: START file upload',event);
+        this.message = null;
 
         let fileInput = this.template.querySelector('input.fr-upload');
         

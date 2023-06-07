@@ -210,6 +210,7 @@ public with sharing class dsfrFileUpload_CTL {
             newLink.ContentDocumentId = fileCV.ContentDocumentId;
             newLink.LinkedEntityId = iterId;
             newLink.ShareType = sharing;
+            newLink.Visibility = 'AllUsers'; // Default value for CustomerCommunity users, enforced also for tests by internal users 
             newLinks.add(newLink);
         }
 

@@ -8,8 +8,29 @@ export default class DsfrAlerteCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     @api alertType = 'error';            
     @api alertSize = 'medium';
-    @api alertTitle;
-    @api alertMessage;
+
+    _alertTitle;
+    @api 
+    get alertTitle() {
+        return this._alertTitle;
+    }
+    set alertTitle(value) {
+        this._alertTitle = value;
+        this.showAlert = this._alertTitle || this._alertMessage
+    }
+
+    _alertMessage;
+    @api 
+    get alertMessage() {
+        return this._alertMessage;
+    }
+    set alertMessage(value) {
+        this._alertMessage = value;
+        this.showAlert = this._alertTitle || this._alertMessage
+    }
+    //@api alertTitle;
+    //@api alertMessage;
+
     @api alertActionLabel;
     @api alertAction;
 
@@ -18,9 +39,21 @@ export default class DsfrAlerteCmp extends NavigationMixin(LightningElement) {
     @api isDebug = false;       // Flag to activate debug information
 
     //-----------------------------------------------------
+    // Technical parameters
+    //-----------------------------------------------------
+
+    showAlert = false;
+
+    //-----------------------------------------------------
     // Custom getter
     //-----------------------------------------------------
     
+    /*
+    get showAlert() {
+        return this.alertTitle || this.alertMessage;
+    }
+    */
+
     get alertClass() {
         return 'fr-alert fr-background-default--grey fr-alert--' + this.alertType + (this.alertSize === 'small' ? ' fr-alert--sm ' : ' ') + (this.alertCss || '');
     }

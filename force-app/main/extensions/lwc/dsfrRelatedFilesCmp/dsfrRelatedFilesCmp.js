@@ -199,6 +199,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
 
         let linkId = event.srcElement?.name;
         if (this.isDebug) console.log('handleUnlink: linkId determined ', linkId);
+        if (this.isDebug) console.log('handleUnlink: linkId determined ', linkId);
 
         unlinkFile({linkId: linkId})
             .then(() => {

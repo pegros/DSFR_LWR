@@ -118,7 +118,8 @@ export default class DsfrFileSelectorCmp extends LightningElement {
 
     handleSelect(event) {
         if (this.isDebug) console.log('handleSelect: START for file selector',event);
-
+        this.message = null;
+        
         let fileSelect = this.template.querySelector("select[name='fileSelect']");
         if (this.isDebug) console.log('handleSelect: file selector value ',fileSelect?.value);
 

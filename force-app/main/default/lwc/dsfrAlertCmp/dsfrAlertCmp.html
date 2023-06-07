@@ -1,13 +1,13 @@
 <template>
-    <div class={alertClass}>
+    <div class={alertClass} lwc:if={showAlert}>
         <h3 if:true={alertTitle} class="fr-alert__title">
             <lightning-formatted-text value={alertTitle} class="fr-alert__title alertText" >
             </lightning-formatted-text>
         </h3>
         <p if:true={alertMessage} class="alertMessage">
             <!-- fr-display-md  -->
-            <lightning-formatted-text value={alertMessage} class="alertText" >
-            </lightning-formatted-text>
+            <lightning-formatted-rich-text value={alertMessage} class="alertText" >
+            </lightning-formatted-rich-text>
         </p>
         <p if:true={alertActionLabel}>
             <a href="#"  target="_blank" rel="noopener" onclick={openTarget} >{alertActionLabel}</a>

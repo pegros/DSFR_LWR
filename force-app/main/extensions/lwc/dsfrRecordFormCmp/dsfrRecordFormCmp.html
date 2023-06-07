@@ -20,6 +20,7 @@
     </lightning-layout>
 
     <!-- STATUS ALERT-->
+    <!--
     <template lwc:if={message}>
         <c-dsfr-alert-cmp   alert-type={message.type}
                             alert-size="small"
@@ -28,6 +29,7 @@
                             alert-css="fr-m-2v">
         </c-dsfr-alert-cmp>
     </template>
+    -->
 
     <!-- LDS FORM -->
     <template lwc:if={isReady}>
@@ -124,4 +126,8 @@
         </lightning-record-edit-form>
     </template>
     </div>
+
+    <!-- Completion/error notification Utility -->
+    <c-dsfr-alert-popup-dsp is-debug={isDebug} >
+    </c-dsfr-alert-popup-dsp>
 </template>

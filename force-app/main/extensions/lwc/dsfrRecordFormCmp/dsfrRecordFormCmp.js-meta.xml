@@ -35,18 +35,26 @@
                         description="Nom du champ ID de l'enregistrement lié pour lequel le formulaire est affiché." />
                         
             <property   name="fieldConfig"
-                        label="Configuration"
+                        label="Configuration (statique)"
                         type="String"
                         description="Configuration des champs à afficher (format JSON)" />
+            <property   name="requiredFields"
+                        label="Configuration (dynamique)"
+                        type="String"
+                        description="Liste de champs obligatoires à afficher (format CSV avec séparateur ';')" />
 
             <property   name="isReadOnly"
                         label="Lecture seule?"
                         type="Boolean"
                         description="Flag pour afficher le composant en mode lecture seule." />
             <property   name="isEditMode"
-                        label="Edition directe?"
+                        label="Mode Edition (default)?"
                         type="Boolean"
-                        description="Flag pour afficher le composant en mode édition directement (si non lecture seule)." />
+                        description="Flag pour afficher le composant en mode édition par défaut (si non lecture seule)." />
+            <property   name="isEditModeString"
+                        label="Mode Edition (dynamique)?"
+                        type="String"
+                        description="Flag pour afficher le composant en mode édition dynamiquement (si non lecture seule)." />
 
             <property   name="defaultSize"
                         label="Taille par défaut"

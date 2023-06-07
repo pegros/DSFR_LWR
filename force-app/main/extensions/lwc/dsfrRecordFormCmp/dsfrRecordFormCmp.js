@@ -17,9 +17,72 @@ export default class DsfrRecordFormCmp extends LightningElement {
     @api relatedRecordIdField;
 
     @api fieldConfig;
+    _requiredFields;
+    @api 
+    get requiredFields() {
+        return this._requiredFields;
+    }
+    set requiredFields(value) {
+        if (this.isDebug) console.log('requiredFields: START with ', value);
+        this._requiredFields = value;
+        
+        let fieldList = [];
+        try {
+            let fieldConfigList = JSON.parse(this.fieldConfig || []);
+            if (this.isDebug) console.log('requiredFields: fieldList parsed ', fieldConfigList);
+            fieldConfigList.forEach(item => {
+                if (!item.size) { item.size = this.defaultSize; }
+                fieldList.push(item)
+            });
+            if (this.isDebug) console.log('requiredFields: fieldList init from config ', fieldList);
+        }
+        catch (error){
+            console.warn('requiredFields: recordForm fieldList parsing failed ', error);
+            this.isReady = false;
+        }
+        try {
+            let requiredFieldList = ((this.requiredFields)?.split(';')) || [];
+            if (this.isDebug) console.log('requiredFields: requiredFields split ', requiredFieldList);
+            requiredFieldList.forEach(item => {
+                fieldList.push({name: item, size : this.defaultSize, required: true})
+            });
+            if (this.isDebug) console.log('requiredFields: fieldList updated from required fields ', fieldList);
+            this.labelOk = false;
+        }
+        catch (error){
+            console.warn('requiredFields: recordForm requiredFields processing failed ', error);
+            this.isReady = false;
+        }
+        this.fieldList = fieldList;
+        if (this.isDebug) console.log('requiredFields: END with fieldList ', JSON.stringify(this.fieldList));
+    }
+
     @api defaultSize = 6;
     @api isReadOnly = false;
     @api isEditMode = false;
+
+    _isEditModeString;
+    @api 
+    get isEditModeString() {
+        return this._isEditModeString;
+    }
+    set isEditModeString(value) {
+        if (this.isDebug) console.log('isEditModeString: START with ', value);
+
+        this._isEditModeString = value;
+        switch (this._isEditModeString) {
+            case 'true' :
+            case true :
+                this.isEditMode = true;
+                break;
+            case 'false':
+            case false : 
+                this.isEditMode = false;
+                break;
+        }
+        if (this.isDebug) console.log('isEditModeString: END with isEditMode ', this.isEditMode);
+    }
+
     @api formClass;
 
     @api isDebug = false;
@@ -80,6 +143,8 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('connected: related objectApiName ', this.relatedObjectApiName);
         if (this.isDebug) console.log('connected: related recordId field ', this.relatedRecordIdField);
         if (this.isDebug) console.log('connected: fieldConfig ', this.fieldConfig);
+        if (this.isDebug) console.log('connected: requiredFields ', this.requiredFields);
+        if (this.isDebug) console.log('connected: isEditModeString? ', this.isEditModeString);
 
         if (this.relatedRecordIdField) {
             if (this.isDebug) console.log('connected: fetching related record ID');
@@ -94,18 +159,23 @@ export default class DsfrRecordFormCmp extends LightningElement {
             this.isReady = true;
         }
 
-        try {
-            let fieldList = JSON.parse(this.fieldConfig);
-            if (this.isDebug) console.log('connected: fieldList parsed ', fieldList);
-            fieldList.forEach(item => {
-                if (!item.size) { item.size = this.defaultSize; }
-            });
+        if ((this.fieldConfig) && (!this.fieldList)) {
+            if (this.isDebug) console.log('connected: initializing static list of fields');
+            let fieldList = [];
+            try {
+                let fieldConfigList = JSON.parse(this.fieldConfig || []);
+                if (this.isDebug) console.log('connected: fieldList parsed ', fieldConfigList);
+                fieldConfigList.forEach(item => {
+                    if (!item.size) { item.size = this.defaultSize; }
+                    fieldList.push(item)
+                });
+                if (this.isDebug) console.log('connected: fieldList init from config ', fieldList);
+            }
+            catch (error){
+                console.warn('connected: recordForm fieldList parsing failed ', error);
+                this.isReady = false;
+            }
             this.fieldList = fieldList;
-            if (this.isDebug) console.log('connected: fieldList init ', this.fieldList);
-        }
-        catch (error){
-            console.warn('connected: recordForm fieldList parsing failed ', error);
-            this.isReady = false;
         }
 
         if (this.isDebug) console.log('connected: formObjectApiName init ', this.formObjectApiName);
@@ -115,7 +185,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
     }
 
     //-----------------------------------------------------
-    // Initialisation
+    // Event Handlers
     //-----------------------------------------------------
 
     handleLoad(event) {
@@ -168,11 +238,20 @@ export default class DsfrRecordFormCmp extends LightningElement {
     handleSuccess(event) {
         if (this.isDebug) console.log('handleSuccess: START for recordForm',event);
         this.toggleSpinner(false);
-        this.message = {
+
+        let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+        console.warn('handleSuccess: popupUtil fetched ', popupUtil);
+        let alertConfig = {
+            alerts:[{type: "info", title: "Opération effectuée", message: "Vos changements ont bien été sauvegardés."}],
+            size:'small'};
+        popupUtil.showAlert(alertConfig).then(() => {
+            if (this.isDebug) console.log('handleSuccess: END / popup closed');
+        });
+        /*this.message = {
             type: "info",
             title: "Opération effectuée",
             details: "Vos changements ont bien été sauvegardés."
-        }
+        }*/
         this.isEditMode = false;
         if (this.isDebug) console.log('handleSuccess: END for recordForm');
     }
@@ -181,11 +260,19 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleError: START for recordForm',event);
         if (this.isDebug) console.log('handleError: event detail received ',JSON.stringify(event.detail));
         this.toggleSpinner(false);
-        this.message = {
+        let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+        console.warn('handleError: popupUtil fetched ', popupUtil);
+        let alertConfig = {
+            alerts:[{type: "error", title: "Echec de l'opération", message: "La sauvegarde de vos modifications n'a pas pu être réalisée."}],
+            size:'small'};
+        popupUtil.showAlert(alertConfig).then(() => {
+            if (this.isDebug) console.log('handleError: END / popup closed');
+        });
+        /*this.message = {
             type: "error",
             title: "Echec de l'opération",
             details: "La sauvegarde de vos modifications n'a pas pu être réalisée."
-        }
+        }*/
         if (this.isDebug) console.log('handleError: END for recordForm');
     }
     
@@ -208,6 +295,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
+
     toggleSpinner = function(isShown) {
         if (this.isDebug) console.log('toggleSpinner: START with',isShown);
 
