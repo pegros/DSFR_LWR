@@ -425,7 +425,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         }
         if (this.isDebug) console.log('handleSearchKey: END');
     }
-    handleSearch(event){
+    handleSearch(event) {
         if (this.isDebug) console.log('handleSearch: START');
         event.stopPropagation();
         event.preventDefault();

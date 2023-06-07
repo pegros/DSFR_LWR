@@ -134,8 +134,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
     //-----------------------------------------------------
     connectedCallback() {
         if (this.isDebug) {
-            console.log('connected: START for card/tile list');
-            console.log('connected: configName ', this.configName);
+            console.log('connected: START for card/tile list ',this.configName);
             console.log('connected: listContext ', this.listContext);
             console.log('connected: objectApiName ', this.objectApiName);
             console.log('connected: recordId ', this.recordId);
@@ -146,10 +145,20 @@ export default class DsfrCardTileListCmp extends LightningElement {
 
     renderedCallback() {
         if (this.isDebug) {
-            console.log('rendered: START for card/tile list');
-            console.log('rendered: configName ', this.configName);
+            console.log('rendered: START for card/tile list ',this.configName);
             console.log('rendered: sort context ', this.configDetails?.display?.sort);
             console.log('rendered: END for card/tile list');
+        }
+    }
+
+    disconnectedCallback() {
+        if (this.isDebug) {
+            console.log('disconnected: START for card/tile list ',this.configName);
+            console.log('disconnected: listContext ', this.listContext);
+            console.log('disconnected: objectApiName ', this.objectApiName);
+            console.log('disconnected: recordId ', this.recordId);
+            console.log('disconnected: userId ', this.userId);
+            console.log('disconnected: END for card/tile list');
         }
     }
 
@@ -417,7 +426,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
             if (this.isDebug) console.log("buildWhere: processing IN ");
             if (condition.IN.value) {
                 if (this.isDebug) console.log("buildWhere: END / building condition ");
-                let values = condition.IN.value.split(';');
+                let values = condition.IN.value.sfpegJsonUtlt(';');
                 return '(' + condition.IN.field + (condition.IN.not ? " NOT IN ('": " IN ('") + values.join("','") + "'))";
             }
             else {
