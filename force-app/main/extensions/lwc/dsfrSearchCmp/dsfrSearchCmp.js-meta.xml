@@ -24,11 +24,20 @@
                         label="Critères principaux"
                         type="String"
                         description="Liste de noms API de champs picklist fournissant la liste des valeurs possibles de chaque critère (au format liste JSON de Object.Field)" />
-
             <property   name="criteria"
                         label="Critères complémentaires"
                         type="String"
                         description="Liste de noms API de champs picklist fournissant la liste des valeurs possibles de chaque critère (au format liste JSON de Object.Field)" />
+
+            <property   name="wrappingClass"
+                        label="CSS additionnelle"
+                        type="String"
+                        description="Classes pour modifier le style du conteneur du composant" />
+            <property   name="headerClass"
+                        label="CSS du titre"
+                        type="String"
+                        default="fr-h5"
+                        description="Classes pour modifier le style du titre des critères complémentaires." />
 
             <property   name="isDebug"
                         label="Debug ?"

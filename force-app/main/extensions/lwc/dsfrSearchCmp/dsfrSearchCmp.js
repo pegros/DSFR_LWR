@@ -15,6 +15,9 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     @api mainCriteria;          // Main criteria configuration
     @api criteria;              // Additional criteria configuration
 
+    @api wrappingClass;         // Classes pour modifier le style du conteneur du composant 
+    @api headerClass;           // Classes pour modifier le style du titre des critères complémentaires.
+
     @api isDebug = false;
 
     //-----------------------------------------------------
@@ -27,7 +30,9 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     searchTerm;             // Current page state search term
 
     mainCriteriaList;       // main criteria values
+    mainCriteriaSelected;   // list of selected main criteria
     criteriaList;           // additional criteria values
+    criteriaSelected;       // list of selected additional criteria
 
     isReady = false;
 
@@ -47,7 +52,15 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
             if (this.currentState) {
                 if (this.isDebug) console.log('wiredMainPicklists: setting initial states');
-                this.mainCriteriaList = this.initCriteria(criteriaList,this.currentState);
+                let mainCriteriaSelected = [];
+                this.mainCriteriaList = this.initCriteria(criteriaList,this.currentState,mainCriteriaSelected);
+                if (mainCriteriaSelected.length > 0) {
+                    this.mainCriteriaSelected = mainCriteriaSelected;
+                    if (this.isDebug) console.log('wiredMainPicklists: initial selection set', JSON.stringify(this.mainCriteriaSelected));
+                }
+                else {
+                    if (this.isDebug) console.log('wiredMainPicklists: no initial selection');
+                }
             }
             else {
                 if (this.isDebug) console.log('wiredMainPicklists: no current state to set');
@@ -77,7 +90,15 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
             if (this.currentState) {
                 if (this.isDebug) console.log('wiredPicklists: setting initial states');
-                this.criteriaList = this.initCriteria(criteriaList,this.currentState);
+                let criteriaSelected = [];
+                this.criteriaList = this.initCriteria(criteriaList,this.currentState,criteriaSelected);
+                if (criteriaSelected.length > 0) {
+                    this.criteriaSelected = criteriaSelected;
+                    if (this.isDebug) console.log('wiredPicklists: initial selection set', JSON.stringify(this.criteriaSelected));
+                }
+                else {
+                    if (this.isDebug) console.log('wiredPicklists: no initial selection');
+                }
             }
             else {
                 if (this.isDebug) console.log('wiredPicklists: no current state to set');
@@ -201,6 +222,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         //if (this.isDebug) console.log('toggleMenuSelect: new situation ', srcCmp.ariaCurrent);
 
         this.activateApply(false);
+        this.mainCriteriaSelected = this.selectOption(event.srcElement.dataset.name,this.mainCriteriaList,this.mainCriteriaSelected,(event.srcElement.ariaCurrent === 'selection'));
         if (this.isDebug) console.log('toggleMenuSelect: END for search');
     }
     toggleTagSelect(event){
@@ -216,6 +238,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         event.srcElement.ariaPressed = (event.srcElement.ariaPressed === "true" ? "false" : "true");
 
         this.activateApply(false);
+        this.criteriaSelected = this.selectOption(event.srcElement.dataset.name,this.criteriaList,this.criteriaSelected,(event.srcElement.ariaPressed === "true"));
+
         if (this.isDebug) console.log('toggleTagSelect: END for search');
     }
     toggleCheckSelect(event) {
@@ -225,7 +249,6 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('toggleCheckSelect: event ',event);
         if (this.isDebug) console.log('toggleCheckSelect: event detail ',event.detail);
-        if (this.isDebug) console.log('toggleCheckSelect: selected Name ',event.srcElement);
 
         const selectName = event.srcElement.dataset.name;
         if (this.isDebug) console.log('toggleCheckSelect: selected Name ', selectName);
@@ -237,7 +260,12 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             let selectState = selectInput.checked;
             if (this.isDebug) console.log('toggleCheckSelect: selectInput check state ',selectState);
             selectInput.checked = !selectState;
+            if (this.isDebug) console.log('toggleCheckSelect: selectInput updated ',selectInput);
+            if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
             this.activateApply(false);
+            this.criteriaSelected = this.selectOption(selectName,this.criteriaList,this.criteriaSelected,selectInput.checked);
+            if (this.isDebug) console.log('toggleCheckSelect: selectInput finalized ',selectInput);
+            if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
         }
         else {
             console.warn('toggleCheckSelect: selectInput not found ', selectName);
@@ -246,6 +274,84 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('toggleCheckSelect: END for search');
     }
 
+    deselectMainCriteria(event) {
+        if (this.isDebug) console.log('deselectMainCriteria: START for search');
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (this.isDebug) console.log('deselectMainCriteria: event ',event);
+        if (this.isDebug) console.log('deselectMainCriteria: event detail ',event.detail);
+        if (this.isDebug) console.log('deselectMainCriteria: selected Name ',event.srcElement);
+
+        const selectName = event.srcElement.dataset.name;
+        if (this.isDebug) console.log('deselectMainCriteria: selected Name ', selectName);
+
+        if (this.isDebug) console.log('deselectMainCriteria: current selection ', JSON.stringify(this.mainCriteriaSelected));
+        let selectedOption = this.mainCriteriaSelected.find(item => item.fullName === selectName);
+        if (!selectedOption) {
+            console.warn('deselectMainCriteria: option not found ', selectName);
+            return;
+        }
+        selectedOption.selected = false;
+        this.mainCriteriaSelected = this.mainCriteriaSelected.filter(item => item.fullName !== selectName);
+        if (this.isDebug) console.log('deselectMainCriteria: selection updated ', JSON.stringify(this.mainCriteriaSelected));
+
+        let menuElement = this.template.querySelector("a.menuSelector[data-name='" + selectName + "']");
+        if (this.isDebug) console.log('deselectMainCriteria: menuElement found ', menuElement);
+        if (menuElement) {
+            menuElement.removeAttribute('aria-current');
+            if (this.isDebug) console.log('deselectMainCriteria: menuElement unselected ',menuElement);
+        }
+        else {
+            console.warn('deselectMainCriteria: menuElement not found ', selectName);
+        }
+
+        if (this.isDebug) console.log('deselectMainCriteria: END for search');
+    }
+    deselectCriteria(event) {
+        if (this.isDebug) console.log('deselectCriteria: START for search');
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (this.isDebug) console.log('deselectCriteria: event ',event);
+        if (this.isDebug) console.log('deselectCriteria: event detail ',event.detail);
+        if (this.isDebug) console.log('deselectCriteria: selected Name ',event.srcElement);
+
+        const selectName = event.srcElement.dataset.name;
+        if (this.isDebug) console.log('deselectCriteria: selected Name ', selectName);
+
+        if (this.isDebug) console.log('deselectCriteria: current selection ', JSON.stringify(this.criteriaSelected));
+        let selectedOption = this.criteriaSelected.find(item => item.fullName === selectName);
+        if (!selectedOption) {
+            console.warn('deselectCriteria: option not found ', selectName);
+            return;
+        }
+        selectedOption.selected = false;
+        this.criteriaSelected = this.criteriaSelected.filter(item => item.fullName !== selectName);
+        if (this.isDebug) console.log('deselectCriteria: selection updated ', JSON.stringify(this.criteriaSelected));
+
+        let checkElement = this.template.querySelector("input.checkSelector[name='" + selectName + "']");
+        if (this.isDebug) console.log('deselectCriteria: checkElement found ', checkElement);
+        if (checkElement) {
+            checkElement.checked = false;
+            if (this.isDebug) console.log('deselectCriteria: checkElement unselected ',checkElement);
+            this.activateApply(false);
+        }
+        else {
+            let tagElement = this.template.querySelector("button.tagSelector[data-name='" + selectName + "']");
+            if (this.isDebug) console.log('deselectCriteria: tagElement found ', tagElement);
+            if (tagElement) {
+                tagElement.ariaPressed = false;
+                if (this.isDebug) console.log('deselectCriteria: tagElement unselected ',tagElement);
+                this.activateApply(false);
+            }
+            else {
+                console.warn('deselectCriteria: no tag or check Element found ', selectName);
+            }
+        }
+
+        if (this.isDebug) console.log('deselectCriteria: END for search');
+    }
 
     // Search trigger events
     handleSearchKey(event) {
@@ -330,7 +436,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
-    initCriteria = function(criteriaList, pageState) {
+    initCriteria = function(criteriaList, pageState, selectionList) {
         if (this.isDebug) console.log('initCriteria: START ');
         if (this.isDebug) console.log('initCriteria: criteria list ', JSON.stringify(criteriaList));
         if (this.isDebug) console.log('initCriteria: page state ', JSON.stringify(pageState));
@@ -352,6 +458,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
                     if (itemValue) {
                         itemValue.selected = true;
+                        selectionList.push(itemValue);
                     }
                     else {
                         console.warn('initCriteria: value not found ',selectItem);
@@ -380,4 +487,42 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.warn('activateApply: no applyButton to activate');
         }
     }
+    selectOption = function(optionName,sourceList,selectionList,isSelected) {
+        if (this.isDebug) console.log('selectOption: START for optionName ',optionName);
+        if (this.isDebug) console.log('selectOption: isSelected? ',isSelected);
+        if (this.isDebug) console.log('selectOption: sourceList ',JSON.stringify(sourceList));
+        if (this.isDebug) console.log('selectOption: selectionList ',JSON.stringify(selectionList));
+
+        if (isSelected) {
+            if (this.isDebug) console.log('selectOption: adding selection');
+
+            let selectedOption;
+            sourceList.forEach(itemL => {
+                if ((!selectedOption) && (itemL.values)) selectedOption = itemL.values.find(itemO => itemO.fullName === optionName);
+            })
+            if (this.isDebug) console.log('selectOption: selectedOption found ',JSON.stringify(selectedOption));
+
+            if (selectedOption) {
+                selectedOption.selected = true;
+                let newSelectionList = (selectionList ? [... selectionList] : []);
+                newSelectionList.push(selectedOption);
+                if (this.isDebug) console.log('selectOption: END / selectionList updated ',JSON.stringify(newSelectionList));
+                return newSelectionList;
+            }
+            console.warn('selectOption: END / option not found ',optionName);
+            return selectionList;
+        }
+        else {
+            if (this.isDebug) console.log('selectOption: removing selection');
+            let selectedOption = selectionList.find(item => item.fullName === optionName);
+            if (selectedOption) {
+                selectedOption.selected = false;
+                let newSelectionList = selectionList.filter(item => item.fullName !== optionName);
+                if (this.isDebug) console.log('selectOption: END / selectionList updated ',JSON.stringify(newSelectionList));
+                return newSelectionList;
+            }
+            console.warn('selectOption: END / option not found ',optionName);
+            return selectionList;
+        }
+    } 
 }

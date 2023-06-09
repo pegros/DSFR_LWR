@@ -55,16 +55,74 @@
                     <!-- flexibility="no-shrink,no-grow" -->
                     <lightning-layout-item size="3" large-device-size="2" class="slds-order_2 slds-large-order_3">
                         <button class="fr-btn searchButton" title="Rechercher" onclick={updateSearch}>
-                    Rechercher
+                            Rechercher
                         </button>
                     </lightning-layout-item>
+
+                    <!-- Current main selection synthesis -->
+                    <template lwc:if={mainCriteriaSelected} >
+                        <lightning-layout-item size="12" class="slds-order_4">
+                            <lightning-layout  multiple-rows="true" vertical-align="top" class="mainSearchLayout">
+                                <lightning-layout-item size="3">
+                                    <p class="fr-icon-filter-line fr-icon--sm text-title-blue-france fr-px-2v fr-pt-1v">
+                                        &nbsp;{mainCriteriaSelected.length} critère(s) positionné(s)
+                                    </p>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="9">
+                                    <ul class="fr-tags-group fr-px-2v">
+                                        <template for:each={mainCriteriaSelected} for:item="iterS" >
+                                            <li key={iterS.fullName} class="mainSelectSummary">
+                                                <button class="fr-tag fr-tag--sm fr-tag--dismiss tagSelection"
+                                                        data-name={iterS.fullName}
+                                                        data-criteria={iterS.name}
+                                                        aria-label="Retirer la valeur"
+                                                        onclick={deselectMainCriteria}>
+                                                    {iterS.label}
+                                                </button>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                    </template>
                 </lightning-layout>
             </div>
         </template>
     
+        
         <!-- ADDITIONAL CRITERIA DISPLAY -->
         <div class="fr-accordions-group criteriaDiv" lwc:if={criteriaList}>
-            <h5 class="fr-h5">Affiner la recherche</h5>
+            <h3 class={headerClass}>Affiner la recherche</h3>
+
+            <!-- Current additional selection synthesis -->
+            <template lwc:if={criteriaSelected} >
+                <section class="fr-accordion" >
+                    <h3 class="fr-accordion__title">
+                        <button class="fr-accordion__btn fr-icon-filter-fill fr-icon--sm text-title-blue-france"   aria-expanded="false"
+                                value="selectSummary"       onclick={expandCollapse}>
+                                {criteriaSelected.length} critère(s) positionné(s)
+                        </button>
+                    </h3>
+                    <div class="fr-collapse" data-name="selectSummary" >
+                        <ul class="fr-tags-group"> 
+                            <template for:each={criteriaSelected} for:item="iterS" >
+                                <li key={iterS.fullName}>
+                                    <button class="fr-tag fr-tag--sm fr-tag--dismiss tagSelection"
+                                            data-name={iterS.fullName}
+                                            data-criteria={iterS.name}
+                                            aria-label="Retirer la valeur"
+                                            onclick={deselectCriteria}>
+                                        {iterS.label}
+                                    </button>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </section>
+            </template>
+
+            <!-- Additional Criteria selection accordion -->
             <template for:each={criteriaList} for:item="iterC" >
                 <section class="fr-accordion" key={iterC.fullName} >
                     <h3 class="fr-accordion__title">
@@ -114,7 +172,8 @@
                     </div>
                 </section>
             </template>
-            <button class="fr-btn fr-btn--tertiary-no-outline applyButton"
+
+            <button class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-checkbox-line applyButton"
                     disabled    onclick={updateSearch}>
                     Appliquer les changements
             </button>
