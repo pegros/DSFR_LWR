@@ -62,7 +62,8 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         return (this.cardEndIcon ? 'fr-card__detail fr-icon-' + this.cardEndIcon : 'fr-card__detail');
     }
     get cardClass() {
-        let cardClass = 'fr-card fr-enlarge-link';
+        let cardClass = 'fr-card'
+        if (this.cardTarget) cardClass += ' fr-enlarge-link';
         if (!this.isVertical) cardClass += ' fr-card--horizontal fr-card--horizontal-tier';
         if (this.cardCss) cardClass += ' ' + this.cardCss;
         switch (this.cardSize) {
