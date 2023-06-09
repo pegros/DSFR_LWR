@@ -27,7 +27,12 @@
                         label="CSS additionnelle"
                         type="String"
                         default="fr-container"
-                        description="Classes pour modifier le style de la carte (par ex. fr-card--grey, fr-card--no-border, fr-card--no-background, fr-card--shadow)" />
+                        description="Classes pour modifier le style du conteneur du composant" />
+            <property   name="headerCss"
+                        label="CSS du titre"
+                        type="String"
+                        default="fr-h2"
+                        description="Classes pour modifier le style du titre du composant." />
 
             <property   name="objectApiName"
                         label="Object Name"

@@ -24,12 +24,12 @@ export default class DsfrCardTileListCmp extends LightningElement {
     set listContext(value) {
         let listContext;
         try {
-            if (this.isDebug) console.log('set listContext: value provided ', JSON.stringify(value));
+            if (this.isDebug) console.log('set Card/Tile listContext: value provided ', JSON.stringify(value));
             listContext = JSON.parse(value);
-            if (this.isDebug) console.log('set listContext: value parsed ', JSON.stringify(listContext));
+            if (this.isDebug) console.log('set Card/Tile listContext: value parsed ', JSON.stringify(listContext));
         }
         catch(error) {
-            console.warn('set listContext: value parsing failed ', error);
+            console.warn('set Card/Tile listContext: value parsing failed ', error);
             this._listContext = null;
             return;
         }
@@ -58,9 +58,10 @@ export default class DsfrCardTileListCmp extends LightningElement {
         }*/
 
         this._listContext = listContext;
-        if (this.isDebug) console.log('set listContext: value set ', JSON.stringify(this._listContext));
+        if (this.isDebug) console.log('set Card/Tile listContext: value set ', JSON.stringify(this._listContext));
     }
     @api wrappingCss;
+    @api headerCss;         // Classes pour modifier le style du titre du composant.
 
     @api isDebug = false;
 
@@ -102,6 +103,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
     }
     get headerTitle() {
         return '' + (this.recordList?.length || 0) + ' ' + this.listTitle;
+    }
+    get headerClass() {
+        return this.headerCss + ' listTitle';
     }
     get hasSort() {
         //if (this.isDebug) console.log('hasSort: ',(this.configDetails?.display?.sort || false));
