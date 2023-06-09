@@ -50,3 +50,13 @@
 .fr-nav__link:hover {
     background-color: var(--hover-tint);
 }
+.fr-nav__link {
+    color: var(--text-default-grey) !important;
+}
+.fr-nav__link[aria-current] {
+    font-weight: bold !important;
+    color: var(--dxp-c-link-text-color,var(--dxp-s-link-text-color,var(--dxp-g-brand))) !important;
+}
+.fr-nav__link[aria-current]:before {
+    width: 3px !important;
+}

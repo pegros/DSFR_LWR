@@ -9,6 +9,7 @@
 .fr-collapse--expanded {
     --collapse-max-height:20rem;
     overflow-y: auto !important;
+    top: 3rem !important;
 }
 .fr-menu.fr-collapse--expanded {
     background-color: white;
@@ -27,11 +28,11 @@
     position: absolute;
     top: 100%;
 }
-/*.selectMenu {
+.selectMenu {
     position: relative !important;
-    margin-bottom: var(--title-spacing) !important;
+    /*margin-bottom: var(--title-spacing) !important;*/
 }
-.fr-menu.fr-collapse--expanded {
+/*.fr-menu.fr-collapse--expanded {
     --collapse-max-height:20rem;
     display: inline-block  !important;
     overflow-y: auto !important;
@@ -81,7 +82,7 @@ input[type="search"] {
 .tagSelection {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
-    vertical-align: middle !important
+    vertical-align: middle !important;
 }
 
 .mainSearch {
@@ -119,4 +120,13 @@ input[type="search"] {
 
 .fr-tags-group > li {
     line-height: 2rem !important;
+}
+
+.mainSelectionTitle {
+    background: rgb(255,255,255, 0.66);
+    line-height: 2rem;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+    margin-bottom: 2px;
+    /*text-shadow: 1px 0px .5em rgb(255,255,255), 0px 1px .5em rgb(255,255,255), -1px 0px .5em rgb(255,255,255), 0px -1px .5em rgb(255,255,255);*/
 }

@@ -1,3 +1,6 @@
 .fr-tile__desc {
     color: var(--text-default-grey) !important;
 }
+.fr-tile__title, .fr-tile__desc {
+    overflow-wrap: break-word;
+}
