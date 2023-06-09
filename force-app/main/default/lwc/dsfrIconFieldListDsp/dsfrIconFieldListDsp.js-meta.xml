@@ -19,7 +19,7 @@
             <property   name="wrappingClass"
                         label="CSS additionnelle"
                         type="String"
-                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pur ajouter une marge)" />
+                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pour ajouter une marge)" />
             <property   name="fieldClass"
                         label="CSS des éléments"
                         type="String"
