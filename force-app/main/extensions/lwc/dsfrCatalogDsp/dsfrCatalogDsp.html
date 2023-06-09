@@ -1,0 +1,24 @@
+<template>
+    <div class={wrappingClass}>
+        <h2 class="fr-h2 fr-px-2v">Catalogue des Pictogrammes</h2>
+        <ul>
+            <template for:each={pictoList} for:item="iter" >
+                <li key={iter}  class="iconDisplay fr-mx-4v">
+                    <c-dsfr-pictogram-dsp   key={iter} picto-name={iter}   picto-size="small" >
+                    </c-dsfr-pictogram-dsp>
+                    {iter}
+                </li>
+            </template>
+        </ul>
+    
+        <h2 class="fr-h2 fr-px-2v fr-pt-4v">Catalogue des Icônes</h2>
+        <ul>
+            <template for:each={iconsList} for:item="iterIcon">
+                <li key={iterIcon}  class="iconDisplay fr-my-2v fr-mx-4v">
+                    <c-dsfr-icon-field-dsp  value={iterIcon} icon-name={iterIcon}>
+                    </c-dsfr-icon-field-dsp>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>
