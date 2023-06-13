@@ -3,12 +3,15 @@
 }
 .cardImage-small {
     max-height: 200px;
+    object-fit: contain !important;
 }
 .cardImage-medium {
     max-height: 250px;
+    object-fit: contain !important;
 }
 .cardImage-large {
     max-height: 300px;
+    object-fit: contain !important;
 }
 .imageContainer {
     text-align: center;
