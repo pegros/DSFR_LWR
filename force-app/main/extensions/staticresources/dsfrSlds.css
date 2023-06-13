@@ -536,7 +536,8 @@ button.slds-combobox__input-value {
     }
 
     /* SLDS Button OVERRIDES */
-    .slds-button, .slds-button_brand {
+    /* .slds-button */
+    .slds-button_brand {
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
         border-top-left-radius: 0px;
@@ -557,7 +558,6 @@ button.slds-combobox__input-value {
   		line-height: 1.5rem;
   		min-height: 2.5rem;
   		padding: 0.5rem 1rem;
-  		background-color: var(--background-action-high-blue-france) !important;
 
   		--idle: transparent;
   		--hover: var(--background-action-high-blue-france-hover) !important;
