@@ -80,25 +80,34 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
 
             actionPromise.then(data => {
                 if (this.isDebug) console.log('handleAction: operation executed ', JSON.stringify(data));
-                if ((actionDetails.navigate) && (data.recordId)) {
-                    if (this.isDebug) console.log('handleAction: navigating to record');
-                    const newRecordPageRef = {
-                        type: 'standard__recordPage',
-                        attributes: {
-                            recordId: data.recordId,
-                            objectApiName: actionDetails.params.apiName,
-                            actionName: 'view'
+
+                let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+                if (this.isDebug) console.log('handleAction: popupUtil fetched ', popupUtil);
+                let alertConfig = {
+                    alerts:[{type: "success", title: "Opération effectuée", message: "Vos changements ont bien été sauvegardés."}],
+                    size:'small'};
+                popupUtil.showAlert(alertConfig).then(() => {
+                    if ((actionDetails.navigate) && (data.recordId)) {
+                        if (this.isDebug) console.log('handleAction: navigating to record');
+                        const newRecordPageRef = {
+                            type: 'standard__recordPage',
+                            attributes: {
+                                recordId: data.recordId,
+                                objectApiName: actionDetails.params.apiName,
+                                actionName: 'view'
+                           }
                         }
+                        if (this.isDebug) console.log('handleAction: END / Navigating to ',newRecordPageRef);
+                        this[NavigationMixin.Navigate](newRecordPageRef);
                     }
-                    if (this.isDebug) console.log('handleAction: END / Navigating to ',newRecordPageRef);
-                    this[NavigationMixin.Navigate](newRecordPageRef);
-                }
-                else if (actionDetails.reload) {
-                    if (this.isDebug) console.log('handleAction: END / Triggering record data reload on ',actionDetails.reload);
-                    notifyRecordUpdateAvailable(actionDetails.reload);
-                }
-                else if (this.isDebug) console.log('handleAction: END');
-                this.toggleSpinner();
+                    else if (actionDetails.reload) {
+                        if (this.isDebug) console.log('handleAction: END / Triggering record data reload on ',actionDetails.reload);
+                        notifyRecordUpdateAvailable(actionDetails.reload);
+                    }
+                    else if (this.isDebug) console.log('handleAction: END');
+                    this.toggleSpinner();
+                });
+                if (this.isDebug) console.log('handleAction: popup displayed');
             }).catch(error => {
                 console.warn('handleAction: action failed ',error);
                 let alertConfig = {alerts:[],size:'small'};

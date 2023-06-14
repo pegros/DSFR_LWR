@@ -240,9 +240,9 @@ export default class DsfrRecordFormCmp extends LightningElement {
         this.toggleSpinner(false);
 
         let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
-        console.warn('handleSuccess: popupUtil fetched ', popupUtil);
+        if (this.isDebug) console.log('handleSuccess: popupUtil fetched ', popupUtil);
         let alertConfig = {
-            alerts:[{type: "info", title: "Opération effectuée", message: "Vos changements ont bien été sauvegardés."}],
+            alerts:[{type: "success", title: "Opération effectuée", message: "Vos changements ont bien été sauvegardés."}],
             size:'small'};
         popupUtil.showAlert(alertConfig).then(() => {
             if (this.isDebug) console.log('handleSuccess: END / popup closed');
