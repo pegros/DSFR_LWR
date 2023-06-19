@@ -222,6 +222,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         //if (this.isDebug) console.log('toggleMenuSelect: new situation ', srcCmp.ariaCurrent);
 
         this.activateApply(false);
+        this.activateSearch(false);
         this.mainCriteriaSelected = this.selectOption(event.srcElement.dataset.name,this.mainCriteriaList,this.mainCriteriaSelected,(event.srcElement.ariaCurrent === 'selection'));
         if (this.isDebug) console.log('toggleMenuSelect: END for search');
     }
@@ -238,6 +239,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         event.srcElement.ariaPressed = (event.srcElement.ariaPressed === "true" ? "false" : "true");
 
         this.activateApply(false);
+        this.activateSearch(false);
         this.criteriaSelected = this.selectOption(event.srcElement.dataset.name,this.criteriaList,this.criteriaSelected,(event.srcElement.ariaPressed === "true"));
 
         if (this.isDebug) console.log('toggleTagSelect: END for search');
@@ -263,6 +265,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('toggleCheckSelect: selectInput updated ',selectInput);
             if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
             this.activateApply(false);
+            this.activateSearch(false);
             this.criteriaSelected = this.selectOption(selectName,this.criteriaList,this.criteriaSelected,selectInput.checked);
             if (this.isDebug) console.log('toggleCheckSelect: selectInput finalized ',selectInput);
             if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
@@ -336,6 +339,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             checkElement.checked = false;
             if (this.isDebug) console.log('deselectCriteria: checkElement unselected ',checkElement);
             this.activateApply(false);
+            this.activateSearch(false);
         }
         else {
             let tagElement = this.template.querySelector("button.tagSelector[data-name='" + selectName + "']");
@@ -344,6 +348,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 tagElement.ariaPressed = false;
                 if (this.isDebug) console.log('deselectCriteria: tagElement unselected ',tagElement);
                 this.activateApply(false);
+                this.activateSearch(false);
             }
             else {
                 console.warn('deselectCriteria: no tag or check Element found ', selectName);
@@ -359,6 +364,10 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (event.key === 'Enter' || event.keyCode === 13) {
             if (this.isDebug) console.log('handleSearchKey: triggering search');
             this.updateSearch(event);
+        }
+        else {
+            this.activateApply(false);
+            this.activateSearch(false);
         }
         if (this.isDebug) console.log('handleSearchKey: END');
     }
@@ -430,6 +439,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
         this[NavigationMixin.Navigate](searchPage);
         this.activateApply(true);
+        this.activateSearch(true);
         if (this.isDebug) console.log('updateSearch: END for search');
     }
 
@@ -485,6 +495,18 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         else {
             if (this.isDebug) console.warn('activateApply: no applyButton to activate');
+        }
+    }
+    activateSearch = function(state) {
+        if (this.isDebug) console.log('activateSearch: START for state ',state);
+        let searchButton = this.template.querySelector('.searchButton');
+        if (this.isDebug) console.warn('activateSearch: searchButton found ', searchButton);
+        if (searchButton) {
+            searchButton.disabled = state;
+            if (this.isDebug) console.warn('activateSearch: searchButton activated');
+        }
+        else {
+            if (this.isDebug) console.warn('activateSearch: no searchButton to activate');
         }
     }
     selectOption = function(optionName,sourceList,selectionList,isSelected) {

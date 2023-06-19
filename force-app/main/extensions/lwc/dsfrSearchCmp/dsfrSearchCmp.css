@@ -70,6 +70,9 @@ input[type="search"] {
 .selectionItem {
     line-height: 1,5rem !important;
 }
+.applyContainer {
+    text-align: end;
+}
 .applyButton {
     margin-top: 1em;
 }
