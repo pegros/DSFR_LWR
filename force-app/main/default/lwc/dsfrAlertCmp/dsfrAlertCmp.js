@@ -28,6 +28,8 @@ export default class DsfrAlerteCmp extends NavigationMixin(LightningElement) {
         this._alertMessage = value;
         this.showAlert = this._alertTitle || this._alertMessage
     }
+    @api isTags = false;
+    
     //@api alertTitle;
     //@api alertMessage;
 
@@ -48,14 +50,11 @@ export default class DsfrAlerteCmp extends NavigationMixin(LightningElement) {
     // Custom getter
     //-----------------------------------------------------
     
-    /*
-    get showAlert() {
-        return this.alertTitle || this.alertMessage;
-    }
-    */
-
     get alertClass() {
         return 'fr-alert fr-background-default--grey fr-alert--' + this.alertType + (this.alertSize === 'small' ? ' fr-alert--sm ' : ' ') + (this.alertCss || '');
+    }
+    get tagList() {
+        return (this._alertMessage ? this._alertMessage.split(';') : null);
     }
 
     //-----------------------------------------------------

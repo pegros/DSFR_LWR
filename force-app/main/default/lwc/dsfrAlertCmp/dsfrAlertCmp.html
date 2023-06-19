@@ -4,11 +4,22 @@
             <lightning-formatted-text value={alertTitle} class="fr-alert__title alertText" >
             </lightning-formatted-text>
         </h3>
-        <p if:true={alertMessage} class="alertMessage">
-            <!-- fr-display-md  -->
-            <lightning-formatted-rich-text value={alertMessage} class="alertText" >
-            </lightning-formatted-rich-text>
-        </p>
+        <template lwc:if={isTags}>
+            <ul class="fr-tags-group alertMessage">
+                <template for:each={tagList} for:item="item">
+                    <li key={item}>
+                        <c-dsfr-tag-dsp tag-label={item}></c-dsfr-tag-dsp>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <template lwc:elseif={alertMessage}>
+            <p class="alertMessage">
+                <!-- fr-display-md  -->
+                <lightning-formatted-rich-text value={alertMessage} class="alertText" >
+                </lightning-formatted-rich-text>
+            </p>
+        </template>
         <p if:true={alertActionLabel}>
             <a href="#"  target="_blank" rel="noopener" onclick={openTarget} >{alertActionLabel}</a>
         </p>

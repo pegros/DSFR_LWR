@@ -30,6 +30,11 @@
             <property   name="alertMessage"
                         label="Message"
                         type="String" />
+            <property   name="isTags"
+                        label="Message comme liste de tags?"
+                        type="Boolean"
+                        default="false" />
+                        
             <property   name="alertActionLabel"
                         label="Lien"
                         type="String"

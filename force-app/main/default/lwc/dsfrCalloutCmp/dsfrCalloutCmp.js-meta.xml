@@ -20,6 +20,10 @@
                         type="String"
                         default="Description mise en avant"
                         description="Description de la mise en avant" />
+            <property   name="isTags"
+                        label="Description comme liste de tags?"
+                        type="Boolean"
+                        default="false" />
             <property   name="calloutVariant"
                         label="Variante"
                         type="String" 

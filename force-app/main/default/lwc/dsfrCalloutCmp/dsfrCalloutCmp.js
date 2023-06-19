@@ -7,6 +7,7 @@ export default class DsfrCalloutCmp extends LightningElement {
     //-----------------------------------------------------
     @api calloutTitle;
     @api calloutDescription;
+    @api isTags = false;
     @api calloutVariant;          
 
     @api actionLabel;
@@ -21,6 +22,12 @@ export default class DsfrCalloutCmp extends LightningElement {
     //-----------------------------------------------------
     get calloutClass() {
         return  (this.calloutVariant ? 'fr-callout fr-fi-information-line fr-callout--' + this.calloutVariant : 'fr-callout fr-fi-information-line') + (this.calloutCss ? ' ' + this.calloutCss  : '');
+    }
+    get tagList() {
+        return (this.calloutDescription ? this.calloutDescription.split(';') : null);
+    }
+    get tagDescription() {
+        return (this.calloutDescription ? this.calloutDescription.replaceAll(';', ', ') : null);
     }
 
     //-----------------------------------------------------

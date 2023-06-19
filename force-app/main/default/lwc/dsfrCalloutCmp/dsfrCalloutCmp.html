@@ -1,11 +1,25 @@
 <template>
     <div class={calloutClass} >
         <h3 if:true={calloutTitle} class="fr-callout__title calloutText">{calloutTitle}</h3>
-        <p class="fr-callout__text calloutText">
-            {calloutDescription}
-            <!--<lightning-formatted-rich-text class="fr-callout__text" value=>
-            </lightning-formatted-rich-text>-->
-        </p>
+        <template lwc:if={isTags}>
+            <!--
+            <ul class="fr-tags-group calloutText">
+                <template for:each={tagList} for:item="item">
+                    <li key={item}>
+                        <c-dsfr-tag-dsp tag-label={item}></c-dsfr-tag-dsp>
+                    </li>
+                </template>
+            </ul>
+            -->
+            <p class="fr-callout__text calloutText">
+                {tagDescription}
+            </p>
+        </template>
+        <template lwc:elseif={calloutDescription}>
+            <p class="fr-callout__text calloutText">
+                {calloutDescription}
+            </p>
+        </template>
         <c-dsfr-button-dsp if:true={actionTarget} button-target={actionTarget} button-label={actionLabel} is-debug={isDebug}></c-dsfr-button-dsp>
     </div>
 </template>
