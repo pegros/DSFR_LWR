@@ -11,6 +11,7 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     @api tileDescription;
     @api tileTarget;
     @api isVertical = false;
+    @api fitImage = false;
     @api tileCss;
     @api isDebug = false;       // Flag to activate debug information
 
@@ -20,6 +21,9 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
 
     get imageSrc() {
         return (this.tileImage?.includes('delivery/media') ? this.tileImage : '/file-asset/' + this.tileImage);
+    }
+    get imageClass() {
+        return (this.fitImage ? 'fr-responsive-img tileImage' : 'fr-responsive-img' );
     }
     get pictoSrc() {
         return (((this.tileImage?.includes('/')) && (!this.tileImage?.includes('delivery/media'))) ? this.tileImage : null);

@@ -32,6 +32,11 @@
                         type="Boolean"
                         default="true"
                         description="Activation de la variante verticale de la tuile" />
+            <property   name="fitImage"
+                        label="Adapter Image?"
+                        type="Boolean"
+                        default="false"
+                        description="Flag pour  adapter la taille de l'image à l'espace disponible." />
             <property   name="tileCss"
                         label="CSS additionnelle"
                         type="String"
@@ -64,6 +69,12 @@
                         role="inputOnly"
                         default="true"
                         description="Activation de la variante verticale de la tuile" />
+            <property   name="fitImage"
+                        label="Adapter Image?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Flag pour  adapter la taille de l'image à l'espace disponible." />
             <property   name="tileCss"
                         label="CSS additionnelle"
                         type="String"

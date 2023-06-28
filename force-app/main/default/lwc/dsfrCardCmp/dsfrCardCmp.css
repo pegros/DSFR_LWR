@@ -3,14 +3,14 @@
 }
 .cardImage-small {
     max-height: 200px;
-    object-fit: contain !important;
 }
 .cardImage-medium {
     max-height: 250px;
-    object-fit: contain !important;
 }
 .cardImage-large {
     max-height: 300px;
+}
+.cardImageFit {
     object-fit: contain !important;
 }
 .imageContainer {
@@ -34,4 +34,8 @@
 }
 p.[class*=" fr-icon-"]:before {
     vertical-align: calc((0.5rem - var(--icon-size))*.5) !important;
+}
+.fr-card__title, .fr-card__desc, .fr-card__detail {
+    overflow-wrap: break-word;
+    word-break: break-word;
 }

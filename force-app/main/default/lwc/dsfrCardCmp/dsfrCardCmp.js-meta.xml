@@ -93,7 +93,11 @@
                         label="CSS additionnelle (icônes)"
                         type="String"
                         description="Classes pour modifier le style des icônes de la Description détaillée (par ex. fr-text-title--blue-france)" />
-
+            <property   name="fitImage"
+                        label="Adapter Image?"
+                        type="Boolean"
+                        default="false"
+                        description="Flag pour  adapter la taille de l'image à l'espace disponible." />
 
             <property   name="isDebug"
                         label="Debug ?"
@@ -192,6 +196,12 @@
                         type="String"
                         role="inputOnly"
                         description="Classes pour modifier le style des icônes de la Description détaillée (par ex. fr-text-title--blue-france)" />
+            <property   name="fitImage"
+                        label="Adapter Image?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Flag pour  adapter la taille de l'image à l'espace disponible." />
 
             <property   name="isDebug"
                         label="Debug ?"

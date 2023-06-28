@@ -3,6 +3,7 @@
 }
 .fr-tile__title, .fr-tile__desc {
     overflow-wrap: break-word;
+    word-break: break-word;
 }
 .tileImage {
     object-fit: contain !important;

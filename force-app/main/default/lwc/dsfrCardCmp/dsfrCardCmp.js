@@ -25,6 +25,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api cardCss;
     @api fieldClass;
     @api iconClass;
+    @api fitImage = false;
     @api isVertical = false; 
     @api isDebug = false;       // Flag to activate debug information
 
@@ -78,7 +79,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         }
     }
     get cardImageClass() {
-        return 'fr-responsive-img fr-responsive-img--16x9 cardImage-' + this.cardSize;
+        return 'fr-responsive-img fr-responsive-img--16x9 cardImage-' + this.cardSize + (this.fitImage ? ' cardImageFit' : '');
     }
     get pictoSize() {
         switch (this.cardSize) {
