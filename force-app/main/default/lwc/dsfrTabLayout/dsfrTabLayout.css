@@ -1,6 +1,21 @@
+.fr-tabs {
+    max-width: 100% !important;
+    width: 100% !important;
+}
 .fr-tabs:before {
     min-height: 1px;
 }
+.fr-tabs {
+    max-width: 100% !important;
+    width: 100% !important;
+}
 .fr-tabs__panel {
     box-shadow: inset 0 1px 0 0 var(--border-default-grey),inset 1px 0 0 0 var(--border-default-grey),inset -1px 0 0 0 var(--border-default-grey);
+    max-width: 100% !important;
+    width: 100% !important;
+}
+.tabContainer {
+    display: block !important;
+    max-width: calc(100vw - 2rem) !important;
+    width: 100% !important;
 }
