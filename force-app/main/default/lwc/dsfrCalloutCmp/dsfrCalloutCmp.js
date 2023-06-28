@@ -23,11 +23,11 @@ export default class DsfrCalloutCmp extends LightningElement {
     get calloutClass() {
         return  (this.calloutVariant ? 'fr-callout fr-fi-information-line fr-callout--' + this.calloutVariant : 'fr-callout fr-fi-information-line') + (this.calloutCss ? ' ' + this.calloutCss  : '');
     }
-    get tagList() {
-        return (this.calloutDescription ? this.calloutDescription.split(';') : null);
-    }
+    /*get tagList() {
+        return (this.calloutDescription ? this.calloutDescription.split(';').filter(n => n) : null);
+    }*/
     get tagDescription() {
-        return (this.calloutDescription ? this.calloutDescription.replaceAll(';', ', ') : null);
+        return (this.calloutDescription ? this.calloutDescription.split(';').filter(n => n).join(', ') : null);
     }
 
     //-----------------------------------------------------

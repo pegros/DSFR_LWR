@@ -11,14 +11,28 @@
                 </template>
             </ul>
             -->
+            <p class="callout__text">
+                <!-- fr-display-md  -->
+                <lightning-formatted-rich-text value={tagDescription} class="calloutText" >
+                </lightning-formatted-rich-text>
+            </p>
+            <!--
             <p class="fr-callout__text calloutText">
                 {tagDescription}
             </p>
+            -->
         </template>
         <template lwc:elseif={calloutDescription}>
+            <p class="callout__text">
+                <!-- fr-display-md  -->
+                <lightning-formatted-rich-text value={calloutDescription} class="calloutText" >
+                </lightning-formatted-rich-text>
+            </p>
+            <!--
             <p class="fr-callout__text calloutText">
                 {calloutDescription}
             </p>
+            -->
         </template>
         <c-dsfr-button-dsp if:true={actionTarget} button-target={actionTarget} button-label={actionLabel} is-debug={isDebug}></c-dsfr-button-dsp>
     </div>
