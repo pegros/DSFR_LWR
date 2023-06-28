@@ -124,6 +124,23 @@
         <shortDescription>Message d'erreur en cas de problème de détachement d'un fichier</shortDescription>
         <value>Echec de détachement du fichier</value>
     </labels>
+    <labels>
+        <fullName>dsfrFileUploadComment</fullName>
+        <categories>DSFR Component LWC Default Configuration</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Commenaire par défaut du composant précisant les fichiers acceptés.</shortDescription>
+        <value>Taille maximale : 10Mo. Formats supportés : .pdf,.jpg,.png,.doc,.docx.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileUploadTypes</fullName>
+        <categories>DSFR Component LWC Default Configuration</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Liste par défaut des types de fichiers acceptés.</shortDescription>
+        <value>.pdf,.jpg,.png,.doc,.docx</value>
+    </labels>
+    
 
     <labels>
         <fullName>dsfrAlertPopupCloseTitle</fullName>

@@ -18,15 +18,16 @@
             <property   name="comment"
                         label="Explication"
                         type="String"
-                        description="Texte explicatif du composant d'ajout." />
+                        description="Texte explicatif du composant d'ajout (surcharge de la valeur par défaut)." />
             <property   name="accept"
                         label="Extensions"
                         type="String"
-                        description="Liste des extensions de fichiers autorisées" />
+                        description="Liste des extensions de fichiers autorisées (surcharge de la valeur par défaut)." />
             <property   name="contentMeta"
                         label="Metadonnées"
                         type="String"
                         description="Metadonnées à positionner sur le fichier (JSON)" />
+
             <property   name="disabled"
                         label="Inactif?"
                         type="Boolean"
@@ -36,6 +37,7 @@
                         label="CSS additionnelle"
                         type="String"
                         description="Classes pour modifier le style de la tuile (par ex. fr-m-2v)" />
+
             <property   name="recordId"
                         label="ID de l'enregistrement lié"
                         type="String"
@@ -44,11 +46,16 @@
                         label="ID d'autres enregistrements liés"
                         type="String"
                         description="ID d'autres l'enregistrements auquel le fichier sera rattaché (liste JSON)" />            
-
+            <property   name="refreshUser"
+                        label="MAJ Utilisateur?"
+                        type="Boolean"
+                        default="false"
+                        description="Flag pour demander le refresh des données utilisateur après l'upload." />
             <property   name="fileId"
-                        label="ID de fichier existant 🚫"
+                        label="N/A"
                         type="String"
-                        description="ID Salesforce d'un fichier pour lequel une nouvelle version doit être chargée" />
+                        description="Usage futur: ID Salesforce d'un fichier pour lequel une nouvelle version doit être chargée" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
@@ -74,6 +81,7 @@
                         label="Metadonnées"
                         type="String"
                         description="Metadonnées à positionner sur le fichier (JSON)" />
+
             <property   name="disabled"
                         label="Inactif?"
                         type="Boolean"
@@ -85,6 +93,7 @@
                         type="String"
                         role="inputOnly"
                         description="Classes pour modifier le style de la tuile (par ex. fr-m-2v)" />
+
             <property   name="recordId"
                         label="ID de l'enregistrement lié"
                         type="String"
@@ -95,10 +104,18 @@
                         type="String"
                         role="inputOnly"
                         description="ID d'autres l'enregistrements auquel le fichier sera rattaché (liste JSON)" />
+            <property   name="refreshUser"
+                        label="MAJ Utilisateur?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
+                        description="Flag pour demander le refresh des données utilisateur après l'upload." />
             <property   name="fileId"
-                        label="ID de fichier existant 🚫"
+                        label="N/A"
                         type="String"
-                        description="ID Salesforce du fichier chargé ou du fichier pour lequel une nouvelle version doit être chargée" />
+                        role="inputOnly"
+                        description="Usage futur: ID Salesforce du fichier chargé ou du fichier pour lequel une nouvelle version doit être chargée" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"

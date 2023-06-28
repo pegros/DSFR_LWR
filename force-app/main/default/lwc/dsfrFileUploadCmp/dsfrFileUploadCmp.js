@@ -1,7 +1,11 @@
 import { LightningElement, api } from 'lwc';
 import uploadFile from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
+import userId       from '@salesforce/user/Id';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import UPLOAD_SUCCESS from '@salesforce/label/c.dsfrFileUploadSuccess';
+import UPLOAD_COMMENT from '@salesforce/label/c.dsfrFileUploadComment';
+import UPLOAD_TYPES from '@salesforce/label/c.dsfrFileUploadTypes';
+
 
 export default class DsfrFileUploadCmp extends LightningElement {
 
@@ -9,18 +13,24 @@ export default class DsfrFileUploadCmp extends LightningElement {
     // Configuration parameters
     //-----------------------------------------------------
     @api label = 'Charger un fichier';
-    @api comment = 'Taille maximale : 500 Mo. Formats supportés : jpg, png, pdf. Plusieurs fichiers possibles.';
+    @api comment;
     @api accept;
     @api contentMeta;
     @api shareMode = 'V';
     @api disabled = false;
     @api wrappingClass;
+    @api refreshUser = false;
 
     @api recordId;
     @api recordIds;
     @api fileId;
 
     @api isDebug = false;       // Flag to activate debug information
+
+    //-----------------------------------------------------
+    // Context parameters
+    //-----------------------------------------------------
+    currentUserId = userId;
 
     //-----------------------------------------------------
     // Technical parameters
@@ -32,14 +42,13 @@ export default class DsfrFileUploadCmp extends LightningElement {
     fileContent;
 
     //-----------------------------------------------------
-    // Technical parameters
+    // Custom Labels
     //-----------------------------------------------------
     uploadSuccess = UPLOAD_SUCCESS;
 
     //-----------------------------------------------------
     // Custom getter
     //-----------------------------------------------------
-
     get mainClass() {
         return (this.wrappingClass || '') + (this.isError ? ' fr-upload-group fr-input-group--error' : ' fr-upload-group');
     }
@@ -58,6 +67,14 @@ export default class DsfrFileUploadCmp extends LightningElement {
             console.log('connected: accept ',this.accept);
             console.log('connected: content version metadata ',this.contentMeta);
             console.log('connected: disabled ', this.disabled);
+            console.log('connected: refreshUser ', this.refreshUser);
+            console.log('connected: currentUserId ', this.currentUserId);
+        }
+        this.comment = this.comment || UPLOAD_COMMENT;
+        this.accept = this.accept || UPLOAD_TYPES;
+        if (this.isDebug) {
+            console.log('connected: comment reworked ',this.comment);
+            console.log('connected: accept reworked ',this.accept);
             console.log('connected: END file upload');
         }
     }
@@ -113,7 +130,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 let otherIDs = JSON.parse(this.recordIds);
                 recordIds.push(...otherIDs);
             }
-            if (this.isDebug) console.log('registerFile: recordIds init ',recordIds);
+            if (this.isDebug) console.log('registerFile: recordIds init ',JSON.stringify(recordIds));
 
             const uploadData = {
                 name: this.fileName,
@@ -131,25 +148,34 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 this.isError =  false;
 
                 if (recordIds && recordIds.length > 0) {
-                    if (this.isDebug) console.log('handleUpload: handling record data reload ',recordIds);
+                    if (this.isDebug) console.log('registerFile: handling record data reload ',JSON.stringify(recordIds));
                     let recordIdList = [];
                     recordIds.forEach(item => {recordIdList.push({recordId: item})});
-                    if (this.isDebug) console.log('handleUpload: triggering reload on recordIdList ',recordIdList);
+                    if (this.refreshUser && this.currentUserId) {
+                        if (this.isDebug) console.log('registerFile: registering user for reload ',this.currentUserId);
+                        recordIdList.push({recordId: this.currentUserId});
+                    }
+                    else {
+                        if (this.isDebug) console.log('registerFile: Ignoring User / refreshUser ',this.refreshUser);
+                        if (this.isDebug) console.log('registerFile: currentUserId ',this.currentUserId);
+                    }
+                    if (this.isDebug) console.log('registerFile: triggering reload on recordIdList ',JSON.stringify(recordIdList));
                     notifyRecordUpdateAvailable(recordIdList);
                 }
                 
                 let fileInput = this.template.querySelector('input.fr-upload');
-                if (this.isDebug) console.log('handleUpload: reactivating fileInput ',fileInput);
+                if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
                 fileInput.disabled = false;
 
                 if (this.isDebug) console.log('registerFile: END');
             }).catch(error => {
                 console.warn('registerFile: upload failed',error);
                 let fileInput = this.template.querySelector('input.fr-upload');
-                if (this.isDebug) console.log('handleUpload: reactivating fileInput ',fileInput);
+                if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
                 fileInput.disabled = false;
-                console.warn('registerFile: END KO / upload failed ',error);
-                this.message = JSON.stringify(error);
+                console.warn('registerFile: END KO / upload failed ',JSON.stringify(error));
+                //this.message = JSON.stringify(error);
+                this.message = (error.body?.message || error.statusText || 'Erreur technique');
                 this.isError = true;
             });
             if (this.isDebug) console.log('registerFile: upload triggered');
@@ -158,8 +184,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
             let fileInput = this.template.querySelector('input.fr-upload');
             if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
             fileInput.disabled = false;
-            console.warn('registerFile: END KO / upload failed ',error);
-            this.message = JSON.stringify(error);
+            console.warn('registerFile: END KO / upload failed ',JSON.stringify(error));
+            //this.message = JSON.stringify(error);
+            this.message = (error.body?.message || error.statusText || 'Erreur technique');
             this.isError = true;
         }
     }
