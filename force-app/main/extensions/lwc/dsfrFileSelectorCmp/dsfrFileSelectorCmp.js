@@ -143,9 +143,10 @@ export default class DsfrFileSelectorCmp extends LightningElement {
                         notifyRecordUpdateAvailable([{recordId: this.recordId}]);
                     }
 
-                    //let fileSelect = this.template.querySelector("select[name='fileSelect']");
-                    //if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
-                    //fileSelect.disabled = false;
+                    let fileSelect = this.template.querySelector("select[name='fileSelect']");
+                    if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
+                    fileSelect.disabled = false;
+                    
                     if (this.isDebug) console.log('handleSelect: END for file selector');
                 })
                 .catch(error => {
@@ -153,7 +154,8 @@ export default class DsfrFileSelectorCmp extends LightningElement {
                     if (this.isDebug) console.log('handleSelect: reactivating file selector ',fileSelect);
                     fileSelect.disabled = false;
                     console.warn('handleSelect: END KO / file registration failed ', JSON.stringify(error));
-                    this.message = error.body?.message; //JSON.stringify(error);
+                    //this.message = error.body?.message; //JSON.stringify(error);
+                    this.message = (error.body?.message || error.statusText || 'Erreur technique');
                     this.isError = true;
                 });
             if (this.isDebug) console.log('handleSelect: link triggered');

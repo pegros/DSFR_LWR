@@ -14,11 +14,11 @@
             <property   name="label"
                         label="Libellé"
                         type="String"
-                        description="Libellé du composant d'ajout."/>
+                        description="Libellé du composant de sélection."/>
             <property   name="comment"
                         label="Explication"
                         type="String"
-                        description="Texte explicatif du composant d'ajout." />
+                        description="Texte explicatif du composant de sélection." />
 
             <property   name="configName"
                         label="Configuration de liste"

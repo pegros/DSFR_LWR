@@ -24,7 +24,7 @@
 
         <template lwc:if={hasFiles}>
             <select class="fr-select" name="fileSelect" onchange={handleSelect}>
-                <option value="" selected disabled hidden>Selectionnez un fichier</option>
+                <option value="" selected disabled hidden>Sélectionnez un fichier</option>
                 <template for:each={fileList} for:item="iterFile">
                     <option key={iterFile.ContentDocumentId} value={iterFile.ContentDocument.LatestPublishedVersionId}>{iterFile.ContentDocument.Title}</option>
                 </template>

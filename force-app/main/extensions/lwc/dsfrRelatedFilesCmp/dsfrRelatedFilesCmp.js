@@ -197,6 +197,13 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
 
         event.preventDefault();
 
+        let spinner = this.template.querySelector('lightning-spinner');
+        if (this.isDebug) console.log('handleUnlink: spinner found',spinner);
+        if (spinner) {
+            if (this.isDebug) console.log('handleUnlink: showing spinner');
+            spinner.classList.remove('slds-hide');
+        }
+
         let linkId = event.srcElement?.name;
         if (this.isDebug) console.log('handleUnlink: linkId determined ', linkId);
         if (this.isDebug) console.log('handleUnlink: linkId determined ', linkId);
@@ -214,10 +221,19 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                     if (this.isDebug) console.log('handleUnlink: triggering record data reload ',this.recordId);
                     notifyRecordUpdateAvailable([{recordId: this.recordId}]);
                 }
+
+                if (spinner) {
+                    if (this.isDebug) console.log('handleUnlink: hiding spinner');
+                    spinner.classList.add('slds-hide');
+                }
                 if (this.isDebug) console.log('handleUnlink: END');
             })
             .catch(error => {
                 console.warn('handleUnlink: END KO / file registration failed ', JSON.stringify(error));
+                if (spinner) {
+                    if (this.isDebug) console.log('handleUnlink: hiding spinner');
+                    spinner.classList.add('slds-hide');
+                }
             });
         if (this.isDebug) console.log('handleUnlink: unlink triggered');
     }
