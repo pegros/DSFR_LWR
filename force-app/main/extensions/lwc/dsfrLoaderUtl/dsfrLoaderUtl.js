@@ -6,7 +6,7 @@ import DSFR_RSC from '@salesforce/resourceUrl/dsfr';
 export default class DsfrLoaderUtl extends LightningElement {
 
     //-----------------------------------------------------    
-    // Initialisation
+    // Configuration Parameters
     //-----------------------------------------------------
     @api isDebug = false;
 
