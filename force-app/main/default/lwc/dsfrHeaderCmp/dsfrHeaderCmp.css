@@ -6,7 +6,9 @@
 }
 .fr-header {
     width: 100vw !important;
-    margin-left: min(600px - 50vw , 0px) !important;
+    margin-left: min(600px - 50vw, 0px) !important;
+    /*width: calc(100vw - 15px) !important;
+    margin-left: min(607.5px - 50vw, 0px) !important;*/
 }
 /* hide second top menu in modal when it is not open */
 .fr-modal:not(.fr-modal--opened) .toolsModal {

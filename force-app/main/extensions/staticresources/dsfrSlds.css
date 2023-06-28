@@ -1,3 +1,11 @@
+/* Scrollbar width issue on desktops */    
+html {
+    /*overflow-y: scroll;
+    overflow-y: overlay;*/
+    width: 100vw;
+    overflow-x:hidden;
+}
+
 /* STANDARD lightning-input-field OVERRIDES */
 
 /* STANDARD input FIELD matched to fr-input */
