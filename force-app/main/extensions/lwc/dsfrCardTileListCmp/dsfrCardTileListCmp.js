@@ -132,6 +132,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
     get cardIconClass() {
         return this.configDetails?.display?.iconClass || '';        
     }
+    get fitImage() {
+        return this.configDetails?.display?.fitImage;        
+    }
 
     //-----------------------------------------------------
     // Initialisation
