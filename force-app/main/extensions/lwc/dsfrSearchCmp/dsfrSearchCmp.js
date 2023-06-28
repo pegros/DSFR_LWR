@@ -123,6 +123,15 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         this.searchTerm = (this.currentState.term || '').trim();
         if (this.isDebug) console.log('wiredPageRef: search term updated ', this.searchTerm);
 
+        if (this.mainCriteriaList) {
+            if (this.isDebug) console.log('wiredPageRef: resetting main criteria ');
+            this.mainCriteriaSelected = this.reviewCriteria(this.mainCriteriaList,this.currentState);
+        }
+        if (this.criteriaList) {
+            if (this.isDebug) console.log('wiredPageRef: resetting criteria ');
+            this.criteriaSelected = this.reviewCriteria(this.criteriaList,this.currentState);
+        }
+
         if (this.isDebug) console.log('wiredPageRef: END for search');
     }
 
@@ -304,6 +313,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (menuElement) {
             menuElement.removeAttribute('aria-current');
             if (this.isDebug) console.log('deselectMainCriteria: menuElement unselected ',menuElement);
+            this.activateApply(false);
+            this.activateSearch(false);
         }
         else {
             console.warn('deselectMainCriteria: menuElement not found ', selectName);
@@ -433,11 +444,25 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         if (this.isDebug) console.log('updateSearch: newState finalized ', JSON.stringify(newState));
 
+        let expandedElements = this.template.querySelectorAll(".fr-collapse--expanded");
+        if (this.isDebug) console.log('updateSearch: expandedElements fetched ', expandedElements);
+        if (expandedElements) {
+            if (this.isDebug) console.log('updateSearch: closing expanded items');
+            expandedElements.forEach(item => {
+                if (this.isDebug) console.log('updateSearch: processing element ', item);
+                item.classList?.remove("fr-collapse--expanded");
+            });
+        }
+        if (this.isDebug) console.log('updateSearch: expandedElements closed');
+
         let searchPage = (this.searchPage ? {"type":"comm__namedPage","attributes":{"name":this.searchPage}} : {"type":"standard__search"});
         searchPage.state = newState;
         if (this.isDebug) console.log('updateSearch: searchPage init ', JSON.stringify(searchPage));
 
-        this[NavigationMixin.Navigate](searchPage);
+        setTimeout(() => {
+            if (this.isDebug) console.log('updateSearch: navigating ');
+            this[NavigationMixin.Navigate](searchPage);
+        },1000);
         this.activateApply(true);
         this.activateSearch(true);
         if (this.isDebug) console.log('updateSearch: END for search');
@@ -475,7 +500,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                         console.warn('initCriteria: for criteria ',item.fullName);
                     }
                 });
-                if (this.isDebug) console.log('wiredPicklists: criteria values selection updated ',JSON.stringify(item.values));
+                if (this.isDebug) console.log('initCriteria: criteria values selection updated ',JSON.stringify(item.values));
             }
             else {
                 if (this.isDebug) console.log('initCriteria: ignoring picklist (no state)');
@@ -484,6 +509,42 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('initCriteria: END with ', JSON.stringify(criteriaList));
         return criteriaList;
+    }
+    reviewCriteria = function(criteriaList, pageState) {
+        if (this.isDebug) console.log('reviewCriteria: START ');
+        if (this.isDebug) console.log('reviewCriteria: criteria list ', JSON.stringify(criteriaList));
+        if (this.isDebug) console.log('reviewCriteria: page state ', JSON.stringify(pageState));
+
+        let selectionList = [];
+        criteriaList.forEach(item => {
+            if (this.isDebug) console.log('reviewCriteria: processing criteria ', item.fullName);
+
+            if (pageState[item.name]) {
+                if (this.isDebug) console.log('reviewCriteria: processing criteria state ', pageState[item.name]);
+
+                let selectedItems = (pageState[item.name]).split(';');
+                if (this.isDebug) console.log('reviewCriteria: selectedItems extracted ',selectedItems);
+
+                item.values.forEach(iterVal => {
+                    if (selectedItems.includes(iterVal.value)) {
+                        iterVal.selected = true;
+                        selectionList.push(iterVal);
+                    }
+                    else {
+                        iterVal.selected = false;
+                    }
+                });
+                if (this.isDebug) console.log('reviewCriteria: criteria values selection reset ',JSON.stringify(item.values));
+            }
+            else {
+                if (this.isDebug) console.log('reviewCriteria: resetting all values (no criteria state)');
+                item.values.forEach(iterVal => {iterVal.selected = false;});
+                if (this.isDebug) console.log('reviewCriteria: criteria values selection reset ',JSON.stringify(item.values));
+            }
+        });
+
+        if (this.isDebug) console.log('reviewCriteria: END with ', JSON.stringify(criteriaList));
+        return selectionList;
     }
     activateApply = function(state) {
         if (this.isDebug) console.log('activateApply: START for state ',state);

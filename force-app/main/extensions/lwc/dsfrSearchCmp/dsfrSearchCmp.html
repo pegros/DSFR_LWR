@@ -26,22 +26,22 @@
                                                 <ul class="fr-menu__list">
                                                     <template for:each={iterC.values} for:item="iterVal">
                                                         <li key={iterVal.fullName}>
-                                                <template lwc:if={iterVal.selected}>
-                                                    <a  class="fr-nav__link menuSelector"   href="#"                        
-                                                        data-name={iterVal.fullName}
-                                                        data-value={iterVal.value}          data-criteria={iterC.name}
-                                                        aria-current="selection"            onclick={toggleMenuSelect}>
-                                                        {iterVal.label}
-                                                    </a>
-                                                </template>
-                                                <template lwc:else>
-                                                    <a  class="fr-nav__link menuSelector"   href="#"
-                                                        data-name={iterVal.fullName}
-                                                        data-value={iterVal.value}          data-criteria={iterC.name}
-                                                        onclick={toggleMenuSelect}>
-                                                        {iterVal.label}
-                                                    </a>
-                                                </template>
+                                                            <template lwc:if={iterVal.selected}>
+                                                                <a  class="fr-nav__link menuSelector"   href="#"                        
+                                                                    data-name={iterVal.fullName}
+                                                                    data-value={iterVal.value}          data-criteria={iterC.name}
+                                                                    aria-current="selection"            onclick={toggleMenuSelect}>
+                                                                    {iterVal.label}
+                                                                </a>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <a  class="fr-nav__link menuSelector"   href="#"
+                                                                    data-name={iterVal.fullName}
+                                                                    data-value={iterVal.value}          data-criteria={iterC.name}
+                                                                    onclick={toggleMenuSelect}>
+                                                                    {iterVal.label}
+                                                                </a>
+                                                            </template>
                                                         </li>
                                                     </template>
                                                 </ul>
