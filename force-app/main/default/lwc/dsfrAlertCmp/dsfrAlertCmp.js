@@ -54,7 +54,7 @@ export default class DsfrAlerteCmp extends NavigationMixin(LightningElement) {
         return 'fr-alert fr-background-default--grey fr-alert--' + this.alertType + (this.alertSize === 'small' ? ' fr-alert--sm ' : ' ') + (this.alertCss || '');
     }
     get tagList() {
-        return (this._alertMessage ? this._alertMessage.split(';') : null);
+        return (this._alertMessage ? (this._alertMessage.split(';').filter(n => n)) : null);
     }
 
     //-----------------------------------------------------
