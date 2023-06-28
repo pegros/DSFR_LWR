@@ -64,7 +64,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Title du bouton de téléchargement</shortDescription>
-        <value>Télécharger</value>
+        <value>Télécharger le fichier</value>
     </labels>
     <labels>
         <fullName>dsfrRelatedFilesUploadTitle</fullName>
@@ -72,7 +72,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Title du bouton de chargement</shortDescription>
-        <value>Charger une nouvelle version</value>
+        <value>Charger une nouvelle version du fichier</value>
     </labels>
     <labels>
         <fullName>dsfrRelatedFilesDeleteTitle</fullName>
@@ -80,6 +80,6 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Title du bouton de destruction</shortDescription>
-        <value>Enlever</value>
+        <value>Retirer le fichier</value>
     </labels>
 </CustomLabels>

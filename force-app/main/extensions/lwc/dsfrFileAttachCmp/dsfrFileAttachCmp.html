@@ -1,0 +1,56 @@
+<template>
+    <div class={wrappingClass} > 
+        <lightning-layout   multiple-rows="true" vertical-align="top" horizontal-align="end" >
+
+            <!-- Type Selector -->
+            <lightning-layout-item  size="12"    large-device-size={baseWidth}     padding="around-small">
+                <div class={componentClass} > 
+                    <label class="fr-label">
+                        {label}
+                        <template lwc:if={comment}>
+                            <span class="fr-hint-text">{comment}</span>
+                        </template>
+                    </label>
+                <template lwc:if={hasOptions}>
+                    <select class="fr-select"   name="optionSelect" onchange={handleSelect}>
+                        <option value="" selected disabled hidden>Sélectionnez une option</option>
+                        <template for:each={options} for:item="iterOption">
+                            <option key={iterOption.value} value={iterOption.value}>{iterOption.label}</option>
+                        </template>
+                    </select>
+                </template>
+                <template lwc:else>
+                    <select class="fr-select" name="select" disabled>
+                        <option value="" selected disabled hidden>Aucune option disponible</option>
+                    </select>
+                </template>
+                </div>
+            </lightning-layout-item>
+
+            <template lwc:if={isOptionSelected}>
+                <lightning-layout-item  size="12" large-device-size={baseWidth}     padding="around-small">
+                    <c-dsfr-file-upload-cmp     label={uploadLabel}         comment={uploadComment}
+                                                accept=""                   content-meta={uploadMeta}
+                                                record-id={recordId}        record-ids={recordIds}
+                                                refresh-user={refreshUser}  wrapping-class={componentClass}
+                                                is-debug={isDebug} >                        
+                    </c-dsfr-file-upload-cmp>
+                </lightning-layout-item>
+
+                <template lwc:if={selectConfig}>
+                    <lightning-layout-item  size="12"   large-device-size={baseWidth}   padding="around-small">
+                        <c-dsfr-file-selector-cmp   label={selectLabel}         comment={selectComment}
+                                                    config-name={selectConfig}  context={selectContext}
+                                                    wrapping-class={componentClass}
+                                                    record-id={recordId}        object-api-name={objectApiName}
+                                                    is-debug={isDebug} >
+                        </c-dsfr-file-selector-cmp>
+                    </lightning-layout-item>
+                </template>
+            </template>
+            <template lwc:else>
+                <lightning-layout-item  size="12" large-device-size={baseWidth}></lightning-layout-item>
+            </template>
+        </lightning-layout>
+    </div>
+</template>

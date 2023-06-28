@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Gestion de Fichier</masterLabel>
+    <description>Affichage d'un composant de gestion de fichier</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="label"
+                        label="Libellé"
+                        type="String"
+                        description="Libellé du composant de sélection de type."/>
+            <property   name="comment"
+                        label="Explication"
+                        type="String"
+                        description="Explication du composant de sélection de type." />
+
+            <property   name="fieldName"
+                        label="Champ de meta"
+                        type="String"
+                        description="Nom du champ de metadonnées du fichier à sélectionner." />
+            <property   name="optionLabels"
+                        label="Libellés des options"
+                        type="String"
+                        description="Liste des libellés des optiosn possibles séparées par ;" />
+            <property   name="optionValues"
+                        label="Values des options?"
+                        type="String"
+                        description="Liste des valeurs des optiosn possibles séparées par ;" />
+            
+            <property   name="refreshUser"
+                        label="MAJ Utilisateur?"
+                        type="Boolean"
+                        default="false"
+                        description="Flag pour demander le refresh des données utilisateur après l'upload." />
+
+            <property   name="uploadLabel"
+                        label="Libellé ajout"
+                        type="String"
+                        description="Libellé du composant d'ajout." />
+            <property   name="uploadComment"
+                        label="Explication ajout"
+                        type="String"
+                        description="Explication du composant d'ajout" />
+            <property   name="recordIds"
+                        label="ID d'autres enregistrements liés"
+                        type="String"
+                        description="ID d'autres l'enregistrements auquel le fichier sera rattaché (liste JSON)" />
+
+            <property   name="selectLabel"
+                        label="Libellé sélection"
+                        type="String"
+                        description="Libellé du composant de sélection de fichier." />
+            <property   name="selectComment"
+                        label="Explication sélection"
+                        type="String"
+                        description="Explication du composant de sélection de fichier." />
+            <property   name="selectConfig"
+                        label="Configuration de liste"
+                        type="String"
+                        description="Nom du custom metadata sfpegList utilisé pour récupérer les fichiers" />
+                        
+            <property   name="wrappingClass"
+                        label="CSS additionnelle (globale)"
+                        type="String"
+                        description="Classes pour modifier le style global du composant (par ex. fr-m-2v)" />
+            <property   name="componentClass"
+                        label="CSS additionnelle (section)"
+                        type="String"
+                        description="Classes pour modifier le style des composants utilisés." />
+            <property   name="baseWidth"
+                        label="Largeur par défaut"
+                        type="Integer"
+                        max="12"
+                        min="1"
+                        description="X/12 de la largeur disponible par composant (en écran large)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+
+            <property   name="objectApiName"
+                        label="Object API Name"
+                        type="String"
+                        description="API Name of Object for evaluation (usually current object, but may be User)."/>
+            <property   name="recordId"
+                        label="Record ID"
+                        type="String"
+                        description="ID of Record for evaluation (usually current record). Current User ID is used if no data is provided."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
