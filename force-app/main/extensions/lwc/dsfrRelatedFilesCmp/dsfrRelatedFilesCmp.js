@@ -179,15 +179,19 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
         let fileId = event.srcElement?.name;
         if (this.isDebug) console.log('handleDownload: fileId determined ', fileId);
 
-        let pageRef = {
+        /*let pageRef = {
             type: 'standard__webPage',
             attributes: {
-                url: '/sfc/servlet.shepherd/document/download/' + fileId
+                url: '/sfc/servlet.shepherd/document/download/' + fileId //+ '?operationContext=S1'
             }
         };
-        if (this.isDebug) console.log('handleDownload: opening pageRef ', pageRef);
+        if (this.isDebug) console.log('handleDownload: opening pageRef ', JSON.stringify(pageRef));
 
-        this[NavigationMixin.Navigate](pageRef, false);
+        this[NavigationMixin.Navigate](pageRef, false);*/
+
+        let pageRef = '/sfc/servlet.shepherd/document/download/' + fileId;
+        if (this.isDebug) console.log('handleDownload: opening pageRef ', pageRef);
+        window.open(pageRef,'_blank');
 
         if (this.isDebug) console.log('handleDownload: END');
     }
