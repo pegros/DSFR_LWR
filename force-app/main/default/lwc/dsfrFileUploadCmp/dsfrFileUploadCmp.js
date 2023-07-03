@@ -103,7 +103,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
         this.fileName = selectedFile.name;
         if (this.isDebug) console.log('handleUpload: fileName registered ',this.fileName);
 
-        let fileReader = new FileReader()
+        let fileReader = new FileReader();
         fileReader.onload = () => {
             if (this.isDebug) console.log('handleUpload: file content loaded',fileReader.result);
             this.fileContent = fileReader.result.split(',')[1];

@@ -7,8 +7,9 @@
                 <lightning-layout  multiple-rows="true" vertical-align="top" class="mainSearchLayout">
                     <!-- slds-grid_vertical-stretch flexibility="auto"  alignment-bump="right"  horizontal-align="spread" -->
                     <lightning-layout-item size="9" large-device-size="5" class="slds-order_1 " >
-                        <label class="fr-label">Recherche</label>
-                        <input  class="fr-input mainSearch" placeholder="Rechercher"
+                        <label class="fr-label" for="SearchTerm">Mots clés recherchés</label>
+                        <input  class="fr-input mainSearch" id="SearchTerm"
+                                placeholder="Rechercher"
                                 type="search"               name="search"
                                 value={searchTerm}          onkeyup={handleSearchKey}>
                     </lightning-layout-item>
@@ -17,7 +18,7 @@
                             <lightning-layout  multiple-rows="true" vertical-align="top">
                                 <template for:each={mainCriteriaList} for:item="iterC" >
                                     <lightning-layout-item flexibility="auto,no-shrink" key={iterC.fullName}>
-                                        <div  class="fr-nav__item selectMenu">
+                                        <div  class="fr-nav__item selectMenu" >
                                             <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton" aria-expanded="false" value={iterC.fullName} onclick={expandCollapse}>
                                                 {iterC.label}
                                             </button>
@@ -159,9 +160,10 @@
                                             <input  class="checkSelector"       type="checkbox"
                                                     name={iterVal.fullName}     aria-describedby={iterVal.fullName}
                                                     data-value={iterVal.value}  data-criteria={iterC.name}  
-                                                    checked={iterVal.selected} >
+                                                    checked={iterVal.selected}  id={iterVal.fullName}>
                                             <label  class="fr-label"                    data-name={iterVal.fullName}
-                                                    data-parent-name={iterC.fullName}   onclick={toggleCheckSelect} >
+                                                    data-parent-name={iterC.fullName}   for={iterVal.fullName}
+                                                    onclick={toggleCheckSelect} >
                                                     {iterVal.label}
                                             </label>
                                         </div>

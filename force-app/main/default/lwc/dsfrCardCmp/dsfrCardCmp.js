@@ -45,7 +45,8 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         return (((this.cardImage?.includes('/')) && (!this.cardImage?.includes('delivery/media'))) ? this.cardImage : null);
     }
     get imageTitle() {
-        return 'Image pour ' + this.cardTitle;
+        //return 'Image pour ' + this.cardTitle;
+        return null;
     }
     get hasBadgeList() {
         return (this.cardBadgeListJson || this.cardBadgeList);

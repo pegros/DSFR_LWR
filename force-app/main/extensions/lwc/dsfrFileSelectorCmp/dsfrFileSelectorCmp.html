@@ -15,7 +15,7 @@
 
     <!-- COMPONENT DISPLAY -->
     <div class={wrappingClass} > 
-        <label class="fr-label">
+        <label class="fr-label" for="fileSelect">
             {label}
             <template lwc:if={comment}>
                 <span class="fr-hint-text">{comment}</span>
@@ -23,7 +23,7 @@
         </label>
 
         <template lwc:if={hasFiles}>
-            <select class="fr-select" name="fileSelect" onchange={handleSelect}>
+            <select class="fr-select" id="fileSelect" name="fileSelect" onchange={handleSelect}>
                 <option value="" selected disabled hidden>Sélectionnez un fichier</option>
                 <template for:each={fileList} for:item="iterFile">
                     <option key={iterFile.ContentDocumentId} value={iterFile.ContentDocument.LatestPublishedVersionId}>{iterFile.ContentDocument.Title}</option>
@@ -31,7 +31,7 @@
             </select>
         </template>
         <template lwc:else>
-            <select class="fr-select" name="select" disabled>
+            <select class="fr-select" id="fileSelect" name="select" disabled>
                 <option value="" selected disabled hidden>Aucun fichier disponible</option>
             </select>
         </template>
