@@ -15,7 +15,7 @@
 
     <!-- COMPONENT DISPLAY -->
     <div class={wrappingClass} > 
-        <label class="fr-label" for="fileSelect">
+        <label class="fr-label" for="fileSelect fileSelect2">
             {label}
             <template lwc:if={comment}>
                 <span class="fr-hint-text">{comment}</span>
@@ -31,7 +31,7 @@
             </select>
         </template>
         <template lwc:else>
-            <select class="fr-select" id="fileSelect" name="select" disabled>
+            <select class="fr-select" id="fileSelect2" name="select" disabled>
                 <option value="" selected disabled hidden>Aucun fichier disponible</option>
             </select>
         </template>
