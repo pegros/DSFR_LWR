@@ -48,6 +48,10 @@ export default class DsfrRecordFormCmp extends LightningElement {
             });
             if (this.isDebug) console.log('requiredFields: fieldList updated from required fields ', fieldList);
             this.labelOk = false;
+            if (requiredFieldList.length > 0) {
+                this.showModify = !this.readOnly;
+                if (this.isDebug) console.log('requiredFields: showModify updated ', this.showModify);
+            }
         }
         catch (error){
             console.warn('requiredFields: recordForm requiredFields processing failed ', error);
@@ -91,6 +95,7 @@ export default class DsfrRecordFormCmp extends LightningElement {
     // Technical parameters
     //-----------------------------------------------------
 
+    showModify;
     relatedFieldList;
     fieldList;
     formObjectApiName;
@@ -165,14 +170,20 @@ export default class DsfrRecordFormCmp extends LightningElement {
             try {
                 let fieldConfigList = JSON.parse(this.fieldConfig || []);
                 if (this.isDebug) console.log('connected: fieldList parsed ', fieldConfigList);
+                let allDisabled = true;
                 fieldConfigList.forEach(item => {
                     if (!item.size) { item.size = this.defaultSize; }
-                    fieldList.push(item)
+                    if (!item.disabled) { allDisabled = false; }
+                    fieldList.push(item);
                 });
                 if (this.isDebug) console.log('connected: fieldList init from config ', fieldList);
+
+                this.showModify = !(this.readOnly || allDisabled);
+                if (this.isDebug) console.log('connected: showModify init ', this.showModify);
             }
             catch (error){
                 console.warn('connected: recordForm fieldList parsing failed ', error);
+                this.showModify = false;
                 this.isReady = false;
             }
             this.fieldList = fieldList;
