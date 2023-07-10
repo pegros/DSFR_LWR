@@ -10,6 +10,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     // Configuration parameters
     //-----------------------------------------------------
+    @api inputPlaceholder;      // search term input placeholder
+    @api searchButtonTitle;     // search button title
     @api showSearch = false;    // Display search bar
     @api searchPage;            // Search page name (if not standard one)
     @api mainCriteria;          // Main criteria configuration

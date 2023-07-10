@@ -20,6 +20,16 @@
                         type="String"
                         description="Nom de la page de recherche (si différente de la page de recherche standard)" />
 
+            <property   name="inputPlaceholder"
+                        label="Placeholder des mots clés"
+                        type="String"
+                        default="Mots clé de recherche"
+                        description="Placeholder affiché dans le composant de saisie des mots clés de recherche" />
+            <property   name="searchButtonTitle"
+                        label="Titre du bouton rechercher"
+                        type="String"
+                        default="Lancer la recherche"
+                        description="Titre explicatif sur le bouton rechercher principal" />
             <property   name="mainCriteria"
                         label="Critères principaux"
                         type="String"

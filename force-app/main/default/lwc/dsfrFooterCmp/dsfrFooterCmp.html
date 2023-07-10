@@ -14,7 +14,9 @@
                     <ul class="fr-footer__content-list">
                         <template for:each={topMenuItems} for:item="item">
                             <li class="fr-footer__content-item" key={item.label} >
-                                <a  class="fr-footer__content-link" href="#" target="_blank" data-value={item.label} onclick={handleTopClick} >
+                                <a  class="fr-footer__content-link" href="#"
+                                    target={item._target}           title={item.title}
+                                    data-value={item.label}         onclick={handleTopClick} >
                                     {item.label}
                                 </a>
                             </li>
@@ -26,7 +28,9 @@
                 <ul class="fr-footer__bottom-list">
                     <template for:each={bottomMenuItems} for:item="item">
                         <li class="fr-footer__bottom-item" key={item.label} >
-                            <a  class="fr-footer__bottom-link" href="#" data-value={item.label} onclick={handleBottomClick} >
+                            <a  class="fr-footer__bottom-link"  href="#"
+                                target={item._target}           title={item.title}
+                                data-value={item.label}         onclick={handleBottomClick} >
                                 {item.label}
                             </a>
                         </li>

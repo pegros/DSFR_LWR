@@ -77,9 +77,29 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
 
         if (data) {
             if (this.isDebug) console.log('wiredFooterMenus: data  received ', JSON.stringify(data));
-            this.topMenuItems = data[this.topMenu] || [];
+            this.topMenuItems = JSON.parse(JSON.stringify(data[this.topMenu] || []));
+            this.topMenuItems.forEach(item => {
+                if (item.actionType === 'ExternalLink') {
+                    item.title = item.label + ' - Nouvelle fenêtre';
+                    item._target = "_blank";
+                }
+                else {
+                    item._target = "_self";
+                }
+            });
+            //this.topMenuItems = data[this.topMenu] || [];
             if (this.isDebug) console.log('wiredFooterMenus: topMenuItems updated',this.topMenuItems);
-            this.bottomMenuItems = data[this.bottomMenu] || [];
+            this.bottomMenuItems = JSON.parse(JSON.stringify(data[this.bottomMenu] || []));
+            this.bottomMenuItems.forEach(item => {
+                if (item.actionType === 'ExternalLink') {
+                    item.title = item.label + ' - Nouvelle fenêtre';
+                    item._target = "_blank";
+                }
+                else {
+                    item._target = "_self";
+                }
+            });
+            //this.bottomMenuItems = data[this.bottomMenu] || [];
             if (this.isDebug) console.log('wiredFooterMenus: bottomMenuItems updated',this.bottomMenuItems);
             if (this.isDebug) console.log('wiredFooterMenus: END / menus initialized');
         }

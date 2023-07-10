@@ -9,7 +9,7 @@
                     <lightning-layout-item size="9" large-device-size="5" class="slds-order_1 " >
                         <label class="fr-label" for="SearchTerm">Mots clés recherchés</label>
                         <input  class="fr-input mainSearch" id="SearchTerm"
-                                placeholder="Rechercher"
+                                placeholder={inputPlaceholder}
                                 type="search"               name="search"
                                 value={searchTerm}          onkeyup={handleSearchKey}>
                     </lightning-layout-item>
@@ -55,7 +55,7 @@
                     </template>
                     <!-- flexibility="no-shrink,no-grow" -->
                     <lightning-layout-item size="3" large-device-size="2" class="slds-order_2 slds-large-order_3">
-                        <button class="fr-btn searchButton" title="Rechercher" disabled onclick={updateSearch}>
+                        <button class="fr-btn searchButton" title={searchButtonTitle} disabled onclick={updateSearch}>
                             Rechercher
                         </button>
                     </lightning-layout-item>
@@ -178,7 +178,7 @@
             <!-- class="fr-btn fr-btn-tertiary-no-outline fr-btn-icon-left fr-icon-checkbox-line applyButton" -->
             <div class="applyContainer">
                 <button class="fr-btn fr-btn--primary fr-btn--icon-left fr-icon-search-line applyButton"
-                        title="Rechercher" disabled onclick={updateSearch}>
+                        title={searchButtonTitle} disabled onclick={updateSearch}>
                         Rechercher
                 </button>
             </div>

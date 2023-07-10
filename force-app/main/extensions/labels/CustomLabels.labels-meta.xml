@@ -80,6 +80,6 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Title du bouton de destruction</shortDescription>
-        <value>Retirer le fichier</value>
+        <value>Supprimer le fichier</value>
     </labels>
 </CustomLabels>
