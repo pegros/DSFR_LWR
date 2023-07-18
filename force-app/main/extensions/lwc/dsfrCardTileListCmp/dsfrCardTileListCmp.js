@@ -60,6 +60,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
         this._listContext = listContext;
         if (this.isDebug) console.log('set Card/Tile listContext: value set ', JSON.stringify(this._listContext));
     }
+    @api countDisplay = 'left';
     @api wrappingCss;
     @api headerCss;         // Classes pour modifier le style du titre du composant.
 
@@ -102,7 +103,14 @@ export default class DsfrCardTileListCmp extends LightningElement {
         return this.configDetails?.display?.type || 'non défini';
     }
     get headerTitle() {
-        return '' + (this.recordList?.length || 0) + ' ' + this.listTitle;
+        switch (this.countDisplay) {
+            case 'left': 
+                return '' + (this.recordList?.length || 0) + ' ' + this.listTitle;
+            case 'right': 
+                return this.listTitle + ' ('+ (this.recordList?.length || 0) + ')';
+            default:
+                return this.listTitle;
+        }
     }
     get headerClass() {
         return this.headerCss + ' listTitle';

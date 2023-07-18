@@ -11,18 +11,23 @@
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
             <property   name="listTitle"
-                        label="Main Title"
+                        label="Titre principal"
                         type="String"
                         description="Titre du composant" />
             <property   name="configName"
-                        label="List Configuration"
+                        label="Configuration de Liste"
                         type="String"
                         description="Nom du custom metadata sfpegList de configuration" />
             <property   name="listContext"
-                        label="List Context"
+                        label="Contexte de Liste"
                         type="String"
-                        description="Contexte de la liste" />
+                        description="Contexte au format JSON nécessaire à la configuration de la liste" />
 
+            <property   name="countDisplay"
+                        label="Affichage Compteur"
+                        type="String"
+                        datasource="left,right,hide"
+                        description="Mode d'affichage du compteur d'enregistrements de la liste" />
             <property   name="wrappingCss"
                         label="CSS additionnelle"
                         type="String"
