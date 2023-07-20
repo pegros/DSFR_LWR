@@ -36,9 +36,11 @@
                         <div class="fr-header__tools-links ">
                             <ul class="fr-btns-group">
                                 <template lwc:if={isGuestUser}>
-                                    <li>
-                                        <a class="fr-btn fr-icon-account-circle-line" href="#" onclick={handleLogin} >{loginLabel}</a>
-                                    </li>
+                                    <template lwc:if={showLogin}>
+                                        <li>
+                                            <a class="fr-btn fr-icon-account-circle-line" href="#" onclick={handleLogin} >{loginLabel}</a>
+                                        </li>
+                                    </template>
                                 </template>
                                 <template lwc:else>
                                     <template for:each={topMenuItems} for:item="item">
@@ -48,9 +50,11 @@
                                             </a>
                                         </li>
                                     </template>
-                                    <li>
-                                        <a class="fr-btn fr-icon-logout-box-r-line" href="#" onclick={handleLogout} >{logoutLabel}</a>
-                                    </li>
+                                    <template lwc:if={showLogin}>
+                                        <li>
+                                            <a class="fr-btn fr-icon-logout-box-r-line" href="#" onclick={handleLogout} >{logoutLabel}</a>
+                                        </li>
+                                    </template>
                                 </template>
                             </ul>
                         </div>

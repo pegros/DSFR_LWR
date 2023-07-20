@@ -30,6 +30,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     @api showSearch = false;
     @api searchPage;
 
+    @api hideLogin = false;
+
     @api isDebug = false;
     
     //-----------------------------------
@@ -58,6 +60,9 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     // Custom Getters
     //-----------------------------------
 
+    get showLogin() {
+        return !this.hideLogin;
+    }
     /*get loginUrl() {
         return basePathName + '/login';
     }*/

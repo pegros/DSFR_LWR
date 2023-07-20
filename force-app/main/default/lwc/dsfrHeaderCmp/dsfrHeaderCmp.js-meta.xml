@@ -50,6 +50,12 @@
                         type="String"
                         description="Nom de la page de recherche (si différente de la page de recherche standard)" />
 
+            <property   name="hideLogin"
+                        label="Cacher Se Connecter?"
+                        type="Boolean"
+                        default="false"
+                        description="Désactivation des boutons de connexion/deconnexion." />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
