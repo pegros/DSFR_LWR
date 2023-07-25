@@ -6,7 +6,7 @@
             <div class="fr-search-bar fr-search-bar--lg mainSearchDiv" role="search">
                 <lightning-layout  multiple-rows="true" vertical-align="top" class="mainSearchLayout">
                     <!-- slds-grid_vertical-stretch flexibility="auto"  alignment-bump="right"  horizontal-align="spread" -->
-                    <lightning-layout-item size="9" large-device-size="5" class="slds-order_1 " >
+                    <lightning-layout-item size="9" large-device-size={searchTermInput} class="slds-order_1 " >
                         <label class="fr-label" for="SearchTerm">Mots clés recherchés</label>
                         <input  class="fr-input mainSearch" id="SearchTerm"
                                 placeholder={inputPlaceholder}
