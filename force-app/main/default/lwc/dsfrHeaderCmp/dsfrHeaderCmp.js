@@ -376,16 +376,23 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         event.stopPropagation();
         event.preventDefault();
 
-        let loginPage = {type:"comm__namedPage",attributes:{name:"Login"}};
-        //let loginPage = {type:'standard__webPage',attributes: {url:'/login'}};
-        //let loginPage = {type: 'comm__loginPage',attributes: {actionName: 'login'};
-        if (this.isDebug) console.log('handleLogin: loginPage init ', JSON.stringify(loginPage));
-
         this.collapseModals();
         if (this.isDebug) console.log('handleLogin: modal closed');
 
-        this[NavigationMixin.Navigate](loginPage);                                                                      
-        if (this.isDebug) console.log('handleLogin: END / navigation triggered');
+        if (this.isDebug) console.log('wiredPageRef: current pageRef ',this.pageRef);
+        this[NavigationMixin.GenerateUrl](this.pageRef)
+        .then((url) => {
+            if (this.isDebug) console.log('wiredPageRef: current url ',url);
+            let loginPage = {type:"comm__namedPage",attributes:{name:"Login"},state:{startURL:url}};
+            //let loginPage = {type:'standard__webPage',attributes: {url:'/login'}};
+            //let loginPage = {type: 'comm__loginPage',attributes: {actionName: 'login'};
+            if (this.isDebug) console.log('handleLogin: loginPage init ', JSON.stringify(loginPage));
+
+            this[NavigationMixin.Navigate](loginPage);                                                                      
+            if (this.isDebug) console.log('handleLogin: END / navigation triggered');
+        }).catch((error) => {
+            console.warn('handleLogin: END KO/ current url generation failed ',JSON.stringify(error));
+        })
     }
     handleLogout(event) {
         if (this.isDebug) console.log('handleLogout: START');
