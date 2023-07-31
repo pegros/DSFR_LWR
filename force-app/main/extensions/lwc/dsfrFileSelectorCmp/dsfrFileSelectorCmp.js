@@ -162,7 +162,7 @@ export default class DsfrFileSelectorCmp extends LightningElement {
         }
         else {
             console.warn('handleSelect: END KO / no selection');
-            this.message = 'Merci de sélectionner un ficheir dans la liste';
+            this.message = 'Merci de sélectionner un fichier dans la liste';
             this.isError = true;
         }
     }
