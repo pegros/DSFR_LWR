@@ -7,6 +7,7 @@
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
     </targets>
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
@@ -60,6 +61,65 @@
                         label="Debug ?"
                         type="Boolean"
                         default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="buttonLabel"
+                        label="Libellé"
+                        type="String"
+                        role="inputOnly"
+                        description="Libellé du bouton" />
+            <property   name="buttonTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre du bouton" />
+            <property   name="buttonSize"
+                        label="Taille"
+                        type="String"
+                        default="medium"
+                        role="inputOnly"
+                        description="Taille du bouton (small,medium,large)" />
+            <property   name="buttonVariant"
+                        label="Variante"
+                        type="String"
+                        default="primary"
+                        role="inputOnly"
+                        description="Variante d'affichage du bouton (primary,secondary,tertiary,tertiary-no-outline)" />
+            <property   name="buttonIcon"
+                        label="Icône"
+                        type="String"
+                        role="inputOnly"
+                        description="Nom de l'icone DFSR à afficher (e.g. checkbox-circle-line)" />
+            <property   name="buttonIconPosition"
+                        label="Position de l'icône"
+                        type="String"
+                        default="left"
+                        role="inputOnly"
+                        description="Position de l'icone par rapport au libellé du bouton (left,right)" />
+            <property   name="buttonInactive"
+                        label="Inactif ?"
+                        type="String"
+                        default="left"
+                        role="inputOnly"
+                        description="Statut du bouton" />
+            <property   name="buttonAlign"
+                        label="Alignement"
+                        type="String"
+                        default="left"
+                        role="inputOnly"
+                        description="Positionnement du bouton dans son conteneur (left,center,right)." />
+            
+            <property   name="buttonTarget"
+                        label="Cible"
+                        type="String"
+                        role="inputOnly"
+                        description="Salesforce page reference (JSON)" />
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
                         description="Activation de détails pour l'analyse de problèmes" />
         </targetConfig>
     </targetConfigs>
