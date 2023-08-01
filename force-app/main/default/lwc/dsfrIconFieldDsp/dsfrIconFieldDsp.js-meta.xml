@@ -19,6 +19,10 @@
                         label="Préfixe"
                         type="String"
                         description="Préfixe du contenu à ajouter (si celui-ci est renseigné)" />
+            <property   name="valueSuffix"
+                        label="Suffixe"
+                        type="String"
+                        description="Suffixe du contenu à ajouter (si celui-ci est renseigné)" />
             <property   name="iconName"
                         label="Icône"
                         type="String"
@@ -51,6 +55,11 @@
                         type="String"
                         role="inputOnly"
                         description="Préfixe du contenu à ajouter (si celui-ci est renseigné)" />
+            <property   name="valueSuffix"
+                        label="Suffixe"
+                        type="String"
+                        role="inputOnly"
+                        description="Suffixe du contenu à ajouter (si celui-ci est renseigné)" />
             <property   name="iconName"
                         label="Icône"
                         type="String"

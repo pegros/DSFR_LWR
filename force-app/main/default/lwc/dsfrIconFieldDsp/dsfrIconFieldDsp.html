@@ -9,6 +9,11 @@
             </template>
             <lightning-formatted-rich-text class="fr-text iconFieldText" value={value}>
             </lightning-formatted-rich-text>
+            <template lwc:if={valueSuffix}>
+                &nbsp;
+                <lightning-formatted-rich-text class="fr-text iconFieldText" value={valueSuffix}>
+                </lightning-formatted-rich-text>
+            </template>
         </div>
     </template>
 </template>
