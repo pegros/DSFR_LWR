@@ -15,7 +15,7 @@ export default class DsfrPictogrammeDsp extends LightningElement {
     // Custom getter
     //-----------------------------------------------------
     get pictoSrc() {
-        return DSFR + '/artworks/pictograms/' + this.pictoName + '.svg';
+        return DSFR + '/artwork/pictograms/' + this.pictoName + '.svg';
     }
     get pictoCss() {
         //(this.pictoClass || '') + 
