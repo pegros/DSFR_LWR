@@ -1,11 +1,3 @@
-/* Scrollbar width issue on desktops */    
-html {
-    /*overflow-y: scroll;
-    overflow-y: overlay;*/
-    width: 100vw;
-    overflow-x:hidden;
-}
-
 /* STANDARD lightning-input-field OVERRIDES */
 
 /* STANDARD input FIELD matched to fr-input */
@@ -278,7 +270,7 @@ button.slds-combobox__input-value {
 	    height: 1.5rem !important;
 	    width: 1.5rem !important;
         margin-top: 0px !important;
-        margin-left: 1px !important;
+        margin-left: 1px !important!;
     }
     .slds-radio_faux::after {
 	    height: 12px !important;
@@ -444,6 +436,11 @@ button.slds-combobox__input-value {
     	box-shadow: inset 0 -2px 0 0 #3a3a3a;
         padding-bottom: 2px;
 	}
+	/*.slds-dueling-list__options:active, .slds-dueling-list__options:focus {
+    	outline-color: rgb(10,118,246);
+    	outline-style: solid !important;
+    	outline-width: 2px !important;
+	}*/
     
     .slds-dueling-list__options.slds-is-disabled {
     	color: var(--text-disabled-grey);
@@ -480,7 +477,6 @@ button.slds-combobox__input-value {
         background-color: rgb(10,118,246) !important;
     }
     
-
     /* CARD fixes for lightning-formatted-richtext*/
     
     [class*=" fr-icon-"]:before {
@@ -542,10 +538,12 @@ button.slds-combobox__input-value {
         right: -0.25rem;
         font-size: 1rem;
     }
-
+    
     /* SLDS Button OVERRIDES */
-    /* .slds-button */
-    .slds-button_brand {
+    /*.slds-button {
+        
+    }*/
+    .slds-button_brand,  .slds-button_neutral {
         border-bottom-left-radius: 0px;
         border-bottom-right-radius: 0px;
         border-top-left-radius: 0px;
@@ -566,12 +564,24 @@ button.slds-combobox__input-value {
   		line-height: 1.5rem;
   		min-height: 2.5rem;
   		padding: 0.5rem 1rem;
-
+    }
+    
+    .slds-button_brand {
+  		background-color: var(--background-action-high-blue-france) !important;
   		--idle: transparent;
   		--hover: var(--background-action-high-blue-france-hover) !important;
   		--active: var(--background-action-high-blue-france-active) !important;
   		color: var(--text-inverted-blue-france) !important;
 	}
+    
+    /*.slds-button_neutral {
+  		background-color: var(--background-action-high-blue-france) !important;
+
+  		--idle: transparent;
+  		--hover: var(--background-action-high-blue-france-hover) !important;
+  		--active: var(--background-action-high-blue-france-active) !important;
+  		color: var(--text-inverted-blue-france) !important;
+	}*/
     
     /* LOGIN FORM OVERRIDES */ 
     .comm-login-form__container {
