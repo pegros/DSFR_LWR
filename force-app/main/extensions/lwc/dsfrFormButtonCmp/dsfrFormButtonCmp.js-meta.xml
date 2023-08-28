@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>56.0</apiVersion>
+    <apiVersion>57.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Bouton (Action)</masterLabel>
-    <description>Affichage d'un bouton (d'action) du DSFR</description>
+    <masterLabel>DSFR Bouton (Formulaire)</masterLabel>
+    <description>Affichage d'un bouton (de formulaire en popup) du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
@@ -52,10 +52,32 @@
                         datasource="left,center,right"
                         description="Positionnement du bouton dans son conteneur." />
 
-            <property   name="buttonAction"
-                        label="Action"
+            <property   name="formTitle"
+                        label="Titre du formulaire"
                         type="String"
-                        description="Action LDS à effectuer (format JSON)" />
+                        description="Titre de la popup du formulaire" />
+            <property   name="formMessage"
+                        label="Message du formulaire"
+                        type="String"
+                        description="Message introductif de la popup du formulaire" />
+            <property   name="formFieldList"
+                        label="Champs du formulaire"
+                        type="String"
+                        description="Configuration du formulaire (format JSON)" />
+            <property   name="objectApiName"
+                        label="Objet"
+                        type="String"
+                        description="API Name Salesforce de l'objet du formulaire" />
+            <property   name="recordId"
+                        label="ID de l'enregistrement"
+                        type="String"
+                        description="ID Salesforce de l'enregistrement du formulaire" />
+
+            <property   name="doRefresh"
+                        label="Raffraichir la page ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation d'un raffraichissement automatique de la page à la fermeture de la popup." />
 
             <property   name="isDebug"
                         label="Debug ?"

@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { createRecord, updateRecord, deleteRecord, notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { RefreshEvent } from 'lightning/refresh';
 import { NavigationMixin } from 'lightning/navigation';
 
 
@@ -24,8 +25,6 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
     //-----------------------------------------------------
     // Configuration parameters
     //-----------------------------------------------------
-    isInactive = false;
-    buttonClass = 'fr-btn';
 
     //-----------------------------------------------------
     // Initialisation
@@ -55,9 +54,11 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
         this.toggleSpinner();
 
         if (this.isDebug) console.log('handleAction: action fetched ',this.buttonAction);
-        if (this.buttonAction) {
-            const actionDetails = JSON.parse(this.buttonAction);
-            if (this.isDebug) console.log('handleAction: actionDetails parsed ',actionDetails);
+        if (this.isDebug) console.log('handleAction: stringified ', JSON.stringify(this.buttonAction));
+        if (this.isDebug) console.log('handleAction: of type ',typeof this.buttonAction);
+        if (this.buttonAction) {                
+            const actionDetails = (typeof this.buttonAction == 'string' ? JSON.parse(this.buttonAction) : this.buttonAction);
+            if (this.isDebug) console.log('handleAction: actionDetails ready ',actionDetails);
 
             let actionPromise;
             switch (actionDetails.type) {
@@ -103,6 +104,11 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
                     else if (actionDetails.reload) {
                         if (this.isDebug) console.log('handleAction: END / Triggering record data reload on ',actionDetails.reload);
                         notifyRecordUpdateAvailable(actionDetails.reload);
+                    }
+                    else if (actionDetails.refresh) {
+                        if (this.isDebug) console.log('handleAction: END / Triggering page refresh');
+                        this.dispatchEvent(new RefreshEvent());
+                        window.location.reload();
                     }
                     else if (this.isDebug) console.log('handleAction: END');
                     this.toggleSpinner();

@@ -21,6 +21,32 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api cardBadgeListJson;
     @api cardTags;
     @api cardTarget;
+    _cardButtons;
+    @api
+    get cardButtons() {
+        return this._cardButtons;
+    }
+    set cardButtons(value) {
+        if (this.isDebug) console.log('setting cardButtons ',value);
+        if (value) {
+            if (typeof value == 'string') {
+                try {
+                    this._cardButtons = JSON.parse(value);
+                }
+                catch (error) {
+                    console.warn('Issue when parsing cardButtons provided ',value);
+                    this._cardButtons = null;
+                }
+            }
+            else {
+                this._cardButtons = value;
+            }            
+        }
+        else {
+            this._cardButtons = null;
+        }
+        
+    }
     @api cardSize = 'medium';
     @api cardCss;
     @api fieldClass;
@@ -64,8 +90,10 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         return (this.cardEndIcon ? 'fr-card__detail fr-icon-' + this.cardEndIcon : 'fr-card__detail');
     }
     get cardClass() {
-        let cardClass = 'fr-card'
-        if (this.cardTarget) cardClass += ' fr-enlarge-link';
+        let cardClass = 'fr-card';
+        // if there are buttons, the global card link is removed.
+        if (this.isDebug) console.log('getting cardClass _cardButtons : ',this._cardButtons);
+        if ((this.cardTarget) && !(this._cardButtons)) cardClass += ' fr-enlarge-link';
         if (!this.isVertical) cardClass += ' fr-card--horizontal fr-card--horizontal-tier';
         if (this.cardCss) cardClass += ' ' + this.cardCss;
         switch (this.cardSize) {
@@ -100,6 +128,10 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     get hasHeader() {
         return this.cardImage || this.cardBadge;
     }
+    get hasCardEnd() {
+        return (this.isDebug || this.cardEndDetails);
+    }
+
 
     //-----------------------------------------------------
     // Initialisation
@@ -117,6 +149,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('connected: card badge list JSON ',JSON.stringify(this.cardBadgeListJson));
             console.log('connected: card image ',this.cardImage);
             console.log('connected: card target ',this.cardTarget);
+            console.log('connected: card buttons ',JSON.stringify(this.cardButtons));
             console.log('connected: vertical variant? ', this.isVertical);
         }
 
@@ -138,6 +171,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('rendered: card badge list JSON ',JSON.stringify(this.cardBadgeListJson));
             console.log('rendered: card image ',this.cardImage);
             console.log('rendered: card target ',this.cardTarget);
+            console.log('rendered: card buttons ',JSON.stringify(this.cardButtons));
             console.log('rendered: vertical variant? ', this.isVertical);
         }
 

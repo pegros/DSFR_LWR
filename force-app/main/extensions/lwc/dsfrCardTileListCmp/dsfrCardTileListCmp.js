@@ -7,7 +7,13 @@ import SORT_TITLE from '@salesforce/label/c.dsfrCardTileListSortTitle';
 import TYPE_ERROR from '@salesforce/label/c.dsfrCardTileListError';
 import SORT_DEFAULT from '@salesforce/label/c.dsfrCardTileListSortDefault';
 import SORT_PREFIX from '@salesforce/label/c.dsfrCardTileListSortPrefix';
-
+import {
+    registerRefreshContainer,
+    unregisterRefreshContainer,
+    REFRESH_ERROR,
+    REFRESH_COMPLETE,
+    REFRESH_COMPLETE_WITH_ERRORS,
+  } from "lightning/refresh";
 
 export default class DsfrCardTileListCmp extends LightningElement {
 
@@ -77,9 +83,12 @@ export default class DsfrCardTileListCmp extends LightningElement {
 
     iconFieldsTokens;
     targetTokens;
+    buttonsTokens;
 
     elementCss = '';
     isReady = false;
+
+    refreshContainerId;
 
     //-----------------------------------
     // Custom Labels
@@ -154,8 +163,12 @@ export default class DsfrCardTileListCmp extends LightningElement {
             console.log('connected: objectApiName ', this.objectApiName);
             console.log('connected: recordId ', this.recordId);
             console.log('connected: userId ', this.userId);
-            console.log('connected: END for card/tile list');
         }
+
+        this.refreshContainerId = registerRefreshContainer(this, this.refreshContainer);
+        if (this.isDebug)console.log('connected: refresh container registered ',this.refreshContainerId);
+
+        if (this.isDebug) console.log('connected: END for card/tile list');
     }
 
     renderedCallback() {
@@ -173,13 +186,36 @@ export default class DsfrCardTileListCmp extends LightningElement {
             console.log('disconnected: objectApiName ', this.objectApiName);
             console.log('disconnected: recordId ', this.recordId);
             console.log('disconnected: userId ', this.userId);
-            console.log('disconnected: END for card/tile list');
         }
+
+        unregisterRefreshContainer(this.refreshContainerId);
+        if (this.isDebug)console.log('disconnected: refresh container unregistered');
+
+        if (this.isDebug) console.log('disconnected: END for card/tile list');
     }
 
     //-----------------------------------------------------
     // Event Handlers
     //-----------------------------------------------------
+    refreshContainer(refreshPromise) {
+        if (this.isDebug) console.log("refreshContainer: START");
+        
+        let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
+        if (this.isDebug) console.log('refreshContainer: fetching listCmp ',listCmp);
+        listCmp.doRefresh();
+
+        if (this.isDebug) console.log('refreshContainer: END ');
+        return refreshPromise.then((status) => {
+          if (status === REFRESH_COMPLETE) {
+            console.log("refreshContainer Done!");
+          } else if (status === REFRESH_COMPLETE_WITH_ERRORS) {
+            console.warn("refreshContainer Done, with issues refreshing some components");
+          } else if (status === REFRESH_ERROR) {
+            console.error("refreshContainer Major error with refresh.");
+          }
+        });
+    }
+
     handleRecordLoad(event) {
         if (this.isDebug) console.log('handleRecordLoad: START for card/tile list',event);
 
@@ -193,6 +229,12 @@ export default class DsfrCardTileListCmp extends LightningElement {
                 if (this.isDebug) console.log('handleRecordLoad: extracting tokens from target ', this.configDetails.display.target);
                 this.targetTokens = this.extractTokens(this.configDetails.display.target);
                 if (this.isDebug) console.log('handleRecordLoad: all target tokens extracted');
+            }
+            if (this.configDetails?.display?.buttons) {
+                this.configDetails.display.buttonsJson = JSON.stringify(this.configDetails.display.buttons);
+                if (this.isDebug) console.log('handleRecordLoad: extracting tokens from buttons ', this.configDetails.display.buttonsJson);
+                this.buttonsTokens = this.extractTokens(this.configDetails.display.buttonsJson);
+                if (this.isDebug) console.log('handleRecordLoad: all buttons tokens extracted');
             }
             if (this.configDetails?.display?.sort) {
                 if (this.isDebug) console.log('handleRecordLoad: initializing sort');
@@ -275,7 +317,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     newItem.badgeList = badgeList;
                 }
 
-                // Merging Target Tokend in Actions
+                // Merging Target Tokens in Actions
                 if (this.targetTokens) {
                     if (this.isDebug) console.log('handleRecordLoad: merging row target');
 
@@ -299,6 +341,39 @@ export default class DsfrCardTileListCmp extends LightningElement {
                     newItem.target = mergedTarget;
                 }
                 
+                // Merging Buttons Tokens in Actions
+                if (this.buttonsTokens) {
+                    if (this.isDebug) console.log('handleRecordLoad: merging row buttons');
+
+                    let mergedButtons = '' + this.configDetails.display.buttonsJson;
+                    this.buttonsTokens.forEach(itemToken => {
+                        if (this.isDebug) console.log('handleRecordLoad: processing token ',JSON.stringify(itemToken));
+                        let tokenRegex = new RegExp(itemToken.token, 'g');
+                        let itemValue;
+                        if (itemToken.type === 'Item') {
+                            itemValue = item[itemToken.field];
+                        }
+                        else if (itemToken.type === 'Route') {
+                            if (itemToken.field === 'objectApiName') { itemValue = this.objectApiName;}
+                            else if (itemToken.field === 'recordId') { itemValue = this.recordId;}
+                        }
+                        //if ((itemValue !== undefined) && (itemValue !== null))  {
+                        if (itemValue !== undefined) {
+                            if (this.isDebug) console.log('handleRecordLoad: merging token value ',itemValue);
+                            mergedButtons = mergedButtons.replace(tokenRegex,itemValue);
+                        }
+                        else {
+                            if (this.isDebug) console.log('handleRecordLoad: no token value to merge',itemValue);
+                            mergedButtons = mergedButtons.replace(tokenRegex,'');                         
+                        }
+                    });
+                    if (this.isDebug) console.log('handleRecordLoad: buttons merged ',mergedButtons);
+                    newItem.buttons = JSON.parse(mergedButtons);
+                }
+                else {
+                    newItem.buttons = this.configDetails.display.buttons;
+                }
+
                 if (this.isDebug) console.log('handleRecordLoad: newItem prepared ',JSON.stringify(newItem));
                 targetRecordList.push(newItem);
             });

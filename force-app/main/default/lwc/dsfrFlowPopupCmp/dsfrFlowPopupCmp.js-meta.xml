@@ -45,6 +45,12 @@
                         type="String"
                         default="false"
                         description="Statut du bouton" />
+            <property   name="buttonAlign"
+                        label="Alignement"
+                        type="String"
+                        default="left"
+                        datasource="left,center,right"
+                        description="Positionnement du bouton dans son conteneur." />
 
             <property   name="modalTitle"
                         label="Titre modale"
@@ -58,7 +64,12 @@
                         label="Paramètres de processus"
                         type="String"
                         description="Paramètres d'entrée du Flow (format JSON)" />
-
+            <property   name="doRefresh"
+                        label="Raffraichir la page?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation d'un raffraichissement automatique de la page à la fermeture de la popup." />
+                        
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"

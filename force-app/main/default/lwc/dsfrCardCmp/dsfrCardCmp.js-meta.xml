@@ -68,6 +68,10 @@
                         label="Cible"
                         type="String"
                         description="Salesforce page reference (JSON)" />
+            <property   name="cardButtons"
+                        label="Boutons"
+                        type="String"
+                        description="Configuration d'une liste de boutons (Liste JSON de configurations)" />
 
             <property   name="cardSize"
                         label="Taille"

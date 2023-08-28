@@ -82,4 +82,38 @@
         <shortDescription>Title du bouton de destruction</shortDescription>
         <value>Supprimer le fichier</value>
     </labels>
+
+    <labels>
+        <fullName>dsfrFormButtonCloseTitle</fullName>
+        <categories>DSFR Component LWC Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de fermeture de la modale de formulaire</shortDescription>
+        <value>Fermer la fenêtre modale du processus</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFormButtonCloseLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton de fermeture de la modale de formulaire</shortDescription>
+        <value>Fermer</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFormButtonSaveLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton de confirmation de la modale de formulaire</shortDescription>
+        <value>Valider</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFormButtonCancelLabel</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé du bouton d'annulation de la modale de formulaire</shortDescription>
+        <value>Annuler</value>
+    </labels>
+
 </CustomLabels>

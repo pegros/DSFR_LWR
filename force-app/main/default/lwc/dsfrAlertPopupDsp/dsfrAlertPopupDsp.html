@@ -1,29 +1,33 @@
 <template>
-    <template lwc:if={isModalOpen}>
-        <dialog role="dialog" class="fr-modal fr-modal--opened">
-            <div class="fr-container fr-container--fluid fr-container-md">
-                <div class="fr-grid-row fr-grid-row--center">
-                    <div class="fr-col-12 fr-col-md-8">
-                        <div class="fr-modal__body">
-                            <div class="fr-modal__header">
-                                <button class="fr-link--close fr-link" title={closeTitle} onclick={closeModal}>{closeLabel}</button>
-                            </div>
-                            <div class="fr-modal__content">
-                                <template lwc:if={alertConfig.header}>
-                                    <h3 class="fr-modal__title">{alertConfig.header}</h3>
-                                </template>
-                                <template for:each={alertConfig.alerts} for:item="iter">
-                                    <c-dsfr-alert-cmp   key={iter.title}
-                                                        alert-type={iter.type}      alert-size={alertConfig.size}
-                                                        alert-title={iter.title}    alert-message={iter.message}
-                                                        alert-css="fr-my-4v"        is-debug={isDebug}>
-                                    </c-dsfr-alert-cmp>
+    <dialog role="alertdialog"                  class="fr-modal"
+            aria-labelledby="fr-modal-title"    aria-describedby="fr-modal-content">
+        <div class="fr-container fr-container--fluid fr-container-md">
+            <div class="fr-grid-row fr-grid-row--center">
+                <div class="fr-col-12 fr-col-md-8">
+                    <div class="fr-modal__body">
+                        <div class="fr-modal__header">
+                            <button class="fr-link--close fr-link"  title={closeTitle}
+                                    onclick={closeModal}            onkeypressed={handleEnter}>
+                                {closeLabel}
+                            </button>
+                        </div>
+                        <div class="fr-modal__content">
+                            <h3 class={titleClass} id="fr-modal-title">{titleLabel}</h3>
+                            <div id="fr-modal-content">
+                                <template lwc:if={isModalOpen}>
+                                    <template for:each={alertConfig.alerts} for:item="iter">
+                                        <c-dsfr-alert-cmp   key={iter.title}
+                                                            alert-type={iter.type}      alert-size={alertConfig.size}
+                                                            alert-title={iter.title}    alert-message={iter.message}
+                                                            alert-css="fr-my-4v"        is-debug={isDebug}>
+                                        </c-dsfr-alert-cmp>
+                                    </template>
                                 </template>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </dialog>
-    </template>
+        </div>
+    </dialog>
 </template>
