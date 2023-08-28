@@ -77,14 +77,22 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
         event.preventDefault();
 
         if (this.isDebug) console.log('openTarget: target fetched ',this.buttonTarget);
+        if (this.isDebug) console.log('openTarget: target stringified ',JSON.stringify(this.buttonTarget));
         if (this.buttonTarget) {
             if (this.isDebug) console.log('openTarget: navigating to target ');
+            if (this.isDebug) console.log('openTarget: buttonTarget type ',typeof this.buttonTarget);
 
-            const newPageRef = JSON.parse(this.buttonTarget);
+            let newPageRef = (typeof this.buttonTarget == 'string' ? JSON.parse(this.buttonTarget) : JSON.parse(JSON.stringify(this.buttonTarget)));
             if (this.isDebug) console.log('openTarget: newPageRef init ',newPageRef);
+            if (this.isDebug) console.log('openTarget: newPageRef init ',JSON.stringify(newPageRef));
 
-            if (this.isDebug) console.log('openTarget: END opening newPageRef');
-            this[NavigationMixin.Navigate](newPageRef);
+            try {
+                this[NavigationMixin.Navigate](newPageRef);
+                if (this.isDebug) console.log('openTarget: END opening newPageRef');
+            }
+            catch(error) {
+                if (this.isDebug) console.log('openTarget: END KO / opening newPageRef failed ', error);
+            }
         }
         else {
             if (this.isDebug) console.log('openTarget: END / notifying parent (if any via action)');

@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Bouton</masterLabel>
+    <masterLabel>DSFR Bouton (Navigation)</masterLabel>
     <description>Affichage d'un bouton (de navigation) du DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
@@ -100,7 +100,7 @@
             <property   name="buttonInactive"
                         label="Inactif ?"
                         type="String"
-                        default="left"
+                        default="false"
                         role="inputOnly"
                         description="Statut du bouton" />
             <property   name="buttonAlign"
