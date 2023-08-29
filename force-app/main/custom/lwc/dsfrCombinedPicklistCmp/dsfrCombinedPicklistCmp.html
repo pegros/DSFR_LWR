@@ -1,0 +1,89 @@
+<template>
+    <div class={wrappingCss}>
+        <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
+            <div class="fr-col-12" >
+                <fieldset class="fr-fieldset" id="picklist-fieldset" aria-labelledby="fieldset-legend">
+                    <legend class="fr-fieldset__legend" id="fieldset-legend">
+                        <h2 class="fr-h2">{title}</h2>
+                    </legend>
+
+                    <!-- Liste des langues sélectionnées -->
+                    <div class="fr-fieldset__element">
+                        <p lwc:if={message} class="fr-text--sm">
+                            <lightning-formatted-rich-text class="fr-text--sm" value={message}>
+                            </lightning-formatted-rich-text>
+                        </p>
+                        <div class="fr-table fr-table--bordered fr-table--layout-fixed fr-table--no-caption">
+                            <table>
+                                <caption>Tableau</caption>
+                                <thead>
+                                    <tr>
+                                        <template for:each={labels} for:item="iterLabel"> 
+                                            <th scope="col" key={iterLabel}>{iterLabel}</th>
+                                        </template>
+                                        <th scope="col" style="width: 20%;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={recordValues} for:item="iterValue">
+                                        <tr key={iterValue.value}>
+                                            <template for:each={iterValue.details} for:item="iterField">
+                                                <td key={iterField.value}>{iterField.label}</td>
+                                            </template>
+                                            <td>
+                                                <button class="fr-btn fr-icon-delete-line fr-btn--tertiary-no-outline"
+                                                        value={iterValue.value}
+                                                        title={deleteTitle}
+                                                        onclick={handleRemove}>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Section d'ajout de langue -->
+                    <p class="fr-hr"></p>
+                    <div class="actionContainer fr-fieldset__element">
+                         <fieldset class=" fr-fieldset" id="picklist-entry" >
+                            <div class="actionGrid fr-grid-row fr-grid-row-gutters fr-grid-row--bottom ">
+                                <template for:each={fieldValues} for:item="iterField">
+                                    <div class="fr-fieldset__element fr-col-12 fr-col-md-5" key={iterField.label}>
+                                        <div class="fr-select-group">
+                                            <label class="fr-label" for={iterField.label}>
+                                                {iterField.label}
+                                            </label>
+                                            <select class="fr-select" id={iterField.label} name={iterField.label}
+                                                    onchange={handleSelect}>
+                                                <option value="" selected disabled hidden>Selectionnez une option</option>
+                                                <template for:each={iterField.values} for:item="iterFieldValue">
+                                                    <template lwc:if={iterFieldValue.disabled}>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <option key={iterFieldValue.key} value={iterFieldValue.value}>
+                                                            {iterFieldValue.label}
+                                                        </option>
+                                                    </template>
+                                                </template>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </template>
+                                <div class="fr-fieldset__element fr-col-12 fr-col-md-2">
+                                    <button class="addButton fr-btn fr-icon-add-circle-line fr-btn--icon-left fr-btn--primary"
+                                            disabled
+                                            onclick={handleAdd}>
+                                        {addLabel}
+                                    </button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</template>

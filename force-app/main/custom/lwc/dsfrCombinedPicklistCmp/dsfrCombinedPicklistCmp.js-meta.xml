@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Picklists Combinées</masterLabel>
+    <description>Affichage d'un composant pour présenter et éditer des multi-picklists combinées.</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="title"
+                        label="Titre"
+                        type="String"
+                        description="Titre du composant" />
+            <property   name="message"
+                        label="Message"
+                        type="String"
+                        description="Message (optionnel) d'information" />
+            <property   name="fieldName"
+                        label="Nom du champ"
+                        type="String"
+                        description="Nom API du champ à afficher / éditer" />
+            <property   name="fieldLabels"
+                        label="Libellé des champs"
+                        type="String"
+                        description="Liste de libellés de champs correspondant au champ multi-picklist" />
+            <property   name="objectApiName"
+                        label="Object"
+                        type="String"
+                        description="Nom API de l'objet à afficher / éditer" />
+            <property   name="recordId"
+                        label="ID de l'enregistrement"
+                        type="String"
+                        description="ID Salesforce de l'enregistrement à afficher / éditer" />
+
+            <property   name="wrappingCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        default="fr-container fr-background-alt--grey fr-p-4v"
+                        description="Classes pour modifier le style du conteneur du composant" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
