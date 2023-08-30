@@ -43,7 +43,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
 
     get searchTermInput() {
-        return (this.mainCriteriaList?.size > 0 ? 5 : 9);
+        return (this.mainCriteriaList?.length > 0 ? 5 : 9);
     }
 
     //-----------------------------------------------------

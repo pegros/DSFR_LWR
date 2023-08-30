@@ -50,7 +50,7 @@
                          <fieldset class=" fr-fieldset" id="picklist-entry" >
                             <div class="actionGrid fr-grid-row fr-grid-row-gutters fr-grid-row--bottom ">
                                 <template for:each={fieldValues} for:item="iterField">
-                                    <div class="fr-fieldset__element fr-col-12 fr-col-md-5" key={iterField.label}>
+                                    <div class="fr-fieldset__element fr-col-12 fr-col-md-5 fr-px-2v" key={iterField.label}>
                                         <div class="fr-select-group">
                                             <label class="fr-label" for={iterField.label}>
                                                 {iterField.label}
@@ -72,7 +72,7 @@
                                     </div>
                                     
                                 </template>
-                                <div class="fr-fieldset__element fr-col-12 fr-col-md-2">
+                                <div class="fr-fieldset__element fr-col-12 fr-col-md-2 fr-px-2v">
                                     <button class="addButton fr-btn fr-icon-add-circle-line fr-btn--icon-left fr-btn--primary"
                                             disabled
                                             onclick={handleAdd}>
