@@ -5,9 +5,18 @@
     <masterLabel>DSFR Styles</masterLabel>
     <description>Chargement des styles du DSFR</description>
     <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
         <target>lightning__FlowScreen</target>
     </targets>
     <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
         <targetConfig targets="lightning__FlowScreen">
             <property   name="isDebug"
                         label="Debug ?"
