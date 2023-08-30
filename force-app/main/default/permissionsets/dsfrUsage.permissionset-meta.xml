@@ -12,6 +12,10 @@
         <apexClass>dsfrFileUpload_CTL</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>dsfrSiteManagement_CTL</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <description>Permission set providing the set of rights necessary to use the DSFR components (e.g. Apex controller classes).</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>dsfrUsage</label>

@@ -1,0 +1,116 @@
+<template>
+    <main class="fr-pt-md-14v" role="main" id="content">
+        <div class="fr-container fr-container--fluid fr-mb-md-14v">
+            <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
+                <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
+                    <div class="fr-container fr-background-alt--grey fr-px-md-0 fr-py-10v fr-py-md-14v">
+                        <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
+                            <div class="fr-col-12 fr-col-md-9 fr-col-lg-8">
+                                <h1 class="fr-h1">{mainTitle}</h1>
+                                <div>
+                                    <form >
+                                        <fieldset class="fr-fieldset" aria-labelledby="login-legend login-messages">
+                                            <legend class="fr-fieldset__legend" id="login-legend">
+                                                <h2 class="fr-h2">{loginHeader}</h2>
+                                            </legend>
+                                            <div class="fr-fieldset__element">
+                                                <p class="fr-text--sm">{mainDescription}</p>
+                                            </div>
+                                            <div class="fr-fieldset__element">
+                                                <fieldset class="fr-fieldset" id="credentials" aria-labelledby="credentials-messages">
+                                                    <div class="fr-fieldset__element">
+                                                        <span class="fr-hint-text">Sauf mention contraire, tous les champs sont obligatoires.</span>
+                                                    </div>
+                                                    <div class="fr-fieldset__element">
+                                                        <div class="fr-input-group">
+                                                            <label class="fr-label" for="username-input">
+                                                                Identifiant
+                                                                <span class="fr-hint-text">Format attendu : nom@domaine.fr</span>
+                                                            </label>
+                                                            <input class="fr-input" autocomplete="username" aria-required="true" aria-describedby="username-messages" name="username" id="username-input" type="text">
+                                                            <div class="fr-messages-group" id="username-messages" aria-live="assertive">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="fr-fieldset__element">
+                                                        <div class="fr-password" id="password">
+                                                            <label class="fr-label" for="password-input">
+                                                                Mot de passe
+                                                            </label>
+                                                            <div class="fr-input-wrap">
+                                                                <input  class="fr-password__input fr-input"
+                                                                        aria-required="true"    aria-describedby="password-input-messages" 
+                                                                        name="password"         id="password-input"
+                                                                        type="password"         autocomplete="current-password" >
+                                                            </div>
+                                                            <div class="fr-messages-group" id="password-input-messages" aria-live="assertive">
+                                                            </div>
+                                                            
+                                                            <div class="fr-password__checkbox fr-checkbox-group fr-checkbox-group--sm">
+                                                                <input  id="password-show"                      type="checkbox"
+                                                                        aria-label="Afficher le mot de passe"   aria-describedby="password-show-messages"
+                                                                        onchange={togglePassword}>
+                                                                <label class="fr-password__checkbox fr-label" for="password-show">
+                                                                    Afficher en clair
+                                                                </label>
+                                                                <div class="fr-messages-group" id="password-show-messages" aria-live="assertive">
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <p>
+                                                                <c-dsfr-button-dsp  button-label={lostPwdLabel}
+                                                                                    button-variant="tertiary-no-outline"
+                                                                                    button-target={lostPwdTarget}
+                                                                                    is-debug={isDebug}>
+                                                                </c-dsfr-button-dsp>
+                                                                <!--
+                                                                <a href="#" class="fr-link" onclick={handleLostPassword}>Mot de passe oublié ?</a>
+                                                                -->
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="fr-messages-group" id="credentials-messages" aria-live="assertive">
+                                                        <template lwc:if={message}>
+                                                            <c-dsfr-alert-cmp   alert-type={message.type}
+                                                                                alert-size="small"
+                                                                                alert-title={message.title}
+                                                                                alert-message={message.details}
+                                                                                alert-css="fr-m-2v">
+                                                            </c-dsfr-alert-cmp>
+                                                        </template>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="fr-fieldset__element">
+                                                <ul class="fr-btns-group">
+                                                    <li>
+                                                        <button class="fr-mt-2v fr-btn" type="submit" onclick={handleLogin}>
+                                                            {loginLabel}
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="fr-messages-group" id="login-messages" aria-live="assertive">
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <hr>
+                                <h2 class="fr-h2">{registerHeader}</h2>
+                                <ul class="fr-btns-group">
+                                    <li>
+                                        <c-dsfr-button-dsp  button-label={registerLabel}
+                                                            button-variant="secondary"
+                                                            button-target={registerTarget}
+                                                            is-debug={isDebug}>
+                                        </c-dsfr-button-dsp>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</template>

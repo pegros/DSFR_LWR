@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Connexion / Login</masterLabel>
+    <description>Page de connexion DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="mainTitle"
+                        label="Titre principal"
+                        type="String"
+                        default="Connexion au site"
+                        description="Titre principal du composant" />
+            
+            <property   name="loginHeader"
+                        label="Section connexion"
+                        type="String"
+                        default="Vous avez un compte"
+                        description="Titre de la section de connexion" />
+            <property   name="mainDescription"
+                        label="Description connexion"
+                        type="String"
+                        description="Texte explicatif de la section de connexion" />
+            <property   name="loginLabel"
+                        label="Bouton de connexion"
+                        type="String"
+                        default="Valider"
+                        description="Libellé du bouton de connexion" />
+            <property   name="loginTarget"
+                        label="URL après Login"
+                        type="String"
+                        description="Simple URL cible (typiquement {!Route.startURL})" />
+
+            <property   name="registerHeader"
+                        label="Section création de compte"
+                        type="String"
+                        default="Vous n’avez pas de compte ?"
+                        description="Titre de la section de création de compte" />
+            <property   name="registerLabel"
+                        label="Bouton création de compte"
+                        type="String"
+                        default="Créer un compte"
+                        description="Libellé du bouton de redirection vers la création de compte" />
+            <property   name="registerTarget"
+                        label="Page Création de compte"
+                        type="String"
+                        description="Salesforce page reference (JSON) de la page dédiée" />
+            
+            <property   name="lostPwdLabel"
+                        label="Lien mot de passe oublié"
+                        type="String"
+                        default="Mot de passe oublié ?"
+                        description="Libellé du lien pour renouveler son mot de passe" />
+            <property   name="lostPwdTarget"
+                        label="Page Mot de passe oublié"
+                        type="String"
+                        description="Salesforce page reference (JSON) de la page dédiée" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+         </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Enregistrement / Register</masterLabel>
+    <description>Page de création de compte utilisateur DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="mainTitle"
+                        label="Titre principal"
+                        type="String"
+                        description="Titre principal du composant" />
+            <property   name="mainDescription"
+                        label="Description principale"
+                        type="String"
+                        description="Description principale du composant" />
+
+            <property   name="formTitle"
+                        label="Titre du formulaire"
+                        type="String" 
+                        description="Descriptif du formulaire de création de compte" />
+            <property   name="formDescription"
+                        label="Description du formulaire"
+                        type="String" 
+                        description="Descriptif du formulaire" />
+            <property   name="formHelp"
+                        label="Aide du formulaire"
+                        type="String" 
+                        description="Message d'aide du formulaire" />
+
+            <property   name="rtName"
+                        label="Type de Compte"
+                        type="String" 
+                        description="Nom developpeur du type d'enregistrement de Compte Personnel à créer"/>
+            <property   name="formFields"
+                        label="Champs du formulaire"
+                        type="String" 
+                        description='Liste des champs de PersonAccount à afficher dans le formulaire (list JSON [{"name":"filedApiName","required":true/false (optional)},...]' />        
+
+            <property   name="cnilMention"
+                        label="Mention CNIL"
+                        type="String"
+                        description="Activation et contenu d'une case d'acceptation de clauses CNIL" />
+
+            <property   name="startUrl"
+                        label="URL cible"
+                        type="String"
+                        description="URL cible après enregistrement et authentification (startURL)" />
+                        
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+         </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
