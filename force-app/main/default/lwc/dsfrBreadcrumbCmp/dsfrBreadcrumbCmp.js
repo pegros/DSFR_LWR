@@ -16,10 +16,30 @@ export default class DsfrBreadcrumbCmp extends NavigationMixin(LightningElement)
     set breadcrumbConfig(value) {
         try {
             if (this.isDebug) console.log('set breadcrumbConfig: START with ',value);
-            this.breadcrumbItems = JSON.parse(value);
+            if (value.includes('ESCAPE(((')) {
+                if (this.isDebug) console.log('set breadcrumbConfig: reworking double quotes');
+                let newValue = value;
+
+                let escapeMatches = [...value.matchAll(/ESCAPE(\(\(\()(.*?)(\)\)\))/gms)];
+                if (this.isDebug) console.log('set breadcrumbConfig: Double Quotes escapeMatches found ',escapeMatches);
+    
+                escapeMatches.forEach(matchIter => {
+                    if (this.isDebug) console.log('mergeTokens: processing matchIter ',matchIter);
+                    let newMatchValue = (matchIter[2]).replace(/"/gms,'\\"');
+                    newMatchValue = (newMatchValue).replace(/[\r\n\t]/gms,' ');        
+                    if (this.isDebug) console.log('mergeTokens: newMatchValue ', newMatchValue);
+                    newValue = newValue.replace(matchIter[0],newMatchValue);
+                });
+                if (this.isDebug) console.log('mergeTokens: parsing escaped value', newValue);
+                this.breadcrumbItems = JSON.parse(newValue);
+            }
+            else {
+                if (this.isDebug) console.log('set breadcrumbConfig: directly parsing value');
+                this.breadcrumbItems = JSON.parse(value);
+            }
             if (this.isDebug) console.log('set breadcrumbConfig: END with ',this.breadcrumbItems);
         } catch (error) {
-            console.error('set breadcrumbConfig: END KO with error ',error);
+            console.error('set breadcrumbConfig: END KO with error ',JSON.stringify(error));
         }
     }
     @api breadcrumbCss;
