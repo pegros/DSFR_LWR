@@ -234,7 +234,13 @@ button.slds-combobox__input-value {
         font-size: 0.75rem !important;
     }
 
-    
+    /* FORM MAIN ERROR OVERRIDES */ 
+    .slds-notify.slds-notify_toast.slds-theme_error::before {
+        content: '⚠';
+        font-size: var(--dxp-s-body-font-size) !important;
+        margin-right: 0.5rem !important;
+    }
+
     
     /* START FLOW OVERRIDES */ 
     
