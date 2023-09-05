@@ -151,6 +151,9 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('connected: requiredFields ', this.requiredFields);
         if (this.isDebug) console.log('connected: isEditModeString? ', this.isEditModeString);
 
+        this.showModify = !(this.isReadOnly);
+        if (this.isDebug) console.log('connected: showModify init ', this.showModify);
+
         if (this.relatedRecordIdField) {
             if (this.isDebug) console.log('connected: fetching related record ID');
             this.formObjectApiName = this.relatedObjectApiName;
@@ -163,22 +166,26 @@ export default class DsfrRecordFormCmp extends LightningElement {
             this.formRecordId = this.recordId;
             this.isReady = true;
         }
+        if (this.isDebug) console.log('connected: isReadOnly? ', this.isReadOnly );
 
+        if (this.isDebug) console.log('connected: fieldList ', JSON.stringify(this.fieldList));
         if ((this.fieldConfig) && (!this.fieldList)) {
             if (this.isDebug) console.log('connected: initializing static list of fields');
             let fieldList = [];
             try {
                 let fieldConfigList = JSON.parse(this.fieldConfig || []);
-                if (this.isDebug) console.log('connected: fieldList parsed ', fieldConfigList);
+                if (this.isDebug) console.log('connected: fieldList parsed ', JSON.stringify(fieldConfigList));
                 let allDisabled = true;
                 fieldConfigList.forEach(item => {
                     if (!item.size) { item.size = this.defaultSize; }
                     if (!item.disabled) { allDisabled = false; }
                     fieldList.push(item);
                 });
-                if (this.isDebug) console.log('connected: fieldList init from config ', fieldList);
+                if (this.isDebug) console.log('connected: fieldList init from config ', JSON.stringify(fieldList));
+                if (this.isDebug) console.log('connected: allDisabled? ', allDisabled);
+                if (this.isDebug) console.log('connected: isReadOnly? ', this.isReadOnly );
 
-                this.showModify = !(this.readOnly || allDisabled);
+                this.showModify = !(this.isReadOnly || allDisabled);
                 if (this.isDebug) console.log('connected: showModify init ', this.showModify);
             }
             catch (error){
@@ -188,6 +195,11 @@ export default class DsfrRecordFormCmp extends LightningElement {
             }
             this.fieldList = fieldList;
         }
+        else {
+            if (this.isDebug) console.log('connected: fieldConfig ', this.fieldConfig);
+            if (this.isDebug) console.log('connected: static list of fields', JSON.stringify(this.fieldList));
+        }
+        if (this.isDebug) console.log('connected: showModify finalized ', this.showModify);
 
         if (this.isDebug) console.log('connected: formObjectApiName init ', this.formObjectApiName);
         if (this.isDebug) console.log('connected: formRecordId init ', this.formRecordId);
