@@ -54,30 +54,36 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
             if (data.fields[this.fieldName].value) {
                 if (this.isDebug) console.log('wiredRecord: processing field value ', data.fields[this.fieldName].value);
+
                 let fieldValues = data.fields[this.fieldName].value.split(';');
                 if (this.isDebug) console.log('wiredRecord: field values split ', fieldValues);
-                let fieldDisplayValues = data.fields[this.fieldName].displayValue.split(';');
-                if (this.isDebug) console.log('wiredRecord: field displayed values split ', fieldDisplayValues);
+
+                //let fieldDisplayValues = data.fields[this.fieldName].displayValue.split(';');
+                //if (this.isDebug) console.log('wiredRecord: field displayed values split ', fieldDisplayValues);
                 
                 let recordValues = [];
                 fieldValues.forEach( (item,index) => {
                     if (this.isDebug) console.log('wiredRecord: processing value # ', index);
+                    if (this.isDebug) console.log('wiredRecord: and content ', item);
                     let newItem = {
                         value : item,
-                        displayValue : fieldDisplayValues[index],
+                        //displayValue : fieldDisplayValues[index],
                         details: []
                     }
-                    let newItemValues = item.split(this.separator);
+                    /*let newItemValues = item.split(this.separator);
                     let newItemLabels = fieldDisplayValues[index].split(this.separator);
                     newItemValues.forEach( (itemUnit,indexUnit) => {
                         if (this.isDebug) console.log('wiredRecord: processing unit # ', indexUnit);
                         newItem.details.push({value: itemUnit, label: newItemLabels[indexUnit]});
                     });
-                    if (this.isDebug) console.log('wiredRecord: newItem init ', JSON.stringify(newItem));
+                    if (this.isDebug) console.log('wiredRecord: newItem init ', JSON.stringify(newItem));*/
                     recordValues.push(newItem);
                 });
                 this.recordValues = recordValues;
                 if (this.isDebug) console.log('wiredRecord: record Values init ', JSON.stringify(this.recordValues));
+
+                this.initLabels();
+                if (this.isDebug) console.log('wiredRecord: value labels reviewed');
 
                 this.filterValues();
                 if (this.isDebug) console.log('wiredRecord: picklist Values filtered');
@@ -113,9 +119,9 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                     if (this.isDebug) console.log('wiredPicklist: processing value ', JSON.stringify(item));
 
                     let itemValues = item.value.split(this.separator);
-                    if (this.isDebug) console.log('wiredPicklist: values split ', JSON.stringify(itemValues));
+                    //if (this.isDebug) console.log('wiredPicklist: values split ', JSON.stringify(itemValues));
                     let itemLabels = item.label.split(this.separator);
-                    if (this.isDebug) console.log('wiredPicklist: labels split ', JSON.stringify(itemLabels));
+                    //if (this.isDebug) console.log('wiredPicklist: labels split ', JSON.stringify(itemLabels));
 
                     itemValues.forEach((itemUnit, indexUnit) => {
                         if (this.isDebug) console.log('wiredPicklist: processing value ', itemUnit);
@@ -123,10 +129,10 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                             if (this.isDebug) console.log('wiredPicklist: registering value ', itemUnit);
                             fieldValues[indexUnit].values.set(itemUnit, {label: itemLabels[indexUnit], value: itemUnit, key: itemUnit + '-' + indexUnit});
                         }
-                        else {
+                        /*else {
                             if (this.isDebug) console.log('wiredPicklist: value already registered ', itemUnit);
                             if (this.isDebug) console.log('wiredPicklist: in ', JSON.stringify(fieldValues[indexUnit]));
-                        }
+                        }*/
                     });
                 });
                 fieldValues.forEach( item => {
@@ -135,6 +141,9 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                 this.fieldValues = fieldValues;
                 if (this.isDebug) console.log('wiredPicklist: fieldValues finalized ', JSON.stringify(this.fieldValues));
 
+                this.initLabels();
+                if (this.isDebug) console.log('wiredPicklist: value labels reviewed');
+                
                 this.filterValues();
                 if (this.isDebug) console.log('wiredPicklist: picklist Values filtered');
             }
@@ -236,6 +245,7 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
         if (this.isDebug) console.log('handleAdd: newValue init', JSON.stringify(newValue));  
 
         if (this.isDebug) console.log('handleAdd: current recordValues ', JSON.stringify(this.recordValues));  
+        if (!this.recordValues) this.recordValues = [];
         this.recordValues.push(newValue);
         if (this.isDebug) console.log('handleAdd: recordValues updated ', JSON.stringify(this.recordValues));  
         if (this.isDebug) console.log('handleAdd: recordValues updated ', JSON.stringify(this.recordValues.slice()));  
@@ -245,9 +255,6 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
         addButton.disabled = true;
 
         this.updateRecord();
-
-        //value : ,
-        //displayValue :,
             
         if (this.isDebug) console.log('handleAdd: END for Combined Picklist');
     }
@@ -303,6 +310,42 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
             if (this.isDebug) console.log('filterValues: ignoring');
         }
         if (this.isDebug) console.log('filterValues: END for Combined Picklist');
+    }
+
+    initLabels = () => {
+        if (this.isDebug) console.log('initLabels: START for Combined Picklist');
+
+        if ((this.recordValues) && (this.fieldValues)) {
+            if (this.isDebug) console.log('initLabels: processing recordValues ', JSON.stringify(this.recordValues));
+            if (this.isDebug) console.log('initLabels: vs fieldValues ', JSON.stringify(this.fieldValues));
+
+            this.recordValues.forEach(item => {
+                if (this.isDebug) console.log('initLabels: processing record value ', item.value);
+                if (this.isDebug) console.log('initLabels: item ', JSON.stringify(item));
+
+                let itemValues = item.value.split(this.separator);
+                if (this.isDebug) console.log('initLabels: itemValues split ', JSON.stringify(itemValues));
+
+                let itemLabels = [];
+                itemValues.forEach( (itemV,indexV) => {
+                    if (this.isDebug) console.log('initLabels: processing value index ', indexV);
+                    if (this.isDebug) console.log('initLabels: and content ', itemV);
+
+                    let itemL = ((this.fieldValues[indexV]).values).find(iter => iter.value === itemV);
+                    if (this.isDebug) console.log('initLabels: label found ', JSON.stringify(itemL));
+
+                    itemLabels.push(itemL.label);
+                    item.details.push({value: itemV, label: itemL.label});
+                });
+                item.displayValue = itemLabels.join(this.separator);
+                if (this.isDebug) console.log('initLabels: item finalized ', JSON.stringify(item));
+            });
+            if (this.isDebug) console.log('initLabels: recordValues updated ', JSON.stringify(this.recordValues));
+        }
+        else {
+            if (this.isDebug) console.log('initLabels: ignoring');
+        }
+        if (this.isDebug) console.log('initLabels: END for Combined Picklist');
     }
 
     updateRecord = () => {
