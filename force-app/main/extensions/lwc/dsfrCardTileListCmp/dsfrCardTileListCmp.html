@@ -11,12 +11,27 @@
                         class="listLoader">
     </c-sfpeg-list-cmp>
 
-
-    <!--
-    fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2
-    fr-grid-row-top
-    -->
+    <!-- ACTUAL CONTENT DISPLAY -->
     <div class={wrappingCss} lwc:if={isReady}>
+
+        <!-- BUTTON GROUP Display -->
+        <template lwc:if={isButton}>
+            <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-sm">
+                <template for:each={recordList} for:item="iter">
+                    <li key={iter.Id}  >
+                        <c-dsfr-button-dsp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                            button-label={iter.label}   button-title={iter.title}
+                                            button-size={iter.size}     button-variant={iter.variant}
+                                            button-target={iter.buttons} button-inactive={iter.inactive}
+                                            button-align="left"         is-debug={isDebug}>
+                        </c-dsfr-button-dsp>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <template lwc:else>
+        <!-- OTHER DISPLAYS -->
+
         <!-- HEADER with Sorting -->
         <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
             <lightning-layout-item flexibility="auto" >
@@ -26,34 +41,23 @@
                 <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
                     <nav role="sort" class="fr-nav">
                         <div class="fr-nav__item sortMenu">
-                        <!--
-                        <ul class="fr_nav__list">
-                            <li class="fr-nav__item sortMenu">
-                        -->
-                                <!--
-                                <button class="fr-btn fr-btn-tertiary-no-outline fr-btn-icon-right fr-icon-arrow-down-s-fill" title="Triez vos enregistrements" onclick={toggleSort}>
-                                -->
-                                <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
-                                    <span class={currentSort.class}>{currentSort.label}</span>
-                                </button>
-                                <div class="fr-collapse fr-menu" data-menu="sort">
-                                    <ul class="fr-menu__list">
-                                        <template for:each={configDetails.display.sort} for:item="iterSort">
-                                            <li key={iterSort.name} >
-                                                <template lwc:if={iterSort.selected}>
-                                                    <a class="fr-nav__link" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
-                                                </template>
-                                                <template lwc:else>
-                                                    <a class="fr-nav__link" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
-                                                </template>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </div>
-                        <!--
-                            </li>
-                        </ul>
-                        -->
+                            <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
+                                <span class={currentSort.class}>{currentSort.label}</span>
+                            </button>
+                            <div class="fr-collapse fr-menu" data-menu="sort">
+                                <ul class="fr-menu__list">
+                                    <template for:each={configDetails.display.sort} for:item="iterSort">
+                                        <li key={iterSort.name} >
+                                            <template lwc:if={iterSort.selected}>
+                                                <a class="fr-nav__link" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                            </template>
+                                            <template lwc:else>
+                                                <a class="fr-nav__link" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                            </template>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
                         </div>
                     </nav>
                 </lightning-layout-item>
@@ -105,15 +109,12 @@
                         </div>
                     </template>
                 </template>
+                
                 <template lwc:else>
                     <p class="fr-icon-alert-fill text-default-error">{typeError}: {displayType}</p>
                 </template>
-                <!--
-                <div class="fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2"><c-dsfr-tile-cmp tile-title="Tile Title" tile-image="environment/environment"></c-dsfr-tile-cmp></div>
-          <div class="fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2"><c-dsfr-card-cmp card-title="Card Title" card-image="environment/environment"></c-dsfr-card-cmp></div>
-          <div class="fr-col-12 fr-col-sm-8 fr-col-md-6 fr-col-lg-4 fr-col-xl-2"><c-dsfr-container-dsp title="Title" title-class="fr-h2" message="Message" message-class="fr-text"></c-dsfr-container-dsp></div>
-                -->
             </div>
         </div>
+        </template>
     </div>
 </template>

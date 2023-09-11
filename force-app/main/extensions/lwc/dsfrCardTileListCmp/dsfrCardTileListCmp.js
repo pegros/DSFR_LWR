@@ -108,6 +108,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
     get isContainer() {
         return this.configDetails?.display?.type === 'Container';
     }
+    get isButton() {
+        return this.configDetails?.display?.type === 'Button';
+    }
     get displayType() {
         return this.configDetails?.display?.type || 'non défini';
     }
@@ -218,7 +221,6 @@ export default class DsfrCardTileListCmp extends LightningElement {
 
     handleRecordLoad(event) {
         if (this.isDebug) console.log('handleRecordLoad: START for card/tile list',event);
-
 
         if (!this.configDetails) {
             let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
@@ -497,90 +499,5 @@ export default class DsfrCardTileListCmp extends LightningElement {
         if (this.isDebug) console.log('extractTokens: END / all tokens extracted ', targetTokens);
         return targetTokens;
     }
-    /*
-    buildWhere = function(condition) {
-        if (this.isDebug) console.log("buildWhere: START with ", condition);
-
-        if (condition.EQ) {
-            if (this.isDebug) console.log("buildWhere: processing EQ ");
-            if (condition.EQ.value) {
-                if (this.isDebug) console.log("buildWhere: END / building condition ");
-                return '(' + condition.EQ.field + (condition.EQ.not ? " != '": " = '") + condition.EQ.value + "')";
-            }
-            else {
-                if (this.isDebug) console.log("buildWhere: END / ignoring condition ");
-                return null;
-            }
-        }
-        else if (condition.IN) {
-            if (this.isDebug) console.log("buildWhere: processing IN ");
-            if (condition.IN.value) {
-                if (this.isDebug) console.log("buildWhere: END / building condition ");
-                let values = condition.IN.value.sfpegJsonUtlt(';');
-                return '(' + condition.IN.field + (condition.IN.not ? " NOT IN ('": " IN ('") + values.join("','") + "'))";
-            }
-            else {
-                if (this.isDebug) console.log("buildWhere: END / ignoring condition ");
-                return null;
-            }
-        }
-        else if (condition.INCL) {
-            if (this.isDebug) console.log("buildWhere: processing INCL ");
-            if (condition.INCL.value) {
-                if (this.isDebug) console.log("buildWhere: END / building condition ");
-                let values = condition.INCL.value.split(';');
-                return '(' + condition.INCL.field + (condition.INCL.not ? " EXCLUDES ('": " INCLUDES ('") + values.join("','") + "'))";
-            }
-            else {
-                if (this.isDebug) console.log("buildWhere: END / ignoring condition ");
-                return null;
-            }
-        }
-        else if (condition.OR) {
-            if (this.isDebug) console.log("buildWhere: processing OR ");
-            let unitConditions = [];
-            condition.OR.forEach(item =>{
-                if (this.isDebug) console.log("buildWhere: processing sub-condition ",item);
-                let itemCondition = this.buildWhere(item);
-                if (itemCondition) {
-                    if (this.isDebug) console.log("buildWhere: registering sub-condition ",itemCondition);
-                    unitConditions.push(itemCondition);
-                }
-                else {
-                    if (this.isDebug) console.log("buildWhere: sub-condition ignored");
-                }
-            });
-            if (unitConditions.length > 0) {
-                if (this.isDebug) console.log("buildWhere: END / grouping OR sub-conditions");
-                return "(" + unitConditions.join(') OR (') + ")";
-            }
-            else {
-                if (this.isDebug) console.log("buildWhere: END / ignoring OR condition (no sub-conditions)");
-            }
-        }
-        else if (condition.AND) {
-            if (this.isDebug) console.log("buildWhere: processing AND ");
-            let unitConditions = [];
-            condition.AND.forEach(item =>{
-                if (this.isDebug) console.log("buildWhere: processing sub-condition ",item);
-                let itemCondition = this.buildWhere(item);
-                if (itemCondition) {
-                    if (this.isDebug) console.log("buildWhere: registering sub-condition ",itemCondition);
-                    unitConditions.push(itemCondition);
-                }
-                else {
-                    if (this.isDebug) console.log("buildWhere: sub-condition ignored");
-                }
-            });
-            if (unitConditions.length > 0) {
-                if (this.isDebug) console.log("buildWhere: END / grouping AND sub-conditions");
-                return "(" + unitConditions.join(') AND (') + ")";
-            }
-            else {
-                if (this.isDebug) console.log("buildWhere: END / ignoring OR condition (no sub-conditions)");
-            }
-        }
-    }
-    */
 
 }
