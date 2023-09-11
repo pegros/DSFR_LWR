@@ -1,3 +1,15 @@
+/* Scrollbar width issue on desktops (for Windows) */ 
+html {
+    width: 100vw;
+    overflow-x:hidden;
+}
+    
+/* STANDARD required star position */
+abbr.slds-required {
+    position: relative !important;
+    float: right;
+}
+
 /* STANDARD lightning-input-field OVERRIDES */
 
 /* STANDARD input FIELD matched to fr-input */
