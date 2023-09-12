@@ -64,6 +64,8 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
 
         this.menuConfig = [{label:this.topMenu,showHome:false},{label:this.bottomMenu,showHome:false}];
         if (this.isDebug) console.log('connected: menuConfig init ', this.menuConfig);
+        if (this.isDebug) console.log('connected: topMenuItems init ', this.topMenuItems);
+        if (this.isDebug) console.log('connected: bottomMenuItems init ', this.bottomMenuItems);
 
         if (this.isDebug) console.log('connected: END for header');
     }
