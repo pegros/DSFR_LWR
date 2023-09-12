@@ -228,12 +228,13 @@ export default class DsfrCardTileListCmp extends LightningElement {
             this.configDetails =  listCmp.configuration;
 
             if (this.configDetails?.display?.target) {
-                if (this.isDebug) console.log('handleRecordLoad: extracting tokens from target ', this.configDetails.display.target);
-                this.targetTokens = this.extractTokens(this.configDetails.display.target);
+                this.configDetails.display.targetJson = (typeof this.configDetails.display.target == 'object' ? JSON.stringify(this.configDetails.display.target) : this.configDetails.display.target);
+                if (this.isDebug) console.log('handleRecordLoad: extracting tokens from target ', this.configDetails.display.targetJson);
+                this.targetTokens = this.extractTokens(this.configDetails.display.targetJson);
                 if (this.isDebug) console.log('handleRecordLoad: all target tokens extracted');
             }
             if (this.configDetails?.display?.buttons) {
-                this.configDetails.display.buttonsJson = JSON.stringify(this.configDetails.display.buttons);
+                this.configDetails.display.buttonsJson = (typeof this.configDetails.display.buttons == 'object' ? JSON.stringify(this.configDetails.display.buttons) : this.configDetails.display.buttons);
                 if (this.isDebug) console.log('handleRecordLoad: extracting tokens from buttons ', this.configDetails.display.buttonsJson);
                 this.buttonsTokens = this.extractTokens(this.configDetails.display.buttonsJson);
                 if (this.isDebug) console.log('handleRecordLoad: all buttons tokens extracted');
@@ -323,7 +324,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
                 if (this.targetTokens) {
                     if (this.isDebug) console.log('handleRecordLoad: merging row target');
 
-                    let mergedTarget = '' + this.configDetails.display.target;
+                    let mergedTarget = '' + this.configDetails.display.targetJson;
                     this.targetTokens.forEach(itemToken => {
                         if (this.isDebug) console.log('handleRecordLoad: processing token ',JSON.stringify(itemToken));
                         let tokenRegex = new RegExp(itemToken.token, 'g');
