@@ -41,15 +41,20 @@ Toute la configuration du composant s'effectue directement dans **Site Builder**
 Le paramètre `Champs du formulaire` permet de configurer la liste des champs à inclure dans le formulaire ainsi que la façon dont ils sont affichés. Ce paramètre 
 * `name` (obligatoire) donne l'API Name du champ
 * `disabled` (optionel) permet basculer le champ en lecture seule (true / false)
+* `hidden` (optionel) permet de cacher le champ (true / false) pour par ex. forcer une nouvelle valeur sans l'afficher à l'écran.
 * `required` (optionnel) permet de rendre le champ obligatoire (true / false)
 * `value` (optionel) permet de renseigner une valeur par défaut pour le champ
 
-Par exemple, la configuration suivante affiche deux champs d'un objet custom, le premier (`Etat__c`) en lecture seule avec une nouvelle valeur par défaut et le second (`Commentaire__c`) modifiable et obligatoire.
+Par exemple, la configuration suivante affiche trois champs d'un objet custom, le premier (`Name`) en lecture seule, le second (`Etat__c`) caché avec une nouvelle valeur par défaut et le troisième (`Commentaire__c`) modifiable et obligatoire.
 ```
 [
     {
+        "name":"Name",
+        "disabled": true
+    },
+    {
         "name":"Etat__c",
-        "disabled": true,
+        "hidden": true,
         "value":"EC"
     },
     {

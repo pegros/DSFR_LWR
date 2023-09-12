@@ -58,6 +58,12 @@
                                                                         variant="label-stacked" required>
                                                 </lightning-input-field>
                                             </template>
+                                            <template lwc:elseif={iter.hidden}>
+                                                <lightning-input-field  key={iter.name}         class="slds-hide"
+                                                                        field-name={iter.name}  value={iter.value}
+                                                                        variant="label-hidden">
+                                                </lightning-input-field>
+                                            </template>
                                              <template lwc:else>
                                                 <lightning-input-field  key={iter.name}         class="dsfrInput"
                                                                         field-name={iter.name}  value={iter.value}
