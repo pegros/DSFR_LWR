@@ -11,7 +11,16 @@ export default class DsfrStepperCmp extends LightningElement {
     //-----------------------------------------------------
     @api steps          = [];       // enables to provide a step list directly (for Flows)
     @api stepsConfig    = null;     // enables to provide a JSON string instead of a step list as input (for Sites)
-    @api currentStep    = null;
+    //@api currentStep    = null;
+    _currentStep = null;
+    @api 
+    get currentStep() {
+        return this._currentStep;
+    }
+    set currentStep(value) {
+        this._currentStep = value;
+    }
+
     @api stepsCss;
 
     @api isDebug = false;       // Flag to activate debug information
