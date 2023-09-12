@@ -36,10 +36,14 @@
                         default=""
                         description="Master Label du menu de navigation du site fournissant le menu supérieur" />
             <property   name="mainMenu"
-                        label="Menu principal"
+                        label="Menu principal (simple)"
                         type="String"
                         default="Default Navigation"
                         description="Master Label du menu de navigation du site fournissant les onglets de navigation" />
+            <property   name="complexMenu"
+                        label="Menu principal (complexe)"
+                        type="String"
+                        description="DeveloperName du custom metadata sfpegAction fournissant la configuration des onglets/menus de navigation" />
             <property   name="showSearch"
                         label="Inclure Recherche ?"
                         type="Boolean"
@@ -50,6 +54,14 @@
                         type="String"
                         description="Nom de la page de recherche (si différente de la page de recherche standard)" />
 
+            <property   name="userName"
+                        label="Nom de l'utilisateur"
+                        type="String"
+                        description="Nom optionnel de l'utilisateur à afficher dans l'entête." />
+            <property   name="userTarget"
+                        label="Lien utilisateur"
+                        type="String"
+                        description="Reference (optionnelle) de page Salesforce pour activer un lien sur le nom de l'utilisateur" />
             <property   name="hideLogin"
                         label="Cacher Se Connecter?"
                         type="Boolean"

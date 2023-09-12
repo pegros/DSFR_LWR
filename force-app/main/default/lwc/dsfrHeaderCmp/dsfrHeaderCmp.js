@@ -26,10 +26,14 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
     @api topMenu;
     @api mainMenu;
+    @api complexMenu;
 
     @api showSearch = false;
     @api searchPage;
 
+    @api userName;
+    // {"type":"comm__namedPage","attributes":{"name":"TEST__c"}}
+    @api userTarget;
     @api hideLogin = false;
 
     @api isDebug = false;
@@ -45,7 +49,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------
     menuConfig;
     topMenuItems;
-    mainMenuItems;
+    complexMenuItems;
 
     //-----------------------------------
     // Custom Labels
@@ -63,6 +67,9 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     get showLogin() {
         return !this.hideLogin;
     }
+    get showTopMenu() {
+        return (this.topMenuItems || this.userName || !this.hideLogin);
+    }
     /*get loginUrl() {
         return basePathName + '/login';
     }*/
@@ -73,7 +80,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------
     // Context Handling (to set selected tab)
     //-----------------------------------
-    @wire(CurrentPageReference) 
+    // Not working properly --> removed for now
+    /*@wire(CurrentPageReference) 
     wiredPageRef(data) {
         if (this.isDebug) console.log('wiredPageRef: START for header');
         if (data) {
@@ -148,7 +156,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         else {
             if (this.isDebug) console.log('wiredPageRef: END no data ');
         }
-    }
+    }*/
 
 
     //----------------------------------------------------------------
@@ -158,9 +166,16 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('connected: START for header');
         if (this.isDebug) console.log('connected: topMenu ',this.topMenu);
         if (this.isDebug) console.log('connected: mainMenu', this.mainMenu);
+        if (this.isDebug) console.log('connected: complexMenu', this.complexMenu);
+
+        if (this.isDebug) console.log('connected: userName', this.userName);
+        if (this.isDebug) console.log('connected: userTarget', this.userTarget);
+        if (this.isDebug) console.log('connected: hideLogin', this.hideLogin);
 
         this.menuConfig = [{label:this.topMenu,showHome:false},{label:this.mainMenu,showHome:true}];
-        if (this.isDebug) console.log('connected: menuConfig init ', this.menuConfig);
+        if (this.isDebug) console.log('connected: menuConfig init ', JSON.stringify(this.menuConfig));
+        if (this.isDebug) console.log('connected: topMenuItems init ', this.topMenuItems);
+        if (this.isDebug) console.log('connected: bottomMenuItems init ', this.bottomMenuItems);
 
         if (this.isDebug) console.log('connected: END for header');
     }
@@ -196,7 +211,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
                 }
                 topMenuItems.push(newItem);
             });
-            this.topMenuItems = topMenuItems;
+            this.topMenuItems = (topMenuItems.length > 0 ? topMenuItems : null);
             if (this.isDebug) console.log('wiredHeaderMenus: topMenuItems updated',this.topMenuItems);
 
             let mainMenuData = data[this.mainMenu] || [];
@@ -211,14 +226,14 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
                 }
                 mainMenuItems.push(newItem);
             });
-            this.mainMenuItems = mainMenuItems;
+            this.mainMenuItems = (mainMenuItems.length > 0 ? mainMenuItems : null);
             if (this.isDebug) console.log('wiredHeaderMenus: mainMenuItems updated',this.mainMenuItems);
             if (this.isDebug) console.log('wiredHeaderMenus: END / menus initialized');
         }
         else if (error) {
             console.warn('wiredHeaderMenus: END KO for menus fetch / error  received ', JSON.stringify(error));
-            this.topMenuItems = [];
-            this.mainMenuItems = [];
+            this.topMenuItems = null;
+            this.mainMenuItems = null;
         }
         else {
             if (this.isDebug) console.log('wiredHeaderMenus: END / no response');
@@ -283,6 +298,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('rendered: top Menu ',this.topMenu);
         if (this.isDebug) console.log('rendered: main Menu', this.mainMenu);
+        if (this.isDebug) console.log('rendered: complexMenu', this.complexMenu);
 
         if (this.isDebug) console.log('rendered: title ',document?.title);
         if (this.isDebug) console.log('rendered: head title ',document?.head?.title);
@@ -337,7 +353,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     //----------------------------------------------------------------
     // Navigation links
     handleLogoClick(event) {
-        if (this.isDebug) console.log('handleLogoClick: START for logo link ');
+        if (this.isDebug) console.log('handleLogoClick: START for Header');
         event.stopPropagation();
         event.preventDefault();
         let newPageRef = {
@@ -349,30 +365,30 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleLogoClick: newPageRef prepared ',JSON.stringify(newPageRef));
         
         this[NavigationMixin.Navigate](newPageRef);
-        if (this.isDebug) console.log('handleLogoClick: END for logo link');
+        if (this.isDebug) console.log('handleLogoClick: END for Header');
     }
     handleTopClick(event){
-        if (this.isDebug) console.log('handleTopClick: START for header menu ',this.topMenu);
+        if (this.isDebug) console.log('handleTopClick: START for Header top menu ',this.topMenu);
         if (this.isDebug) console.log('handleTopClick: event received ',event);
         event.stopPropagation();
         event.preventDefault();
         if (this.isDebug) console.log('handleTopClick: topMenuItems ',JSON.stringify(this.topMenuItems));
         this.navigate(event,this.topMenuItems);
-        if (this.isDebug) console.log('handleTopClick: END for header menu',this.topMenu);
+        if (this.isDebug) console.log('handleTopClick: END for Header top menu',this.topMenu);
     }
     handleMainClick(event){
-        if (this.isDebug) console.log('handleMainClick: START for header menu ',this.mainMenu);
+        if (this.isDebug) console.log('handleMainClick: START for Header main menu ',this.mainMenu);
         if (this.isDebug) console.log('handleMainClick: event received ',event);
         event.stopPropagation();
         event.preventDefault();
         if (this.isDebug) console.log('handleMainClick: mainMenuItems ', JSON.stringify(this.mainMenuItems));
         this.navigate(event,this.mainMenuItems);
-        if (this.isDebug) console.log('handleMainClick: END for header menu',this.topMenu);
+        if (this.isDebug) console.log('handleMainClick: END for Header main menu',this.topMenu);
     }
 
     // Login & logout buttons
     handleLogin(event) {
-        if (this.isDebug) console.log('handleLogin: START');
+        if (this.isDebug) console.log('handleLogin: START for Header');
         event.stopPropagation();
         event.preventDefault();
 
@@ -389,13 +405,13 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('handleLogin: loginPage init ', JSON.stringify(loginPage));
 
             this[NavigationMixin.Navigate](loginPage);                                                                      
-            if (this.isDebug) console.log('handleLogin: END / navigation triggered');
+            if (this.isDebug) console.log('handleLogin: END for Header / navigation triggered');
         }).catch((error) => {
-            console.warn('handleLogin: END KO/ current url generation failed ',JSON.stringify(error));
+            console.warn('handleLogin: END KO for Header / current url generation failed ',JSON.stringify(error));
         })
     }
     handleLogout(event) {
-        if (this.isDebug) console.log('handleLogout: START');
+        if (this.isDebug) console.log('handleLogout: START for Header');
         event.stopPropagation();
         event.preventDefault();
 
@@ -425,20 +441,34 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleLogout: modal closed');
 
         window.open(logoutUrl, '_self');
-        if (this.isDebug) console.log('handleLogout: END / navigation triggered');
+        if (this.isDebug) console.log('handleLogout: END for Header / navigation triggered');
+    }
+    handleUserOpen(event) {
+        if (this.isDebug) console.log('handleUserOpen: START for Header user target ',this.userTarget);
+        event.stopPropagation();
+        event.preventDefault();
+
+        try {
+            let targetPage = JSON.parse(this.userTarget);
+            if (this.isDebug) console.log('handleLogoClick: END OK / opening target page',targetPage);
+            this[NavigationMixin.Navigate](targetPage);
+        }
+        catch (error) {
+            console.log('handleLogoClick: END KO / target page parsing failed ', JSON.stringify(error));
+        }
     }
 
     // Search button action
     handleSearchKey(event) {
-        if (this.isDebug) console.log('handleSearchKey: START',event);
+        if (this.isDebug) console.log('handleSearchKey: START for Header',event);
         if (event.key === 'Enter' || event.keyCode === 13) {
             if (this.isDebug) console.log('handleSearchKey: triggering search');
             this.handleSearch(event);
         }
-        if (this.isDebug) console.log('handleSearchKey: END');
+        if (this.isDebug) console.log('handleSearchKey: END for Header');
     }
     handleSearch(event) {
-        if (this.isDebug) console.log('handleSearch: START');
+        if (this.isDebug) console.log('handleSearch: START for Header');
         event.stopPropagation();
         event.preventDefault();
 
@@ -458,12 +488,12 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleSearch: searchPage init ', JSON.stringify(searchPage));
 
         this[NavigationMixin.Navigate](searchPage);
-        if (this.isDebug) console.log('handleSearch: END / navigation triggered');
+        if (this.isDebug) console.log('handleSearch: END for Header / navigation triggered');
     }
 
     // Expand/collapse of modals when in mobile/narrow mode
     toggleModal(event) {
-        if (this.isDebug) console.log('toggleModal: START');
+        if (this.isDebug) console.log('toggleModal: START for Header');
         if (this.isDebug) console.log('toggleModal: event',event);
 
         const modalName = event.target.dataset.modal;
@@ -483,7 +513,101 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
                 modalDiv.classList.add('fr-modal--opened');
             }
         }
-        if (this.isDebug) console.log('toggleModal: END');
+        if (this.isDebug) console.log('toggleModal: END for Header');
+    }
+
+    // Custom Action Menu Handling
+    handleActionsReady(event) {
+        if (this.isDebug) console.log('handleActionsReady: START for Header');
+        if (this.isDebug) console.log('handleActionsReady: event received ',event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        this.complexMenuItems = this.template.querySelector('c-sfpeg-action-bar-cmp').actionConfig;
+        if (this.isDebug) console.log('handleActionsReady: actions fetched ',JSON.stringify(this.complexMenuItems));
+
+        if (this.isDebug) console.log('handleActionsReady: END for Header');
+    }
+    handleActionTrigger(event) {
+        if (this.isDebug) console.log('handleActionTrigger: START for Header');
+        if (this.isDebug) console.log('handleActionTrigger: event received ',event);
+        event.stopPropagation();
+        event.preventDefault();
+        if (this.isDebug) console.log('handleActionTrigger: event details ',JSON.stringify(event.detail));
+
+        this.collapseMenu();
+
+        const actionName = event.target.dataset.value;
+        if (this.isDebug) console.log('handleActionTrigger: actionName identified ',actionName);
+
+        try {
+            if (this.isDebug) console.log('handleActionTrigger: triggering action');
+            this.template.querySelector('c-sfpeg-action-bar-cmp').executeBarAction(actionName,null);
+            if (this.isDebug) console.log('handleActionTrigger: END OK / action triggered');
+        }
+        catch (error) {
+            console.warn('handleActionTrigger: action execution failed!', JSON.stringify(error));
+            
+            let alertConfig = {alerts:[],size:'small'};
+            if (error.body?.output?.errors) {
+                alertConfig.header = error.body?.message;
+                error.body.output.errors.forEach(item => {
+                    alertConfig.alerts.push({type:'error', message: item.message});
+                });
+            }
+            else {
+                alertConfig.alerts.push({type:'error', message: (error.body?.message || error.statusText)});
+            }
+            console.warn('handleActionTrigger: alertConfig init ', JSON.stringify(alertConfig));
+
+            let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+            console.warn('handleActionTrigger: opening popupUtil ', popupUtil);
+            popupUtil.showAlert(alertConfig).then(() => {
+                if (this.isDebug) console.log('handleActionTrigger: END KO / popup closed');
+            });
+        }
+    }
+    handleActionDone(event) {
+        if (this.isDebug) console.log('handleActionDone: START');
+        if (this.isDebug) console.log('handleActionDone: event received ',event);
+        event.stopPropagation();
+        event.preventDefault();
+        
+        if (this.isDebug) console.log('handleActionDone: END for Header');
+    }
+
+    // Expand/collapse of custom action menu
+    toggleMenu(event) {
+        if (this.isDebug) console.log('toggleMenu: START for Header');
+        if (this.isDebug) console.log('toggleMenu: event',event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        let currentTarget = event.target?.value;
+        if (this.isDebug) console.log('toggleMenu: current target fetched ', currentTarget);
+        let currentTargetId = event.target?.ariaControls;
+        if (this.isDebug) console.log('toggleMenu: current target ID fetched ', currentTargetId);
+
+        let currentStatus =  event.target?.ariaExpanded;
+        if (this.isDebug) console.log('toggleMenu: current status fetched ', currentStatus);
+
+        let currentMenu = this.template.querySelector("div.fr-collapse[id='" + currentTargetId + "']");
+        if (this.isDebug) console.log('toggleMenu: current menu fetched ', currentMenu);
+        
+        if (currentStatus == "true") {
+            if (this.isDebug) console.log('toggleMenu: collapsing menu');
+            currentMenu.classList?.remove("fr-collapse--expanded");
+            event.target.ariaExpanded = "false";
+        }
+        else {
+            if (this.isDebug) console.log('toggleMenu: collapsing previous menu (if any)');
+            this.collapseMenu();
+            if (this.isDebug) console.log('toggleMenu: expanding new menu');
+            currentMenu.classList.add("fr-collapse--expanded");
+            event.target.ariaExpanded = "true";
+        }
+
+        if (this.isDebug) console.log('toggleMenu: END for Header');
     }
 
     //----------------------------------------------------------------
@@ -527,6 +651,28 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         }
 
         if (this.isDebug) console.log('collapseModals: END');
+    }
+
+    collapseMenu = function() {
+        if (this.isDebug) console.log('collapseMenu: START');
+
+        let openMenu = this.template.querySelector('div.fr-collapse--expanded');
+        if (this.isDebug) console.log('collapseMenu: openMenu fetched ',openMenu);
+
+        let openButton = this.template.querySelector('.fr-nav__btn[aria-expanded="true"]');
+        if (this.isDebug) console.log('collapseMenu: openButton fetched ',openButton);
+
+        if (openMenu) {
+            if (this.isDebug) console.log('collapseMenu: closing menu');
+            openMenu.classList.remove('fr-collapse--expanded');
+        }
+
+        if (openButton) {
+            if (this.isDebug) console.log('collapseMenu: deselecting menu button');
+            openButton.ariaExpanded = "false";
+        }
+
+        if (this.isDebug) console.log('collapseMenu: END');
     }
 
     htmlDecode = function(input) {
