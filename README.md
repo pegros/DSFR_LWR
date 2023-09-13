@@ -1,45 +1,52 @@
-# **DSFR** Components for LWR Experience Sites
+# Composants **DSFR** pour Experience Sites LWR
 
 ## Introduction
 
-This package contains a set of configurable  LWC component implementing various
-HTML components defined in the French Government Design System
-([Système de Design de l'État](https://www.systeme-de-design.gouv.fr/))
-for Salesforce Experience Sites.
+Ce package contient un ensemble de composants LWC à destination des Experience Sites Salesforce implémentant le template **LWR Build Your Own**.
 
-⚠️ These components aim at reproducing as well as possible the expected DSFR Page 
-Layout and Styling within **LWR Build Your Own** template based Experience Sites.   
+Il s'agit de l'implémentation de différents composants HTML définis dans le **[Système de Design de l'État Français](https://www.systeme-de-design.gouv.fr/)**, prenant en compte la structuration et les contraintes de ce template **LWR Build Your Own** des Experience Sites Salesforce.
 
-⚠️ This is a first draft version which will progressively enhanced and extended
-for a first live implementation.
+Ces composants sont construits/maintenus en tant qu'exemples/contributions de [Pierre-Emmanuel Gros](https://github.com/pegros) dans le cadre de missions de conseil pour Salesforce.
+* Il s'agit d'une première version initialisée pour un premier projet en production, les composants étant progressivement enrichis et améliorés au gré des nouveaux besoins rencontrés.
+* Merci de le contacter si vous souhaitez participer à cette initiative (par ex. via des pull requests)
+* Vous pouvez également utiliser les **[issues](https://github.com/pegros/DSFR_LWR/issues)** pour poser des questions, remonter des problèmes ou demander des améliorations.
 
-These components are built/maintained as contributions/examples for ongoing Advisory assignments by 
-[Pierre-Emmanuel Gros](https://github.com/pegros). Please reach out if you want to contribute to
-this initiative.
+⚠️ Ce package est actuellement basé sur la version **v1.10.0** du **DSFR** (see [here](https://www.systeme-de-design.gouv.fr/comment-utiliser-le-dsfr/developpeurs/prise-en-main-du-dsfr) to download a newer version). Les nouvelles versions du *DSFR** sont intégrées en _best effort_. 
 
-⚠️ This package is based on the v1.7.2 release of the DSFR (see [here](https://www.systeme-de-design.gouv.fr/comment-utiliser-le-dsfr/developpeurs/prise-en-main-du-dsfr) to download a newer version).
+ℹ️ Un autre package à destination des sites **LWR Build Your Own**  plus générique est également disponible pour enrichir les capacités de configuration des pages : cf. **[PEG_LWR](https://github.com/pegros/PEG_LWR)**
 
-## Package Content
+## Contenu du Package
 
-It provides different sets of LWC Components:
-* Pure layout components (accordion and tabs of sections)
-* Complex Components (header and footer implementing responsibe)
-* Aggregated Components (card, tiles, alerts...)
-* Individual Display Components (tags, buttons...)
+Ce package propose différents types de composants LWC:
+* Composants unitaires de présentation (tags, boutons...)
+* Components de présentation (entête, pied de page)
+* Composants de structure (accordéons, onglets de sections)
+* Composants de sécurité (connexion, changement de mot de passe...)
+* Composants complexes (cartes, tuiles, alertes...)
 
-Each of the following component is documented in its own dedicated page.
+Chaque composant est documenté dans sa propre page.
+
+ℹ️ Certains composants nécessitent le déploiement prélable du package **[PEG_LIST](https://github.com/pegros/PEG_LIST)** pour fonctionner. Il s'agit de tous les composants proposant des fonctionnalités avancées en termes de liste et d'action.
+
+⚠️ Le package comporte également des éléments à charger dans le site en static resource
+* la CSS, les polices et les icônes / pictogrammes du **DSFR**
+* une CSS de surcharge des caractéristiques du **SLDS** standard Salesforce pour les adapter à la charte graphique du **DSFR** (afin d'utiliser certains composants standards Salesforce, par ex. le [lightning-record-form](https://developer.salesforce.com/docs/component-library/bundle/lightning-record-form/documentation) ou les inputs standards des [Flows](https://help.salesforce.com/s/articleView?id=sf.flow_ref_elements_screencmp.htm))
 
 ### Composants d'action
 
-* **[dsfrButtonDsp](/help/dsfrButtonDsp.md)**
-* **[dsfrActionButtonCmp](/help/dsfrActionButtonCmp.md)**
-* **[dsfrFormButtonCmp](/help/dsfrFormButtonCmp.md)**
-* **[dsfrFlowPopupCmp](/help/dsfrFlowPopupCmp.md)**
+* **[dsfrButtonDsp](/help/dsfrButtonDsp.md)** pour déclencher une action de navigation
+* **[dsfrActionButtonCmp](/help/dsfrActionButtonCmp.md)** pour déclencher une création / MAJ d'un enregistrement (par ex. MAJ d'un statut)
+* **[dsfrFormButtonCmp](/help/dsfrFormButtonCmp.md)** pour déclencher un formulaire de création / modification en popup modale
+* **[dsfrFlowPopupCmp](/help/dsfrFlowPopupCmp.md)** pour déclencher un processus guidé (Salesforce Flow) en popup modale
 
 ### Composants de structure
 
 * **[dsfrCardCmp](/help/dsfrCardCmp.md)**
 
+
+### Composants de présentation
+
+* **[dsfrHeaderCmp](/help/dsfrHeaderCmp.md)**
 
 ## Configuration Details
 
