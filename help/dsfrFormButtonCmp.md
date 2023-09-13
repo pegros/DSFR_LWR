@@ -18,7 +18,7 @@ Toute la configuration du composant s'effectue directement dans **Site Builder**
     * `Libellé` : libellé du bouton
     * `Titre` : titre du bouton (en cas de survol du bouton)
     * `Taille` : taille du bouton (small, medium, large)
-    * `Variante` : Variante d'affichage du bouton (primùary, secondary...)
+    * `Variante` : Variante d'affichage du bouton (primary, secondary...)
     * `Icône` : Nom de l'icone DFSR à afficher dans le bouton (e.g. `checkbox-circle-line`)
     * `Position de l'icône` : Position de l'icône par rapport au libellé du bouton (left,right)
     * `Inactif ?` : Statut d'activité du bouton (true, false)
