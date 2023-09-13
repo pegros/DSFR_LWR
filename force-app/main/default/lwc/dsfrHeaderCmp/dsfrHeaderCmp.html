@@ -48,6 +48,18 @@
                                 <p class="fr-header__service-title">{siteTitle}</p>
                             </template>
                             <p class="fr-header__service-tagline">{siteTagline}</p>
+                            <!-- Debug Info display -->
+                            <template lwc:if={isDebug}>
+                                <p class="fr-header__service-tagline">
+                                    <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                                        Mode debug activé!
+                                    </span>
+                                    <span class="fr-badge fr-badge--info">
+                                        <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrHeaderCmp.md" target="_blank">
+                                            Voir la documentation</a>
+                                    </span>
+                                </p>
+                            </template>
                         </div>
                     </div>
                     <div class="fr-header__tools">
