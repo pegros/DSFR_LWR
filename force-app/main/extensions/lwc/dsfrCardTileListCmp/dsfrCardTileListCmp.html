@@ -14,107 +14,144 @@
     <!-- ACTUAL CONTENT DISPLAY -->
     <div class={wrappingCss} lwc:if={isReady}>
 
-        <!-- BUTTON GROUP Display -->
+        <!-- BUTTON GROUP DISPLAY -->
         <template lwc:if={isButton}>
-            <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-sm">
-                <template for:each={recordList} for:item="iter">
-                    <li key={iter.Id}  >
-                        <c-dsfr-button-dsp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
-                                            button-label={iter.label}   button-title={iter.title}
-                                            button-size={iter.size}     button-variant={iter.variant}
-                                            button-target={iter.target} button-inactive={iter.inactive}
-                                            button-align="left"         is-debug={isDebug}>
-                        </c-dsfr-button-dsp>
-                    </li>
-                </template>
-            </ul>
-        </template>
-        <template lwc:else>
-        <!-- OTHER DISPLAYS -->
-
-        <!-- HEADER with Sorting -->
-        <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
-            <lightning-layout-item flexibility="auto" >
-                <h3 class={headerClass}>{headerTitle}</h3>
-            </lightning-layout-item>
-            <template lwc:if={hasSort} >
-                <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
-                    <nav role="sort" class="fr-nav">
-                        <div class="fr-nav__item sortMenu">
-                            <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
-                                <span class={currentSort.class}>{currentSort.label}</span>
-                            </button>
-                            <div class="fr-collapse fr-menu" data-menu="sort">
-                                <ul class="fr-menu__list">
-                                    <template for:each={configDetails.display.sort} for:item="iterSort">
-                                        <li key={iterSort.name} >
-                                            <template lwc:if={iterSort.selected}>
-                                                <a class="fr-nav__link" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
-                                            </template>
-                                            <template lwc:else>
-                                                <a class="fr-nav__link" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
-                                            </template>
-                                        </li>
-                                    </template>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                </lightning-layout-item>
+            <!-- Empty result button group case -->
+            <template lwc:if={hasNoResult}>
+                <p lwc:if={forceDisplay} class="debugInfo">AFFICHAGE SI AUCUN RESULTAT</p>
+                <slot name="emptySection"></slot>
+                <p lwc:if={forceDisplay} class="debugInfo">AFFICHAGE SI RESULTATS</p>
             </template>
-        </lightning-layout>
+            
+            <!-- Actual result button group case -->
+            <template lwc:if={hasResults}>
+                <!-- <ul class="fr-btns-group fr-btns-group_-inline-reverse fr-btns-group_-inline-sm"> -->
+                <ul class={buttonAlignClass}>
+                    <template for:each={recordList} for:item="iter">
+                        <li key={iter.Id}  >
+                            <c-dsfr-button-dsp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                                button-label={iter.label}   button-title={iter.title}
+                                                button-size={iter.size}     button-variant={iter.variant}
+                                                button-target={iter.target} button-inactive={iter.inactive}
+                                                button-align="left"         is-debug={isDebug}>
+                            </c-dsfr-button-dsp>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+        </template>
 
-        <!-- LIST DISPLAY -->
-        <div class="fr-container--fluid">
-            <div class="fr-grid-row fr-grid-row--gutters fr-grid-row-top">
-                <template lwc:if={isCard}>
-                    <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12">
-                            <c-dsfr-card-cmp    card-image={item.image}                 card-title={item.title}
-                                                card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
-                                                card-description={item.description}     card-description-fields={item.iconFields}
-                                                card-start-details={item.startDetails}  card-start-icon={item.startIcon}
-                                                card-end-details={item.endDetails}      card-end-icon={item.endIcon}
-                                                card-tags={item.tags}                   card-badge-list-json={item.badgeList}
-                                                card-size={item.size}                   is-vertical={item.isVertical}
-                                                card-css={elementCss}                   field-class={cardFieldClass}
-                                                icon-class={cardIconClass}              fit-image={fitImage}
-                                                card-target={item.target}               card-buttons={item.buttons}
-                                                is-debug={isDebug}>
-                            </c-dsfr-card-cmp>
-                        </div>
-                    </template>
+        <!-- OTHER DISPLAY TYPES -->
+        <template lwc:else>
+
+            <!-- HEADER with Sorting -->
+            <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
+                <lightning-layout-item flexibility="auto" >
+                    <h3 class={headerClass}>{headerTitle}</h3>
+                </lightning-layout-item>
+                <template lwc:if={hasSort} >
+                    <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
+                        <nav role="sort" class="fr-nav">
+                            <div class="fr-nav__item sortMenu">
+                                <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
+                                    <span class={currentSort.class}>{currentSort.label}</span>
+                                </button>
+                                <div class="fr-collapse fr-menu" data-menu="sort">
+                                    <ul class="fr-menu__list">
+                                        <template for:each={configDetails.display.sort} for:item="iterSort">
+                                            <li key={iterSort.name} >
+                                                <template lwc:if={iterSort.selected}>
+                                                    <a class="fr-nav__link" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                </template>
+                                                <template lwc:else>
+                                                    <a class="fr-nav__link" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                </template>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </lightning-layout-item>
                 </template>
-                <template lwc:elseif={isTile}>
-                    <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12">
-                            <c-dsfr-tile-cmp    tile-image={item.image}         tile-title={item.title}
-                                                tile-description={item.description}
-                                                is-vertical={item.isVertical}   tile-css={elementCss}
-                                                fit-image={fitImage}
-                                                tile-target={item.target}
-                                                is-debug={isDebug} >
-                            </c-dsfr-tile-cmp>
-                        </div>
-                    </template>
-                </template>
-                <template lwc:elseif={isContainer}>
-                    <template for:each={recordList} for:item="item">
-                        <div key={item.Id} class="fr-col-12">
-                            <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
-                                                    message={item.message}  message-class={item.messageClass}
-                                                    wrapping-class={elementCss} 
-                                                    is-debug={isDebug} >
-                            </c-dsfr-container-dsp>
-                        </div>
-                    </template>
-                </template>
-                
-                <template lwc:else>
-                    <p class="fr-icon-alert-fill text-default-error">{typeError}: {displayType}</p>
-                </template>
-            </div>
-        </div>
+            </lightning-layout>
+
+            <!-- Empty result list case -->
+            <template lwc:if={hasNoResult}>
+                <slot name="emptySection"></slot>
+            </template>
+
+            <!-- Actual result list case -->
+            <template lwc:if={hasResults}>
+                <div class="fr-container--fluid">
+                    <div class="fr-grid-row fr-grid-row--gutters fr-grid-row-top">
+                        <!-- Card List Display -->
+                        <template lwc:if={isCard}>
+                            <template for:each={recordList} for:item="item">
+                                <div key={item.Id} class="fr-col-12">
+                                    <c-dsfr-card-cmp    card-image={item.image}                 card-title={item.title}
+                                                        card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
+                                                        card-description={item.description}     card-description-fields={item.iconFields}
+                                                        card-start-details={item.startDetails}  card-start-icon={item.startIcon}
+                                                        card-end-details={item.endDetails}      card-end-icon={item.endIcon}
+                                                        card-tags={item.tags}                   card-badge-list-json={item.badgeList}
+                                                        card-size={item.size}                   is-vertical={item.isVertical}
+                                                        card-css={elementCss}                   field-class={cardFieldClass}
+                                                        icon-class={cardIconClass}              fit-image={fitImage}
+                                                        card-target={item.target}               card-buttons={item.buttons}
+                                                        is-debug={isDebug}>
+                                    </c-dsfr-card-cmp>
+                                </div>
+                            </template>
+                        </template>
+                        <!-- Tile List Display -->
+                        <template lwc:elseif={isTile}>
+                            <template for:each={recordList} for:item="item">
+                                <div key={item.Id} class="fr-col-12">
+                                    <c-dsfr-tile-cmp    tile-image={item.image}         tile-title={item.title}
+                                                        tile-description={item.description}
+                                                        is-vertical={item.isVertical}   tile-css={elementCss}
+                                                        fit-image={fitImage}
+                                                        tile-target={item.target}
+                                                        is-debug={isDebug} >
+                                    </c-dsfr-tile-cmp>
+                                </div>
+                            </template>
+                        </template>
+                        <!-- Container List Display -->
+                        <template lwc:elseif={isContainer}>
+                            <template for:each={recordList} for:item="item">
+                                <div key={item.Id} class="fr-col-12">
+                                    <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
+                                                            message={item.message}  message-class={item.messageClass}
+                                                            wrapping-class={elementCss} 
+                                                            is-debug={isDebug} >
+                                    </c-dsfr-container-dsp>
+                                </div>
+                            </template>
+                        </template>   
+                        <!-- Unsupported/undefined Display Type -->
+                        <template lwc:else>
+                            <p class="fr-icon-alert-fill text-default-error">{typeError}: {displayType}</p>
+                        </template>
+                    </div>
+                </div>
+            </template>
         </template>
     </div>
+
+    <template lwc:if={isDebug}>
+        <div class={wrappingCss}>
+            <p class="fr-mb-4v">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrCardTileListCmp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </div>
+    </template>
+
 </template>

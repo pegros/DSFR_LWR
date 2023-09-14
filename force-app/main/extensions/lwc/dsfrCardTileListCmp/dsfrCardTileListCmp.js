@@ -15,6 +15,10 @@ import {
     REFRESH_COMPLETE_WITH_ERRORS,
   } from "lightning/refresh";
 
+/**
+* @slot emptySection
+*/
+
 export default class DsfrCardTileListCmp extends LightningElement {
 
     //-----------------------------------------------------
@@ -70,6 +74,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
     @api wrappingCss;
     @api headerCss;         // Classes pour modifier le style du titre du composant.
 
+    @api hasEmptySection;
+    @api forceDisplay;
+    
     @api isDebug = false;
 
     //-----------------------------------------------------
@@ -154,6 +161,15 @@ export default class DsfrCardTileListCmp extends LightningElement {
     }
     get fitImage() {
         return this.configDetails?.display?.fitImage;        
+    }
+    get buttonAlignClass() {
+        return 'fr-btns-group fr-btns-group--inline-reverse fr-btns-group--inline-sm align-' + this.configDetails?.display?.align;
+    }
+    get hasNoResult() {
+        return ((this.hasEmptySection) && ((this.forceDisplay) || ((this.recordList?.length || 0) == 0)));
+    }
+    get hasResults() {
+        return (this.recordList?.length > 0);
     }
 
     //-----------------------------------------------------

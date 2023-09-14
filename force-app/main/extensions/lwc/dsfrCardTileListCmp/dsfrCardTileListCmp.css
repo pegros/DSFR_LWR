@@ -60,3 +60,19 @@
 .fr-nav__link[aria-current]:before {
     width: 3px !important;
 }
+.align-right {
+    /*text-align: end;*/
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+.align-center {
+    /*text-align: center;*/
+    align-items: center;
+    justify-content: center;
+}
+.debugInfo {
+    padding: 1rem;
+    color: navy;
+    font-style: italic;
+    font-weight: bold;
+}

@@ -10,6 +10,11 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
+            <property   name="forceDisplay"
+                        label="Forcer affichage complet?"
+                        type="Boolean"
+                        description="Flag pour forcer l'affichage de la section vide (pour configuration dans Site Builder)." />
+
             <property   name="listTitle"
                         label="Titre principal"
                         type="String"
@@ -38,6 +43,11 @@
                         type="String"
                         default="fr-h2"
                         description="Classes pour modifier le style du titre du composant." />
+
+            <property   name="hasEmptySection"
+                        label="Afficher section vide?"
+                        type="Boolean"
+                        description="Flag permettant d'afficher une section paramétrable si la liste ne contient aucun élément." />
 
             <property   name="objectApiName"
                         label="Object Name"
