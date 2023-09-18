@@ -76,3 +76,17 @@
     font-style: italic;
     font-weight: bold;
 }
+ul.horizontalUL li {
+    display: inline-block;
+    white-space:normal;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding-right: 1em;   
+}
+ul.horizontalUL li:last-child {
+    padding-right: 0em; 
+}
+ul.horizontalUL {
+    line-height: 0.5rem;
+}

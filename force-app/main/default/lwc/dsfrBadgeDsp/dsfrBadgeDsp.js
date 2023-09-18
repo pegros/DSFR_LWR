@@ -22,6 +22,10 @@ export default class DsfrBadgeDsp extends LightningElement {
     connectedCallback() {
         if (this.isDebug) console.log('connected: START badge');
         if (this.isDebug) console.log('connected: badge value ', this.badgeValue);
+        if (typeof this.badgeValue == 'number') {
+            this.badgeValue = '' + this.badgeValue;
+            if (this.isDebug) console.log('connected: badge value converted');
+        };
 
         let badgeClass = 'fr-badge';
         if (this.isDebug) console.log('connected: badge size ', this.badgeSize);

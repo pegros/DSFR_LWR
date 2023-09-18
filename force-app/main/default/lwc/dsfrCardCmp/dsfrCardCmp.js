@@ -64,6 +64,12 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     // Custom getter
     //-----------------------------------------------------
 
+    get cardTitleStr() {
+        if (this.isDebug) console.log('cardTitleStr: value ', this.cardTitle);
+        if (this.isDebug) console.log('cardTitleStr: type ',(typeof this.cardTitle));
+        if (this.isDebug) console.log('cardTitleStr: returning ',(typeof this.cardTitle == 'number' ? '' + this.cardTitle : this.cardTitle));
+        return (typeof this.cardTitle == 'number' ? '' + this.cardTitle : this.cardTitle);
+    }
     get imageSrc() {
         return (this.cardImage?.includes('delivery/media') ? this.cardImage : '/file-asset/' + this.cardImage);
     }
@@ -86,8 +92,20 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     get cardStartClass() {
         return (this.cardStartIcon ? 'fr-card__detail fr-icon-' + this.cardStartIcon : 'fr-card__detail');
     }
+    get cardStartDetailsStr() {
+        if (this.isDebug) console.log('cardStartDetailsStr: value ', this.cardStartDetails);
+        if (this.isDebug) console.log('cardStartDetailsStr: type ',(typeof this.cardStartDetails));
+        if (this.isDebug) console.log('cardStartDetailsStr: returning ',(typeof this.cardStartDetails == 'number' ? '' + this.cardStartDetails : this.cardStartDetails));
+        return (typeof this.cardStartDetails == 'number' ? '' + this.cardStartDetails : this.cardStartDetails);
+    }
     get cardEndClass() {
         return (this.cardEndIcon ? 'fr-card__detail fr-icon-' + this.cardEndIcon : 'fr-card__detail');
+    }
+    get cardStartEndStr() {
+        if (this.isDebug) console.log('cardStartDetailsStr: valmue ',this.cardEndDetails);
+        if (this.isDebug) console.log('cardStartDetailsStr: type ',(typeof this.cardEndDetails));
+        if (this.isDebug) console.log('cardStartEndStr: returning ',(typeof this.cardEndDetails == 'number' ? '' + this.cardEndDetails : this.cardEndDetails));
+        return (typeof this.cardEndDetails == 'number' ? '' + this.cardEndDetails : this.cardEndDetails);
     }
     get cardClass() {
         let cardClass = 'fr-card';
@@ -215,29 +233,65 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     resetInput = () => {
         if (this.isDebug) console.log('resetInput: START for card');
-        if ((this.cardTitle) && (typeof this.cardTitle !== 'string')) {
-            this.cardTitle = null;
-            if (this.isDebug) console.log('resetInput: card title reset ');
+        if (this.cardTitle) {
+            if (typeof this.cardTitle == 'number') {
+                this.cardTitle = '' + this.cardTitle;
+                if (this.isDebug) console.log('resetInput: card title converted ');
+            }
+            else if (typeof this.cardTitle !== 'string') {
+                this.cardTitle = null;
+                if (this.isDebug) console.log('resetInput: card title reset ');
+            }
         }
-        if ((this.cardBadge) && (typeof this.cardBadge !== 'string')) {
-            this.cardBadge = null;
-            if (this.isDebug) console.log('resetInput: card badge reset ');
+        if (this.cardBadge) {
+            if (typeof this.cardBadge == 'number') {
+                this.cardBadge = '' + this.cardBadge;
+                if (this.isDebug) console.log('resetInput: card badge converted ');
+            }
+            else if (typeof this.cardBadge !== 'string') {
+                this.cardBadge = null;
+                if (this.isDebug) console.log('resetInput: card badge reset ');
+            }
         }
-        if ((this.cardDescription) &&  (typeof this.cardDescription !== 'string')) {
-            this.cardDescription = null;
-            if (this.isDebug) console.log('resetInput: card description reset ');
+        if (this.cardDescription) {
+            if (typeof this.cardDescription == 'number') {
+                this.cardDescription = '' + this.cardDescription;
+                if (this.isDebug) console.log('resetInput: card description converted ');
+            }
+            else if (typeof this.cardDescription !== 'string') {
+                this.cardDescription = null;
+                if (this.isDebug) console.log('resetInput: card description reset ');
+            }
         }
-        if ((this.cardStartDetails) &&  (typeof this.cardStartDetails !== 'string')) {
-            this.cardStartDetails = null;
-            if (this.isDebug) console.log('resetInput: card start detail reset ');
+        if (this.cardStartDetails) {
+            if (typeof this.cardStartDetails == 'number') {
+                this.cardStartDetails = '' + this.cardStartDetails;
+                if (this.isDebug) console.log('resetInput: card start details converted ');
+            }
+            else if (typeof this.cardStartDetails !== 'string') {
+                this.cardStartDetails = null;
+                if (this.isDebug) console.log('resetInput: card start details reset ');
+            }
         }
-        if ((this.cardEndDetails) && (typeof this.cardEndDetails !== 'string')) {
-            this.cardEndDetails = null;
-            if (this.isDebug) console.log('resetInput: card end detail reset ');
+        if (this.cardEndDetails) {
+            if (typeof this.cardEndDetails == 'number') {
+                this.cardEndDetails = '' + this.cardEndDetails;
+                if (this.isDebug) console.log('resetInput: card end details converted ');
+            }
+            else if (typeof this.cardEndDetails !== 'string') {
+                this.cardEndDetails = null;
+                if (this.isDebug) console.log('resetInput: card end details reset ');
+            }
         }
-        if ((this.cardTags) && (typeof this.cardTags !== 'string')) {
-            this.cardTags = null;
-            if (this.isDebug) console.log('resetInput: card tags reset ');
+        if (this.cardTags) {
+            if (typeof this.cardTags == 'number') {
+                this.cardTags = '' + this.cardTags;
+                if (this.isDebug) console.log('resetInput: card tags converted ');
+            }
+            else if (typeof this.cardTags !== 'string') {
+                this.cardTags = null;
+                if (this.isDebug) console.log('resetInput: card tags reset ');
+            }
         }
         if ((this.cardImage) && (typeof this.cardImage !== 'string')) {
             this.cardImage = null;

@@ -130,6 +130,20 @@
                                 </div>
                             </template>
                         </template>   
+                        <!-- Icon Field List Display -->
+                        <template lwc:elseif={isIconField}>
+                            <ul class={iconFieldWrappingClass}>
+                                <template for:each={recordList} for:item="item">
+                                    <li key={item.icon}  >
+                                        <c-dsfr-icon-field-dsp  value={item.value}          icon-name={item.icon}
+                                                                value-prefix={item.prefix}  value-suffix={item.suffix}
+                                                                wrapping-class={configDetails.display.fieldClass} icon-class={configDetails.display.iconClass}
+                                                                is-debug={isDebug}>
+                                        </c-dsfr-icon-field-dsp>
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
                         <!-- Unsupported/undefined Display Type -->
                         <template lwc:else>
                             <p class="fr-icon-alert-fill text-default-error">{typeError}: {displayType}</p>
@@ -142,7 +156,7 @@
 
     <template lwc:if={isDebug}>
         <div class={wrappingCss}>
-            <p class="fr-mb-4v">
+            <p class="fr-py-4v">
                 <span class="fr-badge fr-badge--warning  fr-mr-4v">
                     Mode debug activé!
                 </span>

@@ -118,6 +118,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
     get isButton() {
         return this.configDetails?.display?.type === 'Button';
     }
+    get isIconField() {
+        return this.configDetails?.display?.type === 'IconField';
+    }
     get displayType() {
         return this.configDetails?.display?.type || 'non défini';
     }
@@ -170,6 +173,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
     }
     get hasResults() {
         return (this.recordList?.length > 0);
+    }
+    get iconFieldWrappingClass() {
+        return 'fr-col-12 ' + (this.configDetails?.display.wrappingClass || 'horizontalUL'); 
     }
 
     //-----------------------------------------------------

@@ -91,13 +91,25 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     resetInput = () => {
         if (this.isDebug)console.log('resetInput: START for tile');
-        if ((this.cardTitle) && (typeof this.cardTitle !== 'string')) {
-            this.tileTitle = null;
-            if (this.isDebug)console.log('resetInput: tile title reset ');
+        if (this.tileTitle) {
+            if (typeof this.tileTitle == 'number') {
+                this.tileTitle = '' + this.tileTitle;
+                if (this.isDebug)console.log('resetInput: tile title converted ',this.tileTitle);
+            }
+            else if  (typeof this.tileTitle !== 'string') {
+                this.tileTitle = null;
+                if (this.isDebug)console.log('resetInput: tile title reset ');
+            }
         }
-        if ((this.tileDescription) && (typeof this.tileDescription !== 'string')) {
-            this.tileDescription = null;
-            if (this.isDebug)console.log('resetInput: tile description reset ');
+        if (this.tileDescription) {
+            if (typeof this.tileDescription == 'number') {
+                this.tileDescription = '' + this.tileDescription;
+                if (this.isDebug)console.log('resetInput: tile description converted',this.tileDescription);
+            }
+            else if (typeof this.tileDescription !== 'string') {
+                this.tileDescription = null;
+                if (this.isDebug)console.log('resetInput: tile description reset ');
+            }
         }
         if ((this.tileImage) && (typeof this.tileImage !== 'string')) {
             this.tileImage = null;

@@ -23,8 +23,10 @@ export default class DsfrContainerDsp extends LightningElement {
             console.log('connected: titleClass', this.titleClass);
             console.log('connected: message', this.message);
             console.log('connected: messageClass', this.messageClass);
-            console.log('connected: END for container');
         }
+        //Handling strange LWR inputs for fields reset to empty (object value instead of null)
+        this.resetInput();
+        if (this.isDebug) console.log('connected: END for container');
     }
     renderedCallback() {
         if (this.isDebug) {
@@ -34,12 +36,42 @@ export default class DsfrContainerDsp extends LightningElement {
             console.log('rendered: message', this.message);
             console.log('rendered: messageClass', this.messageClass);
         }
-
-        if ((this.message) && (typeof this.message !== 'string')) {
-            if (this.isDebug) console.log('rendered: erasing message');
-            this.message = null;
-        }
-
+        //Handling strange LWR inputs for fields reset to empty (object value instead of null)
+        this.resetInput();
         if (this.isDebug) console.log('rendered: END for container');
+    }
+
+    //-----------------------------------------------------
+    // Utilities
+    //-----------------------------------------------------
+    resetInput = () => {
+        if (this.isDebug)console.log('resetInput: START for container');
+        if (this.title) {
+            if (typeof this.title == 'number') {
+                this.title = '' + this.title;
+                if (this.isDebug)console.log('resetInput: title converted ',this.title);
+            }
+            else if  (typeof this.title !== 'string') {
+                this.title = null;
+                if (this.isDebug)console.log('resetInput: title reset ');
+            }
+        }
+        else {
+            if (this.isDebug)console.log('resetInput: null title ',this.title);
+        }
+        if (this.message) {
+            if (typeof this.message == 'number') {
+                this.message = '' + this.message;
+                if (this.isDebug) console.log('resetInput: message converted ',this.message);
+            }
+            else if (typeof this.message !== 'string') {
+                this.message = null;
+                if (this.isDebug)console.log('resetInput: message reset ');
+            }
+        }
+        else {
+            if (this.isDebug)console.log('resetInput: null message ',this.message);
+        }
+        if (this.isDebug) console.log('resetInput: END for container');
     }
 }
