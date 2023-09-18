@@ -207,7 +207,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
                     newItem.label = labelParts[0];
                 }
                 else {
-                    newItem.class = 'fr-btn';
+                    newItem.class = 'noIconMenu fr-btn fr-text--sm';
                 }
                 topMenuItems.push(newItem);
             });

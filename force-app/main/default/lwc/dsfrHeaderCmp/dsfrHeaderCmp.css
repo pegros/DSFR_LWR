@@ -49,6 +49,17 @@ input[type="search"] {
 .headerMenu {
     position: relative !important;
 }
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg) .fr-btn:not([class^=fr-icon-]):not([class*=" fr-icon-"]):not([class^=fr-fi-]):not([class*=" fr-fi-"]) {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    font-size: .875rem !important;
+    min-height: 2rem !important;
+}
+.fr-btn.noIconMenu {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    font-size: .875rem !important;
+}
 .fr-nav__link {
     color: var(--text-action-high-grey) !important;
 }
