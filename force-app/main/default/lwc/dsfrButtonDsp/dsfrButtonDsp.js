@@ -87,11 +87,27 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('openTarget: newPageRef init ',JSON.stringify(newPageRef));
 
             try {
-                this[NavigationMixin.Navigate](newPageRef);
-                if (this.isDebug) console.log('openTarget: END opening newPageRef');
+                if (newPageRef.type == 'fileDownload') {
+                    if (this.isDebug) console.log('openTarget: downloading file');
+                    
+                    let fileId = newPageRef.attributes?.fileId;
+                    if (this.isDebug) console.log('openTarget: fileId determined ', fileId);
+
+                    let downloadURL = '/sfc/servlet.shepherd/document/download/' + fileId;
+                    if (this.isDebug) console.log('openTarget: opening downloadURL ', downloadURL);
+                    window.open(downloadURL,'_blank');
+
+                    if (this.isDebug) console.log('openTarget: END downloading file');
+                }
+                else {
+                    if (this.isDebug) console.log('openTarget: triggering standard navigation');
+
+                    this[NavigationMixin.Navigate](newPageRef);
+                    if (this.isDebug) console.log('openTarget: END opening newPageRef');
+                }
             }
             catch(error) {
-                if (this.isDebug) console.log('openTarget: END KO / opening newPageRef failed ', error);
+                if (this.isDebug) console.log('openTarget: END KO / opening newPageRef failed ', JSON.stringify(error));
             }
         }
         else {

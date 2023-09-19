@@ -23,6 +23,8 @@ Toute la configuration du composant s'effectue directement dans **Site Builder**
 * `Cible` : **[Page reference](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.reference_page_reference_type)** cible du bouton vers lequel l'utilisateur doit être redirigé.
 
 
+⚠️ Un type special de `Cible` a été ajouté à la liste standard Salesforce afin de déclencher le téléchargement d'un fichier d'une manière compatible avec les contraintes des sites Experience LWR : il s'agit du type **fileDownload**.
+`
 ### Navigation vers la page de record affiché dans une liste
 
 Par exemple, pour naviguer vers un Compte affiché dans une carte intégrée dans une liste ou une grille standard Salesforce.
@@ -57,6 +59,21 @@ Par exemple, pour naviguer vers une page custom en fournissant un contexte.
 
 Les éléments de contexte passés dans le `state` peuvent ensuite être utilisés via les **data bindings** `{!Route.xxx}` pour valoriser des composants dans la page cible.
 
+
+### Téléchargement d'un fichier
+
+Il est possible de télécharger en un click un fichier dont on connait l'ID, soit parce qu'il est enregistré sur l'enregistrement courant, soit parce qu'il est récupéré au travers d'une requête SOQL (cf. composant **[dsfrButtonDsp](/help/dsfrButtonDsp.md)**).
+
+La syntaxe de la cible est similaire aux page references Salesforce standards, en utilisant le type special **fileDownload**.
+
+```
+{
+    "type": "fileDownload",
+    "attributes": {
+        "fileId": "{!Item.ContentDocumentId}"
+    }
+}
+```
 
 ## Précisions techniques
 
