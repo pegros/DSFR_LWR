@@ -24,66 +24,82 @@
                                         <th scope="col" style="width: 20%;">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <template for:each={recordValues} for:item="iterValue">
-                                        <tr key={iterValue.value}>
-                                            <template for:each={iterValue.details} for:item="iterField">
-                                                <td key={iterField.value}>{iterField.label}</td>
-                                            </template>
-                                            <td>
-                                                <button class="fr-btn fr-icon-delete-line fr-btn--tertiary-no-outline"
-                                                        value={iterValue.value}
-                                                        title={deleteTitle}
-                                                        onclick={handleRemove}>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
+                                <template lwc:if={recordValues} >
+                                    <tbody>
+                                        <template for:each={recordValues} for:item="iterValue">
+                                            <tr key={iterValue.value}>
+                                                <template for:each={iterValue.details} for:item="iterField">
+                                                    <td key={iterField.value}>{iterField.label}</td>
+                                                </template>
+                                                <td>
+                                                    <button class="fr-btn fr-icon-delete-line fr-btn--tertiary-no-outline"
+                                                            value={iterValue.value}
+                                                            title={deleteTitle}
+                                                            onclick={handleRemove}>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </template>
                             </table>
                         </div>
                     </div>
 
                     <!-- Section d'ajout de langue -->
-                    <p class="fr-hr"></p>
-                    <div class="actionContainer fr-fieldset__element">
-                         <fieldset class=" fr-fieldset" id="picklist-entry" >
-                            <div class="actionGrid fr-grid-row fr-grid-row-gutters fr-grid-row--bottom ">
-                                <template for:each={fieldValues} for:item="iterField">
-                                    <div class="fr-fieldset__element fr-col-12 fr-col-md-5 fr-px-2v" key={iterField.label}>
-                                        <div class="fr-select-group">
-                                            <label class="fr-label" for={iterField.label}>
-                                                {iterField.label}
-                                            </label>
-                                            <select class="fr-select" id={iterField.label} name={iterField.label}
-                                                    onchange={handleSelect}>
-                                                <option value="" selected disabled hidden>Selectionnez une option</option>
-                                                <template for:each={iterField.values} for:item="iterFieldValue">
-                                                    <template lwc:if={iterFieldValue.disabled}>
+                    <template lwc:if={fieldValues} >
+                        <p class="fr-hr"></p>
+                        <div class="actionContainer fr-fieldset__element">
+                             <fieldset class=" fr-fieldset" id="picklist-entry" >
+                                <div class="actionGrid fr-grid-row fr-grid-row-gutters fr-grid-row--bottom ">
+                                    <template for:each={fieldValues} for:item="iterField">
+                                        <div class="fr-fieldset__element fr-col-12 fr-col-md-5 fr-px-2v" key={iterField.label}>
+                                            <div class="fr-select-group">
+                                                <label class="fr-label" for={iterField.label}>
+                                                    {iterField.label}
+                                                </label>
+                                                <select class="fr-select" id={iterField.label} name={iterField.label}
+                                                        onchange={handleSelect}>
+                                                    <option value="" selected disabled hidden>Selectionnez une option</option>
+                                                    <template for:each={iterField.values} for:item="iterFieldValue">
+                                                        <template lwc:if={iterFieldValue.disabled}>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <option key={iterFieldValue.key} value={iterFieldValue.value}>
+                                                                {iterFieldValue.label}
+                                                            </option>
+                                                        </template>
                                                     </template>
-                                                    <template lwc:else>
-                                                        <option key={iterFieldValue.key} value={iterFieldValue.value}>
-                                                            {iterFieldValue.label}
-                                                        </option>
-                                                    </template>
-                                                </template>
-                                            </select>
+                                                </select>
+                                            </div>
                                         </div>
+                                    </template>
+                                    <div class="fr-fieldset__element fr-col-12 fr-col-md-2 fr-px-2v">
+                                        <button class="addButton fr-btn fr-icon-add-circle-line fr-btn--icon-left fr-btn--primary"
+                                                disabled
+                                                onclick={handleAdd}>
+                                            {addLabel}
+                                        </button>
                                     </div>
-                                    
-                                </template>
-                                <div class="fr-fieldset__element fr-col-12 fr-col-md-2 fr-px-2v">
-                                    <button class="addButton fr-btn fr-icon-add-circle-line fr-btn--icon-left fr-btn--primary"
-                                            disabled
-                                            onclick={handleAdd}>
-                                        {addLabel}
-                                    </button>
                                 </div>
-                            </div>
-                        </fieldset>
-                    </div>
+                            </fieldset>
+                        </div>
+                    </template>
                 </fieldset>
             </div>
+            <template lwc:if={isDebug}>
+                <div class="fr-col-12">
+                    <p class="fr-py-4v">
+                        <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                            Mode debug activé!
+                        </span>
+                        <span class="fr-badge fr-badge--info">
+                            <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrCombinedPicklistCmp.md" target="_blank">
+                                Voir la documentation</a>
+                        </span>
+                    </p>
+                </div>
+            </template>
         </div>
     </div>
 </template>
