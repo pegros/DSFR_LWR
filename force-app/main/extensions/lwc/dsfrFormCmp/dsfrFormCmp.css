@@ -1,0 +1,12 @@
+.formSection {
+    width: 100%;
+}
+.formTitle {
+    min-width: 50%;
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+}
+.spinnerDiv {
+    top: 20px;
+    left: 10px;
+}

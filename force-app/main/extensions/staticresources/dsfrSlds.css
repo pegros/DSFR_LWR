@@ -195,11 +195,33 @@ button.slds-combobox__input-value {
     padding-left: 1rem !important;
 }
 /* Remove Help-text icons */
-.slds-form-element__icon {
+.slds-button__icon {
     display: none !important;
 }
 
 /* better manage hint-text */
+/*.slds-form-element__icon {
+    display: none !important;
+}*/
+.slds-form-element__icon{
+    display:block !important;
+}
+.slds-assistive-text {
+    margin-top: 0.75rem;
+    display: block;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    position: relative !important;
+    color: var(--text-mention-grey);
+    width: auto !important;
+    height: auto !important;
+}
+/*.slds-assistive-text {
+    display: block;
+    position: relative !important;
+    width: auto !important;
+    height: auto !important;
+}*/
 .fr-hint-text {
     margin-bottom: 0px !important;
 }
@@ -228,15 +250,16 @@ button.slds-combobox__input-value {
 .slds-has-error .slds-form-element__help::before {
     display: inline-block;
   	margin-right: 0.25rem;
-    background-color: currentColor;
-  width: var(--icon-size);
-  height: var(--icon-size);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-	-webkit-mask-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M17.5,2.5h-11L1,12l5.5,9.5h11L23,12L17.5,2.5z M16.2,14.8l-1.4,1.4L12,13.4l-2.8,2.8l-1.4-1.4l2.8-2.8L7.8,9.2l1.4-1.4l2.8,2.8l2.8-2.8l1.4,1.4L13.4,12L16.2,14.8z'/></svg>");
+    color: currentColor;
+    /*background-color: currentColor;*/
+    width: var(--icon-size);
+    height: var(--icon-size);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+	/*-webkit-mask-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M17.5,2.5h-11L1,12l5.5,9.5h11L23,12L17.5,2.5z M16.2,14.8l-1.4,1.4L12,13.4l-2.8,2.8l-1.4-1.4l2.8-2.8L7.8,9.2l1.4-1.4l2.8,2.8l2.8-2.8l1.4,1.4L13.4,12L16.2,14.8z'/></svg>");
 	mask-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M17.5,2.5h-11L1,12l5.5,9.5h11L23,12L17.5,2.5z M16.2,14.8l-1.4,1.4L12,13.4l-2.8,2.8l-1.4-1.4l2.8-2.8L7.8,9.2l1.4-1.4l2.8,2.8l2.8-2.8l1.4,1.4L13.4,12L16.2,14.8z'/></svg>");
-      --icon-size: 1rem;
-    /*content:'❌';*/
+      --icon-size: 1rem;*/
+    content:'❌ ';
 }
     .slds-text-color_error.slds-text-body_small span {
         font-size: 0.75rem !important;
@@ -288,7 +311,7 @@ button.slds-combobox__input-value {
 	    height: 1.5rem !important;
 	    width: 1.5rem !important;
         margin-top: 0px !important;
-        margin-left: 1px !important!;
+        margin-left: 1px !important;
     }
     .slds-radio_faux::after {
 	    height: 12px !important;

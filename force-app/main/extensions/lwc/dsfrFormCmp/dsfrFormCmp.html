@@ -1,0 +1,171 @@
+<template>
+    <div class={formClass}>
+        <!-- FORM TITLE -->
+        <lightning-layout multiple-rows="true" vertical-align="center" class="formHeader">
+            <template lwc:if={formTitle}>
+                <lightning-layout-item flexibility="auto" >
+                    <h2 class="fr-h2 formTitle">{formTitle}</h2>
+                </lightning-layout-item>
+            </template>
+            <template lwc:if={showEdit}>
+                <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
+                    <button class="fr-btn fr-btn--secondary formButton" type="button" onclick={toggleMode}>
+                        {editLabel}
+                    </button>
+                </lightning-layout-item>
+            </template>
+            <template lwc:if={formDescription}>
+                <lightning-layout-item size="12" >
+                    <p class="fr-text--sm">{formDescription}</p>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+
+        <!-- FORM CONTENT -->
+        <template lwc:if={isReady}>
+            <lightning-record-edit-form class="mainForm"            object-api-name={objectApiName}
+                                        record-id={recordId}        record-type-id={recordTypeId}
+                                        onload={handleLoad}         onsubmit={handleSubmit}
+                                        onsuccess={handleSuccess}   onerror={handleError}>
+                <!-- FORM SECTIONS -->
+                <template for:each={configDetails.sections} for:item="iterSection">
+                    <fieldset   key={iterSection.key}   class={sectionClass}
+                                id={iterSection.key}    aria-labelledby={iterSection.legendKey}>
+                        <legend class={iterSection.legendClass} id={iterSection.legendKey}>
+                            <h3>{iterSection.title}</h3>
+                        </legend>
+                        <template lwc:if={iterSection.description}>
+                            <div class="fr-fieldset__element">
+                                <p class="fr-text--sm">{iterSection.description}</p>
+                            </div>
+                        </template>
+                        <template lwc:if={iterSection.help}>
+                            <div class="fr-fieldset__element">
+                                <span class="fr-hint-text">{iterSection.help}</span>
+                            </div>
+                        </template>
+                        <lightning-layout multiple-rows="true" pull-to-boundary="medium" class="formSection">
+                            <template for:each={iterSection.fields} for:item="iterSectionField">
+                                <lightning-layout-item  key={iterSectionField.name}
+                                                        size="12"                   medium-device-size={iterSectionField.size} 
+                                                        padding="horizontal-medium" class="fieldItem" >
+                                    <template lwc:if={iterSectionField.hidden}>
+                                        <div class="fr-fieldset__element slds-hide">
+                                            <div class="fr-input-group fr-input-group--disabled">
+                                                <lightning-output-field field-name={iterSectionField.name}>
+                                                </lightning-output-field>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template lwc:elseif={isEditMode}>
+                                        <div class="fr-fieldset__element">
+                                            <div class="fr-input-group">
+                                                <template lwc:if={iterSectionField.disabled}>
+                                                    <lightning-output-field class="dsfrInput"       variant="label-stacked"
+                                                                            field-name={iterSectionField.name}>
+                                                    </lightning-output-field>
+                                                </template>
+                                                <template lwc:elseif={iterSectionField.required} >
+                                                    <lightning-input-field  class="dsfrInput"       variant="label-stacked"
+                                                                            field-name={iterSectionField.name}  required>
+                                                    </lightning-input-field>
+                                                </template>
+                                                <template lwc:else>
+                                                    <lightning-input-field  class="dsfrInput"       variant="label-stacked"
+                                                                            field-name={iterSectionField.name} >
+                                                    </lightning-input-field>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <template lwc:else>
+                                        <div class="fr-fieldset__element">
+                                            <div class="fr-input-group fr-input-group--disabled">
+                                                <lightning-output-field class="dsfrInput"       variant="label-stacked"
+                                                                        field-name={iterSectionField.name} >
+                                                </lightning-output-field>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                    </fieldset>
+                </template>
+
+                <!-- FORM SECTIONS -->
+                <template lwc:if={configDetails.context}>
+                    <fieldset class="slds-hide" id="context" aria-labelledby="context-legend">
+                        <legend class="fr-fieldset__legend slds-hide" id="context-legend">
+                            <h3>Champs de contexte masqués</h3>
+                        </legend>
+                        <template for:each={configDetails.context} for:item="iterContext">
+                            <div key={iterContext.name} class="fr-fieldset__element slds-hide">
+                                <div class="fr-input-group fr-input-group--disabled">
+                                    <lightning-output-field field-name={iterContext.name}>
+                                    </lightning-output-field>
+                                </div>
+                            </div>
+                        </template>
+                    </fieldset>
+                </template>
+
+                <!-- FORM ERROR MESSAGES -->
+                <lightning-messages> </lightning-messages>
+
+                <!-- FORM BUTTONS -->
+                <template lwc:if={isReadyOnly}>
+                </template>
+                <template lwc:elseif={isEditMode}>
+                    <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
+                        <li>
+                            <button class="fr-btn fr-btn--secondary formButton" type="reset" onclick={handleCancel}>
+                                {cancelLabel}
+                            </button>
+                        </li>
+                        <li>
+                            <button class="fr-btn formButton" type="submit" >
+                                {saveDynamicLabel}
+                            </button>
+                        </li>
+                        <li>
+                            <div class="slds-is-relative spinnerDiv">
+                                <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
+                                </lightning-spinner>
+                            </div>
+                        </li>
+                    </ul>
+               </template>
+               <template lwc:else>
+                    <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
+                        <li>
+                            <button class="fr-btn fr-btn--secondary formButton" type="button" onclick={toggleMode}>
+                                {editLabel}
+                            </button>
+                        </li>
+                    </ul>
+               </template>
+            </lightning-record-edit-form>
+        </template>
+
+        <template lwc:if={isDebug}>
+            <p class="fr-p-4v">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--new  fr-mr-4v">
+                    {objectApiName} : {recordId}
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrFormCmp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </template>
+    </div>    
+
+    <!-- NOTIFICATION UTILITY -->
+    <c-dsfr-alert-popup-dsp is-debug={isDebug} >
+    </c-dsfr-alert-popup-dsp>
+
+</template>

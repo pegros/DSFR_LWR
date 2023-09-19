@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>58.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Formulaire (V2)</masterLabel>
+    <description>Affichage d'un formulaire pour éditer un enregistrement</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="formTitle"
+                        label="Titre"
+                        type="String"
+                        description="Libellé de titre du formulaire" />
+            <property   name="formDescription"
+                        label="Description"
+                        type="String"
+                        description="Libellé de titre du formulaire" />
+
+            <property   name="formClass"
+                        label="CSS du formulaire"
+                        type="String"
+                        description="Ensemble des classes CSS appliquées au conteneur du formulaire" />
+            <property   name="sectionClass"
+                        label="CSS des sections"
+                        type="String"
+                        description="Ensemble des classes CSS appliquées à chaque section du formulaire" />
+
+            <property   name="configName"
+                        label="Configuration"
+                        type="String"
+                        description="Nom du custom metadata sfpegCard de configuration" />
+
+            <property   name="isReadOnly"
+                        label="Lecture seule?"
+                        type="Boolean"
+                        description="Flag pour afficher le composant en mode lecture seule." />
+            <property   name="isEditMode"
+                        label="Mode Edition (default)?"
+                        type="Boolean"
+                        description="Flag pour afficher le composant en mode édition par défaut (si non lecture seule)." />
+            <property   name="isEditModeString"
+                        label="Mode Edition (dynamique)?"
+                        type="String"
+                        description="Flag pour afficher le composant en mode édition dynamiquement (si non lecture seule)." />
+
+            <property   name="objectApiName"
+                        label="Objet"
+                        type="String"
+                        default="{!Route.objectApiName}"
+                        description="API Name de l'objet pour lequel le formulaire est affiché" />
+            <property   name="recordId"
+                        label="ID"
+                        type="String"
+                        default="{!Route.recordId}"
+                        description="ID de l'enregistrement pour lequel le formulaire est affiché (mode création si vide)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
