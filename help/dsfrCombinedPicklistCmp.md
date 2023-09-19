@@ -47,8 +47,11 @@ EN - 2          Anglais - Moyen
 ```
 
 La propriété `Libellé des champs` est alors configurée avec la valeur `["Langue","Niveau"]` identifiant la première partie de valeurs de picklist comme la langue et la seconde comme le niveau.
-* Le même séparateur (`- `) doit être utilisé pour les libellés et les codes
+* Le même séparateur (` - `) doit être utilisé pour les libellés et les codes
 * chaque langue doit avoir une entrée pour tous les niveaux possibles
+
+La valeur stockée sur le champ multi-picklist considéré est alors du style `EN - 2;FR - 4` et son libellé affiché de manière standard  `Anglais - Moyen;Français - Courant`.
+
 
 ## Précisions techniques
 
