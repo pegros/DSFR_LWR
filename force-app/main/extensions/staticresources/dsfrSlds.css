@@ -195,14 +195,16 @@ button.slds-combobox__input-value {
     padding-left: 1rem !important;
 }
 /* Remove Help-text icons */
-.slds-button__icon {
-    display: none !important;
-}
-
-/* better manage hint-text */
-/*.slds-form-element__icon {
+/* ROLL-BACK because of multi-picklist issues */
+/*.slds-button__icon {
     display: none !important;
 }*/
+
+/* better manage hint-text */
+.slds-form-element__icon {
+    display: none !important;
+}
+/*
 .slds-form-element__icon{
     display:block !important;
 }
@@ -215,7 +217,7 @@ button.slds-combobox__input-value {
     color: var(--text-mention-grey);
     width: auto !important;
     height: auto !important;
-}
+}*/
 /*.slds-assistive-text {
     display: block;
     position: relative !important;
