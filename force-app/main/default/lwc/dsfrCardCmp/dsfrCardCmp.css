@@ -39,3 +39,7 @@ p.[class*=" fr-icon-"]:before {
     overflow-wrap: break-word;
     word-break: break-word;
 }
+.debugSection {
+    position: relative;
+    bottom: 20px;
+}

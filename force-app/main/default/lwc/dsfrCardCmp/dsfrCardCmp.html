@@ -80,18 +80,6 @@
                             </lightning-formatted-rich-text>
                         </p>
                     </template>
-                     <!-- Debug Info display -->
-                    <template lwc:if={isDebug}>
-                        <p class="fr-card__detail fr-mt-4v">
-                            <span class="fr-badge fr-badge--warning  fr-mr-4v">
-                                Mode debug activé!
-                            </span>
-                            <span class="fr-badge fr-badge--info">
-                                <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrCardCmp.md" target="_blank">
-                                    Voir la documentation</a>
-                            </span>
-                        </p>
-                    </template>
                 </div>
             </div>
             <template lwc:if={cardButtons}>
@@ -154,5 +142,21 @@
             </template>
         </div>
     </div>
+     <!-- Debug Info display -->
+     <!--
+     <template lwc:if={isDebug}>
+        <div class="debugSection">
+            <p class="">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrCardCmp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>        
+        </div>
+    </template>
+    -->
 
 </template>
