@@ -1,6 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, updateRecord } from 'lightning/uiRecordApi';
-import { getPicklistValues } from 'lightning/uiObjectInfoApi';
+import { getPicklistValues } from 'lightning/uiObjectInfoApi'; 
 
 import ADD_LABEL from '@salesforce/label/c.dsfrCombinedPicklistAddLabel';
 import DELETE_TITLE from '@salesforce/label/c.dsfrCombinedPicklistDeleteTitle';
