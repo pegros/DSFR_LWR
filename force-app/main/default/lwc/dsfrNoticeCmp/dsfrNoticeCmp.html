@@ -6,6 +6,13 @@
                     <lightning-formatted-text value={noticeTitle} class="fr-notice__title noticeText" >
                     </lightning-formatted-text>
                 </p>
+                <template lwc:if={noticeAction}>
+                    <c-dsfr-button-dsp  button-target={noticeAction}            button-label={noticeActionLabel}
+                                        button-variant="tertiary-no-outline"    button-size="small"
+                                        button-icon="arrow-right-line"          button-icon-position="right"
+                                        is-debug={isDebug}>
+                    </c-dsfr-button-dsp>
+                </template>
             </div>
         </div>
     </div>
