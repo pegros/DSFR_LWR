@@ -151,7 +151,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
         if (this.isDebug) console.log('currentSort: currentSort found ',JSON.stringify(currentSort));
         if (currentSort) {
             if (this.isDebug) console.log('currentSort: END / returning current ');
-            return {label: SORT_PREFIX + currentSort.label, class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line')};
+            return {label: SORT_PREFIX + ' ' + currentSort.label, class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line')};
         }
         if (this.isDebug) console.log('currentSort: END / returning default ');
         return {label: SORT_DEFAULT};
@@ -184,7 +184,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
     connectedCallback() {
         if (this.isDebug) {
             console.log('connected: START for card/tile list ',this.configName);
-            console.log('connected: listContext ', this.listContext);
+            console.log('connected: listContext ', JSON.stringify(this.listContext));
             console.log('connected: objectApiName ', this.objectApiName);
             console.log('connected: recordId ', this.recordId);
             console.log('connected: userId ', this.userId);

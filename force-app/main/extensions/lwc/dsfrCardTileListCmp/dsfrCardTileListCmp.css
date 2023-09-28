@@ -56,9 +56,10 @@
 .fr-nav__link[aria-current] {
     font-weight: bold !important;
     color: var(--dxp-c-link-text-color,var(--dxp-s-link-text-color,var(--dxp-g-brand))) !important;
+    position: static !important;
 }
 .fr-nav__link[aria-current]:before {
-    width: 3px !important;
+    display: none !important;
 }
 .align-right {
     /*text-align: end;*/
