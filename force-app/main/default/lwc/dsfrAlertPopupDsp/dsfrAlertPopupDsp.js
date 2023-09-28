@@ -50,6 +50,20 @@ export default class DsfrAlertPopupDsp extends LightningElement {
         if (this.isDebug) console.log('rendered: END Alert Popup');
     }*/
 
+    disconnectedCallback() {
+        if (this.isDebug) console.log('disconnected: START Alert Popup with ',JSON.stringify(this.alertConfig));
+
+        if (this.isModalOpen) {
+            if (this.isDebug) console.log('disconnected: closing Popup ');
+            this.closeModal();
+        }
+        else {
+            if (this.isDebug) console.log('disconnected: Popup already closed');
+        }
+        
+        if (this.isDebug) console.log('disconnected: END Alert Popup');
+    }
+
     //-----------------------------------
     // Event Handler
     //-----------------------------------
@@ -71,12 +85,12 @@ export default class DsfrAlertPopupDsp extends LightningElement {
         document.body.style.overflowY = 'hidden';
         if (this.isDebug) console.log('showAlert: document style updated ',document.body.style.overflowY);
 
-        setTimeout(() => { 
+        /*setTimeout(() => { 
             let closeButton = this.template.querySelector('button.fr-link--close');
             if (this.isDebug) console.log('showAlert: START fetching closeButton ',closeButton);
             closeButton.focus({ focusVisible: true });
-            if (this.isDebug) console.log('showAlert: START closeButton focused');
-        }, 150);
+            if (this.isDebug) console.log('showAlert: END closeButton focused');
+        }, 150);*/
         
         if (this.isDebug) console.log('showAlert: END Alert Popup returning Promise');
         return  new Promise((resolve,reject)=> {
@@ -93,7 +107,7 @@ export default class DsfrAlertPopupDsp extends LightningElement {
     //-----------------------------------
     closeModal(event) {
         if (this.isDebug) console.log('closeModal: START');
-        event.preventDefault();
+        if (event) event.preventDefault();
         this.isModalOpen = false;
 
         let modalCmp = this.template.querySelector('dialog');
