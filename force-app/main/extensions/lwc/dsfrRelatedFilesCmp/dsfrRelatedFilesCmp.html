@@ -19,22 +19,24 @@
             <ul>
                 <template for:each={fileList} for:item="iterFile">
                     <li key={iterFile.id}>
-                        <div class="fr-download">
+                        <div class={iterFile.class}>
                             <!-- download -->
                             <p> 
                                 <a  href="#"  class="fr-download__link"
                                     title={downloadTitle} name={iterFile.contentId}
                                     onclick={handleDownload}>
                                     {iterFile.title}
-                                    <span class="fr-download__detail">
-                                        <template for:each={iterFile.details} for:item="item">
-                                            <span key={item.value} class="listItem">
-                                                <template lwc:if={item.prefix}>{item.prefix}&nbsp;</template>
-                                                {item.value}
-                                                <template lwc:if={item.suffix}>&nbsp;{item.suffix}</template>
-                                            </span>
-                                        </template>
-                                    </span>                       
+                                    <template lwc:if={iterFile.details}>
+                                        <span class="fr-download__detail">
+                                            <template for:each={iterFile.details} for:item="item">
+                                                <span key={item.value} class="listItem">
+                                                    <template lwc:if={item.prefix}>{item.prefix}&nbsp;</template>
+                                                    {item.value}
+                                                    <template lwc:if={item.suffix}>&nbsp;{item.suffix}</template>
+                                                </span>
+                                            </template>
+                                        </span>
+                                    </template>
                                 </a>
                                 <!--<lightning-formatted-number class="fr-download__detail" value={iterFile.ContentDocument.ContentSize} format-style="decimal" maximum-significant-digits="5"></lightning-formatted-number>-->
                                 <template lwc:if={showDelete}>
@@ -51,4 +53,17 @@
             </lightning-spinner>
         </template>
     </div>
+    <template lwc:if={isDebug}>
+        <div class={wrappingCss}>
+            <p class="fr-py-4v">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrRelatedFilesCmp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </div>
+    </template>
 </template>

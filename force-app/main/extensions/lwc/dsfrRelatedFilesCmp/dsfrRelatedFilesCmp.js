@@ -155,6 +155,13 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                         newItem.details.push(newItemDetail);
                     }
                 });
+                if (newItem.details.length == 0) {
+                    delete newItem.details;
+                    newItem.class="fr-download noPadding";
+                }
+                else {
+                    newItem.class="fr-download";
+                }
                 if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
                 targetRecordList.push(newItem);
             });
@@ -210,7 +217,52 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
 
         let linkId = event.srcElement?.name;
         if (this.isDebug) console.log('handleUnlink: linkId determined ', linkId);
-        if (this.isDebug) console.log('handleUnlink: linkId determined ', linkId);
+
+        unlinkFile({linkId: linkId})
+        .then(() => {
+            if (this.isDebug) console.log('handleUnlink: file unlinked');
+
+            let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
+            if (this.isDebug) console.log('handleUnlink: listCmp fetched',listCmp);
+            listCmp.doRefresh();
+            if (this.isDebug) console.log('handleUnlink: file list refresh triggered');
+
+            if (this.recordId) {
+                if (this.isDebug) console.log('handleUnlink: triggering record data reload ',this.recordId);
+                notifyRecordUpdateAvailable([{recordId: this.recordId}]);
+            }
+
+            if (spinner) {
+                if (this.isDebug) console.log('handleUnlink: hiding spinner');
+                spinner.classList.add('slds-hide');
+            }
+            if (this.isDebug) console.log('handleUnlink: END');
+        })
+        .catch(error => {
+            console.warn('handleUnlink: END KO / file registration failed ', JSON.stringify(error));
+            if (spinner) {
+                if (this.isDebug) console.log('handleUnlink: hiding spinner');
+                spinner.classList.add('slds-hide');
+            }
+        });
+        if (this.isDebug) console.log('handleUnlink: unlink triggered');
+    }
+
+    // @TODO finalise new version upload
+    handleReplace(event){
+        if (this.isDebug) console.log('handleReplace: START',event);
+        event.preventDefault();
+
+        /*
+        let spinner = this.template.querySelector('lightning-spinner');
+        if (this.isDebug) console.log('handleReplace: spinner found',spinner);
+        if (spinner) {
+            if (this.isDebug) console.log('handleReplace: showing spinner');
+            spinner.classList.remove('slds-hide');
+        }
+
+        let linkId = event.srcElement?.name;
+        if (this.isDebug) console.log('handleReplace: linkId determined ', linkId);
 
         unlinkFile({linkId: linkId})
             .then(() => {
@@ -239,9 +291,9 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                     spinner.classList.add('slds-hide');
                 }
             });
-        if (this.isDebug) console.log('handleUnlink: unlink triggered');
+        */
+        if (this.isDebug) console.log('handleReplace: replace triggered');
     }
-
 
     //-----------------------------------------------------
     // Utilities
