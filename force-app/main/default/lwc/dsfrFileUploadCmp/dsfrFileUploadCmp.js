@@ -16,7 +16,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     @api comment;
     @api accept;
     @api contentMeta;
-    @api shareMode = 'V';
+    @api shareMode = 'I';
     @api disabled = false;
     @api wrappingClass;
     @api refreshUser = false;
@@ -127,7 +127,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
             }
             if (this.recordIds) {
                 if (this.isDebug) console.log('registerFile: registering other recordIds ',this.recordIds);
-                let otherIDs = JSON.parse(this.recordIds);
+                let otherIDs = JSON.parse(this.recordIds).filter((item) => item);
                 recordIds.push(...otherIDs);
             }
             if (this.isDebug) console.log('registerFile: recordIds init ',JSON.stringify(recordIds));
