@@ -49,6 +49,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------
     menuConfig;
     topMenuItems;
+    mainMenuItems;
     complexMenuItems;
 
     //-----------------------------------
@@ -80,6 +81,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------
     // Context Handling (to set selected tab)
     //-----------------------------------
+    @wire(CurrentPageReference)
+    pageRef;
     // Not working properly --> removed for now
     /*@wire(CurrentPageReference) 
     wiredPageRef(data) {
@@ -212,7 +215,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
                 topMenuItems.push(newItem);
             });
             this.topMenuItems = (topMenuItems.length > 0 ? topMenuItems : null);
-            if (this.isDebug) console.log('wiredHeaderMenus: topMenuItems updated',this.topMenuItems);
+            if (this.isDebug) console.log('wiredHeaderMenus: topMenuItems updated',JSON.stringify(this.topMenuItems));
 
             let mainMenuData = data[this.mainMenu] || [];
             let mainMenuItems = [];
@@ -227,7 +230,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
                 mainMenuItems.push(newItem);
             });
             this.mainMenuItems = (mainMenuItems.length > 0 ? mainMenuItems : null);
-            if (this.isDebug) console.log('wiredHeaderMenus: mainMenuItems updated',this.mainMenuItems);
+            if (this.isDebug) console.log('wiredHeaderMenus: mainMenuItems updated',JSON.stringify(this.mainMenuItems));
             if (this.isDebug) console.log('wiredHeaderMenus: END / menus initialized');
         }
         else if (error) {
@@ -302,6 +305,9 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('rendered: title ',document?.title);
         if (this.isDebug) console.log('rendered: head title ',document?.head?.title);
+
+        if (this.isDebug) console.log('rendered: current pageRef ',JSON.stringify(this.pageRef));
+        if (this.isDebug) console.log('rendered: location ',JSON.stringify(window.location));
 
         /*console.log('rendered: head list ',document?.head);
         console.log('rendered: head navigation meta ',document?.head?.querySelector('meta[name="navigation"]'));
@@ -395,10 +401,10 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         this.collapseModals();
         if (this.isDebug) console.log('handleLogin: modal closed');
 
-        if (this.isDebug) console.log('wiredPageRef: current pageRef ',this.pageRef);
+        if (this.isDebug) console.log('handleLogin: current pageRef ',JSON.stringify(this.pageRef));
         this[NavigationMixin.GenerateUrl](this.pageRef)
         .then((url) => {
-            if (this.isDebug) console.log('wiredPageRef: current url ',url);
+            if (this.isDebug) console.log('handleLogin: current url ',url);
             let loginPage = {type:"comm__namedPage",attributes:{name:"Login"},state:{startURL:url}};
             //let loginPage = {type:'standard__webPage',attributes: {url:'/login'}};
             //let loginPage = {type: 'comm__loginPage',attributes: {actionName: 'login'};
@@ -414,6 +420,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleLogout: START for Header');
         event.stopPropagation();
         event.preventDefault();
+
+        if (this.isDebug) console.log('handleLogout: current pageRef ',JSON.stringify(this.pageRef));
 
         //if (this.isDebug) console.log('handleLogout: location fetched ', window?.location);
         //if (this.isDebug) console.log('handleLogout: hostname fetched ', window?.location?.hostname);
