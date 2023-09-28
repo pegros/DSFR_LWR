@@ -83,6 +83,8 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
     handleAction(event) {
         if (this.isDebug) console.log('handleAction: START for Form ',this.buttonLabel);
         if (this.isDebug) console.log('handleAction: event ',event);
+        if (this.isDebug) console.log('handleAction: recordId ',this.recordId);
+        if (this.isDebug) console.log('handleAction: objectApiName ',this.objectApiName);
 
 
         try {
@@ -191,6 +193,7 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
         if (this.doRefresh) {
             if (this.isDebug) console.log('handleSuccess: refreshing page');
             this.dispatchEvent(new RefreshEvent());
+            window.location.reload();
         }
         this.toggleSpinner(false);
 
