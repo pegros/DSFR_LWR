@@ -145,7 +145,7 @@ public with sharing class dsfrFileUpload_CTL {
 
         ContentVersion newFile = new ContentVersion();
         newFile.VersionData = EncodingUtil.base64Decode(content);
-        newFile.Title = name;
+        newFile.Title = name.left(name.lastIndexOf('.'));
         newFile.PathOnClient = name;
 
         if (meta != null) {
