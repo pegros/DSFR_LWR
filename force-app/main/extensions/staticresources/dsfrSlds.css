@@ -5,9 +5,14 @@ html {
 }
     
 /* STANDARD required star position */
-abbr.slds-required {
+.fr-input-group abbr.slds-required {
     position: relative !important;
     float: right;
+    padding-bottom: 4px;
+}
+.flowruntime-input-label abbr.slds-required {
+    position: absolute !important;
+    top: -.5rem;
 }
 
 /* STANDARD lightning-input-field OVERRIDES */
@@ -20,6 +25,11 @@ abbr.slds-required {
     line-height: 1.5rem;
     padding: 0.5rem 1rem;
     margin-top: 0.5rem;
+}
+
+input.slds-input, textarea.slds-textarea {
+    background-color: var(--background-contrast-grey) !important;
+    color: var(--text-default-grey) !important;
 }
 
 .slds-input::placeholder {
@@ -249,20 +259,69 @@ button.slds-combobox__input-value {
     border-left-width : 0px;
     border-right-width : 0px;
 }
-.slds-has-error .slds-form-element__help::before {
+.slds-has-error .slds-combobox__input {
+    box-shadow: inset 0 -2px 0 0 var(--border-plain-error) !important;
+}
+.slds-has-error .slds-select_container {
+    box-shadow: inset 0 -2px 0 0 var(--border-plain-error) !important;
+}
+.slds-has-error .slds-select, .slds-has-error .slds-select:focus {
+    box-shadow: unset;
+}
+.slds-select_container:has(> select:active), .slds-select_container:has(> select:focus) {
+    outline-color: rgb(10,118,246);
+    outline-style: solid !important;
+    outline-width: 2px !important;
+    outline-offset: 2px !important;
+}
+
+.flowruntime-input-error, .flowruntime-input-error .slds-rich-text-editor__output, .flowruntime-input-error .slds-rich-text-editor__output span, .flowruntime-input-error .slds-rich-text-editor__output span > p {
+    color: var(--text-default-error);
+    font-size: .75rem;
+    display: inline;
+}
+.flowruntime-input-error::before {
+    color: var(--text-default-error);
+    font-size: .75rem;
     display: inline-block;
   	margin-right: 0.25rem;
-    color: currentColor;
-    /*background-color: currentColor;*/
     width: var(--icon-size);
     height: var(--icon-size);
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
-	/*-webkit-mask-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M17.5,2.5h-11L1,12l5.5,9.5h11L23,12L17.5,2.5z M16.2,14.8l-1.4,1.4L12,13.4l-2.8,2.8l-1.4-1.4l2.8-2.8L7.8,9.2l1.4-1.4l2.8,2.8l2.8-2.8l1.4,1.4L13.4,12L16.2,14.8z'/></svg>");
-	mask-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M17.5,2.5h-11L1,12l5.5,9.5h11L23,12L17.5,2.5z M16.2,14.8l-1.4,1.4L12,13.4l-2.8,2.8l-1.4-1.4l2.8-2.8L7.8,9.2l1.4-1.4l2.8,2.8l2.8-2.8l1.4,1.4L13.4,12L16.2,14.8z'/></svg>");
-      --icon-size: 1rem;*/
     content:'❌ ';
 }
+/*.slds-has-error .slds-form-element__help::before {*/
+.slds-has-error .slds-form-element__help:blank {
+    display: none !important;
+}
+/*.slds-has-error .slds-form-element__help:not(:empty) {
+    color: purple;
+}*/
+/* .slds-has-error .slds-form-element__help:not(:blank)::before { */
+
+.slds-has-error .slds-form-element__help::before {
+    display: inline-block;
+    font-size: .75rem;
+  	margin-right: 0.25rem;
+    color: currentColor;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    content:'❌ ';
+}
+
+.flowruntime-inline-container .slds-has-error .slds-form-element__help {
+    display: none !important;
+}
+.flowruntime-input .slds-has-error .slds-form-element__help:blank {
+    display: none !important;
+} 
+.flowruntime-input .slds-has-error .slds-form-element__help::before {
+    display: none !important;
+}
+
     .slds-text-color_error.slds-text-body_small span {
         font-size: 0.75rem !important;
     }
@@ -357,6 +416,7 @@ button.slds-combobox__input-value {
    
 .slds-select_container select, .slds-select_container select:focus {
     box-shadow: unset;
+    border-image-width: 0px;
 }
 
     /*
