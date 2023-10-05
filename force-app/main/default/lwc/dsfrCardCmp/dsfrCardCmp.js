@@ -147,7 +147,8 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         return this.cardImage || this.cardBadge;
     }
     get hasCardEnd() {
-        return (this.isDebug || this.cardEndDetails);
+        //return (this.isDebug || this.cardEndDetails);
+        return  this.cardEndDetails;
     }
 
 
@@ -239,6 +240,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('resetInput: card title converted ');
             }
             else if (typeof this.cardTitle !== 'string') {
+                if (this.isDebug) console.log('resetInput: resetting card title ',JSON.stringify(this.cardTitle));
                 this.cardTitle = null;
                 if (this.isDebug) console.log('resetInput: card title reset ');
             }
@@ -249,6 +251,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('resetInput: card badge converted ');
             }
             else if (typeof this.cardBadge !== 'string') {
+                if (this.isDebug) console.log('resetInput: resetting card badge ',JSON.stringify(this.cardBadge));
                 this.cardBadge = null;
                 if (this.isDebug) console.log('resetInput: card badge reset ');
             }
@@ -259,6 +262,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('resetInput: card description converted ');
             }
             else if (typeof this.cardDescription !== 'string') {
+                if (this.isDebug) console.log('resetInput: resetting card description ',JSON.stringify(this.cardDescription));
                 this.cardDescription = null;
                 if (this.isDebug) console.log('resetInput: card description reset ');
             }
@@ -269,6 +273,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('resetInput: card start details converted ');
             }
             else if (typeof this.cardStartDetails !== 'string') {
+                if (this.isDebug) console.log('resetInput: resetting card start details ',JSON.stringify(this.cardStartDetails));
                 this.cardStartDetails = null;
                 if (this.isDebug) console.log('resetInput: card start details reset ');
             }
@@ -279,6 +284,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('resetInput: card end details converted ');
             }
             else if (typeof this.cardEndDetails !== 'string') {
+                if (this.isDebug) console.log('resetInput: resetting card end details ',JSON.stringify(this.cardEndDetails));
                 this.cardEndDetails = null;
                 if (this.isDebug) console.log('resetInput: card end details reset ');
             }
@@ -289,11 +295,13 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('resetInput: card tags converted ');
             }
             else if (typeof this.cardTags !== 'string') {
+                if (this.isDebug) console.log('resetInput: resetting card tags ',JSON.stringify(this.cardTags));
                 this.cardTags = null;
                 if (this.isDebug) console.log('resetInput: card tags reset ');
             }
         }
         if ((this.cardImage) && (typeof this.cardImage !== 'string')) {
+            if (this.isDebug) console.log('resetInput: resetting card image ',JSON.stringify(this.cardImage));
             this.cardImage = null;
             if (this.isDebug) console.log('resetInput: card image reset ');
         }
