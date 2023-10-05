@@ -12,13 +12,25 @@
 
     <!-- COMPONENT DISPLAY -->
     <div class={wrappingClass} >
-        <template lwc:if={label}>
-            <h4 class="fr-downloads-group__title fr-mb-2v">{label}</h4>
-        </template>
+        <lightning-layout multiple-rows="true" vertical-align="top" class="listHeader">
+            <lightning-layout-item flexibility="auto" >
+                <template lwc:if={label}>
+                    <h3 class="fr-downloads-group__title fr-mb-2v">{label}</h3>
+                </template>
+            </lightning-layout-item>
+            <template lwc:if={showRefresh} >
+                <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
+                    <c-dsfr-button-dsp  button-icon="refresh-line"              button-icon-position="noLabel"
+                                        button-title="Raffraichir la liste"     button-variant="tertiary-no-outline"
+                                        ontrigger={handleRefresh}               is-debug={isDebug}>
+                    </c-dsfr-button-dsp>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
         <template lwc:if={isReady}>
             <ul>
                 <template for:each={fileList} for:item="iterFile">
-                    <li key={iterFile.id}>
+                    <li key={iterFile.linkId}>
                         <div class={iterFile.class}>
                             <!-- download -->
                             <p> 

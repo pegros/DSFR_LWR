@@ -47,11 +47,11 @@
 
             <!-- HEADER with Sorting -->
             <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
-                <lightning-layout-item flexibility="auto" >
+                <lightning-layout-item flexibility="auto" alignment-bump="right" >
                     <h3 class={headerClass}>{headerTitle}</h3>
                 </lightning-layout-item>
                 <template lwc:if={hasSort} >
-                    <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
+                    <lightning-layout-item flexibility="auto, no-grow, no-shrink" >
                         <nav role="sort" class="fr-nav">
                             <div class="fr-nav__item sortMenu">
                                 <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
@@ -73,6 +73,17 @@
                                 </div>
                             </div>
                         </nav>
+                    </lightning-layout-item>
+                </template>
+                <template lwc:if={showRefresh} >
+                    <lightning-layout-item flexibility="auto, no-grow, no-shrink" >
+                        <div class="refreshButton">
+                            <c-dsfr-button-dsp  button-icon="refresh-line"              button-icon-position="noLabel"
+                                                button-title="Raffraichir la liste"     button-variant="tertiary-no-outline"
+                                                ontrigger={handleRefresh}
+                                                is-debug={isDebug}>
+                            </c-dsfr-button-dsp>
+                        </div>
                     </lightning-layout-item>
                 </template>
             </lightning-layout>

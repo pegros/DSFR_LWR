@@ -5,19 +5,32 @@
     margin-bottom:  0.5rem;
 }
 .listTitle {
+    padding-top:  0.5rem !important;
     min-width: 50%;
-    margin-bottom:  0.75rem !important;
+    padding-bottom:  0.5rem !important;
+    /*line-height: .5rem !important;*/
+    margin-bottom: var(--title-spacing) !important;
+    /*margin-bottom:  0.75rem !important;*/
 }
 .sortMenu {
     position: relative !important;
+    margin-bottom: var(--title-spacing) !important;
+    font-size: .5rem !important;
+    line-height: .5rem !important;
+    display: inline-block !important;
+}
+.refreshButton {
+    display: inline-block !important;
+    font-size: .5rem !important;
+    line-height: .5rem !important;
     margin-bottom: var(--title-spacing) !important;
 }
 .fr-nav__item:before {
     box-shadow: none !important;
 }
 .sortButton {
-    padding-top:  0.75rem !important;
-    padding-bottom:  0.75rem !important;
+    padding-top:  0.5rem !important;
+    padding-bottom:  0.5rem !important;
 }
 .fr-menu {
     padding-top:  0px !important;

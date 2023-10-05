@@ -18,6 +18,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     @api showUpload = false;
     @api showDelete = false;
     @api disabled = false;
+    @api showRefresh = false;
 
     _listContext;
     @api 
@@ -293,6 +294,15 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
             });
         */
         if (this.isDebug) console.log('handleReplace: replace triggered');
+    }
+
+    handleRefresh(event){
+        if (this.isDebug) console.log('handleRefresh: START',event);
+        event.preventDefault();
+        let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
+        if (this.isDebug) console.log('handleRefresh: listCmp fetched',listCmp);
+        listCmp.doRefresh();
+        if (this.isDebug) console.log('handleRefresh: END file list refresh triggered');
     }
 
     //-----------------------------------------------------

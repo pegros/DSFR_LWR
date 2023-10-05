@@ -23,16 +23,22 @@
                         type="String"
                         description="Contexte d'utilisation de la configuration de liste" />
 
+            <property   name="showRefresh"
+                        label="Refresh?"
+                        type="Boolean"
+                        default="false"
+                        description="Affichage ou non d'un bouton de refresh de la liste." />
+
             <property   name="showUpload"
                         label="Upload?"
                         type="Boolean"
                         default="false"
-                        description="Déactivation de la fonction d'upload de nouvelle version sur un fichier." />
+                        description="Désactivation de la fonction d'upload de nouvelle version sur un fichier." />
             <property   name="showDelete"
                         label="Delete?"
                         type="Boolean"
                         default="false"
-                        description="Déactivation de la fonction de delete du lien fichier." />
+                        description="Désactivation de la fonction de delete du lien fichier." />
 
             <property   name="disabled"
                         label="Inactif?"
@@ -55,6 +61,7 @@
                         type="String"
                         description="ID Salesforce de l'enregistrement de rattachement des fichiers" />
             
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"

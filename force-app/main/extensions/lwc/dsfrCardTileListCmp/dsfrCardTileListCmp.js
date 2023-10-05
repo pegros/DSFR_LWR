@@ -76,6 +76,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
 
     @api hasEmptySection;
     @api forceDisplay;
+    @api showRefresh;
     
     @api isDebug = false;
 
@@ -192,7 +193,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
 
         this.refreshContainerId = registerRefreshContainer(this, this.refreshContainer);
         if (this.isDebug)console.log('connected: refresh container registered ',this.refreshContainerId);
-
+        
         if (this.isDebug) console.log('connected: END for card/tile list');
     }
 
@@ -492,6 +493,15 @@ export default class DsfrCardTileListCmp extends LightningElement {
         }
         
         if (this.isDebug) console.log('selectSort: END for card/tile list');        
+    }
+
+    handleRefresh(event){
+        if (this.isDebug) console.log('handleRefresh: START',event);
+        event.preventDefault();
+        let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
+        if (this.isDebug) console.log('handleRefresh: listCmp fetched',listCmp);
+        listCmp.doRefresh();
+        if (this.isDebug) console.log('handleRefresh: END file list refresh triggered');
     }
 
     //-----------------------------------------------------
