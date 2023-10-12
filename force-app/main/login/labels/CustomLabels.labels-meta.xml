@@ -1,4 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>dsfrSiteMgtIdentificationInputError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'identification (paramètre manquant)</shortDescription>
+        <value>Problème technique lors de votre identification</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtIdentificationNoUserError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'identification (aucun utilisateur)</shortDescription>
+        <value>Problème d'identification de votre compte à partir de votre identité (#1).</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtIdentificationManyUsersError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'identification (plusieurs utilisateurs)</shortDescription>
+        <value>Problème d'identification de votre compte à partir de votre identité (#2).</value>
+    </labels>
 
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationAccountError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème de d'enregistrement (paramètre manquant)</shortDescription>
+        <value>Problème de création de votre compte: données obligatoires manquantes.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationPasswordError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (password manquant)</shortDescription>
+        <value>Problème de création de votre compte: mot de passe manquant.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationUserError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (email utilisé)</shortDescription>
+        <value>Problème de création de votre compte: Email déjà utilisé sur un compte.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationPasswordInvalidError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (format de password)</shortDescription>
+        <value>Problème de création de votre compte: Votre mot de passe ne respecte pas le format demandé.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationProcessingError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (problème de création)</shortDescription>
+        <value>Problème de création de votre compte:</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationLoginError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (problème de connexion)</shortDescription>
+        <value>Problème de connexion à votre nouveau compte:</value>
+    </labels>
+   
+    <labels>
+        <fullName>dsfrSiteMgtChangeInputError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur lors de changement de mot de passe (paramètre manquant)</shortDescription>
+        <value>Information manquante pour changer votre mot de passe.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtChangeProcessingError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur lors de changement de mot de passe (lors de l'execution)</shortDescription>
+        <value>Problème de changement du mot de passe:</value>
+    </labels>
+
+    <labels>
+        <fullName>dsfrSiteMgtLostPasswordInputError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur lors d'un renvoi de mot de passe (paramètre manquant)</shortDescription>
+        <value>Problème d'identification votre compte: identité manquante.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtLostPasswordNoUserError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur lors d'un renvoi de mot de passe (aucun utilisateurs)</shortDescription>
+        <value>Problème d'identification de votre compte à partir de votre identité (#1).</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtLostPasswordManyUsersError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur lors d'un renvoi de mot de passe (plusieurs utilisateurs)</shortDescription>
+        <value>Problème d'identification de votre compte à partir de votre identité (#2).</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtLostPasswordNoTemplateError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur lors d'un renvoi de mot de passe (template email du site)</shortDescription>
+        <value>Problème de configuration du site : template email non défini.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtLostPasswordSendError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur lors d'un renvoi de mot de passe (erreur d'envoi email)</shortDescription>
+        <value>Problème d'envoi de l'email:</value>
+    </labels>
+
+
+    <labels>
+        <fullName>dsfrSiteMgtCaptchaInputError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en validant un captcha (paramètre manquant)</shortDescription>
+        <value>Problème technique de validation du Captcha (cas #1).</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtCaptchaValidationError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en validant un captcha (validation refusée)</shortDescription>
+        <value>Captcha non suffisamment valide.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtCaptchaProcessingError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en validant un captcha (appel Google KO)</shortDescription>
+        <value>Problème technique de validation du Captcha (cas #2).</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtCaptchaTechnicalError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en validant un captcha (retour Google KO)</shortDescription>
+        <value>Problème technique de validation Captcha (cas #3)</value>
+    </labels>
+    
 </CustomLabels>

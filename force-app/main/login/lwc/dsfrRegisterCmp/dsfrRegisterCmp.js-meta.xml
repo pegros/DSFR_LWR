@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>57.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Enregistrement / Register</masterLabel>
-    <description>Page de création de compte utilisateur DSFR</description>
+    <masterLabel>DSFR Création nouveau compte</masterLabel>
+    <description>Composant de création de nouveau compte utilisateur DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
@@ -20,9 +20,9 @@
                         description="Description principale du composant" />
 
             <property   name="formTitle"
-                        label="Titre du formulaire"
+                        label="Entête du formulaire"
                         type="String" 
-                        description="Descriptif du formulaire de création de compte" />
+                        description="Entête du formulaire de création de compte" />
             <property   name="formDescription"
                         label="Description du formulaire"
                         type="String" 
@@ -39,13 +39,19 @@
             <property   name="formFields"
                         label="Champs du formulaire"
                         type="String" 
-                        description='Liste des champs de PersonAccount à afficher dans le formulaire (list JSON [{"name":"filedApiName","required":true/false (optional)},...]' />        
+                        description='Liste des champs de Compte Personnel à afficher dans le formulaire (list JSON [{"name":"fieldApiName","required":true/false (optional)},...]' />        
 
             <property   name="cnilMention"
                         label="Mention CNIL"
                         type="String"
                         description="Activation et contenu d'une case d'acceptation de clauses CNIL" />
 
+            <property   name="showCaptcha"
+                        label="Activer Captcha ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation du captcha pour valider l'opération." />
+                        
             <property   name="startUrl"
                         label="URL cible"
                         type="String"
@@ -55,7 +61,7 @@
                         label="Debug ?"
                         type="Boolean"
                         default="false"
-                        description="Activation de détails pour l'analyse de problèmes" />
+                        description="Activation de traces pour l'analyse de problèmes" />
          </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

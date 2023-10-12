@@ -4,6 +4,9 @@ import { LightningElement, api, wire } from 'lwc';
 import getPersonAccountRT from '@salesforce/apex/dsfrSiteManagement_CTL.getPersonAccountRT';
 import getPasswordPolicyStatement from '@salesforce/apex/dsfrSiteManagement_CTL.getPasswordPolicyStatement';
 import registerUser from '@salesforce/apex/dsfrSiteManagement_CTL.registerUser';
+
+//import getCaptchaSiteKey from '@salesforce/apex/dsfrSiteManagement_CTL.getCaptchaSiteKey';
+import validateCaptcha from '@salesforce/apex/dsfrSiteManagement_CTL.validateCaptcha';
 //import ACCOUNT_OBJECT from '@salesforce/schema/Account';
 
 
@@ -24,6 +27,7 @@ export default class DsfrRegisterCmp extends LightningElement {
     @api cnilMention;
 
     @api startUrl = '/';
+    @api showCaptcha = false;
 
     @api isDebug = false;
 
@@ -55,16 +59,35 @@ export default class DsfrRegisterCmp extends LightningElement {
         if (data) {
             if (this.isDebug) console.log('wiredPolicy: data received ', data);
             this.pwdPolicy = data;
-            if (this.isDebug) console.log('wiredPolicy: END for Register');
+            if (this.isDebug) console.log('wiredPolicy: END OK for Register');
         }
         else if (error) {
-            console.error('wiredPolicy: END KO / error raised ', error);
+            console.error('wiredPolicy: END KO for Register / error raised ', error);
         }
         else {
-            console.warn('wiredPolicy: END OK / no data fetched');
+            console.warn('wiredPolicy: END OK for Register / no data fetched');
 
         }
     };
+
+    /*captchaSiteKey;
+    @wire(getCaptchaSiteKey,{})
+    wiredCaptchaSiteKey({data,error}) {
+        if (this.isDebug) console.log('wiredCaptchaSiteKey: START for Register');
+        if (data) {
+            if (this.isDebug) console.log('wiredPolicy: data received ', data);
+            this.captchaSiteKey = data;
+            this.triggerCaptcha();
+            if (this.isDebug) console.log('wiredCaptchaSiteKey: END for Register');
+        }
+        else if (error) {
+            console.error('wiredCaptchaSiteKey: END KO / error raised ', error);
+        }
+        else {
+            console.warn('wiredCaptchaSiteKey: END OK / no data fetched');
+
+        }
+    };*/
 
     /*
     @wire(getObjectInfo, { objectApiName: ACCOUNT_OBJECT })
@@ -89,6 +112,10 @@ export default class DsfrRegisterCmp extends LightningElement {
     };*/
 
     formFieldList;
+    //buttonDisabled;
+    //captchaTriggered;
+    tmpAccount;
+    tmpPassword;
 
     //-----------------------------------------------------
     // Initialisation
@@ -116,17 +143,41 @@ export default class DsfrRegisterCmp extends LightningElement {
             this.formFieldList = [{name:"FieldListParsingFailure",required:true}];
         }
 
+        if (this.showCaptcha) {
+            if (this.isDebug) console.log('connected: registering showCaptcha handler');
+            document.addEventListener("grecaptchaVerified", this.handleCaptcha);
+            if (this.isDebug) console.log('connected: showCaptcha handler registered');
+        }
+
         if (this.isDebug) console.log('connected: END for Register');
     }
 
-    /*renderedCallback() {
+    renderedCallback() {
         if (this.isDebug) console.log('rendered: START for Register');
         if (this.isDebug) console.log('rendered: defaultRecordTypeId ', this.defaultRecordTypeId);
         if (this.isDebug) console.log('rendered: formFieldList ', JSON.stringify(this.formFieldList));
         if (this.isDebug) console.log('rendered: accountDesc ', JSON.stringify(this.accountDesc));
         if (this.isDebug) console.log('rendered: accountPicklistDesc ', JSON.stringify(this.accountPicklistDesc));
+
+        /*if (this.showCaptcha) {
+            if (this.isDebug) console.log('rendered: triggering showCaptcha');
+            this.triggerCaptcha();
+        }*/
+
         if (this.isDebug) console.log('rendered: END for Register');
-    }*/
+    }
+
+    disconnectedCallback() {
+        if (this.isDebug) console.log('disconnected: START for Register');
+
+        if (this.showCaptcha) {
+            if (this.isDebug) console.log('disconnected: deregistering showCaptcha handler');
+            document.removeEventListener("grecaptchaVerified", this.handleCaptcha);
+            if (this.isDebug) console.log('disconnected: showCaptcha handler deregistered');
+        }
+
+        if (this.isDebug) console.log('disconnected: END for Register');
+    }
 
     //-----------------------------------------------------
     // Event Handlers
@@ -214,19 +265,30 @@ export default class DsfrRegisterCmp extends LightningElement {
         } 
         if (this.isDebug) console.log('handleSubmit: email inputs checked');
 
-        registerUser({ newAccount: newAccount, password: passwordInputs[0].value, startUrl: this.startUrl})
-        .then((result) => {
-            if (this.isDebug) console.log('handleSubmit: registration success ',result);
-            this.toggleSpinner(false);
-            if (this.isDebug) console.log('handleSubmit: END / opening target');
-            window.open(result,'_self');
-        }).catch((error) => {
-            console.warn('handleSubmit: END KO / registration failed ',error);
-            this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
-            this.toggleSpinner(false);
-        });
+        if (this.showCaptcha) {
+            if (this.isDebug) console.log('handleSubmit: challenging captcha');
+            this.tmpAccount = newAccount;
+            this.tmpPassword = passwordInputs[0].value;
+            document.dispatchEvent(new CustomEvent("grecaptchaExecute", {"detail": {action: "register"}}));
+            if (this.isDebug) console.log('handleSubmit: END / captcha challenge requested');
+        }
+        else {
+            if (this.isDebug) console.log('handleSubmit: no captcha challenge required');
 
-        if (this.isDebug) console.log('handleSubmit: registration requested');
+            registerUser({ newAccount: newAccount, password: passwordInputs[0].value, startUrl: this.startUrl})
+            .then((result) => {
+                if (this.isDebug) console.log('handleSubmit: registration success ',result);
+                this.toggleSpinner(false);
+                if (this.isDebug) console.log('handleSubmit: END / opening target');
+                window.open(result,'_self');
+            }).catch((error) => {
+                console.warn('handleSubmit: END KO / registration failed ',error);
+                this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
+                this.toggleSpinner(false);
+            });
+
+            if (this.isDebug) console.log('handleSubmit: registration requested');
+        }
     }
 
     handleError(event) {
@@ -283,5 +345,69 @@ export default class DsfrRegisterCmp extends LightningElement {
         
         if (this.isDebug) console.log('toggleSpinner: END');
     }
+
+    handleCaptcha = (event) => {
+        if (this.isDebug) console.log('handleCaptcha: START for Register with ',JSON.stringify(event.detail));
+
+        if (event.detail.action !== 'register') {
+            if (this.isDebug) console.log('handleCaptcha: END for Register / ignoring action');
+            return;
+        }
+
+        if (this.isDebug) console.log('handleCaptcha: validating captcha ',  JSON.stringify(event.detail));
+        //validateCaptcha({ recaptchaResponse: event.detail.response})
+        validateCaptcha(event.detail)
+        .then(result => {
+            if (this.isDebug) console.log('handleCaptcha: captcha validated');
+
+            registerUser({ newAccount: this.tmpAccount, password: this.tmpPassword, startUrl: this.startUrl})
+            .then((result) => {
+                if (this.isDebug) console.log('handleCaptcha: registration success ',result);
+                this.toggleSpinner(false);
+                if (this.isDebug) console.log('handleCaptcha: END for Register / opening target');
+                window.open(result,'_self');
+            }).catch((error) => {
+                console.warn('handleCaptcha: END KO for Register / registration failed ',JSON.stringify(error));
+                this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
+                this.toggleSpinner(false);
+            });
+
+            if (this.isDebug) console.log('handleCaptcha: registration requested');
+        })
+        .catch(error => {
+            console.warn('handleCaptcha: END KO for Register / Captcha validation failed ',JSON.stringify(error));
+            this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème de validation Captcha');
+            this.toggleSpinner(false);
+        });
+        if (this.isDebug) console.log('handleCaptcha: validation triggered');
+    }
+
+    /*triggerCaptcha = function() {
+        if (this.isDebug) console.log('triggerCaptcha: START');
+
+        if (this.captchaTriggered) {
+            if (this.isDebug) console.log('triggerCaptcha: END / captcha already triggered ');
+            return;
+        }
+
+        if (this.captchaSiteKey) {
+            if (this.isDebug) console.log('triggerCaptcha: site key available ',this.captchaSiteKey);
+
+            let divElement = this.template.querySelector('div.recaptchaCheckbox');
+            if (divElement) {
+                if (this.isDebug) console.log('triggerCaptcha: divElement available ', divElement);
+                let payload = {element: divElement, badge: 'bottomright', key: this.captchaSiteKey};
+                document.dispatchEvent(new CustomEvent("grecaptchaRender", {detail: payload}));
+                //this.captchaTriggered = true;
+                if (this.isDebug) console.log('triggerCaptcha: END / captcha triggered');
+            }
+            else {
+                if (this.isDebug) console.log('triggerCaptcha: END / awaiting ');
+            }
+        }
+        else {
+            if (this.isDebug) console.log('triggerCaptcha: END / waiting for site key ');
+        }
+    }*/
 
 }

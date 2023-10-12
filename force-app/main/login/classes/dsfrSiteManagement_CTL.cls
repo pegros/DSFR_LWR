@@ -32,7 +32,12 @@
 ***/
 
 public with sharing class dsfrSiteManagement_CTL {
-   
+
+    /***
+    * @description  Captcha score theshold above which evaluations are validated
+    ***/
+    private final static Decimal MIN_CAPTCHA_SCORE = .4;
+
     /***
     * @description  Method to fetch the default Account RecordType ID for self-registration on the 
     *               current Network.
@@ -82,7 +87,8 @@ public with sharing class dsfrSiteManagement_CTL {
 
         if (String.isEmpty(identity) || String.isEmpty(password)) {
             System.debug(LoggingLevel.ERROR,'loginViaIdentity: END KO / Missing information');
-            throw new AuraHandledException('Problème technique lors de votre identification.');
+            //throw new AuraHandledException('Problème technique lors de votre identification.');
+            throw new AuraHandledException(Label.dsfrSiteMgtIdentificationInputError);
         }
 
         UserSearch_UTL searchUtl = new UserSearch_UTL();
@@ -100,11 +106,13 @@ public with sharing class dsfrSiteManagement_CTL {
         System.debug('loginViaIdentity: #users matching identity ' + userNames?.size());
         if ((userNames == null) || (userNames.size() == 0)) {
             System.debug(LoggingLevel.ERROR,'loginViaIdentity: END KO / User not found for identity ' + identity);
-            throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#1).');
+            //throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#1).');
+            throw new AuraHandledException(Label.dsfrSiteMgtIdentificationNoUserError);
         }
         if (userNames.size() > 1) {
             System.debug(LoggingLevel.ERROR,'loginViaIdentity: END KO / More than 1 user found for identity ' + identity);
-            throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#2).');
+            //throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#2).');
+            throw new AuraHandledException(Label.dsfrSiteMgtIdentificationManyUsersError);
         }
         System.debug('loginViaIdentity: logging in username ' + userNames[0].username);
         
@@ -122,8 +130,7 @@ public with sharing class dsfrSiteManagement_CTL {
     }
 
     /***
-    * @description  Method to upload base64 content as a new ContentDocument and 
-    *               automatically link it to a record (as new ContentDocumentLink).
+    * @description  Method to create/activate a new Customer Community User (and its related PersonAccount)
     * @param        newAccount  New Account data to create
     * @param        password    Name of the ContentDocument to be created 
     * @param        startUrl    List of IDs of the records to which the new ContentDocument should be linked 
@@ -137,11 +144,13 @@ public with sharing class dsfrSiteManagement_CTL {
         // Step #1 - Controls and Context fetch
         if (newAccount == null || String.isBlank(newAccount.LastName) || String.isBlank(newAccount.FirstName) || String.isBlank(newAccount.PersonEmail)) {
             System.debug(LoggingLevel.ERROR,'registerUser: END KO / Missing Account info (first/last/email) ' + newAccount);
-            throw new AuraHandledException('Problème de création de votre compte: données obligatoires manquantes.');
+            //throw new AuraHandledException('Problème de création de votre compte: données obligatoires manquantes.');
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationAccountError);
         }
         if (String.isBlank(password)) {
             System.debug(LoggingLevel.ERROR,'registerUser: END KO / Missing password');
-            throw new AuraHandledException('Problème de création de votre compte: mot de passe manquant.');
+            //throw new AuraHandledException('Problème de création de votre compte: mot de passe manquant.');
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationPasswordError);
         }
 
         UserSearch_UTL searchUtl = new UserSearch_UTL();
@@ -155,7 +164,8 @@ public with sharing class dsfrSiteManagement_CTL {
         System.debug('registerUser: #users matching Email ' + userNames?.size());
         if (userNames?.size() > 0) {
             System.debug(LoggingLevel.ERROR,'registerUser: END KO / at least 1 user found with email ' + newAccount.PersonEmail);
-            throw new AuraHandledException('Problème de création de votre compte: Email déjà utilisé sur un compte.');
+            //throw new AuraHandledException('Problème de création de votre compte: Email déjà utilisé sur un compte.');
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationUserError);
         }
         System.debug('loginViaIdentity: email usage controlled');
 
@@ -217,8 +227,15 @@ public with sharing class dsfrSiteManagement_CTL {
         System.debug('registerUser: newUser init ' + newUser);
 
         System.debug('registerUser: password provided ' + password);
-        Site.validatePassword(newUser, password, password);
-        System.debug('registerUser: password format checked');
+        try {
+            Site.validatePassword(newUser, password, password);
+            System.debug('registerUser: password format checked');
+        }
+        catch(exception e) {
+            System.debug(LoggingLevel.ERROR,'registerUser: KO upon password validation ' + e);
+            //throw new AuraHandledException('Votre mot de passe ne respecte pas le format demandé.');
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationPasswordInvalidError);
+        }
 
 
         // Step #3 - Account and User Registration
@@ -229,7 +246,8 @@ public with sharing class dsfrSiteManagement_CTL {
         }
         catch (exception e) {
             System.debug(LoggingLevel.ERROR,'registerUser: KO upon PersonAccount creation ' + e);
-            throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
+            //throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
         }
 
         ID userId;
@@ -244,11 +262,13 @@ public with sharing class dsfrSiteManagement_CTL {
             for (String iter : e.getDisplayMessages()) {
                 System.debug(LoggingLevel.ERROR,'registerUser: error ' + iter);
             }
-            throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
+            //throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
         }
         catch (exception e) {
             System.debug(LoggingLevel.ERROR,'registerUser: KO upon User registration ' + e);
-            throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
+            //throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
         }
 
 
@@ -260,9 +280,11 @@ public with sharing class dsfrSiteManagement_CTL {
         }
         catch(Exception e) {
             System.debug(LoggingLevel.ERROR,'registerUser: END KO / login failed ' + e.getMessage());
-            throw new AuraHandledException('Problème de connexion à votre nouveau compte. ' + e.getMessage());
+            //throw new AuraHandledException('Problème de connexion à votre nouveau compte. ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationLoginError + ' ' + e.getMessage());
         }
 
+        /* Try to trgger email validation via change pwd process */
         /*try {
             if (String.isBlank(nwInfos.ChgEmailVerNewEmailTemplateId)) {
                 System.debug('registerUser: no email verification template defined on network');
@@ -288,6 +310,38 @@ public with sharing class dsfrSiteManagement_CTL {
     }
 
     /***
+    * @description  Method to update the password of the current user.
+    * @param        newPassword         new password entere
+    * @param        verifyNewPassword   second entry of the new password
+    * @param        oldPassword         previous password
+    * @return       String              page ref URL
+    * @exception    Various exceptions in case of wrong input or execution failure.
+    ***/
+    @AuraEnabled
+    public static String changePassword(final String newPassword, final String verifyNewPassword, final String oldPassword) {
+        System.debug('changePassword: START for new Password ' + newPassword);
+
+        // Step #1 - Controls and Context fetch
+        if (String.isBlank(newPassword) || String.isBlank(verifyNewPassword) || String.isBlank(oldPassword)) {
+            System.debug(LoggingLevel.ERROR,'changePassword: END KO / Missing password info');
+            //throw new AuraHandledException('Information manquante pour changer votre mot de passe.');
+            throw new AuraHandledException(Label.dsfrSiteMgtChangeInputError);
+        }
+
+        try {
+            System.debug('changePassword: replacing old password ' + oldPassword);
+            System.PageReference targetPage = Site.changePassword(newPassword, verifyNewPassword, oldPassword);
+            System.debug('changePassword: END OK / returning ' + targetPage.getUrl());
+            return targetPage.getUrl();
+        }
+        catch(Exception e) {
+            System.debug(LoggingLevel.ERROR,'changePassword: END KO / password change failed ' + e.getMessage());
+            //throw new AuraHandledException('Problème de changement du mot de passe. ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtChangeProcessingError + ' ' +  e.getMessage());
+        }
+    }
+
+    /***
     * @description  Method to send the lost password email for a user identify.
     * @param        identity    username or Email of the user logging in
     * @exception    Various exceptions in case of wrong input or execution failure.
@@ -299,7 +353,8 @@ public with sharing class dsfrSiteManagement_CTL {
         // Step #1 - Controls and Context fetch
         if (String.isBlank(identity)) {
             System.debug(LoggingLevel.ERROR,'sendLostPassword: END KO / Missing identity');
-            throw new AuraHandledException('Problème d\'identification votre compte: identité manquante.');
+            //throw new AuraHandledException('Problème d\'identification votre compte: identité manquante.');
+            throw new AuraHandledException(Label.dsfrSiteMgtLostPasswordInputError);
         }
 
         UserSearch_UTL searchUtl = new UserSearch_UTL();
@@ -313,32 +368,168 @@ public with sharing class dsfrSiteManagement_CTL {
         System.debug('sendLostPassword: #users matching identity ' + userNames?.size());
         if ((userNames == null) || (userNames.size() == 0)) {
             System.debug(LoggingLevel.ERROR,'sendLostPassword: END KO / User not found for identity ' + identity);
-            throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#1).');
+            //throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#1).');
+            throw new AuraHandledException(Label.dsfrSiteMgtLostPasswordNoUserError);
         }
         if (userNames.size() > 1) {
             System.debug(LoggingLevel.ERROR,'sendLostPassword: END KO / More than 1 user found for identity ' + identity);
-            throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#2).');
+            //throw new AuraHandledException('Problème d\'identification de votre compte à partir de votre identité (#2).');
+            throw new AuraHandledException(Label.dsfrSiteMgtLostPasswordManyUsersError);
         }
         System.debug('sendLostPassword: sending email to username ' + userNames[0].username);
 
         // Step #3 - Email Sending
         if (String.isBlank(nwInfos.ForgotPasswordEmailTemplateId)) {
             System.debug(LoggingLevel.ERROR,'sendLostPassword: END KO / no forgot email template defined on network');
-            throw new AuraHandledException('Problème de configuration du site : template email non défini.');
+            //throw new AuraHandledException('Problème de configuration du site : template email non défini.');
+            throw new AuraHandledException(Label.dsfrSiteMgtLostPasswordNoTemplateError);
         }
+
+        try {
+            System.debug('sendLostPassword: using forgot email template to replace pwd ' + nwInfos.ForgotPasswordEmailTemplateId);
+            System.debug('sendLostPassword: username ' + userNames[0].username);
+            Boolean emailStatus = searchUtl.resetPassword(userNames[0].username, (String)(nwInfos.ForgotPasswordEmailTemplateId));
+            System.debug('sendLostPassword: lost password email sent ' + emailStatus);   
+        }
+        catch(Exception e) {
+            System.debug(LoggingLevel.ERROR,'sendLostPassword: END KO / lost pwd email sending failed ' + e.getMessage());
+            //throw new AuraHandledException('Problème d\'envoi de l\'email. ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtLostPasswordSendError + ' ' + e.getMessage());
+        }
+
+        /*
         try {
             System.debug('sendLostPassword: using forgot email template to replace pwd ' + nwInfos.ForgotPasswordEmailTemplateId);
             System.debug('sendLostPassword: user ID ' + userNames[0].id);
             System.debug('sendLostPassword: network ID ' + networkId);
-            Boolean emailStatus = searchUtl.sendEmail((String)(userNames[0].id), (String)(nwInfos.ChgEmailVerNewEmailTemplateId), networkId, Site.getPathPrefix());
+            Boolean emailStatus = searchUtl.sendEmail((String)(userNames[0].id), (String)(nwInfos.ForgotPasswordEmailTemplateId), networkId, Site.getPathPrefix());
             System.debug('sendLostPassword: lost password email sent ' + emailStatus);   
         }
         catch(Exception e) {
             System.debug(LoggingLevel.ERROR,'sendLostPassword: END KO / lost pwd email sending failed ' + e.getMessage());
             throw new AuraHandledException('Problème d\'envoi de l\'email. ' + e.getMessage());
-        }
+        }*/
         System.debug('sendLostPassword: END OK');
     }
+
+    /***
+    * @description  Method to validate a captcha challenge on server side
+    * @param        recaptchaResponse   value returned by the client side captcha challenge
+    * @param        siteKey             site key used for the client side captcha challenge
+    * @param        actionName          action name used for the client side captcha challenge
+    * @param        isEnterprise        flage to use enterprise instead of developer recaptcha API
+    * @exception    Various exceptions in case of wrong input or execution failure.
+    ***/
+    @AuraEnabled
+    public static String validateCaptcha(final String response,final String site, final String action, final Boolean isEnterprise) {
+        System.debug('validateCaptcha: START for response ' + response);
+        System.debug('validateCaptcha: with site Key ' + site);
+        System.debug('validateCaptcha: for action ' + action);
+        System.debug('validateCaptcha: for Enterprise API ' + isEnterprise);
+
+        // Step #1 - Controls and Context fetch
+        if ((String.isBlank(response)) || (String.isBlank(site)) || (String.isBlank(action))) {
+            System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Missing input');
+            //throw new AuraHandledException('Problème de validation du Captcha.');
+            throw new AuraHandledException(Label.dsfrSiteMgtCaptchaInputError);
+        }
+
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setMethod('POST');
+
+        if (isEnterprise) {
+            System.debug('validateCaptcha: using Enterprise API');
+            request.setEndpoint('callout:GoogleRecaptchaEnterprise');
+            //request.setHeader('X-goog-api-key','{!$Credential.Password}');
+            request.setHeader('Content-Type','application/json; charset=utf-8');
+            request.setBody(  '{"event":{"token":"' + response
+                            + '","siteKey":"' + site
+                            + '","expectedAction":"' + action +'"}}');
+        }   
+        else {
+            System.debug('validateCaptcha: using Developer API');
+            request.setEndpoint('callout:GoogleRecaptchaDeveloper');
+            //request.setEndpoint('callout:GoogleRecaptcha');
+            //request.setEndpoint('https://www.google.com/recaptcha/api/siteverify');
+            request.setHeader('Content-Type','application/x-www-form-urlencoded');
+            //request.setBody('secret=' + '{!$Credential.RecaptchaGoogleAccount.apiKey}' + '&response=' + recaptchaResponse);
+            request.setBody('secret=' + '{!$Credential.Password}' + '&response=' + response);
+            //request.setBody('secret=' + CAPTCHA_SECRET_KEY + '&response=' + recaptchaResponse);
+        }
+            
+        System.debug('validateCaptcha: issuing request ' + request);
+        System.debug('validateCaptcha: with body ' + request.getBody());
+
+        HttpResponse httpResponse = http.send(request);
+        System.debug('validateCaptcha: POST response received ' + httpResponse);
+
+        if (httpResponse.getStatusCode() == 200) {
+            System.debug('validateCaptcha: POST response body received ' + httpResponse.getBody());
+            Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(httpResponse.getBody());
+
+            if (isEnterprise) {
+                System.debug('validateCaptcha: analysing Enterprise API result');
+                if (result.containsKey('riskAnalysis')) {
+                    Decimal score = (Decimal) ((Map<String, Object>)(result.get('riskAnalysis'))).get('score');
+                    if (score > MIN_CAPTCHA_SCORE) {
+                        System.debug('validateCaptcha: END OK / Google check score high enough ' + score);
+                        return 'Captcha validé (enterprise)';
+                    }
+                    else {
+                        System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Google check score too low ' + score);
+                        //throw new AuraHandledException('Captcha non suffisamment valide (enterprise)');
+                        throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError);
+                    }
+                }
+                else {
+                    System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Google answer misses risk evaluation');
+                    //throw new AuraHandledException('Captcha invalide (enterprise)');
+                    throw new AuraHandledException(Label.dsfrSiteMgtCaptchaTechnicalError);
+                }
+            }
+            else {
+                System.debug('validateCaptcha: analysing Developer API result');
+                if (result.containsKey('success')) {
+                    if (result.get('success') == true) {
+                        if (result.containsKey('score')) {
+                            //score logic is only needed/returned for v3 (0.0 - 1.0)
+                            //https://developers.google.com/recaptcha/docs/v3
+
+                            Decimal score = (Decimal)result.get('score');
+                            if (score > MIN_CAPTCHA_SCORE) {
+                                System.debug('validateCaptcha: END OK / Google check score high enough ' + score);
+                                return 'Captcha validé (v3)';
+                            }
+                            else {
+                                System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Google check score too low ' + score);
+                                //throw new AuraHandledException('Captcha non suffisamment valide (v3) (developer)');
+                                throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError + ' (v3 - developer)');
+                            }
+                        }
+                        else {
+                            System.debug('validateCaptcha: END OK / v2 simple validation');
+                            return 'Captcha validé (v2)';
+                        }
+                    }
+                    else {
+                        System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / validation refused ' + result);
+                        //throw new AuraHandledException('Captcha invalide (developer)');
+                        throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError + ' (developer)');
+                    }
+                }
+                else {
+                    System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Google answer misses success evaluation');
+                    //throw new AuraHandledException('Captcha invalide (enterprise)');
+                    throw new AuraHandledException(Label.dsfrSiteMgtCaptchaTechnicalError + ' (developer)');
+                }
+            }
+        }
+        System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / technical problem  ' + httpResponse.getBody());
+        //throw new AuraHandledException('Problème technique de validation Captcha');
+        throw new AuraHandledException(Label.dsfrSiteMgtCaptchaProcessingError);
+    }
+
 
     /**
     * @description	Private utility Class to fetch User usernames in without sharing mode.
@@ -365,12 +556,20 @@ public with sharing class dsfrSiteManagement_CTL {
             System.debug('sendEmail: END with status ' + emailStatus);
             return emailStatus;
         }
-        public System.ResetPasswordResult resetPassword(final String userId, final String templateId) {
+        public Boolean resetPassword(final String username, final String templateId) {
+            System.debug('resetPassword: START for user ' + username);
+            System.debug('resetPassword: with template ' + templateId);
+            //Boolean emailStatus = Site.forgotPassword(username, templateId);
+            Boolean emailStatus = Site.forgotPassword(username);
+            System.debug('resetPassword: END with status ' + emailStatus);
+            return emailStatus;
+        }
+        /*public System.ResetPasswordResult resetPassword(final String userId, final String templateId) {
             System.debug('resetPassword: START ');
             System.ResetPasswordResult resetStatus = System.resetPasswordWithEmailTemplate(userId, true, templateId);
             System.debug('resetPassword: END with status ' + resetStatus);
             return resetStatus;
-        }
+        }*/
         /*public UserRole getPortalRole() {
             return [Select Name From UserRole Where PortalType = 'None' Limit 1];
         }*/

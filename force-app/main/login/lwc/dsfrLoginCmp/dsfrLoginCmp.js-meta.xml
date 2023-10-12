@@ -3,7 +3,7 @@
     <apiVersion>57.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>DSFR Connexion / Login</masterLabel>
-    <description>Page de connexion DSFR</description>
+    <description>Composant de connexion DSFR</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
@@ -60,11 +60,17 @@
                         type="String"
                         description="Salesforce page reference (JSON) de la page dédiée" />
 
+            <property   name="useCaptcha"
+                        label="Activer Captcha ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation du captcha pour valider l'opération." />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
                         default="false"
-                        description="Activation de détails pour l'analyse de problèmes" />
+                        description="Activation de traces pour l'analyse de problèmes" />
          </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
