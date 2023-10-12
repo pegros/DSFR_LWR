@@ -38,7 +38,7 @@ Le composant crée un **PersonAccount** et active un CustomerCommunity **User** 
 * positionant le `owner` par défaut du site (qui doit avoir un rôle) sur le **PersonAccount**
 * initialisant les préférences de localisation (langue, chiffres, fuseau horaire...) correspondant au `Guest User` du site
 
-![Register](/media/dsfrRegisterCmp.png) 
+![Register](/media/dsfrRegisterCmp.png =200x) 
 
 Le composant se configure entièrement dans **Site Builder** et offre les paramètres suivants:
 * `Titre principal`: Titre principal du composant
@@ -63,7 +63,7 @@ Le composant **DSFR Connexion / Login** a pour vocation d'être utilisé dans la
 Il permet également de rediriger l'utilisateur vers les pages de création de nouveau compte
 (s'il n'a pas de compte) ou de réinitialisation de mot de passe (s'il l'a oublié).
 
-![Login](/media/dsfrLoginCmp.png) 
+![Login](/media/dsfrLoginCmp.png =200x) 
 
 Le composant se configure entièrement dans **Site Builder** et offre les paramètres suivants:
 * `Titre principal`: Titre principal du composant
@@ -84,7 +84,7 @@ Le composant se configure entièrement dans **Site Builder** et offre les param�
 
 Le composant **DSFR Réinitialisation mot de passe** a pour vocation d'être utilisé dans la page standard `Forgot Password` des sites pour permettre aux utilisateurs de réinitialiser leur mot de passe. 
 
-![Lost Password](/media/dsfrLostPasswordCmp.png) 
+![Lost Password](/media/dsfrLostPasswordCmp.png =200x) 
 
 Le composant se configure entièrement dans **Site Builder** et offre les paramètres suivants:
 * `Titre principal`: Titre principal du composant
@@ -108,7 +108,7 @@ Le composant se configure entièrement dans **Site Builder** et offre les param�
 
 Le composant **DSFR Changement mot de passe** a pour vocation d'être utilisé dans une page ou un ensemble de pages permettant à l'utilisateur d'administrer ses données personnelles. 
 
-![Change Password](/media/dsfrChangePasswordCmp.png) 
+![Change Password](/media/dsfrChangePasswordCmp.png =200x) 
 
 Le composant se configure entièrement dans **Site Builder** et offre les paramètres suivants:
 * `Titre principal`: Titre principal du composant
@@ -134,7 +134,7 @@ La solution implemente actuellement la version v3 de **[reCAPTCHA](https://www.g
 * L'utilisation de **reCAPTCHA** par les composants est par ailleurs optionnelle et configurable au travers de propriétés booléennes `Use Captcha ?` accessibles depuis **Site Builder**.
 * La bascule entre les versions **developer** et **enterprise** du **reCAPTCHA** par les composants est configurable au travers de propriétés booléennes `Use Captcha ?` accessibles depuis **Site Builder**.
 
-| [Recaptcha](/media/Recaptcha.png) | [Recaptcha](/media/RecaptchaExpanded.png) |
+| ![Recaptcha](/media/Recaptcha.png =100x) | ![Recaptcha](/media/RecaptchaExpanded.png=100x) |
 
 
 ### Déclaration Google
