@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Le composant **dsfrIconFieldDsp** permet une information textuelle préfixée avec une **[icône du DSFR](https://www.systeme-de-design.gouv.fr/elements-d-interface/fondamentaux-techniques/icones)**.
+Le composant **dsfrIconFieldDsp** permet d'afficher une information textuelle préfixée par une **[icône du DSFR](https://www.systeme-de-design.gouv.fr/elements-d-interface/fondamentaux-techniques/icones)**.
 
 <img src="/media/dsfrIconFieldDsp.png" alt="Register" width=400> 
 
