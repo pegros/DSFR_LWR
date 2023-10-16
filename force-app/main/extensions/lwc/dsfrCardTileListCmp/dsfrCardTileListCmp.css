@@ -1,6 +1,9 @@
+/* Hide sfpegListCmp data loading utility */
 .listLoader {
     display:none
 }
+
+/* Header global overrides */
 .listHeader {
     margin-bottom:  0.5rem;
 }
@@ -12,37 +15,40 @@
     margin-bottom: var(--title-spacing) !important;
     /*margin-bottom:  0.75rem !important;*/
 }
-.sortMenu {
-    position: relative !important;
-    margin-bottom: var(--title-spacing) !important;
-    font-size: .5rem !important;
-    line-height: .5rem !important;
-    display: inline-block !important;
+
+/* Header sort feature overrides */
+.sortNav {
+    /*margin-top: -2px;
+    background-color: blue;
+    padding: 2px;*/
+    display: inline-block;
+    position: static;
+    vertical-align: middle;
+    flex: none;
 }
-.refreshButton {
-    display: inline-block !important;
-    font-size: .5rem !important;
-    line-height: .5rem !important;
-    margin-bottom: var(--title-spacing) !important;
+.sortDiv {
+    /*background-color: green;
+    padding: 2px;*/
+    display: inline-block;
+    position: relative;
 }
-.fr-nav__item:before {
-    box-shadow: none !important;
+.sortDiv::before {
+    display: none !important;
 }
 .sortButton {
+    /*background-color: red;*/
     padding-top:  0.5rem !important;
     padding-bottom:  0.5rem !important;
+    min-height: auto !important;
+    min-height: auto !important;
+    /*justify-content: flex-start !important;*/
+    font-size: .875rem !important;
+    padding-right: .5rem !important;
+    display: block !important;
 }
-.fr-menu {
-    padding-top:  0px !important;
-    padding-bottom:  0px !important;
-    /*-webkit-appearance: none;*/
-    filter: drop-shadow(var(--overlap-shadow)) !important;
-}
-.fr-menu.fr-collapse--expanded {
-    display: inline-block  !important;
+.sortMenu {
+    display: none;
     max-height: none !important;
-    /*background-color: transparent;
-    background-color: var(--background-contrast-grey);*/
     background-color: white;
     color: black;
     z-index: 1000;
@@ -53,27 +59,63 @@
     margin-left:  0rem !important;
     margin-right:  0rem !important;
     margin-bottom:  0rem !important;
-    top:  2.75rem !important;
-    right: 0rem !important;
+    top: 120% !important;
+    right: 0 !important;
+    position: absolute !important;
+    filter: drop-shadow(var(--overlap-shadow));
 }
-/*.fr-nav__link {
-    --hover-tint: var(--hover);
-    --active-tint: var(--active);
-}*/
-.fr-nav__link:hover {
-    background-color: var(--hover-tint);
+.sortMenu.fr-collapse--expanded {
+    display: block  !important;
 }
-.fr-nav__link {
+.sortList {
+    max-width: 20 rem !important;
+    background-color: var(--background-overlap-grey);
+    margin-bottom: 1rem;
+}
+.sortLink {
     color: var(--text-default-grey) !important;
+    font-size: .875rem !important;
+    box-shadow: 0 calc(-1rem - 1px) 0 -1rem var(--border-default-grey) !important;
 }
-.fr-nav__link[aria-current] {
+.sortLink[aria-current] {
     font-weight: bold !important;
     color: var(--dxp-c-link-text-color,var(--dxp-s-link-text-color,var(--dxp-g-brand))) !important;
     position: static !important;
 }
-.fr-nav__link[aria-current]:before {
+.sortLink[aria-current]:before {
     display: none !important;
 }
+.sortLink:before {
+    box-shadow: none !important;
+}
+.sortLink:hover {
+    background-color: var(--hover-tint);
+}
+
+/* Header refresh feature overrides */
+.refreshDiv {
+    display: inline-block;
+    /*background-color: yellow;
+    padding: 3px;*/
+    position: static;
+    vertical-align: middle;
+}
+.refreshButton{
+    /* background-color: orange;*/
+    display: block;
+    padding-left: .5rem !important;
+    padding-right: .5rem !important;
+    /*outline-offset: 0px !important;*/
+}
+/*.refreshButton::before{
+    vertical-align: 0px !important;
+}*/
+/*.refreshButton button.fr-nav__btn {
+    font-size: .875rem !important;
+    padding-right: .5rem !important;
+}*/
+
+/* Generic classes used in data display */
 .align-right {
     /*text-align: end;*/
     align-items: flex-end;
@@ -83,12 +125,6 @@
     /*text-align: center;*/
     align-items: center;
     justify-content: center;
-}
-.debugInfo {
-    padding: 1rem;
-    color: navy;
-    font-style: italic;
-    font-weight: bold;
 }
 ul.horizontalUL li {
     display: inline-block;
@@ -103,4 +139,11 @@ ul.horizontalUL li:last-child {
 }
 ul.horizontalUL {
     line-height: 0.5rem;
+}
+
+.debugInfo {
+    padding: 1rem;
+    color: navy;
+    font-style: italic;
+    font-weight: bold;
 }
