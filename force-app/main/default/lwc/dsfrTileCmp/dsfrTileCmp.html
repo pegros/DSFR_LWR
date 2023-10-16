@@ -9,10 +9,19 @@
                     {tileTitle}
                 </template>
             </h4>
-            <p if:true={tileDescription} class="fr-tile__desc">
-                <lightning-formatted-rich-text class="fr-tile__desc" value={tileDescription}>
-                </lightning-formatted-rich-text>
-            </p>
+            <template lwc:if={tileDescription}>
+                <p class="fr-tile__desc">
+                    <lightning-formatted-rich-text class="fr-tile__desc" value={tileDescription}>
+                    </lightning-formatted-rich-text>
+                </p>
+            </template>
+            <template lwc:if={isDebug}>
+                <p class="fr-tile__desc">
+                    <c-dsfr-badge-dsp   badge-value="Mode debug activé!"    badge-variant="warning"
+                                        show-icon="true"                    class="badgeListItem">
+                    </c-dsfr-badge-dsp>
+                </p>
+            </template>
         </div>
         <div lwc:if={tileImage} class="fr-tile__img">
             <template lwc:if={pictoSrc}>
