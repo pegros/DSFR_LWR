@@ -32,7 +32,7 @@
             <property   name="wrappingClass"
                         label="CSS additionnelle"
                         type="String"
-                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pur ajouter une marge)" />
+                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pour ajouter une marge)" />
             <property   name="iconClass"
                         label="CSS de l'icône"
                         type="String"
@@ -42,7 +42,7 @@
                         label="Debug ?"
                         type="Boolean"
                         default="false"
-                        description="Activation de détails pour l'aalyse de problèmes" />
+                        description="Activation de traces pour l'analyse de problèmes" />
         </targetConfig>
         <targetConfig targets="lightning__FlowScreen">
             <property   name="value"
@@ -72,7 +72,7 @@
                         type="String"
                         default=""
                         role="inputOnly"
-                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pur ajouter une marge)" />
+                        description="Classe DSFR à appliquer au composant (e.g. fr-m-2v  pour ajouter une marge)" />
             <property   name="iconClass"
                         label="CSS de l'icône"
                         type="String"
@@ -84,7 +84,7 @@
                         type="Boolean"
                         default="false"
                         role="inputOnly"
-                        description="Activation de détails pour l'aalyse de problèmes" />
+                        description="Activation de traces pour l'analyse de problèmes" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
