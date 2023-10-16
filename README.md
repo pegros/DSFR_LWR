@@ -32,6 +32,7 @@ Chaque composant est documenté dans sa propre page.
 * la CSS, les polices et les icônes / pictogrammes du **DSFR**
 * une CSS de surcharge des caractéristiques du **SLDS** standard Salesforce pour les adapter à la charte graphique du **DSFR** (afin d'utiliser certains composants standards Salesforce, par ex. le [lightning-record-form](https://developer.salesforce.com/docs/component-library/bundle/lightning-record-form/documentation) ou les inputs standards des [Flows](https://help.salesforce.com/s/articleView?id=sf.flow_ref_elements_screencmp.htm))
 
+
 ### Composants d'action
 
 * **[dsfrButtonDsp](/help/dsfrButtonDsp.md)** pour déclencher une action de navigation
@@ -41,12 +42,25 @@ Chaque composant est documenté dans sa propre page.
 
 ### Composants de structure
 
+* **[dsfrIconFieldDsp](/help/dsfrIconFieldDsp.md)**
 * **[dsfrCardCmp](/help/dsfrCardCmp.md)**
 
 
 ### Composants de présentation
 
 * **[dsfrHeaderCmp](/help/dsfrHeaderCmp.md)**
+* **[dsfrCardTileListCmp](/help/dsfrCardTileListCmp.md)**
+
+### Composants spécifiques
+
+* **[dsfrCombinedPicklistCmp](/help/dsfrCombinedPicklistCmp.md)**
+
+### Composants de gestion utilisateur
+
+* **[dsfrLoginCmp](/help/dsfrLoginCmp.md)**
+* **[dsfrRegisterCmp](/help/dsfrLoginCmp.md)**
+* **[dsfrChangePasswordCmp](/help/dsfrLoginCmp.md)**
+* **[dsfrLostPasswordCmp](/help/dsfrLoginCmp.md)**
 
 ## Configuration Details
 
