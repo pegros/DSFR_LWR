@@ -33,7 +33,7 @@
                                                 accept=""                   content-meta={uploadMeta}
                                                 record-id={recordId}        record-ids={recordIds}
                                                 refresh-user={refreshUser}  wrapping-class={componentClass}
-                                                is-debug={isDebug} >                        
+                                                do-refresh={doRefresh}      is-debug={isDebug} >                        
                     </c-dsfr-file-upload-cmp>
                 </lightning-layout-item>
 
@@ -43,7 +43,7 @@
                                                     config-name={selectConfig}  context={selectContext}
                                                     wrapping-class={componentClass}
                                                     record-id={recordId}        object-api-name={objectApiName}
-                                                    is-debug={isDebug} >
+                                                    do-refresh={doRefresh}      is-debug={isDebug} >
                         </c-dsfr-file-selector-cmp>
                     </lightning-layout-item>
                 </template>

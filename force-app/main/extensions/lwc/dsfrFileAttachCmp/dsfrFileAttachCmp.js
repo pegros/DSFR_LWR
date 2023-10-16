@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
 
+
 export default class DsfrFileAttachCmp extends LightningElement {
 
     //-----------------------------------------------------
@@ -75,6 +76,8 @@ export default class DsfrFileAttachCmp extends LightningElement {
     @api wrappingClass;
     @api componentClass;
     @api baseWidth = 6;
+
+    @api doRefresh;
 
     @api isDebug = false;
 

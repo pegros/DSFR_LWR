@@ -39,6 +39,12 @@
                         type="String"
                         description="Classes pour modifier le style du composant (par ex. fr-m-2v)" />
 
+            <property   name="doRefresh"
+                        label="Raffraichir la page ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation d'un raffraichissement automatique de la page après rattachement d'un fichier." />
+
             <property   name="objectApiName"
                         label="Object Name"
                         type="String"

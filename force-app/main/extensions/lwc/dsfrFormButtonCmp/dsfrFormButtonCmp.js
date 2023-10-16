@@ -1,6 +1,10 @@
 import { LightningElement, api, wire } from 'lwc';
 import { RefreshEvent } from 'lightning/refresh';
 import { NavigationMixin } from 'lightning/navigation';
+
+import { publish, MessageContext } from 'lightning/messageService';
+import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
+
 import CLOSE_TITLE from '@salesforce/label/c.dsfrFormButtonCloseTitle';
 import CLOSE_LABEL from '@salesforce/label/c.dsfrFormButtonCloseLabel';
 import SAVE_LABEL from '@salesforce/label/c.dsfrFormButtonSaveLabel';
@@ -35,6 +39,9 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
     @api objectApiName;
     recordTypeId;
     isModalOpen;
+
+    @wire(MessageContext)
+    messageContext;
 
     //-----------------------------------
     // Custom Labels
@@ -191,9 +198,18 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
         if (this.isDebug) console.log('handleSuccess: START for Form Popup',event);
         
         if (this.doRefresh) {
-            if (this.isDebug) console.log('handleSuccess: refreshing page');
+            if (this.isDebug) console.log('handleSuccess: Triggering refresh');
+            let actionNotif = {
+                channel: "dsfrRefresh",
+                action: {"type": "done","params": {"type": "refresh"}},
+                context: null
+            };
+            if (this.isDebug) console.log('handleSuccess: actionNotif prepared ',JSON.stringify(actionNotif));
+            if (this.isDebug) console.log('handleSuccess: END / Publishing page refresh notification');
+            publish(this.messageContext, sfpegCustomNotification, actionNotif);
+            /*if (this.isDebug) console.log('handleSuccess: refreshing page');
             this.dispatchEvent(new RefreshEvent());
-            window.location.reload();
+            window.location.reload();*/
         }
         this.toggleSpinner(false);
 

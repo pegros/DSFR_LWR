@@ -79,6 +79,12 @@
                         min="1"
                         description="X/12 de la largeur disponible par composant (en écran large)" />
 
+            <property   name="doRefresh"
+                        label="Raffraichir la page ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation d'un raffraichissement automatique de la page après chargement d'un fichier." />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"

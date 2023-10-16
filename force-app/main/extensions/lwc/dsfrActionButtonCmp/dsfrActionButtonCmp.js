@@ -3,6 +3,8 @@ import { createRecord, updateRecord, deleteRecord, notifyRecordUpdateAvailable }
 import { RefreshEvent } from 'lightning/refresh';
 import { NavigationMixin } from 'lightning/navigation';
 
+import { publish, MessageContext } from 'lightning/messageService';
+import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
 
 export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElement) {
 
@@ -25,6 +27,9 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
     //-----------------------------------------------------
     // Configuration parameters
     //-----------------------------------------------------
+
+    @wire(MessageContext)
+    messageContext;
 
     //-----------------------------------------------------
     // Initialisation
@@ -106,9 +111,17 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
                         notifyRecordUpdateAvailable(actionDetails.reload);
                     }
                     else if (actionDetails.refresh) {
-                        if (this.isDebug) console.log('handleAction: END / Triggering page refresh');
-                        this.dispatchEvent(new RefreshEvent());
-                        window.location.reload();
+                        if (this.isDebug) console.log('handleAction: Triggering refresh');
+                        //this.dispatchEvent(new RefreshEvent());
+                        //window.location.reload();
+                        let actionNotif = {
+                            'channel': "dsfrRefresh",
+                            'action': {"type": "done","params": {"type": "refresh"}},
+                            'context': null
+                        };
+                        if (this.isDebug) console.log('handleAction: actionNotif prepared ',JSON.stringify(actionNotif));
+                        if (this.isDebug) console.log('handleAction: END / Publishing page refresh notification');
+                        publish(this.messageContext, sfpegCustomNotification, actionNotif);
                     }
                     else if (this.isDebug) console.log('handleAction: END');
                     this.toggleSpinner();

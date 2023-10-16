@@ -3,6 +3,8 @@ import userId       from '@salesforce/user/Id';
 import linkFile     from '@salesforce/apex/dsfrFileUpload_CTL.linkFile';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 
+import { publish, MessageContext } from 'lightning/messageService';
+import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
 export default class DsfrFileSelectorCmp extends LightningElement {
 
     //-----------------------------------------------------
@@ -46,6 +48,8 @@ export default class DsfrFileSelectorCmp extends LightningElement {
     @api shareMode = 'V';
     @api disabled;
     @api wrappingClass;
+
+    @api doRefresh;
 
     @api isDebug = false;
 
@@ -139,8 +143,20 @@ export default class DsfrFileSelectorCmp extends LightningElement {
                     this.isError =  false;
 
                     if (this.recordId) {
-                        if (this.isDebug) console.log('handleUpload: triggering record data reload ',this.recordId);
+                        if (this.isDebug) console.log('handleSelect: triggering record data reload ',this.recordId);
                         notifyRecordUpdateAvailable([{recordId: this.recordId}]);
+                    }
+
+                    if (this.doRefresh) {
+                        if (this.isDebug) console.log('handleSelect: Triggering refresh');
+                        let actionNotif = {
+                            channel: "dsfrRefresh",
+                            action: {"type": "done","params": {"type": "refresh"}},
+                            context: null
+                        };
+                        if (this.isDebug) console.log('handleSelect: actionNotif prepared ',JSON.stringify(actionNotif));
+                        publish(this.messageContext, sfpegCustomNotification, actionNotif);
+                        if (this.isDebug) console.log('handleSelect: page refresh notification published');
                     }
 
                     let fileSelect = this.template.querySelector("select[name='fileSelect']");
