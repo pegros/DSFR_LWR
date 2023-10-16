@@ -1,12 +1,14 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import uploadFile from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
 import userId       from '@salesforce/user/Id';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+
 import UPLOAD_SUCCESS from '@salesforce/label/c.dsfrFileUploadSuccess';
 import UPLOAD_COMMENT from '@salesforce/label/c.dsfrFileUploadComment';
 import UPLOAD_TYPES from '@salesforce/label/c.dsfrFileUploadTypes';
 
-
+import { publish, MessageContext } from 'lightning/messageService';
+import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
 export default class DsfrFileUploadCmp extends LightningElement {
 
     //-----------------------------------------------------
@@ -25,6 +27,8 @@ export default class DsfrFileUploadCmp extends LightningElement {
     @api recordIds;
     @api fileId;
 
+    @api doRefresh;
+
     @api isDebug = false;       // Flag to activate debug information
 
     //-----------------------------------------------------
@@ -40,6 +44,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
 
     fileName;
     fileContent;
+
+    @wire(MessageContext)
+    messageContext;
 
     //-----------------------------------------------------
     // Custom Labels
@@ -161,6 +168,18 @@ export default class DsfrFileUploadCmp extends LightningElement {
                     }
                     if (this.isDebug) console.log('registerFile: triggering reload on recordIdList ',JSON.stringify(recordIdList));
                     notifyRecordUpdateAvailable(recordIdList);
+                }
+
+                if (this.doRefresh) {
+                    if (this.isDebug) console.log('registerFile: Triggering refresh');
+                    let actionNotif = {
+                        channel: "dsfrRefresh",
+                        action: {"type": "done","params": {"type": "refresh"}},
+                        context: null
+                    };
+                    if (this.isDebug) console.log('registerFile: actionNotif prepared ',JSON.stringify(actionNotif));
+                    publish(this.messageContext, sfpegCustomNotification, actionNotif);
+                    if (this.isDebug) console.log('registerFile: page refresh notification published');
                 }
                 
                 let fileInput = this.template.querySelector('input.fr-upload');

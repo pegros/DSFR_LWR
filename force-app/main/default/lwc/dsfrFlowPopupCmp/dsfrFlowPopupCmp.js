@@ -1,8 +1,11 @@
-import { api, LightningElement } from 'lwc';
+import { api, LightningElement, wire } from 'lwc';
 import { RefreshEvent } from 'lightning/refresh';
+
 import CLOSE_TITLE from '@salesforce/label/c.dsfrFlowPopupCloseTitle';
 import CLOSE_LABEL from '@salesforce/label/c.dsfrFlowPopupCloseLabel';
 
+import { publish, MessageContext } from 'lightning/messageService';
+import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
 export default class DsfrFlowPopupCmp extends LightningElement {
 
     //-----------------------------------
@@ -31,6 +34,9 @@ export default class DsfrFlowPopupCmp extends LightningElement {
     flowVInput;
     flowStatus;
     
+    @wire(MessageContext)
+    messageContext;
+
     //-----------------------------------
     // Custom Labels
     //-----------------------------------
@@ -158,8 +164,17 @@ export default class DsfrFlowPopupCmp extends LightningElement {
         if (this.isDebug) console.log('closeModal: document style updated ',document.body.style.overflowY);
 
         if ((this.doRefresh) && (event.detail.status === 'FINISHED')) {
-            if (this.isDebug) console.log('closeModal: refreshing page');
-            this.dispatchEvent(new RefreshEvent());
+            if (this.isDebug) console.log('closeModal: Triggering refresh');
+            let actionNotif = {
+                channel: "dsfrRefresh",
+                action: {"type": "done","params": {"type": "refresh"}},
+                context: null
+            };
+            if (this.isDebug) console.log('closeModal: actionNotif prepared ',JSON.stringify(actionNotif));
+            if (this.isDebug) console.log('closeModal: END / Publishing page refresh notification');
+            publish(this.messageContext, sfpegCustomNotification, actionNotif);
+            //if (this.isDebug) console.log('closeModal: refreshing page');
+            //this.dispatchEvent(new RefreshEvent());
             //window.location.reload();
         }
         if (this.isDebug) console.log('closeModal: END');

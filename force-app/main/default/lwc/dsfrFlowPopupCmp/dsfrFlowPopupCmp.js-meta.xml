@@ -64,6 +64,7 @@
                         label="Paramètres de processus"
                         type="String"
                         description="Paramètres d'entrée du Flow (format JSON)" />
+                        
             <property   name="doRefresh"
                         label="Raffraichir la page?"
                         type="Boolean"
