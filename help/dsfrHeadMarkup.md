@@ -51,12 +51,19 @@ style standard Salesforce components (if used).
       --sds-c-checkbox-color-background-checked : rgb(0,0,145);
       --slds-c-checkbox-shadow: rgb(22,22,22) 0px 0px 0px 1px inset;
       --sds-c-checkbox-radius-border: .25rem;
+       
+      /* Form color overrides */
+      --textarea-color-background : var(--background-contrast-grey);
+      --input-color-background : var(--background-contrast-grey):
+      --input-color-background-focus: var(--background-contrast-grey);
+      --slds-c-input-color-background: var(--background-contrast-grey);
 
       /* Error color overrides */
       --slds-c-radio-shadow : inset 0 0 0 1px var(--border-action-high-grey), inset 0 0 0 18px var(--background-default-grey);
        
       /* ul styling reset */
-	   --ul-type: 'disc' !important;
+	   --ul-type: disc !important;
+      --dxp-c-link-text-color : var(--text-action-high-blue-france) !important;
    }
 
 </style>

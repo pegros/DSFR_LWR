@@ -139,7 +139,6 @@ Il est possible d'étendre les capacités de ce framework en ajoutant les IDs de
 },
 ```
 
-
 ## Précisions techniques
 
 Le composant utilise un composant du package **[PEG_LIST](https://github.com/pegros/PEG_LIST)** pour une configuration dynamique de la barre de navigation principale (**[sfpegActionBarCmp](https://github.com/pegros/PEG_LIST/blob/master/help/sfpegActionBarCmp.md)**).
