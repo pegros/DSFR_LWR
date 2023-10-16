@@ -81,7 +81,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         return null;
     }
     get hasBadgeList() {
-        return (this.cardBadgeListJson || this.cardBadgeList);
+        return (this.cardBadgeListJson || this.cardBadgeList || this.isDebug);
     }
     get badgeList() {
         return ((this.cardBadgeListJson) ? this.cardBadgeListJson : ((this.cardBadgeList) ? JSON.parse(this.cardBadgeList) : null));
@@ -141,7 +141,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         }
     }
     get hasStart() {
-        return this.tagList || this.cardStartDetails || this.cardBadgeListJson || this.cardBadgeList;
+        return this.tagList || this.cardStartDetails || this.cardBadgeListJson || this.cardBadgeList || this.isDebug;
     }
     get hasHeader() {
         return this.cardImage || this.cardBadge;

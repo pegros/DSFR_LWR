@@ -55,6 +55,13 @@
                                     </li>
                                 </template>
                             </template>
+                            <template lwc:if={isDebug}>
+                                <li>
+                                    <c-dsfr-badge-dsp   badge-value="Mode debug activé!" badge-variant="warning"
+                                                        show-icon="true"                class="badgeListItem">
+                                    </c-dsfr-badge-dsp>
+                                </li>
+                            </template>
                         </ul>
                     </template>
                     <template lwc:if={cardTags}>
