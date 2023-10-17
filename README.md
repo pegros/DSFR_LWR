@@ -57,10 +57,10 @@ Chaque composant est documenté dans sa propre page.
 
 ### Composants de gestion utilisateur
 
-* **[dsfrLoginCmp](/help/dsfrLoginCmp.md)**
-* **[dsfrRegisterCmp](/help/dsfrLoginCmp.md)**
-* **[dsfrChangePasswordCmp](/help/dsfrLoginCmp.md)**
-* **[dsfrLostPasswordCmp](/help/dsfrLoginCmp.md)**
+* **[dsfrLoginCmp](/help/dsfrLogin.md)**
+* **[dsfrRegisterCmp](/help/dsfrLogin.md)**
+* **[dsfrChangePasswordCmp](/help/dsfrLogin.md)**
+* **[dsfrLostPasswordCmp](/help/dsfrLogin.md)**
 
 ## Configuration Details
 
