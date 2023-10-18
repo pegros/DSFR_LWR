@@ -47,7 +47,15 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Message d'erreur en cas de problème d'enregistrement (email utilisé)</shortDescription>
-        <value>Problème de création de votre compte: Email déjà utilisé sur un compte.</value>
+        <value>Problème de création de votre compte: Email déjà utilisé sur un compte utilisateur.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationAccountError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (email utilisé)</shortDescription>
+        <value>Problème de création de votre compte: Email déjà utilisé sur un compte candidat.</value>
     </labels>
     <labels>
         <fullName>dsfrSiteMgtRegistrationPasswordInvalidError</fullName>
@@ -56,6 +64,14 @@
         <protected>false</protected>
         <shortDescription>Message d'erreur en cas de problème d'enregistrement (format de password)</shortDescription>
         <value>Problème de création de votre compte: Votre mot de passe ne respecte pas le format demandé.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationEmailError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (envoi code)</shortDescription>
+        <value>Problème de génération de votre code d'identification:</value>
     </labels>
     <labels>
         <fullName>dsfrSiteMgtRegistrationProcessingError</fullName>
@@ -74,6 +90,31 @@
         <value>Problème de connexion à votre nouveau compte:</value>
     </labels>
    
+    <labels>
+        <fullName>dsfrSiteMgtValidationInputError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème de validation (paramètre manquant)</shortDescription>
+        <value>Problème technique lors de la validation de votre code</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtValidationProcessingError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème de validation (problème de validation)</shortDescription>
+        <value>Problème de validation de votre code:</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtValidationFinalisationError</fullName>
+        <categories>DSFR Apex Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème de validation (problème d'init de password)</shortDescription>
+        <value>Problème technique d'initialisation de votre mot de passe:</value>
+    </labels>
+
     <labels>
         <fullName>dsfrSiteMgtChangeInputError</fullName>
         <categories>DSFR Apex Error Message</categories>

@@ -1,5 +1,5 @@
 /***
-* @description  Lightning controller to manage registratin, login and passwords
+* @description  Lightning controller to manage registration, login and passwords
 *               on Experience Sites.
 *               Part of the DSFR_LWR package.
 * @author       P-E GROS
@@ -130,11 +130,19 @@ public with sharing class dsfrSiteManagement_CTL {
     }
 
     /***
-    * @description  Method to create/activate a new Customer Community User (and its related PersonAccount)
+    * @description  Method to initiate the registration of a new Customer Community User.
+    *               If a PersonAccount already exsits with the provided Account email and RecordType
+    *               and if this PersonAccount has no related Community User, this existing PersonAccount
+    *               is used to register the User. Otherwise a new PersonAccount is initiated with the 
+    *               provided Account data.
+    *               Settings (language, encoding...) for the new User being registered are inherited from
+    *               the Community Guest. Username, alias and nicknames are generated out of the Account
+    *               first and last name as well as the Community Path prefix and current community user count.
+    *               User Profile and Account Owner are derived from the Site configuration.
     * @param        newAccount  New Account data to create
-    * @param        password    Name of the ContentDocument to be created 
-    * @param        startUrl    List of IDs of the records to which the new ContentDocument should be linked 
-    * @return       String      starUrl with authentication embedded
+    * @param        password    Password to set on the new User (for verification purposes only)
+    * @param        startUrl    (obsolete, kept for backward compatibility) 
+    * @return       String      registration verification ID (an email with a validation code being sent to the Account email)
     * @exception    Various exceptions in case of wrong input or execution failure.
     ***/
     @AuraEnabled
@@ -160,6 +168,7 @@ public with sharing class dsfrSiteManagement_CTL {
         Network nwInfos = searchUtl.getNetworkInfos(networkId);
         System.debug('registerUser: nwInfos fetched ' + nwInfos);
 
+        // User Control
         List<User> userNames = searchUtl.getUser(newAccount.PersonEmail,nwInfos.SelfRegProfileId);
         System.debug('registerUser: #users matching Email ' + userNames?.size());
         if (userNames?.size() > 0) {
@@ -167,7 +176,34 @@ public with sharing class dsfrSiteManagement_CTL {
             //throw new AuraHandledException('Problème de création de votre compte: Email déjà utilisé sur un compte.');
             throw new AuraHandledException(Label.dsfrSiteMgtRegistrationUserError);
         }
-        System.debug('loginViaIdentity: email usage controlled');
+        System.debug('registerUser: email usage controlled on user');
+
+        // Account Control
+        Account currentAccount = null;
+        List<Account> accountNames = searchUtl.getAccount(newAccount.PersonEmail,newAccount.RecordTypeId);
+        System.debug('registerUser: #accounts matching Email ' + accountNames?.size());
+        if (accountNames?.size() > 0) {
+            if (accountNames.size() > 1) {
+                System.debug(LoggingLevel.ERROR,'registerUser: END KO / more than 1 account found with email ' + newAccount.PersonEmail);
+                throw new AuraHandledException(Label.dsfrSiteMgtRegistrationAccountError);
+            }
+            else {
+                currentAccount = accountNames[0];
+                System.debug('registerUser: 1 matching Account found ' + currentAccount);
+                if (currentAccount.Users?.size() > 0) {
+                    System.debug('registerUser: currentAccount Users registered ' + currentAccount.Users);
+                    System.debug(LoggingLevel.ERROR,'registerUser: END KO / account found with email already activated (#2) ' + newAccount.PersonEmail);
+                    throw new AuraHandledException(Label.dsfrSiteMgtRegistrationAccountError);
+                }      
+                newAccount.Id = currentAccount.Id;
+                //newAccount.PersonContactId = currentAccount.PersonContactId;
+                newAccount.FirstName = currentAccount.FirstName;
+                newAccount.LastName = currentAccount.LastName;
+                System.debug('registerUser: setting AccountId ' + currentAccount.Id);
+            }
+        }
+        System.debug('registerUser: email usage controlled on account');
+
 
         Site siteInfos = searchUtl.getSiteInfos(Site.getSiteId());
         System.debug('registerUser: siteInfos fetched ' + siteInfos);
@@ -193,18 +229,14 @@ public with sharing class dsfrSiteManagement_CTL {
 
 
         // Step #2 - Data Preparation
-        System.debug('registerUser: startUrl provided ' + startUrl);
+        /*System.debug('registerUser: startUrl provided ' + startUrl);
         if (String.isEmpty(startUrl)) {
             startUrl = Site.getPathPrefix();
             System.debug('registerUser: default startUrl set ' + startUrl);
-        }
+        }*/
 
-        /*ConnectApi.OrganizationSettings  orgSettings = ConnectApi.Organization.getSettings();
-        System.debug('registerUser: orgSettings fetched ' + orgSettings);
-        Organization orgInfos = [select Name, DefaultLocaleSidKey, LanguageLocaleKey, TimeZoneSidKey from Organization limit 1];
-        System.debug('registerUser: currentDomain fetched ' + currentDomain);*/
         newAccount.OwnerId = siteInfos.GuestRecordDefaultOwnerId;
-        System.debug('registerUser: newAccount OnwerId updated ' + newAccount.OwnerId);
+        System.debug('registerUser: newAccount OwnerId updated ' + newAccount.OwnerId);
 
         User newUser = new User(
             Username = nwInfos.UrlPathPrefix.substringBefore('vforcesite') + nwUserCount + '@' + currentDomain,
@@ -237,12 +269,23 @@ public with sharing class dsfrSiteManagement_CTL {
             throw new AuraHandledException(Label.dsfrSiteMgtRegistrationPasswordInvalidError);
         }
 
-
-        // Step #3 - Account and User Registration
+        // Step #3 - Account Registration
         try {
-            insert newAccount;
-            System.debug('registerUser: new Account inserted ' + newAccount);
-            System.debug('registerUser: new Account ID ' + newAccount.Id);
+            if (String.isBlank(newAccount.Id)) {
+                insert newAccount;
+                //System.debug('registerUser: new Account inserted ' + newAccount);
+                System.debug('registerUser: new Account inserted with ID ' + newAccount.Id);
+                ID contactID = searchUtl.getContactId(newAccount.Id);
+                //newUser.AccountId = newAccount.Id;
+                newUser.ContactId = contactID;
+                System.debug('registerUser: user linked to new Contact ID ' + newUser.ContactId);
+            }
+            else {
+                System.debug('registerUser: reusing Account with ID ' + newAccount.Id);
+                //newUser.AccountId = newAccount.Id;
+                newUser.ContactId = currentAccount.PersonContactId;
+                System.debug('registerUser: user linked to existing Contact ID ' + newUser.ContactId);
+            }                
         }
         catch (exception e) {
             System.debug(LoggingLevel.ERROR,'registerUser: KO upon PersonAccount creation ' + e);
@@ -250,9 +293,10 @@ public with sharing class dsfrSiteManagement_CTL {
             throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
         }
 
-        ID userId;
+        // Step #4 - User Registration
+        /*ID userId;
         try {
-            userId = Site.createExternalUser(newUser, newAccount.Id, password, false);
+            userId = common.exception.ApiException: Unable to create/update fields: ProfileId. Please check the security settings of this field and verify that it is read/write for your profile or permission set.newUser, newAccount.Id, password, false);
             //ID userId = Site.createExternalUser(newUser, newAccount.Id, password);
             //String userId = Site.createPortalUser(newUser, newAccount.Id, password);
             System.debug('registerUser: new User created ' + userId);            
@@ -269,10 +313,10 @@ public with sharing class dsfrSiteManagement_CTL {
             System.debug(LoggingLevel.ERROR,'registerUser: KO upon User registration ' + e);
             //throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
             throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
-        }
+        }*/
 
-
-        // Step #4 - User login
+        /*
+        // Step #5 - User login
         System.PageReference targetPage;
         try {
             targetPage = Site.login(newUser.username, password, startUrl);
@@ -283,30 +327,107 @@ public with sharing class dsfrSiteManagement_CTL {
             //throw new AuraHandledException('Problème de connexion à votre nouveau compte. ' + e.getMessage());
             throw new AuraHandledException(Label.dsfrSiteMgtRegistrationLoginError + ' ' + e.getMessage());
         }
+            
+        System.debug('registerUser: END OK with ' + targetPage.getUrl());
+        return targetPage.getUrl();*/
 
-        /* Try to trgger email validation via change pwd process */
-        /*try {
-            if (String.isBlank(nwInfos.ChgEmailVerNewEmailTemplateId)) {
-                System.debug('registerUser: no email verification template defined on network');
+        // Step #5 - User Email Challenge
+        try {
+            System.debug('registerUser: controlling registration by Email for ' + newUser);   
+            String verificationId;
+            verificationId = System.UserManagement.initSelfRegistration(Auth.VerificationMethod.EMAIL, newUser);
+            System.debug('registerUser: END OK / email verification initiated ' + verificationId);   
+            return verificationId;         
+        }
+        catch (exception e) {
+            System.debug(LoggingLevel.ERROR,'registerUser: END KO / email verification init failed / ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationEmailError + ' ' + e.getMessage());
+        }
+    }
+
+    /***
+    * @description  Method to cfinalise the registration of a new Customer Community User.
+    *               It assumes that a call to registerUser() has been done previously.
+    *               Not only it validates the registration, therefore actually creating the User
+    *               but it also initialises its password.
+    * @param        verificationId  Registration verification ID returned by the call to registerUser()
+    * @param        validationCode  Registration validation Code sent by email to the user.
+    * @param        email           User Email to which the code has been sent
+    * @param        password        User password to set (assumaing it has been previously checked when calling registerUser())
+    * @param        startUrl        URL to which the User should be redirected upon successful validation 
+    * @return       String          starUrl with authentication embedded
+    * @exception    Various exceptions in case of wrong input or execution failure.
+    ***/
+    @AuraEnabled
+    public static String validateUser(final String verificationId, final String validationCode, final string email, final string password, final String startUrl) {
+        System.debug('validateUser: START for verification ID ' + verificationId);
+        System.debug('validateUser: with input validation code ' + validationCode);
+        System.debug('validateUser: email ' + email);
+        System.debug('validateUser: password ' + password);
+        System.debug('validateUser: and start URL ' + startUrl);
+
+        // Step #1 - Controls and Context fetch
+        if (String.isBlank(verificationId) || String.isBlank(validationCode) || String.isBlank(email) || String.isBlank(password)) {
+            System.debug(LoggingLevel.ERROR,'validateUser: END KO / Missing input information');
+            //throw new AuraHandledException('Problème de création de votre compte: données obligatoires manquantes.');
+            throw new AuraHandledException(Label.dsfrSiteMgtValidationInputError);
+        }
+        System.debug('validateUser: inputs controlled');
+
+        // Step #2 - Data Preparation
+        System.debug('validateUser: startUrl provided ' + startUrl);
+        if (String.isEmpty(startUrl)) {
+            startUrl = Site.getPathPrefix();
+            System.debug('validateUser: default startUrl set ' + startUrl);
+        }
+
+        // Step #3 - Email Validation
+        String targetUrl; 
+        UserSearch_UTL searchUtl = new UserSearch_UTL();
+        try {
+            System.debug('validateUser: challenging provided key');
+            Auth.VerificationResult status = searchUtl.validateUser(verificationId, validationCode, startUrl);
+            //Auth.VerificationResult status = System.UserManagement.verifySelfRegistration(Auth.VerificationMethod.EMAIL, verificationId, validationCode, startUrl);
+            System.debug('validateUser: status returned ' + status);
+            if(status.success == true) {
+                targetUrl = status.redirect?.getUrl();
+                System.debug('validateUser: email verified and target URL determined ' + targetUrl);
             }
             else {
-                System.debug('registerUser: using email verification template to check user email ' + nwInfos.ChgEmailVerNewEmailTemplateId);
-                System.debug('registerUser: user ID ' + userId);
-                System.debug('registerUser: network ID ' + networkId);
-                System.debug('registerUser: startUrl ' + startUrl);
-                // Send email confirmation
-                //Boolean emailStatus = System.UserManagement.sendAsyncEmailConfirmation(userId, nwInfos.ChgEmailVerNewEmailTemplateId, networkId, startUrl);
-                Boolean emailStatus = searchUtl.sendEmail(userId, nwInfos.ChgEmailVerNewEmailTemplateId, networkId, startUrl);
-                System.debug('registerUser: email validation email sent ' + emailStatus);
+                System.debug(LoggingLevel.ERROR,'validateUser: END KO / email verification failed ' + status.message);
+                throw new HandledException(status.message);
             }
         }
+        catch(Exception e){
+            System.debug(LoggingLevel.ERROR,'validateUser: END KO / email verification failed technically ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtValidationProcessingError + ' ' + e.getMessage());
+        }
+        
+        String networkId = Network.getNetworkId();
+        System.debug('validateUser: networkId fetched ' + networkId);
+        Network nwInfos = searchUtl.getNetworkInfos(networkId);
+        System.debug('validateUser: nwInfos fetched ' + nwInfos);
+
+        try {
+            List<User> userNames = searchUtl.getUser(email,nwInfos.SelfRegProfileId);
+            System.debug('validateUser: #users matching Email ' + userNames?.size());
+            if (userNames?.size() != 1) {
+                System.debug(LoggingLevel.ERROR,'validateUser: END KO / not 1 user found with email ' + email);
+                //throw new AuraHandledException('Problème de création de votre compte: Email déjà utilisé sur un compte.');
+                throw new HandledException('Nouvel utilisateur non trouvé');
+            }
+            System.debug('registerUser: new user found' + userNames[0]);
+        
+            searchUtl.setPassword(userNames[0].Id,password);
+            System.debug('registerUser: password set');
+        }
         catch(Exception e) {
-            System.debug(LoggingLevel.ERROR,'registerUser: END KO / email verification failed ' + e.getMessage());
-            throw new AuraHandledException('Problème de vérification de votre adresse email. ' + e.getMessage());
-        }*/
-            
-        System.debug('loginViaEmail: END OK with ' + targetPage.getUrl());
-        return targetPage.getUrl();
+            System.debug(LoggingLevel.ERROR,'validateUser: END KO / password init failed ' + e.getMessage());
+            throw new AuraHandledException(Label.dsfrSiteMgtValidationFinalisationError + ' ' + e.getMessage());
+        }
+
+        System.debug('validateUser: END OK / redirecting user');
+        return targetUrl;
     }
 
     /***
@@ -530,7 +651,6 @@ public with sharing class dsfrSiteManagement_CTL {
         throw new AuraHandledException(Label.dsfrSiteMgtCaptchaProcessingError);
     }
 
-
     /**
     * @description	Private utility Class to fetch User usernames in without sharing mode.
     **/
@@ -540,6 +660,26 @@ public with sharing class dsfrSiteManagement_CTL {
                     WHERE IsActive = true
                         AND (   (username = :identity)
                             OR  ((ProfileId = :profileId) AND (Email = :identity)))];
+        }
+        public List<Account> getAccount(final String email, final String recordTypeId) {
+            System.debug('getAccount: for email ' + email);
+            System.debug('getAccount: and RT ' + recordTypeId);
+            //return [SELECT LastName, FirstName, Utilisateur__c, (select Id from Users) FROM Account
+            //        WHERE recordTypeId = :recordTypeId AND PersonEmail = :email];
+            return [SELECT LastName, FirstName, PersonContactId, (select Id from Users) FROM Account
+                    WHERE isPersonAccount = true AND recordTypeId = :recordTypeId AND PersonEmail = :email];
+        }
+        public ID getContactId(final ID accountID) {
+            System.debug('getContactId: for PersonAccount ID ' + accountID);
+            Account tmpAccount = [SELECT PersonContactId FROM Account WHERE isPersonAccount = true  AND Id = :accountID LIMIT 1];
+            if (tmpAccount == null) {
+                System.debug(LoggingLevel.ERROR,'getContactId: PersonAccount not found for ID ' + accountID);
+                throw new HandledException('Compte personnel non trouvé');
+            }
+            else {
+                System.debug(LoggingLevel.ERROR,'getContactId: PersonAccount found with ContactID ' + tmpAccount.PersonContactId);
+                return tmpAccount.PersonContactId;
+            }
         }
         public Network getNetworkInfos(final String networkId) {
             return [SELECT SelfRegProfileId, UrlPathPrefix, ChgEmailVerNewEmailTemplateId, ForgotPasswordEmailTemplateId, Name FROM Network WHERE Id = :networkId][0];
@@ -564,20 +704,22 @@ public with sharing class dsfrSiteManagement_CTL {
             System.debug('resetPassword: END with status ' + emailStatus);
             return emailStatus;
         }
-        /*public System.ResetPasswordResult resetPassword(final String userId, final String templateId) {
-            System.debug('resetPassword: START ');
-            System.ResetPasswordResult resetStatus = System.resetPasswordWithEmailTemplate(userId, true, templateId);
-            System.debug('resetPassword: END with status ' + resetStatus);
-            return resetStatus;
-        }*/
-        /*public UserRole getPortalRole() {
-            return [Select Name From UserRole Where PortalType = 'None' Limit 1];
-        }*/
+        public Auth.VerificationResult validateUser (final String verificationId, final String validationCode, final String startUrl) {
+            System.debug('validateUser: START for verification Id ' + verificationId);
+            System.debug('validateUser: with validation Code ' + validationCode);
+            System.debug('validateUser: and start Url ' + startUrl);
+            return System.UserManagement.verifySelfRegistration(Auth.VerificationMethod.EMAIL, verificationId, validationCode, startUrl);
+        }
+        public void setPassword(final ID userId, final String password) {
+            System.debug('setPassword: START for User Id ' + userId);
+            System.debug('setPassword: with password ' + password);
+            system.setPassword(userId,password);
+            System.debug('validateUser: END');
+        }
 	}
 
-
     /**
-    * @description	Dummy method to ensure 90% test coverage, as .
+    * @description	Dummy method to ensure 90% test coverage, as actual logic is hard to test.
     **/
     @TestVisible
     private static void testDummy() {

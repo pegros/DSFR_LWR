@@ -4,6 +4,7 @@ import { LightningElement, api, wire } from 'lwc';
 import getPersonAccountRT from '@salesforce/apex/dsfrSiteManagement_CTL.getPersonAccountRT';
 import getPasswordPolicyStatement from '@salesforce/apex/dsfrSiteManagement_CTL.getPasswordPolicyStatement';
 import registerUser from '@salesforce/apex/dsfrSiteManagement_CTL.registerUser';
+import validateUser from '@salesforce/apex/dsfrSiteManagement_CTL.validateUser';
 
 //import getCaptchaSiteKey from '@salesforce/apex/dsfrSiteManagement_CTL.getCaptchaSiteKey';
 import validateCaptcha from '@salesforce/apex/dsfrSiteManagement_CTL.validateCaptcha';
@@ -25,6 +26,9 @@ export default class DsfrRegisterCmp extends LightningElement {
     @api formFields = '[{"name":"LastName","required":true},{"name":"FirstName","required":true},{"name":"PersonEmail","required":true}]';
     
     @api cnilMention;
+
+    @api validationTitle = 'Valider votre compte';
+    @api validationDescription = "Un email avec un code d'accès vous a été envoyé à l'adresse indiquée à l'étape précédente. Merci de renseigner ce code.";
 
     @api startUrl = '/';
     @api showCaptcha = false;
@@ -70,52 +74,19 @@ export default class DsfrRegisterCmp extends LightningElement {
         }
     };
 
-    /*captchaSiteKey;
-    @wire(getCaptchaSiteKey,{})
-    wiredCaptchaSiteKey({data,error}) {
-        if (this.isDebug) console.log('wiredCaptchaSiteKey: START for Register');
-        if (data) {
-            if (this.isDebug) console.log('wiredPolicy: data received ', data);
-            this.captchaSiteKey = data;
-            this.triggerCaptcha();
-            if (this.isDebug) console.log('wiredCaptchaSiteKey: END for Register');
-        }
-        else if (error) {
-            console.error('wiredCaptchaSiteKey: END KO / error raised ', error);
-        }
-        else {
-            console.warn('wiredCaptchaSiteKey: END OK / no data fetched');
-
-        }
-    };*/
-
-    /*
-    @wire(getObjectInfo, { objectApiName: ACCOUNT_OBJECT })
-    accountDesc;
-
-    accountPicklistDesc;
-    @wire(getPicklistValuesByRecordType, { objectApiName: ACCOUNT_OBJECT, recordTypeId: '$defaultRecordTypeId'})
-    wiredPicklists({data,error}) {
-        if (this.isDebug) console.log('wiredPicklists: START for Register');
-        if (data) {
-            if (this.isDebug) console.log('wiredPicklists: data received ', JSON.stringify(data));
-            this.accountPicklistDesc = data;
-            if (this.isDebug) console.log('wiredPicklists: END for Register');
-        }
-        else if (error) {
-            console.error('wiredPicklists: END KO / error raised ', error);
-        }
-        else {
-            console.warn('wiredPicklists: END OK / no data fetched');
-
-        }
-    };*/
-
     formFieldList;
-    //buttonDisabled;
-    //captchaTriggered;
+
+    // Temporary execution context
     tmpAccount;
+    tmpEmail;
     tmpPassword;
+    tmpVerification;
+
+    // Progress follow-up
+    stages = ["Initialisation","Validation"];
+    currentStage = 'Initialisation';
+    validationMessage;
+
 
     //-----------------------------------------------------
     // Initialisation
@@ -188,34 +159,6 @@ export default class DsfrRegisterCmp extends LightningElement {
         this.toggleSpinner(false);
 
         if (this.isDebug) console.log('handleLoad: defaultRecordTypeId ', this.defaultRecordTypeId);
-
-        /*
-        if ((!this.formRecordTypeId) && (this.formRecordId)){
-            this.formRecordTypeId = (event.detail.records)[this.recordId]?.recordTypeId;
-            if (this.isDebug) console.log('handleLoad: formRecordTypeId init ', this.formRecordTypeId);
-        }
-
-        if (!this.labelOk) {
-            if (this.isDebug) console.log('handleLoad: initialising labels');
-            if (this.isDebug) console.log('handleLoad: details provided ',JSON.stringify(event.detail));
-
-            let objectFields = ((event.detail.objectInfos)[this.formObjectApiName])?.fields;
-            if (this.isDebug) console.log('handleLoad: objectFields fetched ',JSON.stringify(objectFields));
-            this.fieldList.forEach(item => {
-                if (this.isDebug) console.log('handleLoad: processing field ',item.name);
-                if (!item.label) {
-                    item.label = objectFields[item.name]?.label;
-                }
-                if ((!item.hideHelp) && (!item.help) && (objectFields[item.name]?.inlineHelpText)) {
-                    item.help = objectFields[item.name]?.inlineHelpText;
-                }
-                if (this.isDebug) console.log('handleLoad: label set for field ',item.label);
-            });
-            if (this.isDebug) console.log('handleLoad: fieldList updated ',JSON.stringify(this.fieldList));
-            this.fieldList = [... this.fieldList];
-        }
-        */
-        
         if (this.isDebug) console.log('handleLoad: END for Register');
     }
 
@@ -247,12 +190,14 @@ export default class DsfrRegisterCmp extends LightningElement {
         } 
         if (this.isDebug) console.log('handleSubmit: CNIL mention checked');
 
-        let newAccount = {sobjectType: 'Account', recordTypeId : this.recordTypeId};
+        let newAccount = {sobjectType: 'Account', RecordTypeId : this.defaultRecordTypeId};
+        if (this.isDebug) console.log('handleSubmit: newAccount init ', JSON.stringify(newAccount));
         for (let iter in event.detail.fields) {
             if (this.isDebug) console.log('handleSubmit: processing Account field ', iter);
+            if (this.isDebug) console.log('handleSubmit: with value ', event.detail.fields[iter]);
             newAccount[iter] = event.detail.fields[iter];
         }
-        if (this.isDebug) console.log('handleSubmit: newAccount prepared ', newAccount);
+        if (this.isDebug) console.log('handleSubmit: newAccount prepared ', JSON.stringify(newAccount));
 
         let emailControlInput = this.template.querySelector('input[name="email-control"]');
         if (this.isDebug) console.log('handleSubmit: emailControlInput input fetched ', emailControlInput);
@@ -265,10 +210,10 @@ export default class DsfrRegisterCmp extends LightningElement {
         } 
         if (this.isDebug) console.log('handleSubmit: email inputs checked');
 
+        this.tmpAccount = newAccount;
+        this.tmpPassword = passwordInputs[0].value;
         if (this.showCaptcha) {
             if (this.isDebug) console.log('handleSubmit: challenging captcha');
-            this.tmpAccount = newAccount;
-            this.tmpPassword = passwordInputs[0].value;
             document.dispatchEvent(new CustomEvent("grecaptchaExecute", {"detail": {action: "register"}}));
             if (this.isDebug) console.log('handleSubmit: END / captcha challenge requested');
         }
@@ -279,10 +224,18 @@ export default class DsfrRegisterCmp extends LightningElement {
             .then((result) => {
                 if (this.isDebug) console.log('handleSubmit: registration success ',result);
                 this.toggleSpinner(false);
-                if (this.isDebug) console.log('handleSubmit: END / opening target');
-                window.open(result,'_self');
+
+                this.tmpVerification = result;
+                this.currentStage = 'Validation';
+                if (this.isDebug) console.log('handleSubmit: next stage set ',this.currentStage);
+
+                this.template.querySelector('.registrationForm').classList.add('slds-hide');
+                this.template.querySelector('.validationForm').classList.remove('slds-hide');
+                if (this.isDebug) console.log('handleSubmit: END / moving to validation stage');
+                //if (this.isDebug) console.log('handleSubmit: END / opening target');
+                //window.open(result,'_self');
             }).catch((error) => {
-                console.warn('handleSubmit: END KO / registration failed ',error);
+                console.warn('handleSubmit: END KO / registration failed ',JSON.stringify(error));
                 this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
                 this.toggleSpinner(false);
             });
@@ -310,6 +263,45 @@ export default class DsfrRegisterCmp extends LightningElement {
         if (this.isDebug) console.log('togglePassword: END / password input type updated ', passwordInputs[0].type);
     }
 
+    handleValidate(event) {
+        if (this.isDebug) console.log('handleValidate: START for Register',event);
+        if (this.isDebug) console.log('handleValidate: startUrl ', this.startUrl);
+        if (this.isDebug) console.log('handleValidate: verification ID ', this.tmpVerification);
+        event.preventDefault();
+        this.toggleSpinner(true);
+        this.validationMessage = null;
+
+        let validationCode = this.template.querySelector('.fr-input[name="validationCode"]').value;
+        if (this.isDebug) console.log('handleValidate: validation code fetched ', validationCode);
+
+        if (!(validationCode)) {
+            console.warn('handleValidate: END KO / missing code');
+            this.validationMessage = {
+                type: "error",
+                title: "Echec de validation",
+                details: 'Merci de bien vouloir renseigner un code.'
+            };
+            this.toggleSpinner(false);
+            return;
+        }
+
+        validateUser({verificationId: this.tmpVerification, validationCode:validationCode, email: this.tmpAccount.PersonEmail, password: this.tmpPassword, startUrl:this.startUrl})
+        .then(result => {
+            if (this.isDebug) console.log('handleValidate: END OK / user validated, opening target ', result);
+            window.open(result,'_self');
+        }).catch(error => {
+            if (this.isDebug) console.log('handleValidate: validation error ', JSON.stringify(error));
+            this.validationMessage = {
+                type: "error",
+                title: "Echec de validation",
+                details: (error.body?.message || error.statusText || '')
+            };
+            this.toggleSpinner(false);
+            console.warn('handleValidate: END KO / validation and login failed ', JSON.stringify(error));
+        });
+        if (this.isDebug) console.log('handleValidate: requesting validation and login');
+    }
+
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
@@ -317,30 +309,36 @@ export default class DsfrRegisterCmp extends LightningElement {
     toggleSpinner = function(isShown) {
         if (this.isDebug) console.log('toggleSpinner: START with',isShown);
 
-        let spinner = this.template.querySelector('lightning-spinner');
-        if (this.isDebug) console.log('toggleSpinner: spinner found',spinner);
+        let spinners = this.template.querySelectorAll('lightning-spinner');
+        if (this.isDebug) console.log('toggleSpinner: spinners found',spinners);
 
         let buttons = this.template.querySelectorAll('button.formButton');
         if (this.isDebug) console.log('toggleSpinner: buttons found',buttons);
 
-        if (spinner) {
+        if (spinners) {
             if (isShown) {
-                if (this.isDebug) console.log('toggleSpinner: showing spinner');
-                spinner.classList.remove('slds-hide');
+                if (this.isDebug) console.log('toggleSpinner: showing spinners');
+                spinners.forEach(item => {
+                    item.classList.remove('slds-hide');
+                });
+                //spinner.classList.remove('slds-hide');
                 buttons.forEach(item => {
                     item.disabled = true;
                 });
             }
             else {
-                if (this.isDebug) console.log('toggleSpinner: hiding spinner');
-                spinner.classList.add('slds-hide');
+                if (this.isDebug) console.log('toggleSpinner: hiding spinners');
+                //spinner.classList.add('slds-hide');
+                spinners.forEach(item => {
+                    item.classList.add('slds-hide');
+                });
                 buttons.forEach(item => {
                     item.disabled = false;
                 });
             }
         }
         else {
-            if (this.isDebug) console.log('toggleSpinner: no spinner displayed');
+            if (this.isDebug) console.log('toggleSpinner: no spinners displayed');
         }
         
         if (this.isDebug) console.log('toggleSpinner: END');
@@ -364,8 +362,14 @@ export default class DsfrRegisterCmp extends LightningElement {
             .then((result) => {
                 if (this.isDebug) console.log('handleCaptcha: registration success ',result);
                 this.toggleSpinner(false);
-                if (this.isDebug) console.log('handleCaptcha: END for Register / opening target');
-                window.open(result,'_self');
+
+                this.tmpVerification = result;
+                this.currentStage = 'Validation';
+                this.template.querySelector('.registrationForm').classList.add('slds-hide');
+                this.template.querySelector('.validationForm').classList.remove('slds-hide');
+                if (this.isDebug) console.log('handleCaptcha: END OK / moving to validation stage');
+                //if (this.isDebug) console.log('handleCaptcha: END for Register / opening target');
+                //window.open(result,'_self');
             }).catch((error) => {
                 console.warn('handleCaptcha: END KO for Register / registration failed ',JSON.stringify(error));
                 this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
@@ -381,33 +385,5 @@ export default class DsfrRegisterCmp extends LightningElement {
         });
         if (this.isDebug) console.log('handleCaptcha: validation triggered');
     }
-
-    /*triggerCaptcha = function() {
-        if (this.isDebug) console.log('triggerCaptcha: START');
-
-        if (this.captchaTriggered) {
-            if (this.isDebug) console.log('triggerCaptcha: END / captcha already triggered ');
-            return;
-        }
-
-        if (this.captchaSiteKey) {
-            if (this.isDebug) console.log('triggerCaptcha: site key available ',this.captchaSiteKey);
-
-            let divElement = this.template.querySelector('div.recaptchaCheckbox');
-            if (divElement) {
-                if (this.isDebug) console.log('triggerCaptcha: divElement available ', divElement);
-                let payload = {element: divElement, badge: 'bottomright', key: this.captchaSiteKey};
-                document.dispatchEvent(new CustomEvent("grecaptchaRender", {detail: payload}));
-                //this.captchaTriggered = true;
-                if (this.isDebug) console.log('triggerCaptcha: END / captcha triggered');
-            }
-            else {
-                if (this.isDebug) console.log('triggerCaptcha: END / awaiting ');
-            }
-        }
-        else {
-            if (this.isDebug) console.log('triggerCaptcha: END / waiting for site key ');
-        }
-    }*/
 
 }

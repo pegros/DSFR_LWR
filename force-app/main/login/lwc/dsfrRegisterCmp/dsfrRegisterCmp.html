@@ -1,6 +1,5 @@
 <template>
     <div role="main" id="content">
-
         <!-- Main Header -->
         <div class="fr-container fr-mt-8v fr-mt-md-14v fr-mb-2v fr-mb-md-8v">
             <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
@@ -13,141 +12,199 @@
             </div>
         </div>
 
-        <!-- Main Form -->
+        <!-- Input Forms -->
         <div class="fr-container fr-container--fluid fr-mb-md-14v">
             <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
                 <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
                     <div class="fr-container fr-background-alt--grey fr-px-md-0 fr-py-10v fr-py-md-14v">
                         <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
                             <div class="fr-col-12 fr-col-md-10 fr-col-lg-9">
-                                <div>
+                                <!-- Progress Indicator -->
+                                <c-dsfr-stepper-cmp steps={stages}      current-step={currentStage}
+                                                    is-debug={isDebug}>
+                                </c-dsfr-stepper-cmp>
+
+                                <!-- Main Registration Form -->
+                                <div class="registrationForm">
                                     <template lwc:if={defaultRecordTypeId}>
-                                    <lightning-record-edit-form class="fr-mb-0"             id="loginForm"
-                                                                object-api-name="Account"   record-type-id={defaultRecordTypeId}
-                                                                onload={handleLoad}         onsubmit={handleSubmit}
-                                                                onerror={handleError}>
-                                        <fieldset class="fr-mb-0 fr-fieldset" id="loginForm-fieldset" aria-labelledby="loginForm-fieldset-legend loginForm-fieldset-messages">
-                                            <legend class="fr-fieldset__legend" id="loginForm-fieldset-legend">
-                                                <h6>{formTitle}</h6>
+                                        <lightning-record-edit-form class="fr-mb-0"             id="loginForm"
+                                                                    object-api-name="Account"   record-type-id={defaultRecordTypeId}
+                                                                    onload={handleLoad}         onsubmit={handleSubmit}
+                                                                    onerror={handleError}>
+                                            <fieldset class="fr-mb-0 fr-fieldset" id="loginForm-fieldset" aria-labelledby="loginForm-fieldset-legend loginForm-fieldset-messages">
+                                                <legend class="fr-fieldset__legend" id="loginForm-fieldset-legend">
+                                                    <h6>{formTitle}</h6>
+                                                </legend>
+                                                <template lwc:if={formDescription}>
+                                                    <div class="fr-fieldset__element">
+                                                        <p class="fr-text--sm">{formDescription}</p>
+                                                    </div>
+                                                </template>
+                                                <template lwc:if={formHelp}>
+                                                    <div class="fr-fieldset__element">
+                                                        <span class="fr-hint-text">{formHelp}</span>
+                                                    </div>
+                                                </template>
+
+                                                <!-- Configurable form input field list -->
+                                                <template for:each={formFieldList} for:item="iter" >
+                                                    <div key={iter.name} class="fr-fieldset__element">
+                                                        <div class="fr-input-group">
+                                                            <template lwc:if={iter.required} >
+                                                                <lightning-input-field  class="dsfrInput"       variant="label-stacked"
+                                                                                        field-name={iter.name}  required>
+                                                                </lightning-input-field>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <lightning-input-field  class="dsfrInput"       variant="label-stacked"
+                                                                                        field-name={iter.name} >
+                                                                </lightning-input-field>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+                                                <!-- Standard email control field -->
+                                                <div class="fr-fieldset__element">
+                                                    <div id="email-control">
+                                                        <label class="fr-label" for="email-control-input">
+                                                            Confirmer l'email
+                                                            <abbr class="fr-required" title="obligatoire">*</abbr>
+                                                       </label>
+                                                        <div class="fr-input-wrap">
+                                                            <input  class="fr-input"
+                                                                    aria-describedby="email-control-input-messages" aria-required="true"
+                                                                    name="email-control" autocomplete="email" id="email-control-input" type="text">
+                                                        </div>
+                                                        <div class="fr-messages-group" id="email-control-input-messages" aria-live="assertive">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Standard password input fields -->
+                                                <div class="fr-fieldset__element">
+                                                    <div class="fr-password" id="password-1">
+                                                        <label class="fr-label" for="password-1-input">
+                                                            Saisir un mot de passe
+                                                            <abbr class="fr-required" title="obligatoire">*</abbr>
+                                                        </label>
+                                                        <span class="fr-hint-text">{pwdPolicy}</span>
+                                                        <div class="fr-input-wrap">
+                                                            <input  class="fr-password__input fr-input"
+                                                                    aria-describedby="password-1-input-messages" aria-required="true"
+                                                                    name="password" autocomplete="new-password" id="password-1-input" type="password">
+                                                        </div>
+                                                        <div class="fr-messages-group" id="password-1-input-messages" aria-live="assertive">
+                                                        </div>
+                                                        <div class="fr-password__checkbox fr-checkbox-group fr-checkbox-group--sm">
+                                                            <input  id="password-1-show"                    type="checkbox"
+                                                                    aria-label="Afficher le mot de passe"   aria-describedby="password-1-show-messages"
+                                                                    onchange={togglePassword} >
+                                                            <label class="fr-password__checkbox fr-label" for="password-1-show">
+                                                                Afficher en clair
+                                                            </label>
+                                                            <div class="fr-messages-group" id="password-1-show-messages" aria-live="assertive">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="fr-fieldset__element">
+                                                    <div class="fr-password" id="password-2">
+                                                        <label class="fr-label" for="password-2-input">
+                                                            Confirmer le mot de passe
+                                                            <abbr class="fr-required" title="obligatoire">*</abbr>
+                                                        </label>
+                                                        <div class="fr-input-wrap">
+                                                            <input  class="fr-password__input fr-input"
+                                                                   aria-describedby="password-2-input-messages" aria-required="true"
+                                                                    name="password" autocomplete="new-password" id="password-2-input" type="password">
+                                                        </div>
+                                                        <div class="fr-messages-group" id="password-2-input-messages" aria-live="assertive">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- CNIL Mention -->
+                                                <template lwc:if={cnilMention}>
+                                                    <div class="fr-fieldset__element">
+                                                        <div class="fr-checkbox-group fr-checkbox-group--sm">
+                                                            <input  name="checkbox-cnil"    id="checkbox-cnil" required
+                                                                    type="checkbox"         aria-describedby="checkbox-cnil-messages">
+                                                            <label class="fr-label" for="checkbox-cnil">
+                                                                <lightning-formatted-rich-text class="fr-label" value={cnilMention}>
+                                                                </lightning-formatted-rich-text>
+                                                            </label>
+                                                            <div class="fr-messages-group" id="checkbox-cnil-messages" aria-live="assertive">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+                                                <!-- Submit button -->
+                                                <div class="fr-fieldset__element">
+                                                    <ul class="fr-btns-group">
+                                                        <li>
+                                                            <button class="formButton fr-mt-2v fr-btn" type="submit" >
+                                                                Soumettre
+                                                            </button>
+                                                            <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-m-left_small slds-align_absolute-center">
+                                                            </lightning-spinner>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <!-- Messages d'erreur -->
+                                                <div class="fr-messages-group" id="login-fieldset-messages" aria-live="assertive">
+                                                    <lightning-messages class="fr-messages-group"></lightning-messages>
+                                                </div>
+                                            </fieldset>
+                                        </lightning-record-edit-form>
+                                    </template>
+                                </div>
+
+                                <!-- Validation Form -->
+                                <div class="validationForm slds-hide">
+                                    <form >
+                                        <fieldset class="fr-fieldset" aria-labelledby="validation-legend">
+                                            <legend class="fr-fieldset__legend" id="validation-legend">
+                                                <h2 class="fr-h2">{validationTitle}</h2>
                                             </legend>
-                                            <template lwc:if={formDescription}>
-                                                <div class="fr-fieldset__element">
-                                                    <p class="fr-text--sm">{formDescription}</p>
-                                                </div>
-                                            </template>
-                                            <template lwc:if={formHelp}>
-                                                <div class="fr-fieldset__element">
-                                                    <span class="fr-hint-text">{formHelp}</span>
-                                                </div>
-                                            </template>
-
-                                            <!-- Configurable form input field list -->
-                                            <template for:each={formFieldList} for:item="iter" >
-                                                <div key={iter.name} class="fr-fieldset__element">
-                                                    <div class="fr-input-group">
-                                                        <template lwc:if={iter.required} >
-                                                            <lightning-input-field  class="dsfrInput"       variant="label-stacked"
-                                                                                    field-name={iter.name}  required>
-                                                            </lightning-input-field>
-                                                        </template>
-                                                        <template lwc:else>
-                                                            <lightning-input-field  class="dsfrInput"       variant="label-stacked"
-                                                                                    field-name={iter.name} >
-                                                            </lightning-input-field>
-                                                        </template>
-                                                    </div>
-                                                </div>
-                                            </template>
-
-                                            <!-- Standard email control field -->
                                             <div class="fr-fieldset__element">
-                                                <div id="email-control">
-                                                    <label class="fr-label" for="email-control-input">
-                                                        Confirmer l'email
-                                                        <abbr class="fr-required" title="obligatoire">*</abbr>
-                                                    </label>
-                                                    <div class="fr-input-wrap">
-                                                        <input  class="fr-input"
-                                                                aria-describedby="email-control-input-messages" aria-required="true"
-                                                                name="email-control" autocomplete="email" id="email-control-input" type="text">
-                                                    </div>
-                                                    <div class="fr-messages-group" id="email-control-input-messages" aria-live="assertive">
-                                                    </div>
-                                                </div>
+                                                <p class="fr-text--sm">{validationDescription}</p>
                                             </div>
-
-                                            <!-- Standard password input fields -->
                                             <div class="fr-fieldset__element">
-                                                <div class="fr-password" id="password-1">
-                                                    <label class="fr-label" for="password-1-input">
-                                                        Saisir un mot de passe
-                                                        <abbr class="fr-required" title="obligatoire">*</abbr>
-                                                    </label>
-                                                    <span class="fr-hint-text">{pwdPolicy}</span>
-                                                    <div class="fr-input-wrap">
-                                                        <input  class="fr-password__input fr-input"
-                                                                aria-describedby="password-1-input-messages" aria-required="true"
-                                                                name="password" autocomplete="new-password" id="password-1-input" type="password">
+                                                <fieldset class="fr-fieldset" id="validation" aria-labelledby="validation-messages">
+                                                    <div class="fr-fieldset__element">
+                                                        <span class="fr-hint-text">Sauf mention contraire, tous les champs sont obligatoires.</span>
                                                     </div>
-                                                    <div class="fr-messages-group" id="password-1-input-messages" aria-live="assertive">
-                                                    </div>
-                                                    <div class="fr-password__checkbox fr-checkbox-group fr-checkbox-group--sm">
-                                                        <input  id="password-1-show"                    type="checkbox"
-                                                                aria-label="Afficher le mot de passe"   aria-describedby="password-1-show-messages"
-                                                                onchange={togglePassword} >
-                                                        <label class="fr-password__checkbox fr-label" for="password-1-show">
-                                                            Afficher en clair
-                                                        </label>
-                                                        <div class="fr-messages-group" id="password-1-show-messages" aria-live="assertive">
+                                                    <div class="fr-fieldset__element">
+                                                        <div class="fr-input-group">
+                                                            <label class="fr-label" for="validation-code-input">
+                                                                Code
+                                                                <abbr class="fr-required" title="obligatoire">*</abbr>
+                                                                <!--<span class="fr-hint-text">Format attendu : 6 caractères</span>-->
+                                                            </label>
+                                                            <input class="fr-input" aria-required="true" aria-describedby="code-messages" name="validationCode" id="validation-code-input" type="text">
+                                                            <div class="fr-messages-group" id="validation-code-messages" aria-live="assertive">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <div class="fr-messages-group" id="validation-messages" aria-live="assertive">
+                                                        <template lwc:if={validationMessage}>
+                                                            <c-dsfr-alert-cmp   alert-type={validationMessage.type}
+                                                                                alert-size="small"
+                                                                                alert-title={validationMessage.title}
+                                                                                alert-message={validationMessage.details}
+                                                                                alert-css="fr-m-2v">
+                                                            </c-dsfr-alert-cmp>
+                                                        </template>
+                                                    </div>
+                                                </fieldset>
                                             </div>
-                                            <div class="fr-fieldset__element">
-                                                <div class="fr-password" id="password-2">
-                                                    <label class="fr-label" for="password-2-input">
-                                                        Confirmer le mot de passe
-                                                        <abbr class="fr-required" title="obligatoire">*</abbr>
-                                                    </label>
-                                                    <div class="fr-input-wrap">
-                                                        <input  class="fr-password__input fr-input"
-                                                                aria-describedby="password-2-input-messages" aria-required="true"
-                                                                name="password" autocomplete="new-password" id="password-2-input" type="password">
-                                                    </div>
-                                                    <div class="fr-messages-group" id="password-2-input-messages" aria-live="assertive">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- CNIL Mention -->
-                                            <template lwc:if={cnilMention}>
-                                                <div class="fr-fieldset__element">
-                                                    <div class="fr-checkbox-group fr-checkbox-group--sm">
-                                                        <input  name="checkbox-cnil"    id="checkbox-cnil" required
-                                                                type="checkbox"         aria-describedby="checkbox-cnil-messages">
-                                                        <label class="fr-label" for="checkbox-cnil">
-                                                            <!--{cnilMention}-->
-                                                            <lightning-formatted-rich-text class="fr-label" value={cnilMention}>
-                                                            </lightning-formatted-rich-text>
-                                                        </label>
-                                                        <div class="fr-messages-group" id="checkbox-cnil-messages" aria-live="assertive">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </template>
-
-                                            <!-- Submit button -->
-                                            <!--
-                                            <template lwc:if={showCaptcha}>
-                                                <div class="recaptchaCheckbox"></div>
-                                            </template>
-                                            -->
-
-                                            <!-- Submit button -->
                                             <div class="fr-fieldset__element">
                                                 <ul class="fr-btns-group">
                                                     <li>
-                                                        <button class="formButton fr-mt-2v fr-btn" type="submit" >
+                                                        <button class="formButton fr-mt-2v fr-btn" type="submit" onclick={handleValidate}>
                                                             Valider
                                                         </button>
                                                         <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-m-left_small slds-align_absolute-center">
@@ -155,15 +212,10 @@
                                                     </li>
                                                 </ul>
                                             </div>
-
-                                            <!-- Messages d'erreur -->
-                                            <div class="fr-messages-group" id="login-fieldset-messages" aria-live="assertive">
-                                                <lightning-messages class="fr-messages-group"></lightning-messages>
-                                            </div>
                                         </fieldset>
-                                    </lightning-record-edit-form>
-                                    </template>
+                                    </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -171,6 +223,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Debug Info -->
     <template lwc:if={isDebug}>
         <div class="fr-container">
             <p class="fr-py-4v">

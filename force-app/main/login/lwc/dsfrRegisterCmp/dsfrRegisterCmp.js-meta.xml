@@ -46,6 +46,15 @@
                         type="String"
                         description="Activation et contenu d'une case d'acceptation de clauses CNIL" />
 
+            <property   name="validationTitle"
+                        label="Entête de Validation"
+                        type="String" 
+                        description="Entête de la section de validation" />
+            <property   name="validationDescription"
+                        label="Description de validation"
+                        type="String" 
+                        description="Descriptif de la section de validation" />
+            
             <property   name="showCaptcha"
                         label="Activer Captcha ?"
                         type="Boolean"
