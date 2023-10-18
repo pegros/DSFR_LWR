@@ -18,7 +18,12 @@ export default class DsfrStepperCmp extends LightningElement {
         return this._currentStep;
     }
     set currentStep(value) {
+        if (this.isDebug) console.log('set currentStep for stepper : START with ', value);
         this._currentStep = value;
+        if (this.steps) {
+            if (this.isDebug) console.log('set currentStep for stepper : initializing steps');
+            this.initSteps();
+        }
     }
 
     @api stepsCss;
@@ -54,9 +59,8 @@ export default class DsfrStepperCmp extends LightningElement {
             this.steps = JSON.parse(this.stepsConfig);
         }
         if (this.isDebug) console.log('connected: list of steps to be used ', this.steps);
-        this.stepCount = this.steps?.length || 0;
 
-        if (this.isDebug) console.log('connected: current step provided ', this.currentStep);
+        /*if (this.isDebug) console.log('connected: current step provided ', this.currentStep);
         this.currentIndex = (this.steps?.indexOf(this.currentStep) || 0) + 1;
         if (this.isDebug) console.log('connected: matching index ', this.currentIndex);
 
@@ -67,8 +71,31 @@ export default class DsfrStepperCmp extends LightningElement {
         if (this.currentIndex < this.stepCount) {
             this.nextStep = this.steps.slice(this.currentIndex-1, this.currentIndex+1).pop();
             if (this.isDebug) console.log('connected: next step init ', this.nextStep);
-        }
+        }*/
+
+        this.initSteps();
 
         if (this.isDebug) console.log('connected: END stepper');
+    }
+
+    //-----------------------------------------------------
+    // Utilities
+    //-----------------------------------------------------
+
+    initSteps = function() {
+        if (this.isDebug) console.log('initSteps: START with current step ',this.currentStep);
+
+        this.stepCount = this.steps?.length || 0;
+        if (this.isDebug) console.log('initSteps: #steps ', this.stepCount);
+
+        this.currentIndex = (this.steps?.indexOf(this.currentStep) || 0) + 1;
+        if (this.isDebug) console.log('initSteps: matching index ', this.currentIndex);
+
+        this.currentStateLabel = this.currentStateLabel.replace('{0}', this.currentIndex);
+        this.currentStateLabel = this.currentStateLabel.replace('{1}', this.stepCount);
+        if (this.isDebug) console.log('initSteps: state message init ', this.currentStateLabel);
+ 
+        this.nextStep = this.steps.slice(this.currentIndex-1, this.currentIndex+1).pop();
+        if (this.isDebug) console.log('initSteps: END with next step ', this.nextStep);
     }
 }
