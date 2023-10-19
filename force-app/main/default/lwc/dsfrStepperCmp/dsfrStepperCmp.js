@@ -91,6 +91,7 @@ export default class DsfrStepperCmp extends LightningElement {
         this.currentIndex = (this.steps?.indexOf(this.currentStep) || 0) + 1;
         if (this.isDebug) console.log('initSteps: matching index ', this.currentIndex);
 
+        this.currentStateLabel = STATE_MESSAGE;
         this.currentStateLabel = this.currentStateLabel.replace('{0}', this.currentIndex);
         this.currentStateLabel = this.currentStateLabel.replace('{1}', this.stepCount);
         if (this.isDebug) console.log('initSteps: state message init ', this.currentStateLabel);
