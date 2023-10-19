@@ -39,7 +39,7 @@ Le composant crée un **PersonAccount** et active un CustomerCommunity **User** 
 * positionant le `owner` par défaut du site (qui doit avoir un rôle) sur le **PersonAccount**
 * initialisant les préférences de localisation (langue, chiffres, fuseau horaire...) correspondant au `Guest User` du site
 
-ℹ️ Si un **PersonAccount** avec le même email et record type préexiste dans la base mais n'a pas de
+⚠️ Si un **PersonAccount** avec le même email et record type préexiste dans la base mais n'a pas de
 CustomerCommunity **User** associé, seule l'activation du **User** est effectuée en le liant au 
 **PersonAccount** existant.
 
@@ -66,9 +66,9 @@ Le composant se configure entièrement dans **Site Builder** et offre les param�
 
 ⚠️ Le composant repose sur le **[lightning-record-edit-form](https://developer.salesforce.com/docs/component-library/bundle/lightning-record-edit-form/documentation)** pour le formulaire et applique donc le paramétrage standard des champs configuré dans Salesforce (liste de valeurs, libellés, help text...). Il est en outre indispensable que le **Guest User** du site ait accès en écriture à l'ensemble des champs présentés.
 
-Il utilise également les méthodes standards `initSelfRegistration()` et `verifySelfRegistration()`
+ℹ️ Il utilise également les méthodes standards `initSelfRegistration()` et `verifySelfRegistration()`
 de la classe **[UserManagement](https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_class_System_UserManagement.htm)**
-pour envoyer et valider un code à usage unique pour valider l'enregistrement.
+pour envoyer et valider un code à usage unique et contrôler l'enregistrement.
 
 
 ### Composant de connexion (Connexion / Login)
