@@ -11,7 +11,8 @@ respectivement pour permettre aux utilisateurs de:
 
 L'objectif de ces composants est de masquer le `username` Salesforce des utilisateurs et d'adopter
 l'`email` comme identifiant des utilisateurs du site.
-Cela nécessite donc d'avoir une contrainte d'unicité de l'email des **Users** du site et de ne ps utiliser l'email comme `username`!
+Cela nécessite donc d'avoir une contrainte d'unicité de l'email des **Users** du site et de ne pas utiliser l'email comme `username`!
+L'enregistrement d'un nouveau compte est par ailleurs contrôlé en validant un code envoyé à l'adresse email renseignée.
 
 Les 3 premières fonctionnalités étant disponibles en mode **Guest** sur le site, il est 
 possible de sécuriser ces opérations via la technologie
@@ -38,11 +39,15 @@ Le composant crée un **PersonAccount** et active un CustomerCommunity **User** 
 * positionant le `owner` par défaut du site (qui doit avoir un rôle) sur le **PersonAccount**
 * initialisant les préférences de localisation (langue, chiffres, fuseau horaire...) correspondant au `Guest User` du site
 
+ℹ️ Si un **PersonAccount** avec le même email et record type préexiste dans la base mais n'a pas de
+CustomerCommunity **User** associé, seule l'activation du **User** est effectuée en le liant au 
+**PersonAccount** existant.
+
 L'opération s'effectue en deux étapes, la création d'un nouveau compte utilisateur étant validée
 par un code à usage unique transmis par email à l'adresse saisie dans le formulaire principal (Etape #1).
 Etape #1 - Saisie des informations              | Etape #2 - Validation du code
 :----------------------------------------------:|:-----------------------------------------:
-![Register Etape #2](/media//media/dsfrRegisterCmp.png) | ![Register Etape #2](/media//media/dsfrRegisterCmp2.png)
+![Register Etape #2](/media//media/dsfrRegisterCmp1.png) | ![Register Etape #2](/media//media/dsfrRegisterCmp2.png)
 
 Le composant se configure entièrement dans **Site Builder** et offre les paramètres suivants:
 * `Titre principal`: Titre principal du composant
@@ -60,6 +65,10 @@ Le composant se configure entièrement dans **Site Builder** et offre les param�
 * `Debug ?`: Activation de traces pour l'analyse de problèmes
 
 ⚠️ Le composant repose sur le **[lightning-record-edit-form](https://developer.salesforce.com/docs/component-library/bundle/lightning-record-edit-form/documentation)** pour le formulaire et applique donc le paramétrage standard des champs configuré dans Salesforce (liste de valeurs, libellés, help text...). Il est en outre indispensable que le **Guest User** du site ait accès en écriture à l'ensemble des champs présentés.
+
+Il utilise également les méthodes standards `initSelfRegistration()` et `verifySelfRegistration()`
+de la classe **[UserManagement](https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_class_System_UserManagement.htm)**
+pour envoyer et valider un code à usage unique pour valider l'enregistrement.
 
 
 ### Composant de connexion (Connexion / Login)
