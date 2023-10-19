@@ -38,7 +38,11 @@ Le composant crée un **PersonAccount** et active un CustomerCommunity **User** 
 * positionant le `owner` par défaut du site (qui doit avoir un rôle) sur le **PersonAccount**
 * initialisant les préférences de localisation (langue, chiffres, fuseau horaire...) correspondant au `Guest User` du site
 
-<img src="/media/dsfrRegisterCmp.png" alt="Register" width=400> 
+L'opération s'effectue en deux étapes, la création d'un nouveau compte utilisateur étant validée
+par un code à usage unique transmis par email à l'adresse saisie dans le formulaire principal (Etape #1).
+Etape #1 - Saisie des informations              | Etape #2 - Validation du code
+:----------------------------------------------:|:-----------------------------------------:
+![Register Etape #2](/media//media/dsfrRegisterCmp.png) | ![Register Etape #2](/media//media/dsfrRegisterCmp2.png)
 
 Le composant se configure entièrement dans **Site Builder** et offre les paramètres suivants:
 * `Titre principal`: Titre principal du composant
@@ -49,6 +53,8 @@ Le composant se configure entièrement dans **Site Builder** et offre les param�
 * `Type de Compte`: Nom _developer_ du type d'enregistrement du **PersonAccount** à créer
 * `Champs du formulaire`: Liste des champs de l'objet **PersonAccount** à afficher dans le formulaire, souos forme d'une liste JSON du type `[{"name":"nomApiChamp","required":true/false (optionnel)},...]``
 * `Mention CNIL`: Activation d'une case d'acceptation de clauses CNIL et libellé de la même clause
+* `Entête de Validation`:  Entête du formulaire de validation de compte
+* `Description de validation`: Texte explicatif du formulaire de validation
 * `Activer Captcha ?`: Activation de la fonction Recaptcha Google pour valider l'opération
 * `URL cible`: URL (relative) de la page vers où rediriger l'utilisateur après enregistrement et connexion (typiquement `{!Route.startURL})` pour récupérer l'information transmise par une page d'origine)
 * `Debug ?`: Activation de traces pour l'analyse de problèmes
