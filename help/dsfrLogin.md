@@ -45,9 +45,9 @@ CustomerCommunity **User** associé, seule l'activation du **User** est effectu�
 
 L'opération s'effectue en deux étapes, la création d'un nouveau compte utilisateur étant validée
 par un code à usage unique transmis par email à l'adresse saisie dans le formulaire principal (Etape #1).
-Etape #1 - Saisie des informations              | Etape #2 - Validation du code
-:----------------------------------------------:|:-----------------------------------------:
-![Register Etape #2](/media//media/dsfrRegisterCmp1.png) | ![Register Etape #2](/media//media/dsfrRegisterCmp2.png)
+Etape #1 - Saisie des informations                | Etape #2 - Validation du code
+:------------------------------------------------:|:-----------------------------------------:
+![Register Etape #1](/media/dsfrRegisterCmp1.png) | ![Register Etape #2](/media/dsfrRegisterCmp2.png)
 
 Le composant se configure entièrement dans **Site Builder** et offre les paramètres suivants:
 * `Titre principal`: Titre principal du composant
