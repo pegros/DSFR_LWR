@@ -139,10 +139,10 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
                 else {
                     alertConfig.alerts.push({type:'error', message: (error.body?.message || error.statusText)});
                 }
-                console.warn('handleAction: alertConfig init ', JSON.stringify(alertConfig));
+                if (this.isDebug) console.log('handleAction: alertConfig init ', JSON.stringify(alertConfig));
 
                 let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
-                console.warn('handleAction: popupUtil fetched ', popupUtil);
+                if (this.isDebug) console.log('handleAction: popupUtil fetched ', popupUtil);
                 popupUtil.showAlert(alertConfig).then(() => {
                     if (this.isDebug) console.log('handleAction: END / popup closed');
                 });
