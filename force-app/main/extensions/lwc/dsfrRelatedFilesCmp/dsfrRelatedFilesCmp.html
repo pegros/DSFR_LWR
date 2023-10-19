@@ -1,7 +1,7 @@
 <template>
-    <!-- DATA LOAD UTILITY -->
+    <!-- DATA LOAD UTILITY user-id={currentUserId} -->
     <c-sfpeg-list-cmp   object-api-name={objectApiName} 
-                        record-id={recordId} user-id={currentUserId}
+                        record-id={recordId} 
                         config-name={configName}
                         parent-context={listContext}
                         onload={handleRecordLoad}
@@ -51,9 +51,21 @@
                                     </template>
                                 </a>
                                 <!--<lightning-formatted-number class="fr-download__detail" value={iterFile.ContentDocument.ContentSize} format-style="decimal" maximum-significant-digits="5"></lightning-formatted-number>-->
+                                <template lwc:if={showUpload}>
+                                    <button type="button"               class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-upload-line fr-py-0v"
+                                            name={iterFile.contentId}   title={uploadTitle}
+                                            onclick={triggerUpload}>
+                                    </button>
+                                    <c-dsfr-file-upload-cmp class="slds-hide"               data-name={iterFile.contentId}
+                                                            file-id={iterFile.contentId}    accept={accept}
+                                                            do-notify="true"                do-refresh="true"
+                                                            oncomplete={handleUpload}
+                                                            is-debug={isDebug}>
+                                    </c-dsfr-file-upload-cmp>
+                                </template>
                                 <template lwc:if={showDelete}>
                                     <button class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-close-circle-line fr-py-0v"
-                                            title={deleteTitle} name={iterFile.linkId} onclick={handleUnlink}>
+                                            type="button" title={deleteTitle} name={iterFile.linkId} onclick={handleUnlink}>
                                     </button>
                                 </template>
                             </p>
@@ -78,4 +90,8 @@
             </p>
         </div>
     </template>
+
+    <!-- Error notification Utility -->
+    <c-dsfr-alert-popup-dsp is-debug={isDebug} >
+    </c-dsfr-alert-popup-dsp>
 </template>

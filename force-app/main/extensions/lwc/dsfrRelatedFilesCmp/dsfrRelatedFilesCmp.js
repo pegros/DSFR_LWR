@@ -1,12 +1,12 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
-import userId from '@salesforce/user/Id';
+//import userId from '@salesforce/user/Id';
 import unlinkFile from '@salesforce/apex/dsfrFileUpload_CTL.unlinkFile';
 import DOWNLOAD_TITLE from '@salesforce/label/c.dsfrRelatedFilesDownloadTitle';
 import UPLOAD_TITLE from '@salesforce/label/c.dsfrRelatedFilesUploadTitle';
 import DELETE_TITLE from '@salesforce/label/c.dsfrRelatedFilesDeleteTitle';
-
+import UPLOAD_TYPES from '@salesforce/label/c.dsfrFileUploadTypes';
 
 export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElement)  {
 
@@ -15,6 +15,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     //-----------------------------------------------------
     @api label;
     @api configName;
+    @api accept;
     @api showUpload = false;
     @api showDelete = false;
     @api disabled = false;
@@ -49,10 +50,9 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     //-----------------------------------------------------
     @api objectApiName;
     @api recordId;
-    currentUserId = userId;
+    //currentUserId = userId;
     fileList;
     configDetails;
-
 
     isReady = false;
 
@@ -79,6 +79,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
             console.log('connected: showDelete? ', this.showDelete);
             console.log('connected: END for related files');
         }
+        this.accept = this.accept || UPLOAD_TYPES;
     }
 
     //-----------------------------------------------------
@@ -250,50 +251,34 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     }
 
     // @TODO finalise new version upload
-    handleReplace(event){
-        if (this.isDebug) console.log('handleReplace: START',event);
+    triggerUpload(event){
+        if (this.isDebug) console.log('triggerUpload: START from RelatedFiles',event);
         event.preventDefault();
 
-        /*
-        let spinner = this.template.querySelector('lightning-spinner');
-        if (this.isDebug) console.log('handleReplace: spinner found',spinner);
-        if (spinner) {
-            if (this.isDebug) console.log('handleReplace: showing spinner');
-            spinner.classList.remove('slds-hide');
-        }
-
         let linkId = event.srcElement?.name;
-        if (this.isDebug) console.log('handleReplace: linkId determined ', linkId);
+        if (this.isDebug) console.log('triggerUpload: linkId determined ', linkId);
 
-        unlinkFile({linkId: linkId})
-            .then(() => {
-                if (this.isDebug) console.log('handleUnlink: file unlinked');
+        let fileCmp = this.template.querySelector('c-dsfr-file-upload-cmp[data-name="' +  linkId +'"]');
+        if (this.isDebug) console.log('triggerUpload: file upload found',fileCmp);
 
-                let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
-                if (this.isDebug) console.log('handleUnlink: listCmp fetched',listCmp);
-                listCmp.doRefresh();
-                if (this.isDebug) console.log('handleUnlink: file list refresh triggered');
+        if (fileCmp) {
+            if (this.isDebug) console.log('triggerUpload: triggering file upload');
+            fileCmp.doUpload();
+        }
+        if (this.isDebug) console.log('triggerUpload: END from RelatedFiles');
+    }
 
-                if (this.recordId) {
-                    if (this.isDebug) console.log('handleUnlink: triggering record data reload ',this.recordId);
-                    notifyRecordUpdateAvailable([{recordId: this.recordId}]);
-                }
+    handleUpload(event){
+        if (this.isDebug) console.log('handleUpload: START for RelatedFile');
+        if (this.isDebug) console.log('handleUpload: event detail received ',JSON.stringify(event.detail));
 
-                if (spinner) {
-                    if (this.isDebug) console.log('handleUnlink: hiding spinner');
-                    spinner.classList.add('slds-hide');
-                }
-                if (this.isDebug) console.log('handleUnlink: END');
-            })
-            .catch(error => {
-                console.warn('handleUnlink: END KO / file registration failed ', JSON.stringify(error));
-                if (spinner) {
-                    if (this.isDebug) console.log('handleUnlink: hiding spinner');
-                    spinner.classList.add('slds-hide');
-                }
-            });
-        */
-        if (this.isDebug) console.log('handleReplace: replace triggered');
+        let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+        if (this.isDebug) console.log('handleUpload: popupUtil fetched ', popupUtil);
+        popupUtil.showAlert(event.detail).then(() => {
+            if (this.isDebug) console.log('handleUpload: END for RelatedFile / popup closed');
+        });
+
+        if (this.isDebug) console.log('handleUpload: opening alert popup');
     }
 
     handleRefresh(event){

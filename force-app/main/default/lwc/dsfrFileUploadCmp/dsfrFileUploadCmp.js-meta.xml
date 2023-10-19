@@ -52,9 +52,9 @@
                         default="false"
                         description="Flag pour demander le refresh des données utilisateur après l'upload." />
             <property   name="fileId"
-                        label="N/A"
+                        label="ID Document"
                         type="String"
-                        description="Usage futur: ID Salesforce d'un fichier pour lequel une nouvelle version doit être chargée" />
+                        description="ID Salesforce d'un fichier pour lequel une nouvelle version doit être chargée" />
 
             <property   name="isDebug"
                         label="Debug ?"
@@ -111,10 +111,10 @@
                         role="inputOnly"
                         description="Flag pour demander le refresh des données utilisateur après l'upload." />
             <property   name="fileId"
-                        label="N/A"
+                        label="ID Document"
                         type="String"
                         role="inputOnly"
-                        description="Usage futur: ID Salesforce du fichier chargé ou du fichier pour lequel une nouvelle version doit être chargée" />
+                        description="ID Salesforce du fichier chargé ou du fichier pour lequel une nouvelle version doit être chargée" />
 
             <property   name="isDebug"
                         label="Debug ?"

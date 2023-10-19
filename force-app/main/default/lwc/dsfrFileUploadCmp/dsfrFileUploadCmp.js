@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
-import uploadFile from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
-import userId       from '@salesforce/user/Id';
+import uploadFile       from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
+import uploadVersion    from '@salesforce/apex/dsfrFileUpload_CTL.uploadVersion';
+import userId           from '@salesforce/user/Id';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 
 import UPLOAD_SUCCESS from '@salesforce/label/c.dsfrFileUploadSuccess';
@@ -28,6 +29,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     @api fileId;
 
     @api doRefresh;
+    @api doNotify = false;
 
     @api isDebug = false;       // Flag to activate debug information
 
@@ -76,6 +78,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
             console.log('connected: disabled ', this.disabled);
             console.log('connected: refreshUser ', this.refreshUser);
             console.log('connected: currentUserId ', this.currentUserId);
+            console.log('connected: doNotify ', this.doNotify);
         }
         this.comment = this.comment || UPLOAD_COMMENT;
         this.accept = this.accept || UPLOAD_TYPES;
@@ -84,6 +87,25 @@ export default class DsfrFileUploadCmp extends LightningElement {
             console.log('connected: accept reworked ',this.accept);
             console.log('connected: END file upload');
         }
+    }
+
+    //----------------------------------------------------------------
+    // Interface actions
+    //----------------------------------------------------------------
+    // Parent action execution service (for Action Handler parent component, no merge done)
+    @api doUpload() {
+        if (this.isDebug) console.log('doUpload: START for document ID ', this.fileId);
+        if (this.isDebug) console.log('doUpload: with accepted extensions ', this.accept);
+        if (this.isDebug) console.log('doUpload: and showAlerts ', this.showAlerts);
+
+        let fileInput = this.template.querySelector('input.fr-upload');
+        if (this.isDebug) console.log('doUpload: file upload input found',fileInput);
+
+        if (fileInput) {
+            if (this.isDebug) console.log('doUpload: clicking file input');
+            fileInput.click();
+        }
+        if (this.isDebug) console.log('doUpload: END');
     }
 
     //-----------------------------------------------------
@@ -115,17 +137,27 @@ export default class DsfrFileUploadCmp extends LightningElement {
             if (this.isDebug) console.log('handleUpload: file content loaded',fileReader.result);
             this.fileContent = fileReader.result.split(',')[1];
             if (this.isDebug) console.log('handleUpload: fileContent extracted ', this.fileContent);
-            this.registerFile();
-            if (this.isDebug) console.log('handleUpload: END file registration requested');
+            if (this.fileId) {
+                if (this.isDebug) console.log('handleUpload: requesting new version upload');
+                this.uploadVersion();
+                if (this.isDebug) console.log('handleUpload: END / new version uploaded');
+            }
+            else {
+                if (this.isDebug) console.log('handleUpload: requesting new file registration');
+                this.registerFile();
+                if (this.isDebug) console.log('handleUpload: END / new file registered');
+            }
         }
         if (this.isDebug) console.log('handleUpload: fileReader prepared',fileReader);
         fileReader.readAsDataURL(selectedFile)
         if (this.isDebug) console.log('handleUpload: file Content load triggered');
     }
 
+    //-----------------------------------------------------
+    // Utilities
+    //-----------------------------------------------------
     registerFile() {
         if (this.isDebug) console.log('registerFile: START');
-
         try {
             let recordIds = [];
             if (this.recordId) {
@@ -151,7 +183,8 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 if (this.isDebug) console.log('registerFile: file registered as ', JSON.stringify(result));
                 this.fileContent = null;
                 //this.message =  this.fileName + ' file uploaded successfully!';
-                this.message = this.uploadSuccess.replace('{0}', this.fileName);
+                //this.message = this.uploadSuccess.replace('{0}', this.fileName);
+                this.message = UPLOAD_SUCCESS.replace('{0}', this.fileName);
                 this.isError =  false;
 
                 if (recordIds && recordIds.length > 0) {
@@ -208,5 +241,78 @@ export default class DsfrFileUploadCmp extends LightningElement {
             this.message = (error.body?.message || error.statusText || 'Erreur technique');
             this.isError = true;
         }
+    }
+
+    uploadVersion() {
+        if (this.isDebug) console.log('uploadVersion: START for document ID ',this.fileId);
+    
+        const uploadData = {
+            name: this.fileName,
+            content: this.fileContent,
+            documentId: this.fileId
+        };
+        if (this.isDebug) console.log('uploadVersion: uploadData prepared ', JSON.stringify(uploadData));
+
+        uploadVersion(uploadData)
+        .then(result => {
+            if (this.isDebug) console.log('uploadVersion: version uploaded as ', JSON.stringify(result));
+            this.fileContent = null;
+            this.message = UPLOAD_SUCCESS.replace('{0}', this.fileName);
+            this.isError =  false;
+
+            if (this.doRefresh) {
+                if (this.isDebug) console.log('uploadVersion: Triggering refresh');
+                let actionNotif = {
+                    channel: "dsfrRefresh",
+                    action: {"type": "done","params": {"type": "refresh"}},
+                    context: null
+                };
+                if (this.isDebug) console.log('uploadVersion: actionNotif prepared ',JSON.stringify(actionNotif));
+                publish(this.messageContext, sfpegCustomNotification, actionNotif);
+                if (this.isDebug) console.log('uploadVersion: page refresh notification published');
+            }
+    
+            let fileInput = this.template.querySelector('input.fr-upload');
+            if (this.isDebug) console.log('uploadVersion: reactivating fileInput ',fileInput);
+            fileInput.disabled = false;
+
+            if (this.doNotify) {
+                let alertConfig = {
+                    alerts:[{type: "success", title: "Opération effectuée", message: this.message}],
+                    size:'small'};
+                if (this.isDebug) console.log('uploadVersion: END / notifying completion status ', JSON.stringify(alertConfig));
+                this.dispatchEvent(new CustomEvent('complete',{ detail: alertConfig}));
+            }
+            else {
+                if (this.isDebug) console.log('uploadVersion: END / no popup');
+            }
+        })
+        .catch(error => {
+            console.warn('uploadVersion: upload failed',error);
+            let fileInput = this.template.querySelector('input.fr-upload');
+            if (this.isDebug) console.log('uploadVersion: reactivating fileInput ',fileInput);
+            fileInput.disabled = false;
+            
+            if (this.doNotify) {
+                let alertConfig = {alerts:[],size:'small'};
+                if (error.body?.output?.errors) {
+                    alertConfig.header = error.body?.message;
+                    error.body.output.errors.forEach(item => {
+                        alertConfig.alerts.push({type:'error', message: item.message});
+                    })
+                }
+                else {
+                    alertConfig.alerts.push({type:'error', message: (error.body?.message || error.statusText)});
+                }
+                if (this.isDebug) console.log('uploadVersion: END / notifying completion error ', JSON.stringify(alertConfig));
+                this.dispatchEvent(new CustomEvent('complete',{ detail: alertConfig}));
+            }
+            else {
+                console.warn('uploadVersion: END KO / upload failed ',JSON.stringify(error));
+                this.message = (error.body?.message || error.statusText || 'Erreur technique');
+                this.isError = true;
+            }
+        });
+        if (this.isDebug) console.log('uploadVersion: upload triggered');
     }
 }

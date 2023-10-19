@@ -12,3 +12,6 @@
 .noPadding {
     padding-bottom: 0rem !important;
 }
+c-dsfr-file-upload-cmp + .fr-btn {
+    padding-left: 0 !important;
+}

@@ -33,6 +33,10 @@
 
 public with sharing class dsfrFileUpload_CTL {
    
+    //#######################################################
+    //################# MAIN PUBLIC METHODS #################
+    //#######################################################
+
     /***
     * @description  Method to upload base64 content as a new ContentDocument and 
     *               automatically link it to a record (as new ContentDocumentLink).
@@ -52,6 +56,7 @@ public with sharing class dsfrFileUpload_CTL {
         System.debug('uploadFile: with meta ' + meta);
         System.debug('uploadFile: and content ' + content);
 
+        // Step #1 - Content File Creation
         Map<String,Object> result = new Map<String,Object>();
         ContentVersion newFile;
         try {
@@ -64,7 +69,7 @@ public with sharing class dsfrFileUpload_CTL {
             throw new System.AuraHandledException(Label.dsfrFileUploadRegistrationFailure);// 'File registration failure'
         }
 
-        
+        // Step #2 - Content File Linking
         try {
             list<ContentDocumentLink> newLinks = registerLinks(newFile.Id, recordIds, sharing);
             System.debug('uploadFile: new Links init ' + newLinks);
@@ -81,6 +86,46 @@ public with sharing class dsfrFileUpload_CTL {
         return result;
     }
   
+    /***
+    * @description  Method to upload base64 content as a new ContentDocument and 
+    *               automatically link it to a record (as new ContentDocumentLink).
+    * @param        content     File content encoded in Base64
+    * @param        name        Name of the file being uploaded
+    * @param        documentId  ID of the ContentDocument for which the new ContentVersion should be created.
+    * @param        meta        List of field values to be set on the created ContentDocument.
+    * @param        sharing     Sharing mode to be set for the link (should be 'V' (Viewer), 'C' (Collaborator) or 'I' (Inferred))
+    * @return       Object      ContentVersion (file) created
+    * @exception    Various exceptions in case of wrong context or execution failure.
+    ***/
+    @AuraEnabled
+    public static ContentVersion uploadVersion(final String content, final String name, final String documentId) {
+        System.debug('uploadVersion: START for file ' + name);
+        System.debug('uploadVersion: and documentId ' + documentId);
+
+        if (String.isBlank(name) || String.isBlank(documentId)) {
+            System.debug(LoggingLevel.ERROR, 'uploadVersion: END KO / missing input');
+            throw new System.AuraHandledException(Label.dsfrFileVersionUploadInputFailure);
+        }
+
+        try {
+            ContentVersion newFile = new ContentVersion();
+            newFile.VersionData = EncodingUtil.base64Decode(content);
+            newFile.Title = name.left(name.lastIndexOf('.'));
+            newFile.PathOnClient = name;
+            newFile.ContentDocumentId = documentId;
+            System.debug('uploadVersion: inserting new ContentVersion ' + newFile);
+
+            insert newFile;
+
+            System.debug('uploadVersion: END returning ' + newFile);
+            return newFile;
+        }
+        catch (exception e) {
+            System.debug(LoggingLevel.ERROR, 'uploadVersion: END KO / file version registration failure ' + e);
+            throw new System.AuraHandledException(Label.dsfrFileVersionUploadFailure);
+        }
+    }
+
     /***
     * @description  Method to register a new ContentDocumentLink between a ContentDocument and 
     *               a record.
@@ -130,6 +175,10 @@ public with sharing class dsfrFileUpload_CTL {
         }
     }
 
+
+    //###########################################################
+    //################# PRIVATE UTILITY METHODS #################
+    //###########################################################
 
     /***
     * @description  Utility method to build and insert a new ContentVersion.

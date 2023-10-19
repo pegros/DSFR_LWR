@@ -141,6 +141,24 @@
         <value>.pdf,.jpg,.png,.doc,.docx</value>
     </labels>
     
+    <labels>
+        <fullName>dsfrFileVersionUploadInputFailure</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur au chargement d'une version de fichier (input manquant)</shortDescription>
+        <value>Problème technique lors du chargement de la nouvelle version du fichier</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileVersionUploadFailure</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur au chargement d'une version de fichier (traitement)</shortDescription>
+        <value>Problème technique lors du chargement de la nouvelle version du fichier</value>
+    </labels>
+    
+
 
     <labels>
         <fullName>dsfrAlertPopupCloseTitle</fullName>

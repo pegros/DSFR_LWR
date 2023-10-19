@@ -74,7 +74,7 @@ public class  dsfrFileUpload_TST {
 
 	/***
 	* @description  Test method for the dsfrFileUpload_CTL class, checking the "uploadFile" method
-	*               including all error cases. ReasonForChange
+	*               including all error cases.
 	* @see          dsfrFileUpload_CTL
 	***/
 
@@ -136,8 +136,83 @@ public class  dsfrFileUpload_TST {
 		}
 
 		Test.stopTest();
-		System.debug('testGetConfiguration: END');
+		System.debug('testUploadFile: END');
 	}
+
+	/***
+	* @description  Test method for the dsfrFileUpload_CTL class, checking the "uploadVersion" method
+	*               including all error cases.
+	* @see          dsfrFileUpload_CTL
+	***/
+
+	@isTest
+	static void testUploadVersion() {
+		System.debug('testUploatestUploadVersiondFile: START');
+
+        if (TST_RCD == null) {
+            System.debug('testUploadVersion: registering TEST_RCD ');
+            TST_RCD = new dsfrTest__c(Name = 'TEST');
+            insert TST_RCD;
+		    System.debug('testUploadVersion: TEST_RCD inserted ' + TST_RCD);
+        }
+
+        // Registering initial content
+        System.debug('testUploadVersion: initialising test Content Document ');
+		ID contentDocumentId;
+		try {
+            Map<String,Object> outputMap = dsfrFileUpload_CTL.uploadFile(EncodingUtil.base64Encode(TST_RSC.Body), 'TestUpload', new List<String>{TST_RCD.Id}, null, 'V');
+			System.debug('testUploadVersion: result returned for normal file' + outputMap);
+			Assert.areEqual(2,outputMap.size(),'Upload should return a map with file and link details');
+			System.debug('testUploadVersion: normal file' + outputMap);
+			ID contentVersionId = ((ContentVersion)(outputMap.get('file'))).Id;
+			System.debug('testUploadVersion: version ID extracted ' + contentVersionId);
+			contentDocumentId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :contentVersionId][0].ContentDocumentId;
+			System.debug('testUploadVersion: document ID fetched ' + contentDocumentId);
+		}
+		catch (Exception e) {
+			System.debug(LoggingLevel.ERROR,'testUploadVersion: exception raised for valid file with record' + e.getMessage());
+			Assert.fail('No exception should be raised with valid file and record');
+		}
+
+		Test.startTest();
+
+		// Testing passing case
+        System.debug('testUploadFile: TEST 1 - testing passing case ');
+		try {
+            ContentVersion result = dsfrFileUpload_CTL.uploadVersion(EncodingUtil.base64Encode(TST_RSC.Body), 'TestUploadVersion', contentDocumentId);
+			System.debug('testUploadVersion: result returned for normal file' + result);
+			Assert.areEqual(contentDocumentId,result.contentDocumentId,'File Version Upload should return a version for the same document');
+		}
+		catch (Exception e) {
+			System.debug(LoggingLevel.ERROR,'testUploadVersion: exception raised for valid file version upload ' + e.getMessage());
+			Assert.fail('No exception should be raised with valid file version');
+		}
+
+        // Testing error cases
+        System.debug('testUploadVersion: TEST 2 - testing missing content ID');
+		try {
+            ContentVersion result = dsfrFileUpload_CTL.uploadVersion(EncodingUtil.base64Encode(TST_RSC.Body), 'TestUploadVersion2', null);
+			System.debug(LoggingLevel.ERROR,'testUploadVersion: result returned for file with no name ' + result);
+            Assert.fail('Exception should be raised with file with no name');
+		}
+		catch (Exception e) {
+			System.debug('testUploadFile: Exception properly raised with file with no name' + e.getMessage());
+		}
+
+        System.debug('testUploadFile: TEST 3 - testing wrong content');
+		try {
+			ContentVersion result = dsfrFileUpload_CTL.uploadVersion(TST_RSC.Body.toString(), 'TestUploadVersion3', contentDocumentId);
+			System.debug(LoggingLevel.ERROR,'testUploadFile: result returned for file version with bad content ' + result);
+            Assert.fail('Exception should be raised with file version with bad content');
+		}
+		catch (Exception e) {
+			System.debug('testUploadFile: Exception properly raised with file version with bad content' + e.getMessage());
+		}
+
+		Test.stopTest();
+		System.debug('testUploadFile: END');
+	}
+
 
 
 	/***
