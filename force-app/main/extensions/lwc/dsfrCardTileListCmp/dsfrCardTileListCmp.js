@@ -136,7 +136,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
         }
     }
     get headerClass() {
-        return this.headerCss + ' listTitle';
+        return this.headerCss + ' listTitle' + (this.listTitle ? '' : ' slds-hide');
     }
     get hasSort() {
         //if (this.isDebug) console.log('hasSort: ',(this.configDetails?.display?.sort || false));
