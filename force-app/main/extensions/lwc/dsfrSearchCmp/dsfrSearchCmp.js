@@ -172,6 +172,15 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('connected: END for search');
     }
 
+    /*renderedCallback() {
+        if (this.isDebug) console.log('rendered: START for search');
+
+        if (this.isDebug) console.log('rendered: currentState ', JSON.stringify(this.currentState));
+        if (this.isDebug) console.log('rendered: searchTerm ',this.searchTerm);
+
+        if (this.isDebug) console.log('rendered: END for search');
+    }*/
+
     //-----------------------------------------------------
     // Event Handlers
     //-----------------------------------------------------
@@ -203,6 +212,22 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
 
         if (this.isDebug) console.log('expandCollapse: END');
+    }
+
+    // Search term input events
+    handleInputLeave(event){
+        if (this.isDebug) console.log('handleInputLeave: START for search with term ',this.searchTerm);
+        event.stopPropagation();
+        event.preventDefault();
+
+        let searchInput = this.template.querySelector('input.mainSearch');
+        if (this.isDebug) console.log('handleInputLeave: searchInput found ', searchInput);
+        if (searchInput) {
+            this.searchTerm = searchInput.value;
+            if (this.isDebug) console.log('handleInputLeave: term updated ');
+        }
+
+        if (this.isDebug) console.log('handleInputLeave: END for search with term ',this.searchTerm);
     }
 
     // Option Selection events
