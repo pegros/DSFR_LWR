@@ -6,6 +6,7 @@ Le composant **dsfrIconFieldDsp** permet d'afficher une information textuelle pr
 
 <img src="/media/dsfrIconFieldDsp.png" alt="Register" width=400> 
 
+
 ## Configuration
 
 Toute la configuration du composant s'effectue directement dans **Site Builder** au travers des propriétés proposées:
