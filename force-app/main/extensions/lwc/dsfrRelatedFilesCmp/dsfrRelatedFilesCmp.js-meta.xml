@@ -34,6 +34,11 @@
                         type="Boolean"
                         default="false"
                         description="Désactivation de la fonction d'upload de nouvelle version sur un fichier." />
+            <property   name="accept"
+                        label="Extensions (pour upload)"
+                        type="String"
+                        description="Liste des extensions de fichiers autorisées (surcharge de la valeur par défaut)." />
+            
             <property   name="showDelete"
                         label="Delete?"
                         type="Boolean"

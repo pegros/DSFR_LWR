@@ -175,9 +175,11 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 name: this.fileName,
                 content: this.fileContent,
                 recordIds: recordIds,
-                meta: JSON.parse(this.contentMeta),
                 sharing: this.shareMode
             };
+            if (this.contentMeta) {
+                uploadData.meta = JSON.parse(this.contentMeta);
+            }
             if (this.isDebug) console.log('registerFile: uploadData prepared ', JSON.stringify(uploadData));
             uploadFile(uploadData).then(result => {
                 if (this.isDebug) console.log('registerFile: file registered as ', JSON.stringify(result));
