@@ -6,6 +6,7 @@ Le composant **dsfrFileAttachCmp** permet de sélectionner une méta de fichier 
 un type ou une nature depuis un champ picklist) avant de présenter des composants d'ajout
 et/ou de rattachement de fichier.
  
+_à compléter_
 
 ## Configuration
 
