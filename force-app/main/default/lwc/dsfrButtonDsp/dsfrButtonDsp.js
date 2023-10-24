@@ -54,7 +54,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
             case 'small':
                 buttonClass += ' fr-btn--sm';
                 break;
-            case 'small':
+            case 'large':
                 buttonClass += ' fr-btn--lg';
                 break;
         }
