@@ -187,7 +187,7 @@ Deux Named Credentials sont proposés, respectivement pour l'utilisation des ver
 
 ### Configuration **Head Markup**
 
-Dans le **Head Markeup** du site, il est indispensable d'ajouter le chargement de la librairie reCAPTCHA Google et d'enregistrer un handler pour traiter les demandes de vérification émises par les composants. Pour information, la communication avec les composants s'effectue au travers de deux évènements **grecaptchaExecute** et **grecaptchaVerified**.
+Dans le **Head Markup** du site, il est indispensable d'ajouter le chargement de la librairie reCAPTCHA Google et d'enregistrer un handler pour traiter les demandes de vérification émises par les composants. Pour information, la communication avec les composants s'effectue au travers de deux évènements **grecaptchaExecute** et **grecaptchaVerified**.
 
 Pour cela, il faut y ajouter les lignes suivantes en remplaçant la **<GOOGLE_SITE_KEY>** par la bonne valeur configurée chez Google.
 * En version **Developer**
