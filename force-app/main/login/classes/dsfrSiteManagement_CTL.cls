@@ -359,7 +359,7 @@ public with sharing class dsfrSiteManagement_CTL {
     * @exception    Various exceptions in case of wrong input or execution failure.
     ***/
     @AuraEnabled
-    public static String validateUser(final String verificationId, final String validationCode, final string email, final string password, final String startUrl) {
+    public static String validateUser(final String verificationId, final String validationCode, final string email, final string password, String startUrl) {
         System.debug('validateUser: START for verification ID ' + verificationId);
         System.debug('validateUser: with input validation code ' + validationCode);
         System.debug('validateUser: email ' + email);
@@ -536,7 +536,7 @@ public with sharing class dsfrSiteManagement_CTL {
     /***
     * @description  Method to validate a captcha challenge on server side
     * @param        recaptchaResponse   value returned by the client side captcha challenge
-    * @param        siteKey             site key used for the client side captcha challenge
+    * @param        site                site key used for the client side captcha challenge
     * @param        actionName          action name used for the client side captcha challenge
     * @param        isEnterprise        flage to use enterprise instead of developer recaptcha API
     * @exception    Various exceptions in case of wrong input or execution failure.
