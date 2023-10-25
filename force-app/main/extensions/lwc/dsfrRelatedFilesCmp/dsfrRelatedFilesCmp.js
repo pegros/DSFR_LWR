@@ -241,11 +241,20 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
             if (this.isDebug) console.log('handleUnlink: END');
         })
         .catch(error => {
-            console.warn('handleUnlink: END KO / file registration failed ', JSON.stringify(error));
+            console.warn('handleUnlink: END KO / file unlink failed ', JSON.stringify(error));
             if (spinner) {
                 if (this.isDebug) console.log('handleUnlink: hiding spinner');
                 spinner.classList.add('slds-hide');
             }
+            let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+            if (this.isDebug) console.log('handleUnlink: popupUtil fetched ', popupUtil);
+
+            let alertConfig = {alerts:[],size:'small'};
+            alertConfig.alerts.push({type:'error', message: (error.body?.message || error.statusText)});
+
+            popupUtil.showAlert(alertConfig).then(() => {
+                if (this.isDebug) console.log('handleUnlink: END for RelatedFile / popup closed');
+            });
         });
         if (this.isDebug) console.log('handleUnlink: unlink triggered');
     }
