@@ -178,7 +178,7 @@ Deux Named Credentials sont proposés, respectivement pour l'utilisation des ver
 * `GoogleRecaptchaDeveloper` contient le endpoint standard _Developer_ de Google
     * Il est configuré en authentification `Named Principal`
     * ⚠️ Il faut y renseigner la _Server Key_ Google en tant que mot de passe
-* `GoogleRecaptchaDeveloper` contient le endpoint _Enterprise_ de Google pour le projet utilisé
+* `GoogleRecaptchaEnterprise` contient le endpoint _Enterprise_ de Google pour le projet utilisé
     * Il est configuré en authentication `Anonymous`
     * ⚠️ Il faut y modifier l'URL pour y renseigner l'_API key_ et le _Project ID_
 
