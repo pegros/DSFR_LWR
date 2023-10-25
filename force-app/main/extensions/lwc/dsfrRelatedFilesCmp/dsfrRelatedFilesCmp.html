@@ -15,7 +15,10 @@
         <lightning-layout multiple-rows="true" vertical-align="top" class="listHeader">
             <lightning-layout-item flexibility="auto" >
                 <template lwc:if={label}>
-                    <h3 class="fr-downloads-group__title fr-mb-2v">{label}</h3>
+                    <h3 class="fr-downloads-group__title fr-mb-2v">{label}
+                    <lightning-spinner alternative-text="Opération en cours" size="small" variant="brand" class="slds-spinner_inline slds-hide fr-ml-4v">
+                    </lightning-spinner>
+                    </h3>
                 </template>
             </lightning-layout-item>
             <template lwc:if={showRefresh} >
@@ -73,13 +76,11 @@
                     </li>
                 </template>
             </ul>
-            <lightning-spinner alternative-text="Opération en cours" size="small" variant="brand" class="slds-spinner_inline slds-hide">
-            </lightning-spinner>
         </template>
     </div>
     <template lwc:if={isDebug}>
         <div class={wrappingCss}>
-            <p class="fr-py-4v">
+            <p class="fr-px-2v fr-py-4v">
                 <span class="fr-badge fr-badge--warning  fr-mr-4v">
                     Mode debug activé!
                 </span>

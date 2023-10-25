@@ -1,4 +1,4 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
 import userId       from '@salesforce/user/Id';
 import linkFile     from '@salesforce/apex/dsfrFileUpload_CTL.linkFile';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
@@ -23,25 +23,31 @@ export default class DsfrFileSelectorCmp extends LightningElement {
     set context(value) {
         if (value) {
             if ((!this._context) || (value !== this._context)) {
-                if (this.isDebug) console.log('set context: new value provided ', value);
-                if (this.isDebug) console.log('set context: objectApiName ', this.objectApiName);
-                if (this.isDebug) console.log('set context: recordId ', this.recordId);
+                if (this.isDebug) console.log('set FileSelector context: new value provided ', value);
+                if (this.isDebug) console.log('set FileSelector context: objectApiName ', this.objectApiName);
+                if (this.isDebug) console.log('set FileSelector context: recordId ', this.recordId);
                 this._context = value;
                 try {
                     this.contextJson = JSON.parse(value);
-                    if (this.isDebug) console.log('set context: value parsed ', this.contextJson);
+                    if (this.isDebug) console.log('set FileSelector context: value parsed ', this.contextJson);
+                    this.message = null;
+                    this.isError = false;
                 }
                 catch(error) {
-                    console.warn('set listContext: value parsing failed ', error);
+                    console.warn('set FileSelector context: value parsing failed ', error);
                     this.contextJson = null;
+                    this.message = 'Erreur de configuration technique';
+                    this.isError = true;
                 }
             }
             else {
-                if (this.isDebug) console.log('set context: same value provided');
+                if (this.isDebug) console.log('set FileSelector context: same value provided');
             }
         }
         else {
-            if (this.isDebug) console.log('set context: no value provided');
+            if (this.isDebug) console.log('set FileSelector context: no value provided');
+            this.message = null;
+            this.isError = false;
         }
     }
 
@@ -68,6 +74,8 @@ export default class DsfrFileSelectorCmp extends LightningElement {
     fileList;
     contextJson;
 
+    @wire(MessageContext)
+    messageContext;
 
     //-----------------------------------------------------
     // Custom Getters

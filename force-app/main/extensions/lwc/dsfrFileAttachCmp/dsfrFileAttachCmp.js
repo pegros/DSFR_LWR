@@ -1,7 +1,5 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
-
-
 export default class DsfrFileAttachCmp extends LightningElement {
 
     //-----------------------------------------------------
@@ -135,7 +133,7 @@ export default class DsfrFileAttachCmp extends LightningElement {
     fieldFullName;
     contentVersionRT;
     picklistDesc;
-
+    
     //-----------------------------------------------------
     // Custom Getters
     //-----------------------------------------------------
@@ -199,6 +197,9 @@ export default class DsfrFileAttachCmp extends LightningElement {
         else {
             this.isOptionSelected = false;
         }
+
+        if (this.isDebug) console.log('handleSelect: reseting file upload component');
+        this.template.querySelector('c-dsfr-file-upload-cmp')?.reset();
 
         if (this.isDebug) console.log('handleSelect: END for file attach');
     }

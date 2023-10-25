@@ -108,6 +108,15 @@ export default class DsfrFileUploadCmp extends LightningElement {
         if (this.isDebug) console.log('doUpload: END');
     }
 
+    @api reset() {
+        if (this.isDebug) console.log('reset: START for FileUpload');
+        this.message = null;
+        this.isError = false;
+        if (this.isDebug) console.log('reset: resetting input');
+        this.template.querySelector('input.fr-upload')?.reset();
+        if (this.isDebug) console.log('reset: END for FileUpload');
+    }
+
     //-----------------------------------------------------
     // Event handlers
     //-----------------------------------------------------
@@ -215,6 +224,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
                     if (this.isDebug) console.log('registerFile: actionNotif prepared ',JSON.stringify(actionNotif));
                     publish(this.messageContext, sfpegCustomNotification, actionNotif);
                     if (this.isDebug) console.log('registerFile: page refresh notification published');
+                }
+                else {
+                    if (this.isDebug) console.log('registerFile: not refreshing');
                 }
                 
                 let fileInput = this.template.querySelector('input.fr-upload');
