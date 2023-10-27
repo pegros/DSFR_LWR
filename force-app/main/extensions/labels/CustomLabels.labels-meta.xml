@@ -59,6 +59,15 @@
     </labels>
 
     <labels>
+        <fullName>dsfrFileSelectorSuccess</fullName>
+        <categories>DSFR Component LWC Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message affiché après rattachement d'un fichier</shortDescription>
+        <value>Votre fichier {0} a bien été rattaché.</value>
+    </labels>
+
+    <labels>
         <fullName>dsfrRelatedFilesDownloadTitle</fullName>
         <categories>DSFR Component LWC Button Title</categories>
         <language>en_US</language>

@@ -31,5 +31,6 @@ $RECYCLE.BIN/
 .vscode
 #Examples
 force-app/tests
-dist
+dist-oct-2023
+dist-juillet-2023
 dist-mars-2023
