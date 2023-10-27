@@ -35,6 +35,12 @@
                         type="String"
                         default=""
                         description="Master Label du menu de navigation du site fournissant le menu supérieur" />
+            <property   name="showModes"
+                        label="Bascule de thème ?"
+                        type="Boolean"
+                        default="false"
+                        description="Affichage d'un bouton pour basculer du thème DSFR sombre au clair." />
+
             <property   name="mainMenu"
                         label="Menu principal (simple)"
                         type="String"

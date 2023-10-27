@@ -112,8 +112,12 @@ export default class DsfrFileUploadCmp extends LightningElement {
         if (this.isDebug) console.log('reset: START for FileUpload');
         this.message = null;
         this.isError = false;
-        if (this.isDebug) console.log('reset: resetting input');
-        this.template.querySelector('input.fr-upload')?.reset();
+        let fileInput = this.template.querySelector('input.fr-upload');
+        if (this.isDebug) console.log('reset: fileInput input found ',fileInput);
+        /*if (fileInput) {
+            if (this.isDebug) console.log('reset: resetting input');
+            fileInput.reset();
+        }*/
         if (this.isDebug) console.log('reset: END for FileUpload');
     }
 
@@ -231,14 +235,17 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 
                 let fileInput = this.template.querySelector('input.fr-upload');
                 if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
-                fileInput.disabled = false;
-
+                fileInput.disabled = false;            
+                if (this.isDebug) console.log('registerFile: resetting fileInput ',fileInput);    
+                fileInput.value = null;
                 if (this.isDebug) console.log('registerFile: END');
             }).catch(error => {
-                console.warn('registerFile: upload failed',error);
+                console.warn('registerFile: upload failed',JSON.stringify(error));
                 let fileInput = this.template.querySelector('input.fr-upload');
                 if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
                 fileInput.disabled = false;
+                if (this.isDebug) console.log('registerFile: resetting fileInput ',fileInput);
+                fileInput.value = null;
                 console.warn('registerFile: END KO / upload failed ',JSON.stringify(error));
                 //this.message = JSON.stringify(error);
                 this.message = (error.body?.message || error.statusText || 'Erreur technique');

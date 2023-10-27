@@ -36,6 +36,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     @api userTarget;
     @api hideLogin = false;
 
+    @api showModes = false;
+
     @api isDebug = false;
     
     //-----------------------------------
@@ -464,6 +466,19 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         catch (error) {
             console.log('handleLogoClick: END KO / target page parsing failed ', JSON.stringify(error));
         }
+    }
+
+    // Display Mode Toggle action
+    toggleTheme(event) {
+        console.log('toggleTheme: START');
+        let currentMode = document.documentElement.getAttribute("data-fr-scheme");
+		console.log('toggleTheme: currentMode fetched ', currentMode);
+        let targetMode = ((currentMode == 'dark') ? 'light' : 'dark');
+		console.log('toggleTheme: setting targetMode ', targetMode);
+    	document.documentElement.setAttribute("data-fr-scheme", targetMode);
+    	document.documentElement.setAttribute("data-fr-theme", targetMode);
+        //document.dispatchEvent(new CustomEvent("toggleDsfrMode", {"detail":"Changement demandé"}));
+        console.log('toggleTheme: END');
     }
 
     // Search button action

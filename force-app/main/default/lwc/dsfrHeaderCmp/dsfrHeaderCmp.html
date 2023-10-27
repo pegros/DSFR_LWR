@@ -98,6 +98,14 @@
                                         </template>
                                     </template>
                                 </template>
+                                <template lwc:if={showModes}>
+                                    <li>
+                                        <!--
+                                        <button class="fr-btn fr-icon-theme-fill" title="mode clair/sombre" onclick={toggleTheme}></button>
+                                        -->
+                                        <a class="fr-btn fr-icon-theme-fill" href="#" title="Bascule entre modes clair et sombre"  onclick={toggleTheme} ></a>
+                                    </li>
+                                </template>
                             </ul>
                         </div>
                         <div lwc:if={showSearch} data-modal="search" class="fr-header__search fr-modal" >
@@ -217,11 +225,13 @@
             <div class="fr-container toolsModal">
                 <ul class="fr-btns-group">
                     <template lwc:if={isGuestUser}>
-                        <li>
-                            <a class="fr-btn fr-icon-account-circle-line" href="#" onclick={handleLogin} >{loginLabel}</a>
-                        </li>
+                        <template lwc:if={showLogin}>
+                            <li>
+                                <a class="fr-btn fr-icon-account-circle-line" href="#" onclick={handleLogin} >{loginLabel}</a>
+                            </li>
+                        </template>
                     </template>
-                    <template lwc:elseif={topMenuItems}>
+                    <template lwc:elseif={showTopMenu}>
                         <template for:each={topMenuItems} for:item="item">
                             <li key={item.label} class="fr-nav__item" >
                                 <a  class={item.class} href="#" data-value={item.label} onclick={handleTopClick} >
@@ -229,8 +239,27 @@
                                 </a>
                             </li>
                         </template>
+                        <template lwc:if={showLogin}>
+                            <li>
+                                <a class="fr-btn fr-icon-logout-box-r-line" href="#" onclick={handleLogout} >{logoutLabel}</a>
+                            </li>
+                        </template>
+                        <template lwc:if={userName}>
+                            <template lwc:if={userTarget}>
+                                <li>
+                                    <a class="fr-btn fr-icon-account-pin-circle-fill" href="#" onclick={handleUserOpen} >{userName}</a>
+                                </li>
+                            </template>
+                            <template lwc:else>
+                                <li>
+                                    <p class="fr-btn fr-icon-account-pin-circle-fill" >{userName}</p>
+                                </li>
+                            </template>
+                        </template>
+                    </template>
+                    <template lwc:if={showModes}>
                         <li>
-                            <a class="fr-btn fr-icon-logout-box-r-line" href="#" onclick={handleLogout} >{logoutLabel}</a>
+                            <a class="fr-btn fr-icon-theme-fill" href="#" title="Bascule entre modes clair et sombre"  onclick={toggleTheme} >Bascule d'affichage</a>
                         </li>
                     </template>
                 </ul>
