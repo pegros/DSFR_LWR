@@ -7,6 +7,19 @@
                     </lightning-formatted-rich-text>
                 </div>
                 <div class="fr-footer__content">
+                    <!-- Debug Info display -->
+                    <template lwc:if={isDebug}>
+                        <p class="fr-footer__content-desc">
+                            <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                                Mode debug activé!
+                            </span>
+                            <span class="fr-badge fr-badge--info">
+                                <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrFooterCmp.md" target="_blank">
+                                    Voir la documentation</a>
+                            </span>
+                        </p>
+                    </template>
+                    <!-- Top content and links -->
                     <p lwc:if={footerTop} class="fr-footer__content-desc">
                         <lightning-formatted-rich-text class="fr-footer__content-desc" value={footerTop}>
                         </lightning-formatted-rich-text>
