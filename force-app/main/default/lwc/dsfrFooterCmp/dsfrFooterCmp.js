@@ -56,7 +56,7 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
     // Component initialisation  
     //----------------------------------------------------------------      
     connectedCallback() {
-        if (this.isDebug) console.log('connected: START for header');
+        if (this.isDebug) console.log('connected: START for footer');
         if (this.isDebug) console.log('connected: footerTop ',this.footerTop);
         if (this.isDebug) console.log('connected: footerBottom ',this.footerBottom);
         if (this.isDebug) console.log('connected: topMenu ',this.topMenu);
@@ -67,7 +67,7 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('connected: topMenuItems init ', this.topMenuItems);
         if (this.isDebug) console.log('connected: bottomMenuItems init ', this.bottomMenuItems);
 
-        if (this.isDebug) console.log('connected: END for header');
+        if (this.isDebug) console.log('connected: END for footer');
     }
 
     @wire(getNavigations, { menus:'$menuConfig', userId: '$currentUserId'})
