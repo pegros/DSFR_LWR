@@ -4,6 +4,7 @@ import userId       from '@salesforce/user/Id';
 import sfpegJsonUtl from 'c/sfpegJsonUtl';
 //import DefaultGroupNotificationFrequency from '@salesforce/schema/User.DefaultGroupNotificationFrequency';
 import SORT_TITLE from '@salesforce/label/c.dsfrCardTileListSortTitle';
+import REFRESH_TITLE from '@salesforce/label/c.dsfrCardTileListRefreshTitle';
 import TYPE_ERROR from '@salesforce/label/c.dsfrCardTileListError';
 import SORT_DEFAULT from '@salesforce/label/c.dsfrCardTileListSortDefault';
 import SORT_PREFIX from '@salesforce/label/c.dsfrCardTileListSortPrefix';
@@ -102,6 +103,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
     // Custom Labels
     //-----------------------------------
     sortTitle = SORT_TITLE;
+    refreshTitle = REFRESH_TITLE;
     typeError = TYPE_ERROR;
 
     //-----------------------------------------------------

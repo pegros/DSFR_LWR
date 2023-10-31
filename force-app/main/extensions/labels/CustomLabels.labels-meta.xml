@@ -25,6 +25,14 @@
         <value>Triez vos enregistrements</value>
     </labels>
     <labels>
+        <fullName>dsfrCardTileListRefreshTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de raffraichissement</shortDescription>
+        <value>Raffraichir la liste</value>
+    </labels>
+    <labels>
         <fullName>dsfrCardTileListError</fullName>
         <categories>DSFR Component LWC Error Message</categories>
         <language>en_US</language>
@@ -74,6 +82,38 @@
         <protected>false</protected>
         <shortDescription>Title du bouton de téléchargement</shortDescription>
         <value>Télécharger le fichier</value>
+    </labels>
+    <labels>
+        <fullName>dsfrRelatedFilesSortTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de tri</shortDescription>
+        <value>Triez vos fichiers</value>
+    </labels>
+    <labels>
+        <fullName>dsfrRelatedFilesSortDefault</fullName>
+        <categories>DSFR Component LWC Button Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Libellé par défaut du bouton de tri</shortDescription>
+        <value>Tri par défaut</value>
+    </labels>
+    <labels>
+        <fullName>dsfrRelatedFilesSortPrefix</fullName>
+        <categories>DSFR Component LWC Button Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Début du libellé du bouton de tri avant sélection</shortDescription>
+        <value>Tri par</value>
+    </labels>
+    <labels>
+        <fullName>dsfrRelatedFilesRefreshTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre du bouton de raffraichissement</shortDescription>
+        <value>Raffraichir la liste de fichiers</value>
     </labels>
     <labels>
         <fullName>dsfrRelatedFilesUploadTitle</fullName>
