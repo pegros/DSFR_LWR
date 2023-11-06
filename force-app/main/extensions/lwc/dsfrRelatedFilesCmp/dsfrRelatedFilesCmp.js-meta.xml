@@ -23,6 +23,12 @@
                         type="String"
                         description="Contexte d'utilisation de la configuration de liste" />
 
+            <property   name="countDisplay"
+                        label="Affichage Compteur"
+                        type="String"
+                        datasource="left,right,hide"
+                        description="Mode d'affichage du compteur de fichiers de la liste" />
+
             <property   name="showRefresh"
                         label="Refresh?"
                         type="Boolean"

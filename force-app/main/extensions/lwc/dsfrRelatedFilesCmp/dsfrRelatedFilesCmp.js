@@ -1,12 +1,18 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
-//import userId from '@salesforce/user/Id';
+
 import unlinkFile from '@salesforce/apex/dsfrFileUpload_CTL.unlinkFile';
-import DOWNLOAD_TITLE from '@salesforce/label/c.dsfrRelatedFilesDownloadTitle';
-import UPLOAD_TITLE from '@salesforce/label/c.dsfrRelatedFilesUploadTitle';
-import DELETE_TITLE from '@salesforce/label/c.dsfrRelatedFilesDeleteTitle';
-import UPLOAD_TYPES from '@salesforce/label/c.dsfrFileUploadTypes';
+import sfpegJsonUtl from 'c/sfpegJsonUtl';
+
+import DOWNLOAD_TITLE   from '@salesforce/label/c.dsfrRelatedFilesDownloadTitle';
+import SORT_TITLE       from '@salesforce/label/c.dsfrRelatedFilesSortTitle';
+import SORT_DEFAULT     from '@salesforce/label/c.dsfrRelatedFilesSortDefault';
+import SORT_PREFIX      from '@salesforce/label/c.dsfrRelatedFilesSortPrefix';
+import REFRESH_TITLE    from '@salesforce/label/c.dsfrRelatedFilesRefreshTitle';
+import UPLOAD_TITLE     from '@salesforce/label/c.dsfrRelatedFilesUploadTitle';
+import DELETE_TITLE     from '@salesforce/label/c.dsfrRelatedFilesDeleteTitle';
+import UPLOAD_TYPES     from '@salesforce/label/c.dsfrFileUploadTypes';
 
 export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElement)  {
 
@@ -16,6 +22,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     @api label;
     @api configName;
     @api accept;
+    @api countDisplay = 'hide';
     @api showUpload = false;
     @api showDelete = false;
     @api disabled = false;
@@ -50,7 +57,10 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     //-----------------------------------------------------
     @api objectApiName;
     @api recordId;
-    //currentUserId = userId;
+
+    //-----------------------------------------------------
+    // Technical parameters
+    //-----------------------------------------------------
     fileList;
     configDetails;
 
@@ -59,10 +69,40 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     //-----------------------------------
     // Custom Labels
     //-----------------------------------
-    downloadTitle = DOWNLOAD_TITLE;
-    uploadTitle = UPLOAD_TITLE;
-    deleteTitle = DELETE_TITLE;
-
+    sortTitle       = SORT_TITLE;
+    refreshTitle    = REFRESH_TITLE;
+    downloadTitle   = DOWNLOAD_TITLE;
+    uploadTitle     = UPLOAD_TITLE;
+    deleteTitle     = DELETE_TITLE;
+    
+    //-----------------------------------------------------
+    // Custom Getters
+    //-----------------------------------------------------
+    get listTitle() {
+        switch (this.countDisplay) {
+            case 'left': 
+                return '' + (this.fileList?.length || 0) + ' ' + this.label;
+            case 'right': 
+                return this.label + ' ('+ (this.fileList?.length || 0) + ')';
+            default:
+                return this.label;
+        }
+    }
+    get hasSort() {
+        return (this.configDetails?.sort || false);
+    }
+    get currentSort() {
+        if (this.isDebug) console.log('currentSort: START');
+        
+        let currentSort = this.configDetails.sort.find(item => {return item.selected;});
+        if (this.isDebug) console.log('currentSort: currentSort found ',JSON.stringify(currentSort));
+        if (currentSort) {
+            if (this.isDebug) console.log('currentSort: END / returning current ');
+            return {label: SORT_PREFIX + ' ' + currentSort.label, class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line')};
+        }
+        if (this.isDebug) console.log('currentSort: END / returning default ');
+        return {label: SORT_DEFAULT};
+    }
 
     //-----------------------------------------------------
     // Initialisation
@@ -88,12 +128,14 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     handleRecordLoad(event) {
         if (this.isDebug) console.log('handleRecordLoad: START for related files',event);
 
+        // Config Details Initialization
         if (!this.configDetails) {
             let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
             if (this.isDebug) console.log('handleRecordLoad: fetching listCmp ',listCmp);
 
+            if (this.isDebug) console.log('handleRecordLoad: list configuration available ',JSON.stringify(listCmp.configuration));
             this.configDetails =  listCmp.configuration?.display || {};
-            if (this.isDebug) console.log('handleRecordLoad: initial configDetails ',JSON.stringify(this.configDetails));
+            if (this.isDebug) console.log('handleRecordLoad: initial configDetails set ',JSON.stringify(this.configDetails));
             
             if (!this.configDetails.isReady) {
                 if (this.isDebug) console.log('handleRecordLoad: initialising configDetails');
@@ -104,35 +146,58 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                 else if (typeof this.configDetails.linkId === 'string') {
                     this.configDetails.linkId = (this.configDetails.linkId).split('.');
                 }
+
                 if (!this.configDetails.contentId) {
                     this.configDetails.contentId = ['ContentDocumentId'];
                 }
                 else if (typeof this.configDetails.contentId === 'string') {
                     this.configDetails.contentId = (this.configDetails.contentId).split('.');
                 }
+                
                 if (!this.configDetails.title) {
                     this.configDetails.title = ['ContentDocument','Title'];
                 }
                 else if (typeof this.configDetails.title === 'string') {
                     this.configDetails.title = (this.configDetails.title).split('.');
                 }
+
                 if (!this.configDetails.details) {
                     this.configDetails.details = [{value:['ContentDocument','FileType']},{value:['ContentDocument','ContentSize'],suffix:'octets'}];
                 }
                 else {
                     (this.configDetails.details).forEach( detailIter => {
-                        if (this.isDebug) console.log('handleRecordLoad: analysing detail ', JSON.stringify(detailIter));
+                        if (this.isDebug) console.log('handleRecordLoad: analysing detail item ', JSON.stringify(detailIter));
                         if (typeof detailIter.value === 'string') {
-                            if (this.isDebug) console.log('handleRecordLoad: splitting detail value');
+                            if (this.isDebug) console.log('handleRecordLoad: splitting detail value ', detailIter.value);
                             detailIter.value = (detailIter.value).split('.');
+                            if (this.isDebug) console.log('handleRecordLoad: detail value init ', detailIter.value);
                         }
                     });
                 }
+
+                if (this.configDetails.sort) {
+                    (this.configDetails.sort).forEach( sortIter => {
+                        if (this.isDebug) console.log('handleRecordLoad: analysing sort item ', JSON.stringify(sortIter));
+                        if (typeof sortIter.field === 'string') {
+                            if (this.isDebug) console.log('handleRecordLoad: splitting field value ', sortIter.field);
+                            sortIter.fieldParts = (sortIter.field).split('.');
+                            if (this.isDebug) console.log('handleRecordLoad: field parts init ', sortIter.fieldParts);
+                        }
+                        else if (typeof sortIter.field === 'object') {
+                            if (this.isDebug) console.log('handleRecordLoad: merging field parts ', sortIter.field);
+                            sortIter.fieldParts = (sortIter.field);
+                            sortIter.field = sortIter.fieldParts.join('.');
+                            if (this.isDebug) console.log('handleRecordLoad: field init ', sortIter.field);
+                        }
+                    });
+                }
+
                 this.configDetails.isReady = true;
                 if (this.isDebug) console.log('handleRecordLoad: configDetails init ',JSON.stringify(this.configDetails));
             }
         }
 
+        // Displayed File List Init
         let baseRecordList =  event.detail;
         if (this.isDebug) console.log('handleRecordLoad: list loaded ',JSON.stringify(event.detail));
 
@@ -164,6 +229,25 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                 else {
                     newItem.class="fr-download";
                 }
+
+                if (this.configDetails.sort) {
+                    if (this.isDebug) console.log('handleRecordLoad: copying sort field values');
+                    this.configDetails.sort.forEach(itemSort => {
+                        if (this.isDebug) console.log('handleRecordLoad: processing sort item ',itemSort.field);
+                        let itemSortTgt = '_' + itemSort.field;
+                        let itemSortValue = this.getValue(itemSort.fieldParts,item);
+                        if (this.isDebug) console.log('handleRecordLoad: value ',itemSortValue);
+                        if (itemSortValue != null) {
+                            if (this.isDebug) console.log('handleRecordLoad: registered as ',itemSortTgt);
+                            newItem[itemSortTgt] = itemSortValue;
+                        }
+                        else {
+                            if (this.isDebug) console.log('handleRecordLoad: ignored as ',itemSortTgt);
+                        }
+                    });
+                    if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
+                }
+
                 if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
                 targetRecordList.push(newItem);
             });
@@ -299,15 +383,92 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
         if (this.isDebug) console.log('handleRefresh: END file list refresh triggered');
     }
 
+    toggleSort(event) {
+        if (this.isDebug) console.log('toggleSort: START for related files',event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        let sortMenu = this.template.querySelector("div[data-menu='sort']");
+        if (this.isDebug) console.log('toggleSort: sortMenu found ',sortMenu);
+
+        if (sortMenu) {
+            if (this.isDebug) console.log('toggleSort: current Menu classList ',sortMenu.classList);
+            if (sortMenu.classList.contains('fr-collapse--expanded')) {
+                if (this.isDebug) console.log('toggleSort: closing menu');
+                sortMenu.classList.remove('fr-collapse--expanded');
+            }
+            else {
+                if (this.isDebug) console.log('toggleSort: opening menu');
+                sortMenu.classList.add('fr-collapse--expanded');
+            }
+            if (this.isDebug) console.log('toggleSort: Menu classList updated ',sortMenu.classList);
+        }
+
+        if (this.isDebug) console.log('toggleSort: END for for related files');
+    }
+
+    selectSort(event){
+        if (this.isDebug) console.log('selectSort: START for related files',event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        const selectedLink = event.target.dataset.name;
+        if (this.isDebug) console.log('selectSort: selectedLink identified ',selectedLink);
+
+        let selectedSort;
+        this.configDetails.sort.forEach(item => {
+            if (this.isDebug) console.log('selectSort: processing sort option ',JSON.stringify(item));
+            if (item.field != selectedLink) {
+                item.selected = false;
+                item.up = true;
+            }
+            else {
+                if (item.selected) {
+                    if (this.isDebug) console.log('selectSort: inverting current sort direction ');
+                    item.up = !item.up;
+                }
+                else {
+                    if (this.isDebug) console.log('selectSort: selecting new sorting field ');
+                    item.selected = true;
+                    item.up = true;
+                }
+                selectedSort = item;
+            }
+        });
+        if (this.isDebug) console.log('selectSort: sorting entries updated ',JSON.stringify(this.configDetails.sort));
+       
+        this.toggleSort(event);
+
+        if (selectedSort) {
+            if (this.isDebug) console.log('selectSort: sorting by ',JSON.stringify(selectedSort));
+            let results2sort = [...this.fileList];
+            if (this.isDebug) console.log('selectSort: results2sort init ', JSON.stringify(results2sort));
+            if (this.isDebug) console.log('selectSort: sort by field ', ('_' + selectedSort.field));
+            if (this.isDebug) console.log('selectSort: revers sorting? ', !selectedSort.up);
+            sfpegJsonUtl.sfpegJsonUtl.isDebug = this.isDebug;
+            results2sort.sort(sfpegJsonUtl.sfpegJsonUtl.sortBy(('_' + selectedSort.field), !selectedSort.up));
+            if (this.isDebug) console.log('handleSort: results2sort sorted ',results2sort);
+            this.fileList = results2sort;
+            if (this.isDebug) console.log('selectSort: fileList sorted ',JSON.stringify(this.fileList));
+        }
+        else {
+            console.warn('selectSort: no selected sorting field');
+        }
+        
+        if (this.isDebug) console.log('selectSort: END for related files');        
+    }
+
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
 
     getValue = function(fieldPath,data) {
+        if (this.isDebug) console.log('getValue: START for ',fieldPath);        
         let fieldValue = data;
         fieldPath.forEach(iter => {
             fieldValue = fieldValue[iter];
         });
+        if (this.isDebug) console.log('getValue: END with ',fieldValue);        
         return fieldValue;
     }
 }

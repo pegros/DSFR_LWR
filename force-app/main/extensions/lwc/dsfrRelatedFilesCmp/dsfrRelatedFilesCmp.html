@@ -12,24 +12,50 @@
 
     <!-- COMPONENT DISPLAY -->
     <div class={wrappingClass} >
-        <lightning-layout multiple-rows="true" vertical-align="top" class="listHeader">
+        <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
             <lightning-layout-item flexibility="auto" >
                 <template lwc:if={label}>
-                    <h3 class="fr-downloads-group__title fr-mb-2v">{label}
+                    <h3 class="fr-downloads-group__title fr-mb-2v listTitle">{listTitle}
                     <lightning-spinner alternative-text="Opération en cours" size="small" variant="brand" class="slds-spinner_inline slds-hide fr-ml-4v">
                     </lightning-spinner>
                     </h3>
                 </template>
             </lightning-layout-item>
-            <template lwc:if={showRefresh} >
-                <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
-                    <c-dsfr-button-dsp  button-icon="refresh-line"              button-icon-position="noLabel"
-                                        button-title="Raffraichir la liste"     button-variant="tertiary-no-outline"
-                                        ontrigger={handleRefresh}               is-debug={isDebug}>
-                    </c-dsfr-button-dsp>
-                </lightning-layout-item>
-            </template>
+            <lightning-layout-item flexibility="auto, no-grow" alignment-bump="left">
+                <nav role="sort" class="fr-nav sortNav">
+                    <template lwc:if={hasSort} >        
+                        <div class="fr-nav__item sortDiv">
+                            <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
+                                <span class={currentSort.class}>{currentSort.label}</span>
+                            </button>
+                            <div class="fr-collapse fr-menu sortMenu" data-menu="sort">
+                                <ul class="fr-menu__list sortList">
+                                    <template for:each={configDetails.sort} for:item="iterSort">
+                                        <li key={iterSort.name} class="sortItem">
+                                            <template lwc:if={iterSort.selected}>
+                                                <a class="fr-nav__link sortLink" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                            </template>
+                                            <template lwc:else>
+                                                <a class="fr-nav__link sortLink" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                            </template>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:if={showRefresh} >
+                        <div class="refreshDiv">
+                            <button class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-noLabel fr-icon-refresh-line refreshButton"
+                                    title={refreshTitle}
+                                    onclick={handleRefresh}>
+                            </button>
+                        </div>
+                    </template>
+                </nav>
+            </lightning-layout-item>
         </lightning-layout>
+        <!-- Actual result list case -->
         <template lwc:if={isReady}>
             <ul>
                 <template for:each={fileList} for:item="iterFile">
@@ -78,6 +104,8 @@
             </ul>
         </template>
     </div>
+
+    <!-- Debug Information Diplay -->
     <template lwc:if={isDebug}>
         <div class={wrappingCss}>
             <p class="fr-px-2v fr-py-4v">
