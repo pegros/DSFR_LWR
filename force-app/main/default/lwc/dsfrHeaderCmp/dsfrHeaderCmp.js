@@ -407,7 +407,22 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         this[NavigationMixin.GenerateUrl](this.pageRef)
         .then((url) => {
             if (this.isDebug) console.log('handleLogin: current url ',url);
-            let loginPage = {type:"comm__namedPage",attributes:{name:"Login"},state:{startURL:url}};
+            let loginPage = {type:"comm__namedPage",attributes:{name:"Login"}};
+            if (    (this.pageRef.type !== 'comm__namedPage')
+                ||  (!(['Register','Login','Forgot_Password','Check_Password'].includes(this.pageRef?.attributes?.name)))) {
+                if (this.isDebug) console.log('handleLogin: setting current url as startURL');
+                loginPage.state = {startURL:url};
+            }
+            else {
+                if (this.pageRef.state?.startURL) {
+                    if (this.isDebug) console.log('handleLogin: setting previous startURL');
+                    loginPage.state = {startURL:this.pageRef.state.startURL };
+                }
+                else {
+                    if (this.isDebug) console.log('handleLogin: setting no startURL');
+                }
+            }
+            //let loginPage = {type:"comm__namedPage",attributes:{name:"Login"},state:{startURL:url}};
             //let loginPage = {type:'standard__webPage',attributes: {url:'/login'}};
             //let loginPage = {type: 'comm__loginPage',attributes: {actionName: 'login'};
             if (this.isDebug) console.log('handleLogin: loginPage init ', JSON.stringify(loginPage));
