@@ -99,6 +99,15 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
 
                     if (this.isDebug) console.log('openTarget: END downloading file');
                 }
+                else if (newPageRef.type == 'openTab') {
+                    if (this.isDebug) console.log('openTarget: opening tab');
+                    
+                    let targetURL = newPageRef.attributes?.url;
+                    if (this.isDebug) console.log('openTarget: targetURL determined ', targetURL);
+
+                    window.open(targetURL,'_blank');
+                    if (this.isDebug) console.log('openTarget: END opening tab');
+                }
                 else {
                     if (this.isDebug) console.log('openTarget: triggering standard navigation');
 
