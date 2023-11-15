@@ -65,6 +65,32 @@ export default class DsfrRecordFormCmp extends LightningElement {
     @api isReadOnly = false;
     @api isEditMode = false;
 
+    _isReadOnlyString;
+    @api 
+    get isReadOnlyString() {
+        return this._isReadOnlyString;
+    }
+    set isReadOnlyString(value) {
+        if (this.isDebug) console.log('isReadOnlyString: START with ', value);
+
+        this._isReadOnlyString = value;
+        switch (this._isReadOnlyString) {
+            case 'true' :
+            case true :
+                this.isReadOnly = true;
+                break;
+            case 'false':
+            case false : 
+                this.isReadOnly = false;
+                break;
+        }
+        
+        this.showModify = !(this.isReadOnly);
+        if (this.isDebug) console.log('isReadOnlyString: showModify updated ', this.showModify);
+
+        if (this.isDebug) console.log('isReadOnlyString: END with isReadOnly ', this.isReadOnly);
+    }
+
     _isEditModeString;
     @api 
     get isEditModeString() {

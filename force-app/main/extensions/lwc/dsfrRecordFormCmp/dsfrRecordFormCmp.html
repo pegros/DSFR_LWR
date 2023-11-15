@@ -102,27 +102,29 @@
             </lightning-layout>
 
             <!-- FORM BUTTONS -->
-            <template lwc:if={isEditMode}>
-                <!-- fr-btn--icon-left  fr-icon-close-circle-line fr-icon-checkbox-circle-line -->
-                <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
-                    <li>
-                        <button class="fr-btn fr-btn--secondary formButton" type="reset" onclick={handleCancel}>
-                            {cancelLabel}
-                        </button>
-                    </li>
-                    <li>
-                        <button class="fr-btn formButton" type="submit" >
-                            {saveLabel}
-                        </button>
-                    </li>
-                    <li>
-                        <div class="slds-is-relative spinnerDiv">
-                            <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
-                            </lightning-spinner>
-                        </div>
-                    </li>
-                </ul>
-           </template>
+            <template if:true={showModify}>
+                <template lwc:if={isEditMode}>
+                    <!-- fr-btn--icon-left  fr-icon-close-circle-line fr-icon-checkbox-circle-line -->
+                    <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
+                        <li>
+                            <button class="fr-btn fr-btn--secondary formButton" type="reset" onclick={handleCancel}>
+                                {cancelLabel}
+                            </button>
+                        </li>
+                        <li>
+                            <button class="fr-btn formButton" type="submit" >
+                                {saveLabel}
+                            </button>
+                        </li>
+                        <li>
+                            <div class="slds-is-relative spinnerDiv">
+                                <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
+                                </lightning-spinner>
+                            </div>
+                        </li>
+                    </ul>
+                </template>
+            </template>
         </lightning-record-edit-form>
     </template>
     </div>
@@ -130,4 +132,22 @@
     <!-- Completion/error notification Utility -->
     <c-dsfr-alert-popup-dsp is-debug={isDebug} >
     </c-dsfr-alert-popup-dsp>
+
+    <!-- Debug Information -->
+    <template lwc:if={isDebug}>
+        <div class={wrappingCss}>
+            <p class="fr-py-4v">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--new fr-mr-4v">
+                    {formObjectApiName} {formRecordId}
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrRecordFormCmp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </div>
+    </template>
 </template>

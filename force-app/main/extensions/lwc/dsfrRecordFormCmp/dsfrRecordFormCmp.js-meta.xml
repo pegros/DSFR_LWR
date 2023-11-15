@@ -44,9 +44,14 @@
                         description="Liste de champs obligatoires à afficher (format CSV avec séparateur ';')" />
 
             <property   name="isReadOnly"
-                        label="Lecture seule?"
+                        label="Lecture seule (default)?"
                         type="Boolean"
                         description="Flag pour afficher le composant en mode lecture seule." />
+            <property   name="isReadOnlyString"
+                        label="Lecture seule (dynamique)?"
+                        type="String"
+                        description="Flag pour afficher le composant en mode lecture seule dynamiquement." />
+       
             <property   name="isEditMode"
                         label="Mode Edition (default)?"
                         type="Boolean"
