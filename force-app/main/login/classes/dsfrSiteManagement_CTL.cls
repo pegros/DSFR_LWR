@@ -36,7 +36,7 @@ public with sharing class dsfrSiteManagement_CTL {
     /***
     * @description  Captcha score theshold above which evaluations are validated
     ***/
-    private final static Decimal MIN_CAPTCHA_SCORE = .4;
+    private final static Decimal MIN_CAPTCHA_SCORE = .3;
 
     /***
     * @description  Method to fetch the default Account RecordType ID for self-registration on the 
