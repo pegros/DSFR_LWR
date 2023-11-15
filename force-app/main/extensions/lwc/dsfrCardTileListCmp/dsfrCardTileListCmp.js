@@ -142,7 +142,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
     }
     get hasSort() {
         //if (this.isDebug) console.log('hasSort: ',(this.configDetails?.display?.sort || false));
-        return (this.configDetails?.display?.sort || false);
+        return this.hasResults && (this.configDetails?.display?.sort || false);
     }
     get currentSort() {
         if (this.isDebug) console.log('currentSort: START');

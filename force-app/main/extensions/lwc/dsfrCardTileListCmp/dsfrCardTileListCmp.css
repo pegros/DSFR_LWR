@@ -8,9 +8,9 @@
     margin-bottom:  0.5rem;
 }
 .listTitle {
-    padding-top:  0.5rem !important;
+    padding-top:  0.25rem !important;
     min-width: 50%;
-    padding-bottom:  0.5rem !important;
+    padding-bottom:  0.25rem !important;
     /*line-height: .5rem !important;*/
     margin-bottom: var(--title-spacing) !important;
     /*margin-bottom:  0.75rem !important;*/
@@ -107,13 +107,6 @@
     padding-right: .5rem !important;
     /*outline-offset: 0px !important;*/
 }
-/*.refreshButton::before{
-    vertical-align: 0px !important;
-}*/
-/*.refreshButton button.fr-nav__btn {
-    font-size: .875rem !important;
-    padding-right: .5rem !important;
-}*/
 
 /* Generic classes used in data display */
 .align-right {
