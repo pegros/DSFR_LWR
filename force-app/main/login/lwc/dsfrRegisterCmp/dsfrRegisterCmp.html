@@ -211,6 +211,14 @@
                                                         </lightning-spinner>
                                                     </li>
                                                 </ul>
+                                                <template lwc:if={showBack}>
+                                                    <div class="align-right">
+                                                        <button class="formButton fr-btn fr-btn--tertiary-no-outline fr-icon-arrow-go-back-line fr-btn--icon-right fr-mt-2v"
+                                                                type="button" onclick={handleBack}>
+                                                                Retour à l'étape précédente
+                                                        </button>
+                                                    </div>
+                                                </template>
                                             </div>
                                         </fieldset>
                                     </form>

@@ -29,6 +29,7 @@ export default class DsfrRegisterCmp extends LightningElement {
 
     @api validationTitle = 'Valider votre compte';
     @api validationDescription = "Un email avec un code d'accès vous a été envoyé à l'adresse indiquée à l'étape précédente. Merci de renseigner ce code.";
+    @api showBack = false;
 
     @api startUrl = '/';
     @api showCaptcha = false;
@@ -261,6 +262,16 @@ export default class DsfrRegisterCmp extends LightningElement {
             iter.type = (iter.type == 'password' ? 'text' : 'password');
         });
         if (this.isDebug) console.log('togglePassword: END / password input type updated ', passwordInputs[0].type);
+    }
+
+    handleBack(event){
+        if (this.isDebug) console.log('handleBack: START for Register with currentStage ',this.currentStage);
+        this.currentStage = 'Initialisation';
+        if (this.isDebug) console.log('handleBack: currentStage updated ',this.currentStage);
+        this.template.querySelector('.registrationForm').classList.remove('slds-hide');
+        this.template.querySelector('.validationForm').classList.add('slds-hide');
+        if (this.isDebug) console.log('handleSubmit: form visibility switched back');
+        if (this.isDebug) console.log('handleBack: END for Register');
     }
 
     handleValidate(event) {

@@ -54,7 +54,11 @@
                         label="Description de validation"
                         type="String" 
                         description="Descriptif de la section de validation" />
-            
+            <property   name="showBack"
+                        label="Retour arrière?"
+                        type="Boolean" 
+                        description="Activation d'un bouton de retour arrière depuis la validation" />
+
             <property   name="showCaptcha"
                         label="Activer Captcha ?"
                         type="Boolean"

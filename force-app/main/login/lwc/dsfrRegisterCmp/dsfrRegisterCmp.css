@@ -5,3 +5,6 @@
     position: relative;
     top : -.25rem;
 }
+.align-right {
+    text-align: end;
+}
