@@ -1,5 +1,5 @@
 import { api, LightningElement, wire } from 'lwc';
-import { RefreshEvent } from 'lightning/refresh';
+import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 
 import CLOSE_TITLE from '@salesforce/label/c.dsfrFlowPopupCloseTitle';
 import CLOSE_LABEL from '@salesforce/label/c.dsfrFlowPopupCloseLabel';
@@ -23,6 +23,8 @@ export default class DsfrFlowPopupCmp extends LightningElement {
     @api modalTitle;
     @api flowName;
     @api flowParameters;
+
+    @api recordId;
     @api doRefresh;
 
     @api isDebug = false;
@@ -173,6 +175,12 @@ export default class DsfrFlowPopupCmp extends LightningElement {
             if (this.isDebug) console.log('closeModal: actionNotif prepared ',JSON.stringify(actionNotif));
             if (this.isDebug) console.log('closeModal: END / Publishing page refresh notification');
             publish(this.messageContext, sfpegCustomNotification, actionNotif);
+
+            if (this.recordId) {
+                if (this.isDebug) console.log('redirect: refreshing record ', this.recordId);
+                notifyRecordUpdateAvailable([{recordId: this.recordId}]);
+                if (this.isDebug) console.log('redirect: record refresh triggered ');
+            }
             //if (this.isDebug) console.log('closeModal: refreshing page');
             //this.dispatchEvent(new RefreshEvent());
             //window.location.reload();

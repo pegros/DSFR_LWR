@@ -55,7 +55,7 @@
             <property   name="modalTitle"
                         label="Titre modale"
                         type="String"
-                        description="Libélle supérieur dans la modale" />
+                        description="Libellé supérieur dans la modale" />
             <property   name="flowName"
                         label="Processus"
                         type="String"
@@ -70,7 +70,11 @@
                         type="Boolean"
                         default="false"
                         description="Activation d'un raffraichissement automatique de la page à la fermeture de la popup." />
-                        
+            <property   name="recordId"
+                        label="ID d'enregistrement"
+                        type="String"
+                        description="ID de l'enregistrement à raffraichir" />
+
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"
