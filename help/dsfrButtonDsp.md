@@ -75,6 +75,27 @@ La syntaxe de la cible est similaire aux page references Salesforce standards, e
 }
 ```
 
+### Ouverture d'un nouvel onglet de navigateur
+
+En standard, le navigation service n'ouvre un nouvel onglet que lors d'une redirection
+vers une URL externe. Les sites Experience Cloud sont en effet des _Single Page Applications_
+et il est preférable en termes de performances de toujours rester dans l'onglet courant.
+
+Certains cas particuliers nécessitent toutefois de forcer l'ouverture d'une page dans un nouvel,
+par ex. pour déclencher la génération d'un PDF via une page **VisualForce** (en mode `renderAs="pdf"`)
+depuis un Experience Site Aura ou via un accès Lightning standard (cf. exemple ci-dessous).
+
+La syntaxe de la cible est similaire aux page references Salesforce standards, en utilisant le type special **openTab** .
+
+```
+{
+    "type":"openTab",
+    "attributes": {
+        "url":"/servlet/networks/switch?startURL=/apex/CustomPdfVfPage%3Fid={!User.userId}"
+    }
+}
+```
+
 ## Précisions techniques
 
 Le composant est utilisé pour l'affichage et le déclenchement d'action plus complexes dans plusieurs autres composants de boutons:
