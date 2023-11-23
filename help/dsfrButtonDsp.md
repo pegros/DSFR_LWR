@@ -4,7 +4,8 @@
 
 Le composant **dsfrButtonDsp** permet d'afficher un bouton standard du DSFR (cf. [description officielle](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/bouton)) permettant de déclencher une action de navigation dans un site Experience.
 
-Les différentes variantes du composant sont supportées et configurables au travers de paramètres de configuration.
+Les différentes variantes du composant sont supportées et configurables au travers de paramètres de configuration (variante, taille, icônes, alignement).
+![Variantes du bouton de navigation DSFR](/media/dsfrButtonDsp.png)
 
 La configuration de la navigation repose sur le format des references de page du **[Navigation Service](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.use_navigate_basic)** de Salesforce (cf. [documentation](https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.reference_page_reference_type)).
  
