@@ -4,6 +4,7 @@ import { CurrentPageReference } from 'lightning/navigation';
 //import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 //import { getObjectInfos } from 'lightning/uiObjectInfoApi';
 import getPicklistValues from '@salesforce/apex/dsfrPicklist_CTL.getPicklistValues';
+import basePathName from '@salesforce/community/basePath';
 
 export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
@@ -12,6 +13,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     @api inputPlaceholder;      // search term input placeholder
     @api searchButtonTitle;     // search button title
+    @api searchTag              // for GA4 tracking
     @api showSearch = false;    // Display search bar
     @api searchPage;            // Search page name (if not standard one)
     @api mainCriteria;          // Main criteria configuration
@@ -168,6 +170,9 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 console.warn('connected: additional criteria parsing failed ', error);
             }
         }
+
+        this.searchTag = this.searchTag || this.searchButtonTitle || 'Undefined';
+        if (this.isDebug) console.log('connected: searchTag evaluated ', this.searchTag);
 
         if (this.isDebug) console.log('connected: END for search');
     }
@@ -490,6 +495,18 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         searchPage.state = newState;
         if (this.isDebug) console.log('updateSearch: searchPage init ', JSON.stringify(searchPage));
 
+        if (this.isDebug) console.log('handleDownload: notifying GA'); this.searchTag
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_search',
+            params:{
+                event_source:'dsfrSearchCmp',
+                event_site: basePathName,
+                event_category:(this.searchPage ? 'custom_search' : 'standard_search'),
+                event_label: this.searchTag,
+                search_term: this.searchTerm
+            }
+        }}));
+        
         setTimeout(() => {
             if (this.isDebug) console.log('updateSearch: navigating ');
             this[NavigationMixin.Navigate](searchPage);

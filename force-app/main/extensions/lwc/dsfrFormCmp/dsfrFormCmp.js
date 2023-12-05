@@ -2,6 +2,7 @@ import { LightningElement, wire , api} from 'lwc';
 import getConfiguration from '@salesforce/apex/sfpegCard_CTL.getConfiguration';
 import updateRecord     from '@salesforce/apex/sfpegCard_CTL.updateRecord';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import basePathName from '@salesforce/community/basePath';
 
 import CANCEL_LABEL from '@salesforce/label/c.dsfrRecordFormCancel';
 import SAVE_LABEL   from '@salesforce/label/c.dsfrRecordFormSave';
@@ -17,6 +18,7 @@ export default class DsfrFormCmp extends LightningElement {
     //----------------------------------------------------------------
     @api formTitle;             // Main Title of the form
     @api formDescription;       // Main Description of the form
+    @api formTag;               // for GA4
     @api formClass = "fr-container fr-background-alt--grey fr-py-4v";   // CSS Classes for the wrapping form div
     @api sectionClass = "fr-mb-0 fr-fieldset" ; // CSS Classes for the wrapping form div
 
@@ -107,6 +109,9 @@ export default class DsfrFormCmp extends LightningElement {
             return;
         }
 
+        this.formTag = this.formTag || this.formTitle || 'Undefined';
+        if (this.isDebug) console.log('connected: formTag evaluated ', this.formTag);
+
         if (this.isDebug) console.log('connected: config name fetched ', this.configName);
         if (this.isDebug) console.log('connected: FORM_CONFIGS ', FORM_CONFIGS);
         if (FORM_CONFIGS[this.configName]) {
@@ -187,6 +192,7 @@ export default class DsfrFormCmp extends LightningElement {
         event?.preventDefault();
 
         if (!this.isReadOnly) {
+            if (this.isDebug) console.log('toggleMode: switching mode ');
             this.isEditMode = !this.isEditMode;
             if (this.isEditMode) {
                 if (this.isDebug) console.log('toggleMode: requesting focus on first input');
@@ -194,6 +200,7 @@ export default class DsfrFormCmp extends LightningElement {
             }
         }
         else {
+            if (this.isDebug) console.log('toggleMode: form is readOnly ');
             this.isEditMode = false;
         }
         if (this.isDebug) console.log('toggleMode: END for form with toggled edit? ',this.isEditMode);
@@ -219,6 +226,9 @@ export default class DsfrFormCmp extends LightningElement {
     handleSubmit(event) {
         if (this.isDebug) console.log('handleSubmit: START for form',event);
         this.toggleSpinner(true);
+        
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_submit',params:{event_source:'dsfrFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.formTag}}}));
+        if (this.isDebug) console.log('handleSubmit: GA notified');
 
         if (this.isForceSubmit) {
             if (this.isDebug) console.log('handleSubmit: force save via DML triggered');
@@ -244,12 +254,17 @@ export default class DsfrFormCmp extends LightningElement {
 
             updateRecord({record: recordData, bypassSharingRules : false, bypassDuplicateRules : true})
             .then( () => {
+                if (this.isDebug) console.log('handleSubmit: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_success',params:{event_source:'dsfrFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.formTag}}}));
                 if (this.isDebug) console.log('handleSubmit: END OK / DML update executed');
                 getRecordNotifyChange([{recordId: this.recordId}]);
                 this.toggleSpinner(false);
                 this.isForceSubmit = false;
+                
             })
             .catch( error => {
+                if (this.isDebug) console.log('handleSubmit: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_error',params:{event_source:'dsfrFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.formTag}}}));
                 console.warn('handleSubmit: END KO / record update error ', JSON.stringify(error));
                 this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
             });
@@ -272,6 +287,9 @@ export default class DsfrFormCmp extends LightningElement {
         event.preventDefault();
         this.isEditMode = false;
 
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_success',params:{event_source:'dsfrFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.formTag}}}));
+        if (this.isDebug) console.log('handleSubmit: GA notified');
+
         let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
         console.warn('handleSuccess: popupUtil fetched ', popupUtil);
         let alertConfig = {
@@ -285,6 +303,9 @@ export default class DsfrFormCmp extends LightningElement {
  
     handleError(event) {
         if (this.isDebug) console.log('handleError: START for form',event);
+
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_error',params:{event_source:'dsfrFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.formTag}}}));
+        if (this.isDebug) console.log('handleSubmit: GA notified');
 
         if (this.isDebug) console.log('handleError: event details ',JSON.stringify(event.detail));
         let errors = event.detail?.output?.errors;

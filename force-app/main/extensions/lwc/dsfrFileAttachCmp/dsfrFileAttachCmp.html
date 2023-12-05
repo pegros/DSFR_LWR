@@ -30,7 +30,8 @@
             <template lwc:if={isOptionSelected}>
                 <lightning-layout-item  size="12" large-device-size={baseWidth}     padding="around-small">
                     <c-dsfr-file-upload-cmp     label={uploadLabel}         comment={uploadComment}
-                                                accept=""                   content-meta={uploadMeta}
+                                                tag={uploadTag}
+                                                accept={uploadAccept}       content-meta={uploadMeta}
                                                 record-id={recordId}        record-ids={recordIds}
                                                 refresh-user={refreshUser}  wrapping-class={componentClass}
                                                 do-refresh={doRefresh}      is-debug={isDebug} >                        
@@ -40,6 +41,7 @@
                 <template lwc:if={selectConfig}>
                     <lightning-layout-item  size="12"   large-device-size={baseWidth}   padding="around-small">
                         <c-dsfr-file-selector-cmp   label={selectLabel}         comment={selectComment}
+                                                    tag={selectTag}
                                                     config-name={selectConfig}  context={selectContext}
                                                     wrapping-class={componentClass}
                                                     record-id={recordId}        object-api-name={objectApiName}

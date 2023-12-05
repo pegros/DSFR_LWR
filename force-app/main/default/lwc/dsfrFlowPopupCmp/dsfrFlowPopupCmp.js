@@ -1,5 +1,6 @@
 import { api, LightningElement, wire } from 'lwc';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import basePathName from '@salesforce/community/basePath';
 
 import CLOSE_TITLE from '@salesforce/label/c.dsfrFlowPopupCloseTitle';
 import CLOSE_LABEL from '@salesforce/label/c.dsfrFlowPopupCloseLabel';
@@ -15,6 +16,7 @@ export default class DsfrFlowPopupCmp extends LightningElement {
     @api buttonIconPosition = 'left';
     @api buttonLabel;
     @api buttonTitle;
+    @api buttonTag; // for GA4 tracking
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonAlign;
@@ -76,6 +78,11 @@ export default class DsfrFlowPopupCmp extends LightningElement {
             console.log('connected: Flow Name ', this.flowName);
             console.log('connected: Flow Parameters ', this.flowParameters);
             console.log('connected: do refresh? ', this.doRefresh);
+        }
+
+        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
+        if (this.isDebug) {
+            console.log('connected: buttonTag evaluated ', this.buttonTag);
             console.log('connected: END Flow Popup');
         }
     }
@@ -100,8 +107,13 @@ export default class DsfrFlowPopupCmp extends LightningElement {
 
             this.flowInput = (typeof this.flowParameters == 'string' ?  JSON.parse(this.flowParameters) : this.flowParameters || []);                
             if (this.isDebug) console.log('openModal: flow Input updated ', JSON.stringify(this.flowInput));
+
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrFlowPopupCmp',event_site: basePathName,event_category:'flow_popup',event_label:this.buttonTag}}}));
+            if (this.isDebug) console.log('openModal: GA notified');
         }
         catch (error) {
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrFlowPopupCmp',event_site: basePathName,event_category:'config_error',event_label:this.buttonTag}}}));
+            if (this.isDebug) console.log('openModal: GA notified');
             console.warn('openModal: flowInput parsing failed ', error);
         }
 
@@ -164,6 +176,15 @@ export default class DsfrFlowPopupCmp extends LightningElement {
         if (this.isDebug) console.log('closeModal: document.body.style ',document.body.style);
         document.body.style.overflowY = null;
         if (this.isDebug) console.log('closeModal: document style updated ',document.body.style.overflowY);
+
+        if (event.detail.status === 'FINISHED') {
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrFlowPopupCmp',event_site: basePathName,event_category:'flow_popup',event_label:this.buttonTag}}}));
+            if (this.isDebug) console.log('openModal: GA notified - flow termination');
+        }
+        else {
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_cancel',params:{event_source:'dsfrFlowPopupCmp',event_site: basePathName,event_category:'flow_popup',event_label:this.buttonTag}}}));
+            if (this.isDebug) console.log('openModal: GA notified - popup close');
+        }
 
         if ((this.doRefresh) && (event.detail.status === 'FINISHED')) {
             if (this.isDebug) console.log('closeModal: Triggering refresh');

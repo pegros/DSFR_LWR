@@ -1,5 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
+import basePathName from '@salesforce/community/basePath';
 
 export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
 
@@ -9,6 +10,7 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     @api tileImage = 'logo';
     @api tileTitle;
     @api tileDescription;
+    @api tileTag; // For GA4 link tracking
     @api tileTarget;
     @api isVertical = false;
     @api fitImage = false;
@@ -46,6 +48,10 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
             console.log('connected: tile target ',this.tileTarget);
             console.log('connected: vertical variant? ', this.isVertical);
         }
+
+        this.tileTag = this.tileTag || this.tileLabel || this.tileTitle || 'Undefined';
+        if (this.isDebug) console.log('connected: tileTag evaluated ', this.tileTag);
+        
         //Handling strange LWR inputs for fields reset to empty (object value instead of null)
         this.resetInput();
         if (this.isDebug) console.log('connected: END tile');
@@ -75,6 +81,9 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
         if (this.tileTarget) {
             if (this.isDebug) console.log('openTarget: navigating to target ');
 
+            if (this.isDebug) console.log('openTarget: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_link_click',params:{event_source:'dsfrTileCmp',event_site: basePathName,event_category:'open_target',event_label:this.tileTag}}}));
+
             const newPageRef = JSON.parse(this.tileTarget);
             if (this.isDebug) console.log('openTarget: newPageRef init ',newPageRef);
 
@@ -82,6 +91,9 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
             this[NavigationMixin.Navigate](newPageRef);
         }
         else {
+            if (this.isDebug) console.log('openTarget: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_link_click',params:{event_source:'dsfrTileCmp',event_site: basePathName,event_category:'config_error',event_label:this.tileTag}}}));
+
             if (this.isDebug) console.log('openTarget: END ignoring navigation');
         }
     }

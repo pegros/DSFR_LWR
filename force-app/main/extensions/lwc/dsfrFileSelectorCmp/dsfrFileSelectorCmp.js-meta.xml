@@ -19,7 +19,11 @@
                         label="Explication"
                         type="String"
                         description="Texte explicatif du composant de sélection." />
-
+            <property   name="tag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors d'une sélection à destination de Google Analytics" />
+            
             <property   name="configName"
                         label="Configuration de liste"
                         type="String"

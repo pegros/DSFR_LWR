@@ -1,3 +1,7 @@
 .listLoader {
     display:none
 }
+.fr-error-text, .fr-valid-text {
+    overflow-wrap: break-word;
+    display: block;
+}

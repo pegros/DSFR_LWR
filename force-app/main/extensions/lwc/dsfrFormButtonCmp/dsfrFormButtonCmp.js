@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { RefreshEvent } from 'lightning/refresh';
 import { NavigationMixin } from 'lightning/navigation';
+import basePathName from '@salesforce/community/basePath';
 
 import { publish, MessageContext } from 'lightning/messageService';
 import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
@@ -19,6 +20,7 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
     @api buttonIconPosition = 'left';
     @api buttonLabel;
     @api buttonTitle;
+    @api buttonTag; // for GA4
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonInactive = 'false';
@@ -81,6 +83,9 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
             console.log('connected: record ID ',this.recordId);
         }
 
+        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
+        if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
+
         if (this.isDebug) console.log('connected: END action button');
     }
 
@@ -130,39 +135,25 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
         //this.toggleSpinner();
         this.isModalOpen = true;
 
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_init',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+        if (this.isDebug) console.log('handleAction: GA notified');
+
         if (this.isDebug) console.log('handleAction: END Form ');
     }
 
-    closeModal(event) {
-        if (this.isDebug) console.log('closeModal: START');
-        event.preventDefault();
-        this.isModalOpen = false;
-
-        let modalCmp = this.template.querySelector('dialog');
-        if (this.isDebug) console.log('closeModal: modalCmp fetched ',modalCmp);
-        modalCmp.close();
-        if (this.isDebug) console.log('closeModal: modalCmp closed');
-        modalCmp.classList.remove('fr-modal--opened');
-        if (this.isDebug) console.log('closeModal: modalCmp classList updated');
-        
-        let status = document.removeEventListener('keydown',this.handleEscape);
-        if (this.isDebug) console.log('closeModal: keydown listener removed on document ',status);
-        if (this.isDebug) console.log('closeModal: document.body.style ',document.body.style);
-        document.body.style.overflowY = null;
-        if (this.isDebug) console.log('closeModal: document style updated ',document.body.style.overflowY);
-
-        if (this._resolve) {
-            if (this.isDebug) console.log('closeModal: END calling resolve handler');
-            this._resolve();
-        }
-        else {
-            if (this.isDebug) console.log('closeModal: END with no promise resolve');
-        }
+    handleClose(event) {
+        if (this.isDebug) console.log('handleClose: START');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_cancel',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+        if (this.isDebug) console.log('handleClose: GA notified');
+        if (this.isDebug) console.log('handleClose: END / closing modal');
+        this.closeModal(event);
     }
 
     handleEnter(event) {
-        console.log('handleEnter: START');
+        if (this.isDebug) console.log('handleEnter: START');
         if (event.key === 'Enter') {
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_cancel',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+            if (this.isDebug) console.log('handleEnter: GA notified');
             if (this.isDebug) console.log('handleEnter: END / closing modal');
             this.closeModal(event);
         }
@@ -172,8 +163,10 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
     }
 
     handleEscape = event => {
-        console.log('handleEscape: START');
+        if (this.isDebug) console.log('handleEscape: START');
         if (event.key === 'Escape') {
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_cancel',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+            if (this.isDebug) console.log('handleEscape: GA notified');
             if (this.isDebug) console.log('handleEscape: END / closing modal');
             this.closeModal(event);
         }
@@ -191,12 +184,17 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
     handleSubmit(event) {
         if (this.isDebug) console.log('handleSubmit: START for Form Popup',event);
         this.toggleSpinner(true);
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+        if (this.isDebug) console.log('handleSubmit: GA notified');
         if (this.isDebug) console.log('handleSubmit: END for Form Popup');
     }
 
     handleSuccess(event) {
         if (this.isDebug) console.log('handleSuccess: START for Form Popup',event);
         
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+        if (this.isDebug) console.log('handleSubmit: GA notified');
+
         if (this.doRefresh) {
             if (this.isDebug) console.log('handleSuccess: Triggering refresh');
             let actionNotif = {
@@ -220,11 +218,15 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
     handleError(event) {
         if (this.isDebug) console.log('handleError: START for Form Popup',event);
         this.toggleSpinner(false);
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+        if (this.isDebug) console.log('handleError: GA notified');
         if (this.isDebug) console.log('handleError: END for Form Popup');
     }
     
     handleCancel(event){
         if (this.isDebug) console.log('handleCancel: START for Form Popup',event);
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_cancel',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
+        if (this.isDebug) console.log('handleCancel: GA notified');
         if (this.isDebug) console.log('handleCancel: END for Form Popup');
         this.closeModal(event);
     }
@@ -257,5 +259,32 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
 
         
         if (this.isDebug) console.log('toggleSpinner: END');
+    }
+
+    closeModal(event) {
+        if (this.isDebug) console.log('closeModal: START');
+        event.preventDefault();
+        this.isModalOpen = false;
+
+        let modalCmp = this.template.querySelector('dialog');
+        if (this.isDebug) console.log('closeModal: modalCmp fetched ',modalCmp);
+        modalCmp.close();
+        if (this.isDebug) console.log('closeModal: modalCmp closed');
+        modalCmp.classList.remove('fr-modal--opened');
+        if (this.isDebug) console.log('closeModal: modalCmp classList updated');
+        
+        let status = document.removeEventListener('keydown',this.handleEscape);
+        if (this.isDebug) console.log('closeModal: keydown listener removed on document ',status);
+        if (this.isDebug) console.log('closeModal: document.body.style ',document.body.style);
+        document.body.style.overflowY = null;
+        if (this.isDebug) console.log('closeModal: document style updated ',document.body.style.overflowY);
+
+        if (this._resolve) {
+            if (this.isDebug) console.log('closeModal: END calling resolve handler');
+            this._resolve();
+        }
+        else {
+            if (this.isDebug) console.log('closeModal: END with no promise resolve');
+        }
     }
 }

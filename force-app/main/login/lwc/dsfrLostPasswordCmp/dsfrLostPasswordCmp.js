@@ -2,6 +2,7 @@ import { LightningElement,api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import sendLostPassword from '@salesforce/apex/dsfrSiteManagement_CTL.sendLostPassword';
 import validateCaptcha from '@salesforce/apex/dsfrSiteManagement_CTL.validateCaptcha';
+import basePathName from '@salesforce/community/basePath';
 
 export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
@@ -9,6 +10,7 @@ export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElemen
     //-----------------------------------------------------
     @api mainHeader;
     @api formHeader;
+    @api tag; // for GA4 tracking
     @api formDescription;
     @api sendLabel;
     @api targetPage;
@@ -34,6 +36,9 @@ export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElemen
             document.addEventListener("grecaptchaVerified", this.handleCaptcha);
             if (this.isDebug) console.log('connected: Captcha handler registered');
         }
+
+        this.tag = this.tag || this.formHeader || this.mainHeader || 'lost_password';
+        if (this.isDebug) console.log('connected: tag evaluated ', this.tag);
 
         if (this.isDebug) console.log('connected: END for LostPassword');
     }
@@ -75,6 +80,10 @@ export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElemen
 
         if (this.useCaptcha) {
             if (this.isDebug) console.log('handleSend: challenging captcha');
+
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_resend_password_submit',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'captcha_password',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleLogin: GA notified');
+
             this.tmpIdentity = identity;
             document.dispatchEvent(new CustomEvent("grecaptchaExecute", {"detail": {action: "lostPwd"}}));
             if (this.isDebug) console.log('handleSend: END / captcha challenge requested');
@@ -82,14 +91,24 @@ export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElemen
         else {
             if (this.isDebug) console.log('handleSend: no captcha challenge required');
 
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_resend_password_submit',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'standard_password',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleLogin: GA notified');
+
             sendLostPassword({identity:identity}).then(result => {
                 if (this.isDebug) console.log('handleSend: lost pwd email sent',result);
                 if (this.isDebug) console.log('handleSend: redirecting to ',this.targetPage);
                 this.toggleSpinner(false);
+
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_resend_password_success',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'standard_password',event_label:this.tag}}}));
+                if (this.isDebug) console.log('handleLogin: GA notified');
+
                 let pageRef = JSON.parse(this.targetPage);
                 this[NavigationMixin.Navigate](pageRef, false);
                 if (this.isDebug) console.log('handleSend: END / redirected to target');
             }).catch(error => {
+                if (this.isDebug) console.log('handleLogin: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_resend_password_error',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'standard_password',event_label:this.tag}}}));
+                
                 console.warn('handleSend: END KO / send failed ', JSON.stringify(error));
                 this.message = {
                     type: "error",
@@ -113,20 +132,33 @@ export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElemen
             return;
         }
 
+        if (this.isDebug) console.log('handleCaptcha: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_submit',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'captcha_password',event_label:this.tag}}}));
+
         if (this.isDebug) console.log('handleCaptcha: validating captcha ',  JSON.stringify(event.detail));
         //validateCaptcha({ recaptchaResponse: event.detail.response})
         validateCaptcha(event.detail)
         .then(result => {
             if (this.isDebug) console.log('handleCaptcha: captcha validated');
 
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_success',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'captcha_password',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleCaptcha: GA notified');
+
             sendLostPassword({identity:this.tmpIdentity}).then(result => {
                 if (this.isDebug) console.log('handleCaptcha: lost pwd email sent',result);
                 if (this.isDebug) console.log('handleCaptcha: redirecting to ',this.targetPage);
+
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_resend_password_success',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'captcha_password',event_label:this.tag}}}));
+                if (this.isDebug) console.log('handleCaptcha: GA notified');
+
                 this.toggleSpinner(false);
                 let pageRef = JSON.parse(this.targetPage);
                 this[NavigationMixin.Navigate](pageRef, false);
                 if (this.isDebug) console.log('handleCaptcha: END for lostPassword / redirected to target');
             }).catch(error => {
+                if (this.isDebug) console.log('handleCaptcha: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_resend_password_error',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'captcha_password',event_label:this.tag}}}));
+        
                 console.warn('handleCaptcha: END KO for lostPassword / email send failed ', JSON.stringify(error));
                 this.message = {
                     type: "error",
@@ -139,6 +171,9 @@ export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElemen
             if (this.isDebug) console.log('handleCaptcha: requesting lost pwd email');
         })
         .catch(error => {
+            if (this.isDebug) console.log('handleLogin: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_error',params:{event_source:'dsfrLostPasswordCmp', event_site: basePathName, event_category:'captcha_password',event_label:this.tag}}}));
+    
             console.warn('handleCaptcha: END KO for lostPassword / Captcha validation failed ',error);
             this.message = {
                 type: "error",

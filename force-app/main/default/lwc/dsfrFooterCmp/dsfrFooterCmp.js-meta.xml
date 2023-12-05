@@ -25,7 +25,11 @@
                         type="String"
                         default="Sauf mention contraire, tous les contenus de ce site sont sous licence etalab-2.0"
                         description="Contenu descriptif inférieur du footer" />
-
+            <property   name="tag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label des évènements générés lors d'une action à destination de Google Analytics" />
+            
             <property   name="topMenu"
                         label="Menu supérieur"
                         type="String"

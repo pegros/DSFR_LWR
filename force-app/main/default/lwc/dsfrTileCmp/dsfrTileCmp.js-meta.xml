@@ -23,10 +23,16 @@
                         label="Description"
                         type="String"
                         description="Description de la tuile" />
+                        
             <property   name="tileTarget"
                         label="Cible"
                         type="String"
                         description="Salesforce page reference (JSON)" />
+            <property   name="tileTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors d'un click (si cible définie) à destination de Google Analytics" />
+
             <property   name="isVertical"
                         label="Tuile verticale?"
                         type="Boolean"

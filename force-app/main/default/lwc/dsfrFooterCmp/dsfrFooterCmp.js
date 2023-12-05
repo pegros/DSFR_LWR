@@ -1,5 +1,4 @@
 import { LightningElement, api, wire } from 'lwc';
-
 import { NavigationMixin } from 'lightning/navigation';
 import getNavigations from '@salesforce/apex/dsfrNavigationMenu_CTL.getNavigations';
 
@@ -17,6 +16,7 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
     @api logoTitle = 'Nom du<br/>Ministère';
     @api footerTop;
     @api footerBottom;
+    @api tag = 'site_footer'; // for GA4 tracking
 
     @api topMenu;
     @api bottomMenu;
@@ -179,6 +179,18 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleTopClick: event received ',event);
         event.stopPropagation();
         event.preventDefault();
+
+        if (this.isDebug) console.log('handleBottomClick: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_link_click',
+            params:{
+                event_source:'dsfrFooterCmp',
+                event_site: basePathName,
+                event_category:'footer_top_menu',
+                event_label:this.tag
+            }
+        }}));
+
         if (this.isDebug) console.log('handleTopClick: topMenuItems ',JSON.stringify(this.topMenuItems));
         this.navigate(event,this.topMenuItems);
         if (this.isDebug) console.log('handleTopClick: END for footer menu',this.topMenu);
@@ -188,6 +200,18 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleBottomClick: event received ',event);
         event.stopPropagation();
         event.preventDefault();
+
+        if (this.isDebug) console.log('handleBottomClick: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_link_click',
+            params:{
+                event_source:'dsfrFooterCmp',
+                event_site: basePathName,
+                event_category:'footer_bottom_menu',
+                event_label:this.tag
+            }
+        }}));
+
         if (this.isDebug) console.log('handleBottomClick: bottomMenuItems ', JSON.stringify(this.bottomMenuItems));
         this.navigate(event,this.bottomMenuItems);
         if (this.isDebug) console.log('handleBottomClick: END for footer menu',this.bottomMenu);

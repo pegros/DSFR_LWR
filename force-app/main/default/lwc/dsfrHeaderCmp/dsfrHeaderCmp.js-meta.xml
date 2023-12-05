@@ -29,7 +29,11 @@
                         type="String"
                         default="Précisions sur l'organisation"
                         description="Précision sur l'organisation" />
-
+            <property   name="tag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label des évènements générés lors d'une action à destination de Google Analytics" />
+            
             <property   name="topMenu"
                         label="Menu supérieur"
                         type="String"

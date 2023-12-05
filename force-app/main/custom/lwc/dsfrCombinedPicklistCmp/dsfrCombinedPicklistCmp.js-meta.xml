@@ -18,6 +18,11 @@
                         label="Message"
                         type="String"
                         description="Message (optionnel) d'information" />
+            <property   name="tag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors d'une opération à destination de Google Analytics" />
+            
             <property   name="fieldName"
                         label="Nom du champ"
                         type="String"

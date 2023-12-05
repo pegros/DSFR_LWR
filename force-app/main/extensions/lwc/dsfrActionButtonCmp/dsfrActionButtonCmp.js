@@ -1,12 +1,12 @@
 import { LightningElement, api, wire } from 'lwc';
 import { createRecord, updateRecord, deleteRecord, notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
-import { RefreshEvent } from 'lightning/refresh';
 import { NavigationMixin } from 'lightning/navigation';
+import basePathName from '@salesforce/community/basePath';
 
 import { publish, MessageContext } from 'lightning/messageService';
 import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
 
-export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElement) {
+export default class DsfrActionButtonCmp extends  NavigationMixin(LightningElement) {
 
     //-----------------------------------------------------
     // Configuration parameters
@@ -15,6 +15,7 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
     @api buttonIconPosition = 'left';
     @api buttonLabel;
     @api buttonTitle;
+    @api buttonTag; // for GA4
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonInactive = 'false';
@@ -46,6 +47,9 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
             console.log('connected: button inactive? ', this.buttonInactive);
         }
 
+        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
+        if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
+
         if (this.isDebug) console.log('connected: END action button');
     }
 
@@ -69,41 +73,54 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
             switch (actionDetails.type) {
                 case 'create':
                     if (this.isDebug) console.log('handleAction: triggering create action',JSON.stringify(actionDetails.params));
+                    document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:'create_record',event_label:this.buttonTag}}}));
+                    if (this.isDebug) console.log('handleAction: GA notified');
                     actionPromise = createRecord(actionDetails.params);
                     break;
                 case 'update':
                     if (this.isDebug) console.log('handleAction: triggering update action',JSON.stringify(actionDetails.params));
+                    document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:'update_record',event_label:this.buttonTag}}}));
+                    if (this.isDebug) console.log('handleAction: GA notified');
                     actionPromise = updateRecord(actionDetails.params);
                     break;
                 case 'delete':
                     if (this.isDebug) console.log('handleAction: triggering delete action',JSON.stringify(actionDetails.params));
+                    document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:'delete_record',event_label:this.buttonTag}}}));
+                    if (this.isDebug) console.log('handleAction: GA notified');
                     actionPromise = deleteRecord(actionDetails.params);
                     break;
                 default:
                     console.warn('handleAction: END KO / Unsupported action type');
+                    document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:'config_error',event_label:this.buttonTag}}}));
+                    if (this.isDebug) console.log('handleAction: GA notified');
                     return;
             }
 
             actionPromise.then(data => {
                 if (this.isDebug) console.log('handleAction: operation executed ', JSON.stringify(data));
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:actionDetails.type+'_record',event_label:this.buttonTag}}}));
+                if (this.isDebug) console.log('handleAction: GA re-notified');
 
                 let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
                 if (this.isDebug) console.log('handleAction: popupUtil fetched ', popupUtil);
                 let alertConfig = {
-                    alerts:[{type: "success", title: "Opération effectuée", message: "Vos changements ont bien été sauvegardés."}],
+                    alerts:[{type: "success", title: actionDetails.title || "Opération effectuée",  message: actionDetails.message }],
                     size:'small'};
+                    //alerts:[{type: "success", title: actionDetails.title || "Opération effectuée", actionDetails.title message: "Vos changements ont bien été sauvegardés."}],
                 popupUtil.showAlert(alertConfig).then(() => {
-                    if ((actionDetails.navigate) && (data.recordId)) {
-                        if (this.isDebug) console.log('handleAction: navigating to record');
+                    if (this.isDebug) console.log('handleAction: analysing next steps in action details ', JSON.stringify(actionDetails));                    
+                    if (this.isDebug) console.log('handleAction: for data ', JSON.stringify(data));                    
+                    if ((actionDetails.navigate) && (data.id)) {
+                        if (this.isDebug) console.log('handleAction: navigating to record', data.id);
                         const newRecordPageRef = {
                             type: 'standard__recordPage',
                             attributes: {
-                                recordId: data.recordId,
-                                objectApiName: actionDetails.params.apiName,
+                                recordId: data.id,
+                                objectApiName: data.apiName,
                                 actionName: 'view'
                            }
                         }
-                        if (this.isDebug) console.log('handleAction: END / Navigating to ',newRecordPageRef);
+                        if (this.isDebug) console.log('handleAction: END / Navigating to ', JSON.stringify(newRecordPageRef));
                         this[NavigationMixin.Navigate](newRecordPageRef);
                     }
                     else if (actionDetails.reload) {
@@ -129,6 +146,9 @@ export default class SfpegActionButtonCmp extends  NavigationMixin(LightningElem
                 if (this.isDebug) console.log('handleAction: popup displayed');
             }).catch(error => {
                 console.warn('handleAction: action failed ',error);
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:'submit_error',event_label:this.buttonTag}}}));
+                if (this.isDebug) console.log('handleAction: GA re-notified');
+
                 let alertConfig = {alerts:[],size:'small'};
                 if (error.body?.output?.errors) {
                     alertConfig.header = error.body?.message;

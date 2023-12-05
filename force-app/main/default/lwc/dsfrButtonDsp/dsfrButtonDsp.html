@@ -1,6 +1,6 @@
 <template>
     <div class={alignClass}>
-        <button type="button" if:false={isInactive} class={buttonClass} onclick={openTarget} title={buttonTitle} >
+        <button type="button" if:false={isInactive} class={buttonClass} onclick={openTarget} title={buttonTitle}>
             {buttonLabel}
         </button>
         <button type="button" if:true={isInactive} class={buttonClass} title={buttonTitle} disabled >

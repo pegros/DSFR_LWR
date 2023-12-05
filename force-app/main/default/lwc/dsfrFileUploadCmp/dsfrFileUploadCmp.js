@@ -3,6 +3,7 @@ import uploadFile       from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
 import uploadVersion    from '@salesforce/apex/dsfrFileUpload_CTL.uploadVersion';
 import userId           from '@salesforce/user/Id';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import basePathName from '@salesforce/community/basePath';
 
 import UPLOAD_SUCCESS from '@salesforce/label/c.dsfrFileUploadSuccess';
 import UPLOAD_COMMENT from '@salesforce/label/c.dsfrFileUploadComment';
@@ -17,6 +18,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     //-----------------------------------------------------
     @api label = 'Charger un fichier';
     @api comment;
+    @api tag; // for GA4 tracking
     @api accept;
     @api contentMeta;
     @api shareMode = 'I';
@@ -70,8 +72,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     //-----------------------------------------------------
     connectedCallback() {
         if (this.isDebug) {
-            console.log('connected: START file upload');
-            console.log('connected: label ',this.label);
+            console.log('connected: START file upload ',this.label);
             console.log('connected: comment ',this.comment);
             console.log('connected: accept ',this.accept);
             console.log('connected: content version metadata ',this.contentMeta);
@@ -82,7 +83,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
         }
         this.comment = this.comment || UPLOAD_COMMENT;
         this.accept = this.accept || UPLOAD_TYPES;
+        this.tag = this.tag || this.label || 'Undefined';
         if (this.isDebug) {
+            console.log('connected: tag evaluated ', this.tag);
             console.log('connected: comment reworked ',this.comment);
             console.log('connected: accept reworked ',this.accept);
             console.log('connected: END file upload');
@@ -141,6 +144,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
         }
         if (this.isDebug) console.log('handleUpload: disabling fileInput ',fileInput);
         fileInput.disabled = true;
+
+        if (this.isDebug) console.log('handleUpload: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_upload_submit',params:{event_source:'dsfrFileUploadCmp',event_site: basePathName,event_category:(this.fileId ? 'upload_version' : 'upload_file'),event_label:this.tag}}}));
 
         this.fileName = selectedFile.name;
         if (this.isDebug) console.log('handleUpload: fileName registered ',this.fileName);
@@ -202,6 +208,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 this.message = UPLOAD_SUCCESS.replace('{0}', this.fileName);
                 this.isError =  false;
 
+                if (this.isDebug) console.log('registerFile: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_upload_success',params:{event_source:'dsfrFileUploadCmp',event_site: basePathName,event_category:'upload_file',event_label:this.tag}}}));
+
                 if (recordIds && recordIds.length > 0) {
                     if (this.isDebug) console.log('registerFile: handling record data reload ',JSON.stringify(recordIds));
                     let recordIdList = [];
@@ -241,6 +250,10 @@ export default class DsfrFileUploadCmp extends LightningElement {
                 if (this.isDebug) console.log('registerFile: END');
             }).catch(error => {
                 console.warn('registerFile: upload failed',JSON.stringify(error));
+
+                if (this.isDebug) console.log('registerFile: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_upload_error',params:{event_source:'dsfrFileUploadCmp',event_site: basePathName,event_category:'upload_file',event_label:this.tag}}}));
+
                 let fileInput = this.template.querySelector('input.fr-upload');
                 if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
                 fileInput.disabled = false;
@@ -257,6 +270,10 @@ export default class DsfrFileUploadCmp extends LightningElement {
             let fileInput = this.template.querySelector('input.fr-upload');
             if (this.isDebug) console.log('registerFile: reactivating fileInput ',fileInput);
             fileInput.disabled = false;
+
+            if (this.isDebug) console.log('registerFile: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_upload_error',params:{event_source:'dsfrFileUploadCmp',event_site: basePathName,event_category:'upload_file',event_label:this.tag}}}));
+
             console.warn('registerFile: END KO / upload failed ',JSON.stringify(error));
             //this.message = JSON.stringify(error);
             this.message = (error.body?.message || error.statusText || 'Erreur technique');
@@ -280,6 +297,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
             this.fileContent = null;
             this.message = UPLOAD_SUCCESS.replace('{0}', this.fileName);
             this.isError =  false;
+
+            if (this.isDebug) console.log('registerFile: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_upload_success',params:{event_source:'dsfrFileUploadCmp',event_site: basePathName,event_category:'upload_version',event_label:this.tag}}}));
 
             if (this.doRefresh) {
                 if (this.isDebug) console.log('uploadVersion: Triggering refresh');
@@ -314,6 +334,9 @@ export default class DsfrFileUploadCmp extends LightningElement {
             if (this.isDebug) console.log('uploadVersion: reactivating fileInput ',fileInput);
             fileInput.disabled = false;
             
+            if (this.isDebug) console.log('registerFile: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_upload_error',params:{event_source:'dsfrFileUploadCmp',event_site: basePathName,event_category:'upload_version',event_label:this.tag}}}));
+
             if (this.doNotify) {
                 let alertConfig = {alerts:[],size:'small'};
                 if (error.body?.output?.errors) {

@@ -18,7 +18,11 @@
                         label="Description principale"
                         type="String"
                         description="Description principale du composant" />
-
+            <property   name="tag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors de l'execution d'une action à destination de Google Analytics" />
+            
             <property   name="formTitle"
                         label="Entête du formulaire"
                         type="String" 

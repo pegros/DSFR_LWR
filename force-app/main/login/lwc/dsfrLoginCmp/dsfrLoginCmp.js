@@ -2,6 +2,7 @@ import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import loginViaIdentity from '@salesforce/apex/dsfrSiteManagement_CTL.loginViaIdentity';
 import validateCaptcha from '@salesforce/apex/dsfrSiteManagement_CTL.validateCaptcha';
+import basePathName from '@salesforce/community/basePath';
 
 export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
@@ -11,8 +12,14 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
     @api mainDescription;
 
     @api loginTarget;
+    @api tag; // for GA4 tracking
+
     @api lostPwdTarget;
+    @api lostPwdTag; // for GA4 tracking
+
     @api registerTarget;
+    @api registerTag; // for GA4 tracking
+
     @api useCaptcha = false;
 
     @api isDebug = false;
@@ -45,6 +52,15 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
             document.addEventListener("grecaptchaVerified", this.handleCaptcha);
             if (this.isDebug) console.log('connected: Captcha handler registered');
         }
+
+        this.lostPwdTag = this.lostPwdTag || (this.tag ? this.tag + '_lost_password' : 'lost_password');
+        if (this.isDebug) console.log('connected: lostPwdTag evaluated ', this.lostPwdTag);
+
+        this.registerTag = this.registerTag || (this.tag ? this.tag + '_register' : 'register');
+        if (this.isDebug) console.log('connected: registerTag evaluated ', this.registerTag);
+
+        this.tag = this.tag || this.mainTitle || 'login';
+        if (this.isDebug) console.log('connected: login tag evaluated ', this.tag);
 
         if (this.isDebug) console.log('connected: END for Login');
     }
@@ -89,6 +105,10 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
 
         if (this.useCaptcha) {
             if (this.isDebug) console.log('handleLogin: challenging captcha');
+
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_login_submit',params:{event_source:'dsfrLoginCmp', event_site: basePathName, event_category:'captcha_login',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleLogin: GA notified');
+        
             this.tmpIdentity = identity;
             this.tmpPassword = password;
             document.dispatchEvent(new CustomEvent("grecaptchaExecute", {"detail": {action: "login"}}));
@@ -96,17 +116,51 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
         }
         else {
             if (this.isDebug) console.log('handleLogin: no captcha challenge required');
+
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_login_submit',params:{event_source:'dsfrLoginCmp', event_site: basePathName, event_category:'standard_login',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleLogin: GA notified');
+
             if (this.isDebug) console.log('handleLogin: loginTarget provided ',this.loginTarget);
 
             loginViaIdentity({identity:identity, password:password, startUrl:this.loginTarget}).then(result => {
                 if (this.isDebug) console.log('handleLogin: login granted ', result);
-                this.toggleSpinner(false);
+
+                // Fallback if GA event cannot be sent (no handler, add blocker...)
+                let timeoutID = setTimeout(() => { 
+                    this.toggleSpinner(false);
+                    if (this.isDebug) console.log('handleLogin: END / opening target (fallback timeout)');
+                    window.open(result,'_self');
+                },5000);
+                if (this.isDebug) console.log('handleLogin: notifying GA with timeout registered', timeoutID);
+
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+                    label:'dsfr_login_success',
+                    params:{
+                        event_source:'dsfrLoginCmp',
+                        event_site: basePathName,
+                        event_category:'standard_login',
+                        event_label:this.tag,
+                        event_callback: () => { 
+                            this.toggleSpinner(false);
+                            if (this.isDebug) console.log('handleLogin: clearing timeout ',timeoutID);
+                            clearTimeout(timeoutID);
+                            if (this.isDebug) console.log('handleLogin: END for Login / opening target ',result);
+                            window.open(result,'_self');
+                        }
+                    }
+                }}));
+
                 /*let pageRef = {type: 'standard__webPage', attributes: {url: result}};
                 if (this.isDebug) console.log('handleLogin: END / opening pageRef ', JSON.stringify(pageRef));
                 this[NavigationMixin.Navigate](pageRef, false);*/
-                if (this.isDebug) console.log('handleLogin: END / opening target');
-                window.open(result,'_self');
+                /*setTimeout(() => { 
+                    if (this.isDebug) console.log('handleLogin: END / opening target');
+                    window.open(result,'_self');
+                },1000);*/
             }).catch(error => {
+                if (this.isDebug) console.log('handleLogin: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_login_error',params:{event_source:'dsfrLoginCmp', event_site: basePathName, event_category:'standard_login',event_label:this.tag}}}));
+        
                 if (this.isDebug) console.log('handleLogin: END KO / login failed ', JSON.stringify(error));
                 this.message = {
                     type: "error",
@@ -179,20 +233,58 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
             return;
         }
 
+        if (this.isDebug) console.log('handleCaptcha: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_submit',params:{event_source:'dsfrLoginCmp', event_site: basePathName, event_category:'captcha_login',event_label:this.tag}}}));
+
         if (this.isDebug) console.log('handleCaptcha: validating captcha ',  JSON.stringify(event.detail));
         //validateCaptcha({ recaptchaResponse: event.detail.response})
         validateCaptcha(event.detail)
         .then(result => {
             if (this.isDebug) console.log('handleCaptcha: captcha validated');
 
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_success',params:{event_source:'dsfrLoginCmp', event_site: basePathName, event_category:'captcha_login',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleCaptcha: GA notified');
+
             loginViaIdentity({identity:this.tmpIdentity, password:this.tmpPassword, startUrl:this.loginTarget}).then(result => {
                 if (this.isDebug) console.log('handleCaptcha: login granted ', result);
+
+                // Fallback if GA event cannot be sent (no handler, add blocker...)
+                let timeoutID = setTimeout(() => { 
+                    this.toggleSpinner(false);
+                    if (this.isDebug) console.log('handleCaptcha: END / opening target (fallback timeout)');
+                    window.open(result,'_self');
+                },5000);
+                if (this.isDebug) console.log('handleCaptcha: notifying GA with timeout registered', timeoutID);
+
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+                    label:'dsfr_login_success',
+                    params:{
+                        event_source:'dsfrLoginCmp',
+                        event_site: basePathName,
+                        event_category:'captcha_login',
+                        event_label:this.tag,
+                        event_callback: () => { 
+                            this.toggleSpinner(false);
+                            if (this.isDebug) console.log('handleCaptcha: clearing timeout ',timeoutID);
+                            clearTimeout(timeoutID);
+                            if (this.isDebug) console.log('handleCaptcha: END for Login / opening target ',result);
+                            window.open(result,'_self');
+                        }
+                    }
+                }}));
+                if (this.isDebug) console.log('handleCaptcha: GA notified');
+
                 /*let pageRef = {type: 'standard__webPage', attributes: {url: result}};
                 if (this.isDebug) console.log('handleLogin: END / opening pageRef ', JSON.stringify(pageRef));
                 this[NavigationMixin.Navigate](pageRef, false);*/
-                if (this.isDebug) console.log('handleCaptcha: END for Login / opening target');
-                window.open(result,'_self');
+                /*setTimeout(() => { 
+                    if (this.isDebug) console.log('handleCaptcha: END for Login / opening target');
+                    window.open(result,'_self');
+                },1000);*/
             }).catch(error => {
+                if (this.isDebug) console.log('handleCaptcha: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_login_error',params:{event_source:'dsfrLoginCmp', event_site: basePathName, event_category:'captcha_login',event_label:this.tag}}}));
+            
                 console.warn('handleCaptcha: END KO for Login / login failed ', JSON.stringify(error));
                 this.toggleSpinner(false);
                 this.message = {
@@ -205,6 +297,9 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('handleCaptcha: registration requested');
         })
         .catch(error => {
+            if (this.isDebug) console.log('handleLogin: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_error',params:{event_source:'dsfrLoginCmp', event_site: basePathName, event_category:'captcha_login',event_label:this.tag}}}));
+            
             console.warn('handleCaptcha: END KO for Login / Captcha validation failed ', JSON.stringify(error));
             this.toggleSpinner(false);
             this.message = {

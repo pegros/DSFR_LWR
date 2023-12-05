@@ -19,7 +19,11 @@
                         label="Page de Recherche"
                         type="String"
                         description="Nom de la page de recherche (si différente de la page de recherche standard)" />
-
+            <property   name="searchTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors de l'execution d'une recherche à destination de Google Analytics" />
+            
             <property   name="inputPlaceholder"
                         label="Placeholder des mots clés"
                         type="String"

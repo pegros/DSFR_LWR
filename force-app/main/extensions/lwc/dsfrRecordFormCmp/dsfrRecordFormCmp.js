@@ -1,5 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import basePathName from '@salesforce/community/basePath';
+
 import CANCEL_LABEL from '@salesforce/label/c.dsfrRecordFormCancel';
 import SAVE_LABEL   from '@salesforce/label/c.dsfrRecordFormSave';
 import EDIT_LABEL   from '@salesforce/label/c.dsfrRecordFormEdit';
@@ -10,6 +12,8 @@ export default class DsfrRecordFormCmp extends LightningElement {
     // Configuration parameters
     //-----------------------------------------------------
     @api title;
+    @api tag;   // for GA4
+
     @api objectApiName;
     @api recordId;
 
@@ -177,6 +181,9 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('connected: requiredFields ', this.requiredFields);
         if (this.isDebug) console.log('connected: isEditModeString? ', this.isEditModeString);
 
+        this.tag = this.tag || this.title || 'Undefined';
+        if (this.isDebug) console.log('connected: tag evaluated ', this.tag);
+
         this.showModify = !(this.isReadOnly);
         if (this.isDebug) console.log('connected: showModify init ', this.showModify);
 
@@ -281,6 +288,10 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleSubmit: START for recordForm',event);
         this.message = null;
         this.toggleSpinner(true);
+
+        if (this.isDebug) console.log('handleSubmit: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_submit',params:{event_source:'dsfrRecordFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.tag}}}));
+        
         if (this.isDebug) console.log('handleSubmit: END for recordForm');
     }
 
@@ -288,6 +299,9 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleSuccess: START for recordForm',event);
         this.toggleSpinner(false);
 
+        if (this.isDebug) console.log('handleSuccess: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_success',params:{event_source:'dsfrRecordFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.tag}}}));
+        
         let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
         if (this.isDebug) console.log('handleSuccess: popupUtil fetched ', popupUtil);
         let alertConfig = {
@@ -309,6 +323,10 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleError: START for recordForm',event);
         if (this.isDebug) console.log('handleError: event detail received ',JSON.stringify(event.detail));
         this.toggleSpinner(false);
+
+        if (this.isDebug) console.log('handleSuccess: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_error',params:{event_source:'dsfrRecordFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.tag}}}));
+        
         let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
         console.warn('handleError: popupUtil fetched ', popupUtil);
         let alertConfig = {

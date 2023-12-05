@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi'; 
+import basePathName from '@salesforce/community/basePath';
 
 import ADD_LABEL from '@salesforce/label/c.dsfrCombinedPicklistAddLabel';
 import DELETE_TITLE from '@salesforce/label/c.dsfrCombinedPicklistDeleteTitle';
@@ -13,6 +14,7 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
     //-----------------------------------------------------
     @api title;
     @api message;
+    @api tag; // for GA4 tracking
     @api fieldLabels;
     @api fieldName;
     @api objectApiName;
@@ -184,6 +186,9 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
             return;
         }
 
+        this.tag = this.tag || this.title || 'Undefined';
+        if (this.isDebug) console.log('connected: tag evaluated ', this.tag);
+
         if (this.isDebug) console.log('connected: END for Combined Picklist');
     }
 
@@ -254,7 +259,7 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
         let addButton = this.template.querySelector('.addButton');
         addButton.disabled = true;
 
-        this.updateRecord();
+        this.updateRecord('add_value');
             
         if (this.isDebug) console.log('handleAdd: END for Combined Picklist');
     }
@@ -272,7 +277,7 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
             this.recordValues = this.recordValues.toSpliced(index, 1); 
             if (this.isDebug) console.log('handleRemove: record Values updated ', JSON.stringify(this.recordValues));
 
-            this.updateRecord();
+            this.updateRecord('remove_value');
         }
         else {
             console.warn('handleRemove: item not found');
@@ -348,8 +353,11 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
         if (this.isDebug) console.log('initLabels: END for Combined Picklist');
     }
 
-    updateRecord = () => {
-        if (this.isDebug) console.log('updateRecord: START for Combined Picklist');
+    updateRecord = (operation) => {
+        if (this.isDebug) console.log('updateRecord: START for Combined Picklist ',operation);
+
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrCombinedPicklistCmp',event_site: basePathName,event_category:operation,event_label:this.tag}}}));
+        if (this.isDebug) console.log('handleAdd: notifying GA');
 
         let valueList = [];
         this.recordValues.forEach(item => {
@@ -364,8 +372,12 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
         updateRecord(recordData)
         .then(() => {
+            if (this.isDebug) console.log('handleAdd: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrCombinedPicklistCmp',event_site: basePathName,event_category:operation,event_label:this.tag}}}));
             if (this.isDebug) console.log('updateRecord: END for Combined Picklist');
         }).catch((error) => {
+            if (this.isDebug) console.log('handleAdd: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrCombinedPicklistCmp',event_site: basePathName,event_category:operation,event_label:this.tag}}}));
             console.warn('updateRecord: END KO / for Combined Picklist ',JSON.stringify(error));
         });
         if (this.isDebug) console.log('updateRecord: update requested');

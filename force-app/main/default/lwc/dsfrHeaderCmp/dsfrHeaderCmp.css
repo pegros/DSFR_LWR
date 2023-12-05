@@ -69,3 +69,7 @@ input[type="search"] {
 .fr-header__tools {
     max-width: 66%;
 }
+a[disabled] {
+    pointer-events: none;
+    color: var(--text-disabled-grey) !important;
+}

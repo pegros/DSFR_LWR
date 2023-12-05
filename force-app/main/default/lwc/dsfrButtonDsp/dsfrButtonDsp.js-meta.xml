@@ -19,6 +19,10 @@
                         label="Titre"
                         type="String"
                         description="Titre du bouton" />
+            <property   name="buttonTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors d'un click à destination de Google Analytics" />
             <property   name="buttonSize"
                         label="Taille"
                         type="String"
@@ -74,6 +78,11 @@
                         type="String"
                         role="inputOnly"
                         description="Titre du bouton" />
+            <property   name="buttonTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        role="inputOnly"
+                        description="Label de l'évènement généré lors d'un click à destination de Google Analytics" />
             <property   name="buttonSize"
                         label="Taille"
                         type="String"

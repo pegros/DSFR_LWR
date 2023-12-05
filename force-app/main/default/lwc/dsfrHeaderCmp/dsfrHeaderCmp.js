@@ -23,6 +23,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     @api loginUrl; // Obsolete name, now corresponding to the main logo URL
     @api siteTitle = 'Titre du Site';
     @api siteTagline = 'Précisions sur l\'organisation';
+    @api tag = 'site_header'; // for GA4 tracking
 
     @api topMenu;
     @api mainMenu;
@@ -181,6 +182,20 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('connected: menuConfig init ', JSON.stringify(this.menuConfig));
         if (this.isDebug) console.log('connected: topMenuItems init ', this.topMenuItems);
         if (this.isDebug) console.log('connected: bottomMenuItems init ', this.bottomMenuItems);
+
+        if (this.isDebug) console.log('connected: GA tag ', this.tag);
+
+        if (this.isDebug) console.log('connected: notifying context to GA ',this.currentUserId);
+        let gaContext = { detail:{
+            user_id:this.currentUserId,
+            user_properties:{
+                user_type: (this.isGuestUser ? 'Anonyme' : 'Connecte'),
+                user_site: basePathName
+            }
+        }};
+        if (this.isDebug) console.log('connected: gaContext init ',JSON.stringify(gaContext));
+        document.dispatchEvent(new CustomEvent('gaConfig',gaContext));
+        if (this.isDebug) console.log('connected: context notified to GA');
 
         if (this.isDebug) console.log('connected: END for header');
     }
@@ -372,6 +387,17 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         };
         if (this.isDebug) console.log('handleLogoClick: newPageRef prepared ',JSON.stringify(newPageRef));
         
+        if (this.isDebug) console.log('handleLogoClick: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_link_click',
+            params:{
+                event_source:'dsfrHeaderCmp',
+                event_site: basePathName,
+                event_category:'header_logo',
+                event_label:this.tag
+            }
+        }}));
+
         this[NavigationMixin.Navigate](newPageRef);
         if (this.isDebug) console.log('handleLogoClick: END for Header');
     }
@@ -381,6 +407,18 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         event.stopPropagation();
         event.preventDefault();
         if (this.isDebug) console.log('handleTopClick: topMenuItems ',JSON.stringify(this.topMenuItems));
+
+        if (this.isDebug) console.log('handleTopClick: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_link_click',
+            params:{
+                event_source:'dsfrHeaderCmp',
+                event_site: basePathName,
+                event_category:'header_top_menu',
+                event_label:this.tag
+            }
+        }}));
+
         this.navigate(event,this.topMenuItems);
         if (this.isDebug) console.log('handleTopClick: END for Header top menu',this.topMenu);
     }
@@ -390,6 +428,18 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         event.stopPropagation();
         event.preventDefault();
         if (this.isDebug) console.log('handleMainClick: mainMenuItems ', JSON.stringify(this.mainMenuItems));
+
+        if (this.isDebug) console.log('handleMainClick: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_link_click',
+            params:{
+                event_source:'dsfrHeaderCmp',
+                event_site: basePathName,
+                event_category:'header_main_menu',
+                event_label:this.tag
+            }
+        }}));
+
         this.navigate(event,this.mainMenuItems);
         if (this.isDebug) console.log('handleMainClick: END for Header main menu',this.topMenu);
     }
@@ -402,6 +452,17 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
         this.collapseModals();
         if (this.isDebug) console.log('handleLogin: modal closed');
+
+        if (this.isDebug) console.log('handleLogin: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_link_click',
+            params:{
+                event_source:'dsfrHeaderCmp',
+                event_site: basePathName,
+                event_category:'header_login',
+                event_label:this.tag
+            }
+        }}));
 
         if (this.isDebug) console.log('handleLogin: current pageRef ',JSON.stringify(this.pageRef));
         this[NavigationMixin.GenerateUrl](this.pageRef)
@@ -438,6 +499,11 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         event.stopPropagation();
         event.preventDefault();
 
+        let logoutLinks = this.template.querySelectorAll('a.dsfrLogout');
+        if (this.isDebug) console.log('handleLogout: logout links found',logoutLinks);
+        logoutLinks.forEach(item => {item.disabled = true;});
+        if (this.isDebug) console.log('handleLogout: logout links disabled',logoutLinks);
+        
         if (this.isDebug) console.log('handleLogout: current pageRef ',JSON.stringify(this.pageRef));
 
         //if (this.isDebug) console.log('handleLogout: location fetched ', window?.location);
@@ -449,8 +515,6 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         const baseUrl = sitePrefix.slice(0,sitePrefix.indexOf('/',1));*/
         let logoutUrl = baseUrl + "/secur/logout.jsp";
 
-        //let baseUrl = basePathName.slice(0,basePathName.indexOf('/',1));
-        //if (this.isDebug) console.log('handleLogout: baseUrl extracted ', baseUrl);
         //let logoutUrl = baseUrl + 'vforcesite/secur/logout.jsp?retUrl=' + encodeURI(basePathName);
         if (this.isDebug) console.log('handleLogout: logoutUrl init ', logoutUrl);
         
@@ -465,8 +529,32 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         this.collapseModals();
         if (this.isDebug) console.log('handleLogout: modal closed');
 
-        window.open(logoutUrl, '_self');
-        if (this.isDebug) console.log('handleLogout: END for Header / navigation triggered');
+        
+
+        // Fallback if GA event cannot be sent (no handler, add blocker...)
+        let timeoutID = setTimeout(() => { 
+            if (this.isDebug) console.log('handleLogout: END / opening target (fallback timeout)');
+            window.open(logoutUrl,'_self');
+        },4000);
+        if (this.isDebug) console.log('handleLogout: notifying GA with timeout registered', timeoutID);
+
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_logout_click',
+            params:{
+                event_source:'dsfrHeaderCmp',
+                event_site: basePathName,
+                event_category:'header_logout',
+                event_label:this.tag,
+                event_callback: () => { 
+                    if (this.isDebug) console.log('handleLogout: clearing timeout ',timeoutID);
+                    clearTimeout(timeoutID);
+                    if (this.isDebug) console.log('handleLogout: END for Header / triggering navigation ', logoutUrl);
+                    window.open(logoutUrl,'_self');
+                }
+            }
+        }}));
+        /*window.open(logoutUrl, '_self');
+        if (this.isDebug) console.log('handleLogout: END for Header / navigation triggered');*/
     }
     handleUserOpen(event) {
         if (this.isDebug) console.log('handleUserOpen: START for Header user target ',this.userTarget);
@@ -475,6 +563,18 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
         try {
             let targetPage = JSON.parse(this.userTarget);
+
+            if (this.isDebug) console.log('handleLogin: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+                label:'dsfr_link_click',
+                params:{
+                    event_source:'dsfrHeaderCmp',
+                    event_site: basePathName,
+                    event_category:'header_user_page',
+                    event_label:this.tag
+                }
+            }}));
+
             if (this.isDebug) console.log('handleLogoClick: END OK / opening target page',targetPage);
             this[NavigationMixin.Navigate](targetPage);
         }
@@ -524,6 +624,18 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         searchPage.state = {"term": searchValue};
         //let searchPage = {type: 'comm__namedPage',attributes:{name: 'Search'},state: {term:"test"}}
         if (this.isDebug) console.log('handleSearch: searchPage init ', JSON.stringify(searchPage));
+
+        if (this.isDebug) console.log('handleSearch: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+            label:'dsfr_search',
+            params:{
+                event_source:'dsfrHeaderCmp',
+                event_site: basePathName,
+                event_category:(this.searchPage ? 'custom_search' : 'standard_search'),
+                event_label: this.tag,
+                search_term: searchValue
+            }
+        }}));
 
         this[NavigationMixin.Navigate](searchPage);
         if (this.isDebug) console.log('handleSearch: END for Header / navigation triggered');

@@ -18,7 +18,7 @@
                         label="Explication"
                         type="String"
                         description="Explication du composant de sélection de type." />
-
+            
             <property   name="fieldName"
                         label="Champ de meta"
                         type="String"
@@ -28,7 +28,7 @@
                         type="String"
                         description="Liste des libellés des optiosn possibles séparées par ;" />
             <property   name="optionValues"
-                        label="Values des options?"
+                        label="Valeurs des options"
                         type="String"
                         description="Liste des valeurs des optiosn possibles séparées par ;" />
             
@@ -46,6 +46,14 @@
                         label="Explication ajout"
                         type="String"
                         description="Explication du composant d'ajout" />
+            <property   name="uploadTag"
+                        label="Tag Google Analytics (ajout)"
+                        type="String"
+                        description="Label de l'évènement généré lors d'un ajout à destination de Google Analytics" />
+            <property   name="uploadAccept"
+                        label="Extensions acceptées à l'ajout"
+                        type="String"
+                        description="Liste des extensions de fichiers autorisées (surcharge de la valeur par défaut)." />
             <property   name="recordIds"
                         label="ID d'autres enregistrements liés"
                         type="String"
@@ -59,6 +67,10 @@
                         label="Explication sélection"
                         type="String"
                         description="Explication du composant de sélection de fichier." />
+            <property   name="selectTag"
+                        label="Tag Google Analytics (sélection)"
+                        type="String"
+                        description="Label de l'évènement généré lors d'une sélection à destination de Google Analytics" />
             <property   name="selectConfig"
                         label="Configuration de liste"
                         type="String"

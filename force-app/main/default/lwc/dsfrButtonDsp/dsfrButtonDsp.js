@@ -1,6 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-
+import basePathName from '@salesforce/community/basePath';
 export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
 
     //-----------------------------------------------------
@@ -10,6 +10,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     @api buttonIconPosition = 'left';
     @api buttonLabel;
     @api buttonTitle;
+    @api buttonTag; // for GA4 tracking
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonTarget;
@@ -46,6 +47,9 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
             console.log('connected: button inactive? ', this.buttonInactive);
         }
 
+        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
+        if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
+
         this.isInactive = (this.buttonInactive === 'true');
         if (this.isDebug) console.log('connected: isInactive evaluated ', this.isInactive);
 
@@ -61,7 +65,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
         if (this.buttonIcon) {
             buttonClass += ' fr-btn--icon-' + this.buttonIconPosition + ' fr-icon-' + this.buttonIcon;
         }
-        this.buttonClass = buttonClass;
+        this.buttonClass = buttonClass + (this.buttonLabel ? ' buttonIcon' : '');
         if (this.isDebug) console.log('connected: buttonClass set ', this.buttonClass);
 
         if (this.isDebug) console.log('connected: END button');
@@ -82,7 +86,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('openTarget: navigating to target ');
             if (this.isDebug) console.log('openTarget: buttonTarget type ',typeof this.buttonTarget);
 
-            let newPageRef = (typeof this.buttonTarget == 'string' ? JSON.parse(this.buttonTarget) : JSON.parse(JSON.stringify(this.buttonTarget)));
+            let newPageRef = (typeof this.buttonTarget == 'string' ? JSON.parse(this.buttonTarget) : JSON.parse(JSON.stringify(this.buttonTag)));
             if (this.isDebug) console.log('openTarget: newPageRef init ',newPageRef);
             if (this.isDebug) console.log('openTarget: newPageRef init ',JSON.stringify(newPageRef));
 
@@ -97,25 +101,36 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
                     if (this.isDebug) console.log('openTarget: opening downloadURL ', downloadURL);
                     window.open(downloadURL,'_blank');
 
+                    if (this.isDebug) console.log('openTarget: notifying GA');
+                    document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_button_click',params:{event_source:'dsfrButtonDsp',event_site: basePathName,event_category:'file_download',event_label:this.buttonTag}}}));
+
                     if (this.isDebug) console.log('openTarget: END downloading file');
                 }
                 else if (newPageRef.type == 'openTab') {
                     if (this.isDebug) console.log('openTarget: opening tab');
                     
                     let targetURL = newPageRef.attributes?.url;
-                    if (this.isDebug) console.log('openTarget: targetURL determined ', targetURL);
-
+                    if (this.isDebug) console.log('openTarget: opening targetURL ', targetURL);
                     window.open(targetURL,'_blank');
+
+                    if (this.isDebug) console.log('openTarget: notifying GA');
+                    document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_button_click',params:{event_source:'dsfrButtonDsp',event_site: basePathName,event_category:'open_tab',event_label:this.buttonTag}}}));
+
                     if (this.isDebug) console.log('openTarget: END opening tab');
                 }
                 else {
                     if (this.isDebug) console.log('openTarget: triggering standard navigation');
+
+                    if (this.isDebug) console.log('openTarget: notifying GA');
+                    document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_button_click',params:{event_source:'dsfrButtonDsp',event_site: basePathName,event_category:'open_page',event_label:this.buttonTag}}}));
 
                     this[NavigationMixin.Navigate](newPageRef);
                     if (this.isDebug) console.log('openTarget: END opening newPageRef');
                 }
             }
             catch(error) {
+                if (this.isDebug) console.log('openTarget: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_button_click',params:{event_source:'dsfrButtonDsp',event_site: basePathName,event_category:'open_error',event_label:this.buttonTag}}}));
                 if (this.isDebug) console.log('openTarget: END KO / opening newPageRef failed ', JSON.stringify(error));
             }
         }

@@ -64,11 +64,14 @@ export default class DsfrFileAttachCmp extends LightningElement {
     // File upload parameters
     @api uploadLabel;
     @api uploadComment;
+    @api uploadTag; // for GA4 tracking
+    @api uploadAccept;
     @api recordIds;
 
     // File selector parameters
     @api selectLabel;
     @api selectComment;
+    @api selectTag; // for GA4 tracking
     @api selectConfig;
 
     @api wrappingClass;

@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import basePathName from '@salesforce/community/basePath';
 
 import unlinkFile from '@salesforce/apex/dsfrFileUpload_CTL.unlinkFile';
 import sfpegJsonUtl from 'c/sfpegJsonUtl';
@@ -20,6 +21,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     // Configuration parameters
     //-----------------------------------------------------
     @api label;
+    @api tag;
     @api configName;
     @api accept;
     @api countDisplay = 'hide';
@@ -109,7 +111,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     //-----------------------------------------------------
     connectedCallback() {
         if (this.isDebug) {
-            console.log('connected: START for related files');
+            console.log('connected: START for related files', this.label);
             console.log('connected: configName ', this.configName);
             console.log('connected: listContext ', this.listContext);
             console.log('connected: objectApiName ', this.objectApiName);
@@ -117,9 +119,15 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
             console.log('connected: userId ', this.userId);
             console.log('connected: showUpload? ', this.showUpload);
             console.log('connected: showDelete? ', this.showDelete);
+        }
+
+        this.accept = this.accept || UPLOAD_TYPES;
+        this.tag = this.tag || this.label || 'Undefined';
+        if (this.isDebug) {
+            console.log('connected: tag evaluated ', this.tag);
+            console.log('connected: accept evaluated ', this.accept);
             console.log('connected: END for related files');
         }
-        this.accept = this.accept || UPLOAD_TYPES;
     }
 
     //-----------------------------------------------------
@@ -266,9 +274,11 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
 
     handleDownload(event){
         if (this.isDebug) console.log('handleDownload: START',event);
-
         event.preventDefault();
 
+        if (this.isDebug) console.log('handleDownload: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_button_click',params:{event_source:'dsfrRelatedFilesCmp', event_site: basePathName, event_category:'file_download',event_label:this.tag}}}));
+        
         let fileId = event.srcElement?.name;
         if (this.isDebug) console.log('handleDownload: fileId determined ', fileId);
 
@@ -291,9 +301,11 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
 
     handleUnlink(event){
         if (this.isDebug) console.log('handleUnlink: START',event);
-
         event.preventDefault();
 
+        if (this.isDebug) console.log('handleDownload: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrRelatedFilesCmp', event_site: basePathName, event_category:'unlink_file',event_label:this.tag}}}));
+        
         let spinner = this.template.querySelector('lightning-spinner');
         if (this.isDebug) console.log('handleUnlink: spinner found',spinner);
         if (spinner) {
@@ -308,6 +320,9 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
         .then(() => {
             if (this.isDebug) console.log('handleUnlink: file unlinked');
 
+            if (this.isDebug) console.log('handleDownload: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrRelatedFilesCmp', event_site: basePathName, event_category:'unlink_file',event_label:this.tag}}}));
+        
             let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
             if (this.isDebug) console.log('handleUnlink: listCmp fetched',listCmp);
             listCmp.doRefresh();
@@ -325,6 +340,9 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
             if (this.isDebug) console.log('handleUnlink: END');
         })
         .catch(error => {
+            if (this.isDebug) console.log('handleDownload: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrRelatedFilesCmp', event_site: basePathName, event_category:'unlink_file',event_label:this.tag}}}));
+        
             console.warn('handleUnlink: END KO / file unlink failed ', JSON.stringify(error));
             if (spinner) {
                 if (this.isDebug) console.log('handleUnlink: hiding spinner');
@@ -348,6 +366,9 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
         if (this.isDebug) console.log('triggerUpload: START from RelatedFiles',event);
         event.preventDefault();
 
+        if (this.isDebug) console.log('triggerUpload: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_button_click',params:{event_source:'dsfrRelatedFilesCmp', event_site: basePathName, event_category:'upload_version',event_label:this.tag}}}));
+        
         let linkId = event.srcElement?.name;
         if (this.isDebug) console.log('triggerUpload: linkId determined ', linkId);
 

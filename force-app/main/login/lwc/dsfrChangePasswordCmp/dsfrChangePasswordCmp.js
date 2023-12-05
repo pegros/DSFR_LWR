@@ -1,7 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import changePassword from '@salesforce/apex/dsfrSiteManagement_CTL.changePassword';
 import getPasswordPolicyStatement from '@salesforce/apex/dsfrSiteManagement_CTL.getPasswordPolicyStatement';
-import validateCaptcha from '@salesforce/apex/dsfrSiteManagement_CTL.validateCaptcha';
+import basePathName from '@salesforce/community/basePath';
 
 export default class DsfrChangePasswordCmp extends LightningElement {
     //-----------------------------------------------------
@@ -9,6 +9,7 @@ export default class DsfrChangePasswordCmp extends LightningElement {
     //-----------------------------------------------------
     @api mainTitle;
     @api formTitle;
+    @api tag; // for GA4 tracking
     @api formDescription;
     @api formHint = 'Sauf mention contraire, tous les champs sont obligatoires.';
     @api formButton = 'Modifier';
@@ -16,7 +17,6 @@ export default class DsfrChangePasswordCmp extends LightningElement {
 
     @api isDebug = false;
 
-    
     //-----------------------------------------------------
     // Technical parameters
     //-----------------------------------------------------
@@ -38,6 +38,23 @@ export default class DsfrChangePasswordCmp extends LightningElement {
             console.warn('wiredPolicy: END OK for Change Password / no data fetched');
         }
     };
+
+    //-----------------------------------------------------
+    // Initialisation
+    //-----------------------------------------------------
+    connectedCallback() {
+        if (this.isDebug) {
+            console.log('connected: START for change password ', this.mainTitle);
+            console.log('connected: formTitle ', this.formTitle);
+            console.log('connected: formDescription ', this.formDescription);
+        }
+
+        this.tag = this.tag || this.formTitle || this.mainTitle || 'Undefined';
+        if (this.isDebug) {
+            console.log('connected: tag evaluated ', this.tag);
+            console.log('connected: END for change password');
+        }
+    }
 
     //-----------------------------------------------------
     // Event Handlers
@@ -82,9 +99,16 @@ export default class DsfrChangePasswordCmp extends LightningElement {
             return;
         }
 
+        if (this.isDebug) console.log('handleChange: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_change_password_submit',params:{event_source:'dsfrChangePasswordCmp', event_site: basePathName, event_category:'change_password',event_label:this.tag}}}));
+        
         changePassword({newPassword:newPassword, verifyNewPassword:verifyNewPassword, oldPassword:oldPassword})
         .then(result => {
             if (this.isDebug) console.log('handleChange: password changed',result);
+
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_change_password_success',params:{event_source:'dsfrChangePasswordCmp', event_site: basePathName, event_category:'change_password',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleDownload: GA notified');
+        
             let passwordInputs = this.template.querySelectorAll('.fr-input[name="password"]');
             if (this.isDebug) console.log('handleChange: password inputs fetched ', passwordInputs);
             try {
@@ -104,6 +128,9 @@ export default class DsfrChangePasswordCmp extends LightningElement {
             this.toggleSpinner(false);
             if (this.isDebug) console.log('handleChange: END OK');
         }).catch(error => {
+            if (this.isDebug) console.log('handleDownload: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_change_password_error',params:{event_source:'dsfrChangePasswordCmp', event_site: basePathName, event_category:'change_password',event_label:this.tag}}}));
+        
             console.warn('handleChange: END KO / send failed ', JSON.stringify(error));
             this.message = {
                 type: "error",
@@ -163,40 +190,4 @@ export default class DsfrChangePasswordCmp extends LightningElement {
         
         if (this.isDebug) console.log('toggleSpinner: END');
     }
-
-    handleCaptcha = (event) => {
-        if (this.isDebug) console.log('handleCaptcha: START with ',JSON.stringify(event.detail));
-
-        if (event.detail.action !== 'register') {
-            if (this.isDebug) console.log('handleCaptcha: END / ignoring action');
-            return;
-        }
-
-        if (this.isDebug) console.log('handleCaptcha: validating captcha ',  event.detail.response);
-        validateCaptcha({ recaptchaResponse: event.detail.response})
-        .then(result => {
-            if (this.isDebug) console.log('handleCaptcha: captcha validated');
-
-            registerUser({ newAccount: this.tmpAccount, password: this.tmpPassword, startUrl: this.startUrl})
-            .then((result) => {
-                if (this.isDebug) console.log('handleCaptcha: registration success ',result);
-                this.toggleSpinner(false);
-                if (this.isDebug) console.log('handleCaptcha: END / opening target');
-                window.open(result,'_self');
-            }).catch((error) => {
-                console.warn('handleCaptcha: END KO / registration failed ',error);
-                this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
-                this.toggleSpinner(false);
-            });
-
-            if (this.isDebug) console.log('handleCaptcha: registration requested');
-        })
-        .catch(error => {
-            console.warn('handleCaptcha: END KO / Issue raised ',error);
-            this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
-            this.toggleSpinner(false);
-        });
-        if (this.isDebug) console.log('handleCaptcha: validation triggered');
-    }
-
 }

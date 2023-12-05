@@ -18,7 +18,11 @@
                         label="Description"
                         type="String"
                         description="Libellé de titre du formulaire" />
-
+            <property   name="formTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors de la soumission du formulaire à destination de Google Analytics" />
+            
             <property   name="formClass"
                         label="CSS du formulaire"
                         type="String"

@@ -34,7 +34,11 @@
                         label="URL après Login"
                         type="String"
                         description="Simple URL cible (typiquement {!Route.startURL})" />
-
+            <property   name="tag"
+                        label="Tag Google Analytics (Login)"
+                        type="String"
+                        description="Label de l'évènement généré lors d'un login à destination de Google Analytics" />
+            
             <property   name="registerHeader"
                         label="Section création de compte"
                         type="String"
@@ -49,6 +53,10 @@
                         label="Page Création de compte"
                         type="String"
                         description="Salesforce page reference (JSON) de la page dédiée" />
+            <property   name="registerTag"
+                        label="Tag Google Analytics (Création de compte)"
+                        type="String"
+                        description="Label de l'évènement généré lors d'une redirection à destination de Google Analytics" />
             
             <property   name="lostPwdLabel"
                         label="Lien mot de passe oublié"
@@ -59,7 +67,11 @@
                         label="Page Mot de passe oublié"
                         type="String"
                         description="Salesforce page reference (JSON) de la page dédiée" />
-
+            <property   name="lostPwdTag"
+                        label="Tag Google Analytics (MdP oublié)"
+                        type="String"
+                        description="Label de l'évènement généré lors d'une redirection à destination de Google Analytics" />
+            
             <property   name="useCaptcha"
                         label="Activer Captcha ?"
                         type="Boolean"

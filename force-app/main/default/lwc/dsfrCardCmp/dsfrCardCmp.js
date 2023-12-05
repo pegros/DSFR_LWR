@@ -1,6 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-
+import basePathName from '@salesforce/community/basePath';
 
 export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
 
@@ -11,6 +11,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api cardBadge;
     @api cardBadgeVariant;
     @api cardTitle;
+    @api cardTag; // for GA4 link tracking
     @api cardDescription;
     @api cardDescriptionFields;
     @api cardStartDetails;
@@ -172,6 +173,9 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('connected: vertical variant? ', this.isVertical);
         }
 
+        this.cardTag = this.cardTag || this.cardLabel || this.cardTitle || 'Undefined';
+        if (this.isDebug) console.log('connected: cardTag evaluated ', this.cardTag);
+
         // Handling strange LWR inputs for fields reset to empty (object value instead of null)
         this.resetInput();
         if (this.isDebug) console.log('connected: END card');
@@ -216,6 +220,9 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             const newPageRef = JSON.parse(this.cardTarget);
             if (this.isDebug) console.log('openTarget: newPageRef init ',newPageRef);
 
+            if (this.isDebug) console.log('openTarget: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_link_click',params:{event_source:'dsfrCardCmp',event_site: basePathName,event_category:'open_target',event_label:this.cardTag}}}));
+
             /*this[NavigationMixin.GenerateUrl](newPageRef)
             .then((url) => {
                 if (this.isDebug) console.log('openTarget: new url generated ',url);
@@ -225,6 +232,9 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             this[NavigationMixin.Navigate](newPageRef);
         }
         else {
+            if (this.isDebug) console.log('openTarget: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_link_click',params:{event_source:'dsfrCardCmp',event_site: basePathName,event_category:'config_error',event_label:this.cardTag}}}));
+
             if (this.isDebug) console.log('openTarget: END ignoring navigation');
         }
     }

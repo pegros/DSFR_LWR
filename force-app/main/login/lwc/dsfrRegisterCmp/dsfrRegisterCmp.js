@@ -5,6 +5,7 @@ import getPersonAccountRT from '@salesforce/apex/dsfrSiteManagement_CTL.getPerso
 import getPasswordPolicyStatement from '@salesforce/apex/dsfrSiteManagement_CTL.getPasswordPolicyStatement';
 import registerUser from '@salesforce/apex/dsfrSiteManagement_CTL.registerUser';
 import validateUser from '@salesforce/apex/dsfrSiteManagement_CTL.validateUser';
+import basePathName from '@salesforce/community/basePath';
 
 //import getCaptchaSiteKey from '@salesforce/apex/dsfrSiteManagement_CTL.getCaptchaSiteKey';
 import validateCaptcha from '@salesforce/apex/dsfrSiteManagement_CTL.validateCaptcha';
@@ -17,6 +18,7 @@ export default class DsfrRegisterCmp extends LightningElement {
     //-----------------------------------------------------
     @api mainTitle = "S'enregistrer";
     @api mainDescription;
+    @api tag; // for GA4 tracking
 
     @api formTitle = 'Se créer un compte en choisissant un identifiant';
     @api formDescription;
@@ -121,6 +123,9 @@ export default class DsfrRegisterCmp extends LightningElement {
             if (this.isDebug) console.log('connected: showCaptcha handler registered');
         }
 
+        this.tag = this.tag || this.formTitle || this.mainTitle || 'register';
+        if (this.isDebug) console.log('connected: tag evaluated ', this.tag);
+
         if (this.isDebug) console.log('connected: END for Register');
     }
 
@@ -215,16 +220,26 @@ export default class DsfrRegisterCmp extends LightningElement {
         this.tmpPassword = passwordInputs[0].value;
         if (this.showCaptcha) {
             if (this.isDebug) console.log('handleSubmit: challenging captcha');
+
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_register_submit',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'captcha_register',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleSubmit: GA notified');
+
             document.dispatchEvent(new CustomEvent("grecaptchaExecute", {"detail": {action: "register"}}));
             if (this.isDebug) console.log('handleSubmit: END / captcha challenge requested');
         }
         else {
             if (this.isDebug) console.log('handleSubmit: no captcha challenge required');
 
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_register_submit',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'standard_register',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleSubmit: GA notified');
+
             registerUser({ newAccount: newAccount, password: passwordInputs[0].value, startUrl: this.startUrl})
             .then((result) => {
                 if (this.isDebug) console.log('handleSubmit: registration success ',result);
                 this.toggleSpinner(false);
+
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_validate_init',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'standard_register',event_label:this.tag}}}));
+                if (this.isDebug) console.log('handleSubmit: GA notified');
 
                 this.tmpVerification = result;
                 this.currentStage = 'Validation';
@@ -236,6 +251,9 @@ export default class DsfrRegisterCmp extends LightningElement {
                 //if (this.isDebug) console.log('handleSubmit: END / opening target');
                 //window.open(result,'_self');
             }).catch((error) => {
+                if (this.isDebug) console.log('handleSubmit: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_register_error',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'standard_register',event_label:this.tag}}}));
+                
                 console.warn('handleSubmit: END KO / registration failed ',JSON.stringify(error));
                 this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
                 this.toggleSpinner(false);
@@ -266,6 +284,10 @@ export default class DsfrRegisterCmp extends LightningElement {
 
     handleBack(event){
         if (this.isDebug) console.log('handleBack: START for Register with currentStage ',this.currentStage);
+
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_validate_cancel',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:(this.showCaptcha ? 'captcha_register' : 'standard_register'),event_label:this.tag}}}));
+        if (this.isDebug) console.log('handleSubmit: GA notified');
+
         this.currentStage = 'Initialisation';
         if (this.isDebug) console.log('handleBack: currentStage updated ',this.currentStage);
         this.template.querySelector('.registrationForm').classList.remove('slds-hide');
@@ -282,6 +304,9 @@ export default class DsfrRegisterCmp extends LightningElement {
         this.toggleSpinner(true);
         this.validationMessage = null;
 
+        if (this.isDebug) console.log('handleValidate: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_validate_complete',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:(this.showCaptcha ? 'captcha_register' : 'standard_register'),event_label:this.tag}}}));
+        
         let validationCode = this.template.querySelector('.fr-input[name="validationCode"]').value;
         if (this.isDebug) console.log('handleValidate: validation code fetched ', validationCode);
 
@@ -298,9 +323,40 @@ export default class DsfrRegisterCmp extends LightningElement {
 
         validateUser({verificationId: this.tmpVerification, validationCode:validationCode, email: this.tmpAccount.PersonEmail, password: this.tmpPassword, startUrl:this.startUrl})
         .then(result => {
-            if (this.isDebug) console.log('handleValidate: END OK / user validated, opening target ', result);
-            window.open(result,'_self');
+            if (this.isDebug) console.log('handleValidate: validation granted ', result);
+
+            // Fallback if GA event cannot be sent (no handler, add blocker...)
+            let timeoutID = setTimeout(() => { 
+                this.toggleSpinner(false);
+                if (this.isDebug) console.log('handleValidate: END / opening target (fallback timeout)');
+                window.open(result,'_self');
+            },5000);
+            if (this.isDebug) console.log('handleValidate: notifying GA with timeout registered', timeoutID);
+
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
+                label:'dsfr_register_success',
+                params:{
+                    event_source:'dsfrRegisterCmp',
+                    event_site: basePathName,
+                    event_category:(this.showCaptcha ? 'captcha_register' : 'standard_register'),
+                    event_label:this.tag,
+                    event_callback: () => { 
+                        this.toggleSpinner(false);
+                        if (this.isDebug) console.log('handleValidate: clearing timeout ',timeoutID);
+                        clearTimeout(timeoutID);
+                        if (this.isDebug) console.log('handleValidate: END OK / user validated, opening target ', result);
+                        window.open(result,'_self');
+                    }
+                }
+            }}));
+            /*setTimeout(() => { 
+                if (this.isDebug) console.log('handleValidate: END OK / user validated, opening target ', result);
+                window.open(result,'_self');
+            },1000);*/
         }).catch(error => {
+            if (this.isDebug) console.log('handleValidate: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_register_error',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:(this.showCaptcha ? 'captcha_register' : 'standard_register'),event_label:this.tag}}}));
+            
             if (this.isDebug) console.log('handleValidate: validation error ', JSON.stringify(error));
             this.validationMessage = {
                 type: "error",
@@ -363,16 +419,25 @@ export default class DsfrRegisterCmp extends LightningElement {
             return;
         }
 
+        if (this.isDebug) console.log('handleCaptcha: notifying GA');
+        document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_submit',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'captcha_register',event_label:this.tag}}}));
+
         if (this.isDebug) console.log('handleCaptcha: validating captcha ',  JSON.stringify(event.detail));
         //validateCaptcha({ recaptchaResponse: event.detail.response})
         validateCaptcha(event.detail)
         .then(result => {
             if (this.isDebug) console.log('handleCaptcha: captcha validated');
 
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_success',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'captcha_register',event_label:this.tag}}}));
+            if (this.isDebug) console.log('handleCaptcha: GA notified');
+
             registerUser({ newAccount: this.tmpAccount, password: this.tmpPassword, startUrl: this.startUrl})
             .then((result) => {
                 if (this.isDebug) console.log('handleCaptcha: registration success ',result);
                 this.toggleSpinner(false);
+
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_validate_init',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'captcha_register',event_label:this.tag}}}));
+                if (this.isDebug) console.log('handleSubmit: GA notified');
 
                 this.tmpVerification = result;
                 this.currentStage = 'Validation';
@@ -382,6 +447,9 @@ export default class DsfrRegisterCmp extends LightningElement {
                 //if (this.isDebug) console.log('handleCaptcha: END for Register / opening target');
                 //window.open(result,'_self');
             }).catch((error) => {
+                if (this.isDebug) console.log('handleSubmit: notifying GA');
+                document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_register_error',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'captcha_register',event_label:this.tag}}}));
+                
                 console.warn('handleCaptcha: END KO for Register / registration failed ',JSON.stringify(error));
                 this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème technique');
                 this.toggleSpinner(false);
@@ -390,6 +458,9 @@ export default class DsfrRegisterCmp extends LightningElement {
             if (this.isDebug) console.log('handleCaptcha: registration requested');
         })
         .catch(error => {
+            if (this.isDebug) console.log('handleCaptcha: notifying GA');
+            document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_captcha_error',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:'captcha_register',event_label:this.tag}}}));
+            
             console.warn('handleCaptcha: END KO for Register / Captcha validation failed ',JSON.stringify(error));
             this.template.querySelector('lightning-messages').setError(error.body?.message || error.statusText || 'Problème de validation Captcha');
             this.toggleSpinner(false);

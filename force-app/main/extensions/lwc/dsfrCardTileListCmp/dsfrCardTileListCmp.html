@@ -32,6 +32,7 @@
                         <li key={iter.Id}  >
                             <c-dsfr-button-dsp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
                                                 button-label={iter.label}   button-title={iter.title}
+                                                button-tag={iter.tag}
                                                 button-size={iter.size}     button-variant={iter.variant}
                                                 button-target={iter.target} button-inactive={iter.inactive}
                                                 button-align="left"         is-debug={isDebug}>
@@ -110,8 +111,8 @@
                                                         card-size={item.size}                   is-vertical={item.isVertical}
                                                         card-css={elementCss}                   field-class={cardFieldClass}
                                                         icon-class={cardIconClass}              fit-image={fitImage}
-                                                        card-target={item.target}               card-buttons={item.buttons}
-                                                        is-debug={isDebug}>
+                                                        card-tag={item.tag}                     card-target={item.target}
+                                                        card-buttons={item.buttons}             is-debug={isDebug}>
                                     </c-dsfr-card-cmp>
                                 </div>
                             </template>
@@ -124,7 +125,7 @@
                                                         tile-description={item.description}
                                                         is-vertical={item.isVertical}   tile-css={elementCss}
                                                         fit-image={fitImage}
-                                                        tile-target={item.target}
+                                                        tile-tag={item.tag}              tile-target={item.target}
                                                         is-debug={isDebug} >
                                     </c-dsfr-tile-cmp>
                                 </div>
@@ -171,6 +172,9 @@
             <p class="fr-py-4v">
                 <span class="fr-badge fr-badge--warning  fr-mr-4v">
                     Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--new  fr-mr-4v">
+                    Config. {configName}
                 </span>
                 <span class="fr-badge fr-badge--info">
                     <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrCardTileListCmp.md" target="_blank">

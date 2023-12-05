@@ -99,6 +99,7 @@
                                 <li key={iter.label}  >
                                     <c-dsfr-button-dsp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
                                                         button-label={iter.label}   button-title={iter.title}
+                                                        button-tag={iter.tag}
                                                         button-size={iter.size}     button-variant={iter.variant}
                                                         button-target={iter.target} button-inactive={iter.inactive}
                                                         button-align="left"         is-debug={isDebug}>
@@ -109,6 +110,7 @@
                                 <li key={iter.label}  >
                                     <c-dsfr-flow-popup-cmp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
                                                             button-label={iter.label}   button-title={iter.title}
+                                                            button-tag={iter.tag}
                                                             button-size={iter.size}     button-variant={iter.variant}
                                                             button-inactive={iter.inactive}
                                                             flow-name={iter.flowName}   flow-parameters={iter.flowParameters}
@@ -121,6 +123,7 @@
                                 <li key={iter.label}  >
                                     <c-dsfr-action-button-cmp   button-icon={iter.icon}     button-icon-position={iter.iconPosition}
                                                                 button-label={iter.label}   button-title={iter.title}
+                                                                button-tag={iter.tag}
                                                                 button-size={iter.size}     button-variant={iter.variant}
                                                                 button-action={iter.action} button-inactive={iter.inactive}
                                                                 button-align="left"         is-debug={isDebug}>
@@ -131,11 +134,12 @@
                                 <li key={iter.label}  >
                                     <c-dsfr-form-button-cmp button-icon={iter.icon}     button-icon-position={iter.iconPosition}
                                                             button-label={iter.label}   button-title={iter.title}
+                                                            button-tag={iter.tag}
                                                             button-size={iter.size}     button-variant={iter.variant}
                                                             button-align="left"         button-inactive={iter.inactive}
                                                             form-title={iter.formTitle} form-message={iter.formMessage}
                                                             form-field-list={iter.formFields}
-                                                            record-id={iter.recordId} object-api-name={iter.objectApiName} 
+                                                            record-id={iter.recordId}   object-api-name={iter.objectApiName} 
                                                             do-refresh={iter.refresh}   is-debug={isDebug}>
                                     </c-dsfr-form-button-cmp>
                                 </li>
