@@ -36,7 +36,7 @@ public with sharing class dsfrSiteManagement_CTL {
     /***
     * @description  Captcha score theshold above which evaluations are validated
     ***/
-    private final static Decimal MIN_CAPTCHA_SCORE = .3;
+    private final static Decimal MIN_CAPTCHA_SCORE = (dsfrSiteManagement__c.getInstance().minRecapatchaScore__c == null ? .3 : dsfrSiteManagement__c.getInstance().minRecapatchaScore__c);
 
     /***
     * @description  Method to fetch the default Account RecordType ID for self-registration on the 
@@ -98,7 +98,8 @@ public with sharing class dsfrSiteManagement_CTL {
         System.debug('loginViaIdentity: networkInfos fetched ' + nwInfos);
 
         if (String.isEmpty(startUrl)) {
-            startUrl = '/'; //+ nwInfos.UrlPathPrefix;
+            //startUrl = '/';
+            startUrl = '/' + nwInfos.UrlPathPrefix;
             System.debug('loginViaIdentity: default startUrl set ' + startUrl);
         }
 
@@ -346,14 +347,14 @@ public with sharing class dsfrSiteManagement_CTL {
     }
 
     /***
-    * @description  Method to cfinalise the registration of a new Customer Community User.
+    * @description  Method to finalise the registration of a new Customer Community User.
     *               It assumes that a call to registerUser() has been done previously.
     *               Not only it validates the registration, therefore actually creating the User
     *               but it also initialises its password.
     * @param        verificationId  Registration verification ID returned by the call to registerUser()
     * @param        validationCode  Registration validation Code sent by email to the user.
     * @param        email           User Email to which the code has been sent
-    * @param        password        User password to set (assumaing it has been previously checked when calling registerUser())
+    * @param        password        User password to set (assuming it has been previously checked when calling registerUser())
     * @param        startUrl        URL to which the User should be redirected upon successful validation 
     * @return       String          starUrl with authentication embedded
     * @exception    Various exceptions in case of wrong input or execution failure.
@@ -538,15 +539,17 @@ public with sharing class dsfrSiteManagement_CTL {
     * @param        recaptchaResponse   value returned by the client side captcha challenge
     * @param        site                site key used for the client side captcha challenge
     * @param        actionName          action name used for the client side captcha challenge
-    * @param        isEnterprise        flage to use enterprise instead of developer recaptcha API
+    * @param        isEnterprise        flag to use enterprise instead of developer recaptcha API
+    * @param        isDebug             flag to display score in exception in case of failure
     * @exception    Various exceptions in case of wrong input or execution failure.
     ***/
     @AuraEnabled
-    public static String validateCaptcha(final String response,final String site, final String action, final Boolean isEnterprise) {
+    public static String validateCaptcha(final String response,final String site, final String action, final Boolean isEnterprise, final Boolean isDebug) {
         System.debug('validateCaptcha: START for response ' + response);
         System.debug('validateCaptcha: with site Key ' + site);
         System.debug('validateCaptcha: for action ' + action);
         System.debug('validateCaptcha: for Enterprise API ' + isEnterprise);
+        System.debug('validateCaptcha: debug? ' + isDebug);
 
         // Step #1 - Controls and Context fetch
         if ((String.isBlank(response)) || (String.isBlank(site)) || (String.isBlank(action))) {
@@ -592,6 +595,7 @@ public with sharing class dsfrSiteManagement_CTL {
             if (isEnterprise) {
                 System.debug('validateCaptcha: analysing Enterprise API result');
                 if (result.containsKey('riskAnalysis')) {
+                    System.debug(LoggingLevel.FINE,'validateCaptcha: min captcha score configured ' + MIN_CAPTCHA_SCORE);
                     Decimal score = (Decimal) ((Map<String, Object>)(result.get('riskAnalysis'))).get('score');
                     if (score > MIN_CAPTCHA_SCORE) {
                         System.debug('validateCaptcha: END OK / Google check score high enough ' + score);
@@ -600,7 +604,12 @@ public with sharing class dsfrSiteManagement_CTL {
                     else {
                         System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Google check score too low ' + score);
                         //throw new AuraHandledException('Captcha non suffisamment valide (enterprise)');
-                        throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError);
+                        if (isDebug) {
+                            throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError + ' [' + score + ']');
+                        }
+                        else {
+                            throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError);
+                        }
                     }
                 }
                 else {
@@ -625,7 +634,12 @@ public with sharing class dsfrSiteManagement_CTL {
                             else {
                                 System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Google check score too low ' + score);
                                 //throw new AuraHandledException('Captcha non suffisamment valide (v3) (developer)');
-                                throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError + ' (v3 - developer)');
+                                if (isDebug) {
+                                    throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError + ' (v3 - developer) [' + score + ']');
+                                }
+                                else {
+                                    throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError + ' (v3 - developer)');
+                                }
                             }
                         }
                         else {
