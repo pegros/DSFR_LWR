@@ -68,3 +68,44 @@ style standard Salesforce components (if used).
 
 </style>
 ```
+
+
+### Google Analytics Integration
+
+
+```
+<!-- GA Notifs -->
+<script>
+	console.log('gaHandler: START / Registering handlers');
+    document.addEventListener('gaEvent', function(e) {
+        console.log('gaEventHandler: START with ', e.detail?.label );
+		//console.log('gaEventHandler: and params ', JSON.stringify(e.detail?.params));
+		//console.log('gaEventHandler: current dataLayer ',JSON.stringify(window.dataLayer));
+        gtag('event', e.detail.label, e.detail.params);
+		//console.log('gaEventHandler: dataLayer updated ',JSON.stringify(window.dataLayer));
+        console.log('gaEventHandler: END / GA4 event registered');
+    });
+	console.log('gaHandler: Event handler registered');
+    document.addEventListener('gaConfig', function(e) {
+        console.log('gaConfigHandler: START with ', JSON.stringify(e.detail));
+		//console.log('gaConfigHandler: window data layer ',JSON.stringify(window.dataLayer));
+        if (window.dataLayer) {
+            let tagConfig = window.dataLayer.find(item => item[0] === 'config');
+        	//console.log('gaConfigHandler: tagConfig fetched ',JSON.stringify(tagConfig));
+			let token = tagConfig[1];
+        	console.log('gaConfigHandler: token fetched ',token);
+            //const tagIndex = window.dataLayer.findIndex(item => item[0] === 'config');
+        	//console.log('gaConfigHandler: tagIndex fetched ',tagIndex);
+            //window.dataLayer.splice(tagIndex,1);
+        	//console.log('gaConfigHandler: existing config removed ',JSON.stringify(tagConfig));
+            gtag('config', token, e.detail);
+			//console.log('gaConfigHandler: new config added ',JSON.stringify(window.dataLayer));
+			console.log('gaConfigHandler: END / GA4 config registered');
+        }
+        else {
+			console.warn('gaConfigHandler: END KO / no window data layer to update GA context');            
+        }
+    });
+	console.log('gaHandler: END / Config handler registered');
+</script>
+```
