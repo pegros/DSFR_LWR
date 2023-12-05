@@ -1,16 +1,34 @@
 <template>
-    <div class={wrappingClass}>
-        <template lwc:if={title}>
-            <h2 class={titleClass}>
-                <lightning-formatted-text class={titleClass} value={title} linkify>
-                </lightning-formatted-text>
-            </h2>
-        </template>
-        <template lwc:if={message}>
-            <p class={messageClass}>
-                <lightning-formatted-rich-text class={messageClass} value={message}>
-                </lightning-formatted-rich-text>
-            </p>
-        </template>
-    </div>
+    <template lwc:if={isCollapsible}>
+        <section class="fr-accordion">
+            <h3 class="fr-accordion__title">
+                <button class="fr-accordion__btn"   aria-expanded={ariaExpanded}
+                        aria-controls="accordion"   onclick={expandCollapse}>
+                        {title}
+                </button>
+            </h3>
+            <div class={sectionClass} id="accordion">
+                <p class={messageClass}>
+                    <lightning-formatted-rich-text class={messageClass} value={message}>
+                    </lightning-formatted-rich-text>
+                </p>
+            </div>
+        </section>
+    </template>
+    <template lwc:else>
+        <div class={wrappingClass}>
+            <template lwc:if={title}>
+                <h2 class={titleClass}>
+                    <lightning-formatted-text class={titleClass} value={title} linkify>
+                    </lightning-formatted-text>
+                </h2>
+            </template>
+            <template lwc:if={message}>
+                <p class={messageClass}>
+                    <lightning-formatted-rich-text class={messageClass} value={message}>
+                    </lightning-formatted-rich-text>
+                </p>
+            </template>
+        </div>
+    </template>
 </template>

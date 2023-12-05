@@ -11,7 +11,21 @@ export default class DsfrContainerDsp extends LightningElement {
     @api messageClass;
     @api wrappingClass;
 
+    @api isCollapsible;
+    @api isCollapsed;
+
     @api isDebug = false;
+
+    //-----------------------------------------------------
+    // Initialisation
+    //-----------------------------------------------------
+    get sectionClass() {
+        return (this.isCollapsed ? 'fr-collapse' : 'fr-collapse fr-collapse--expanded');
+    }
+    get ariaExpanded() {
+        return '' + !this.isCollapsed;
+    }
+    
 
     //-----------------------------------------------------
     // Initialisation
@@ -39,6 +53,15 @@ export default class DsfrContainerDsp extends LightningElement {
         //Handling strange LWR inputs for fields reset to empty (object value instead of null)
         this.resetInput();
         if (this.isDebug) console.log('rendered: END for container');
+    }
+
+    //-----------------------------------------------------
+    // Event Handlers
+    //-----------------------------------------------------
+    expandCollapse(event) {
+        if (this.isDebug) console.log('expandCollapse: START with ',this.isCollapsed);
+        this.isCollapsed = !this.isCollapsed;
+        if (this.isDebug) console.log('expandCollapse: END with ',this.isCollapsed);
     }
 
     //-----------------------------------------------------

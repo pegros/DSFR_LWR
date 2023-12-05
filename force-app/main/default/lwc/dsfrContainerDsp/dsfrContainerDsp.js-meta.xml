@@ -34,6 +34,17 @@
                         default="fr-text"
                         description="Style d'affichage du message" />
 
+            <property   name="isCollapsible"
+                        label="Accordéon ?"
+                        type="Boolean"
+                        default="false"
+                        description="Affichage en mode section d'accordéon" />
+            <property   name="isCollapsed"
+                        label="Fermé par défaut ?"
+                        type="Boolean"
+                        default="true"
+                        description="Fermeture par défaut du message en mode section d'accordéon" />
+
             <property   name="wrappingClass"
                         label="Style du Conteneur"
                         type="String"
@@ -70,6 +81,19 @@
                         role="inputOnly"
                         default="fr-text"
                         description="Style d'affichage du message (fr-text--lead,fr-text--lg,fr-text,fr-text--sm,fr-text--xs)" />
+
+            <property   name="isCollapsible"
+                        label="Accordéon ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="false"
+                        description="Affichage en mode section d'accordéon" />
+            <property   name="isCollapsed"
+                        label="Fermé par défaut ?"
+                        type="Boolean"
+                        role="inputOnly"
+                        default="true"
+                        description="Fermeture par défaut du message en mode section d'accordéon" />
 
             <property   name="wrappingClass"
                         label="Style du Conteneur"
