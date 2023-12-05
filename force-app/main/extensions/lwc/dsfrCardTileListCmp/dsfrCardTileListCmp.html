@@ -95,8 +95,9 @@
             <template lwc:if={hasResults}>
                 <!-- fr-container__fluid -->
                 <div class="fr-container__fluid">
-                <!-- fr-grid-row fr-grid-row--gutters fr-grid-row-top -->
-                <div class="fr-grid-row fr-grid-row--gutters fr-grid-row-top">
+                    <!-- fr-grid-row fr-grid-row--gutters fr-grid-row-top -->
+                    <div    class="fr-grid-row fr-grid-row--gutters fr-grid-row-top slds-scrollable_y"
+                            style={resultListStyle} >
                         <!-- Card List Display -->
                         <template lwc:if={isCard}>
                             <template for:each={recordList} for:item="item">

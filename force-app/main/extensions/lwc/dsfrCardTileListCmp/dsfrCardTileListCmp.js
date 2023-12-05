@@ -74,6 +74,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
     @api countDisplay = 'left';
     @api wrappingCss;
     @api headerCss;         // Classes pour modifier le style du titre du composant.
+    @api displayHeight ; // = '50vh'
 
     @api hasEmptySection;
     @api forceDisplay;
@@ -176,6 +177,15 @@ export default class DsfrCardTileListCmp extends LightningElement {
     }
     get hasResults() {
         return (this.recordList?.length > 0);
+    }
+    get resultListStyle() {
+        if ((this.isCollapsible) && (this.isCollapsed)) {
+            return ' ';
+        }
+        else if ((this.recordList || []).length == 0) {
+            return ' ';
+        }
+        return (((this.displayHeight) &&  (this.displayHeight !== '0')) ? 'height: ' + this.displayHeight + ';' : ' ');        
     }
     get iconFieldWrappingClass() {
         return 'fr-col-12 ' + (this.configDetails?.display.wrappingClass || 'horizontalUL'); 

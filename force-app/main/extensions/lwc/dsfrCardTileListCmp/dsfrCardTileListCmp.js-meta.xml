@@ -43,6 +43,10 @@
                         type="String"
                         default="fr-h2"
                         description="Classes pour modifier le style du titre du composant." />
+            <property   name="displayHeight"
+                        label="Hauteur max."
+                        type="String"
+                        description="Hauteur max d'affichage de la liste (en px, em, vh) optionnelle." />
 
             <property   name="showRefresh"
                         label="Refresh ?"
