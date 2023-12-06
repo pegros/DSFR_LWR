@@ -31,4 +31,19 @@
             </template>
         </div>
     </template>
+
+    <template lwc:if={isDebug}>
+        <div class={wrappingCss}>
+            <p class="fr-py-4v">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrContainerDsp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </div>
+    </template>
+
 </template>

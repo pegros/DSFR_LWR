@@ -1,4 +1,4 @@
-# Composant DSFR Picklists Combinées **DSFR**
+# Composant Picklists Combinées **DSFR**
 
 ## Introduction
 
