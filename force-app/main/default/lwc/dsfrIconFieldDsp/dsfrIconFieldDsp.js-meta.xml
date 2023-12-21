@@ -28,6 +28,11 @@
                         type="String"
                         default="time-line"
                         description="Nom de l'icône DSFR à afficher" />
+            <property   name="showEmpty"
+                        label="Toujours afficher ?"
+                        type="Boolean"
+                        default="false"
+                        description="Pour forcer l'affichage du contenu même si la valeur est vide" />
             
             <property   name="wrappingClass"
                         label="CSS additionnelle"
@@ -66,6 +71,12 @@
                         default="time-line"
                         role="inputOnly"
                         description="Nom de l'icône DSFR à afficher" />
+            <property   name="showEmpty"
+                        label="Toujours afficher ?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
+                        description="Pour forcer l'affichage du contenu même si la valeur est vide" />
             
             <property   name="wrappingClass"
                         label="CSS additionnelle"

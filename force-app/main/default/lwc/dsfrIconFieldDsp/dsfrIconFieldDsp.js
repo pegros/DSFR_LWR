@@ -5,7 +5,7 @@ export default class DsfrIconFieldDsp extends LightningElement {
     //-----------------------------------------------------
     // Configuration parameters
     //-----------------------------------------------------
-    _value;
+    _value = null;
     @api 
     get value() {
         return this._value;
@@ -34,10 +34,18 @@ export default class DsfrIconFieldDsp extends LightningElement {
     @api iconName;
     @api valuePrefix;
     @api valueSuffix;
+    @api showEmpty;
     @api iconClass;
     @api wrappingClass;
 
     @api isDebug = false;
+
+    //-----------------------------------------------------
+    // Custom getters
+    //-----------------------------------------------------
+    get doShowValue() {
+        return (this.showEmpty || this._value);
+    }
 
     //-----------------------------------------------------
     // Component Initialisation
@@ -47,6 +55,7 @@ export default class DsfrIconFieldDsp extends LightningElement {
             console.log('connected: START for icon field');
             console.log('connected: icon name ', this.iconName);
             console.log('connected: value ', this.value);
+            console.log('connected: showEmpty ', this.showEmpty);
             console.log('connected: prefix ', this.valuePrefix);
             console.log('connected: suffix ', this.valueSuffix);
         }
@@ -62,6 +71,7 @@ export default class DsfrIconFieldDsp extends LightningElement {
             console.log('rendered: START for icon field');
             console.log('rendered: icon name ', this.iconName);
             console.log('rendered: value ', this.value);
+            console.log('rendered: showEmpty ', this.showEmpty);
             console.log('rendered: prefix ', this.valuePrefix);
             console.log('rendered: suffix ', this.valueSuffix);
             console.log('rendered: END for icon field');

@@ -20,26 +20,26 @@ export default class DsfrIconFieldListDsp extends LightningElement {
             let values;
             if (Array.isArray(data)) {
                 values = data;
-                if (this.isDebug) console.log('set values: data array used ',values);
+                if (this.isDebug) console.log('set values: data array used ',JSON.stringify(values));
             }
             else {
                 values = JSON.parse(data);
-                if (this.isDebug) console.log('set values: data string parsed ',values);
+                if (this.isDebug) console.log('set values: data string parsed ',JSON.stringify(values));
             }
 
             let valueList = [];
             values.forEach(item => {
-                if (item.value) {
+                if (item.showEmpty || item.value) {
                     if (item.value !== '[object Object]') {
-                        if (this.isDebug) console.log('set values: item registered ',item);
+                        if (this.isDebug) console.log('set values: item registered ',JSON.stringify(item));
                         valueList.push(item);
                     }
                     else {
-                        if (this.isDebug) console.log('set values: bad value item ignored ',item);
+                        if (this.isDebug) console.log('set values: bad value item ignored ',JSON.stringify(item));
                     }
                 }
                 else {
-                    if (this.isDebug) console.log('set values: null value item ignored ',item);
+                    if (this.isDebug) console.log('set values: null value item ignored ',JSON.stringify(item));
                 }
             });
             if (this.isDebug) console.log('set values: valueList init ', JSON.stringify(valueList));
