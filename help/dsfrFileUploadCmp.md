@@ -9,9 +9,6 @@ il doit être associé.
 Il permet également de simplement charger une nouvelle version d'un document existant (auquel cas les 
 métadonnées et enregistrements liés ne sont pas modifiés).
 
-Il reprend la structure de la [barre de recherche](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/barre-de-recherche) officielle du **DSFR** mais l'adapte légèrement pour y intégrer deux séries de critères
-de filtre.
-
 Ce composant reprend l'affichage standard du DSFR (cf. [documentation](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/ajout-de-fichier)).
  
 
