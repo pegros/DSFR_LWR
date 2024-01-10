@@ -38,6 +38,28 @@ public with sharing class dsfrFileUpload_CTL {
     //#######################################################
 
     /***
+    * @description  Method to fetch some File related properties of the current Network
+    *               (AllowedExtensions, MaxFileSizeKb)
+    * @return       Network  Current Network infos
+    ***/
+    @AuraEnabled(cacheable=true)
+    public static Network getNetworkInfos() {
+        System.debug('getNetworkInfos: START');
+
+        String networkId = Network.getNetworkId();
+        System.debug('getNetworkInfos: networkId fetched ' + networkId);
+
+        Network result = [SELECT AllowedExtensions, MaxFileSizeKb FROM Network WHERE Id = :networkId LIMIT 1];
+
+        if (String.isNotBlank(result.AllowedExtensions)) {
+            System.debug('getNetworkInfos: adding . to extensions');
+            result.AllowedExtensions = '.' + result.AllowedExtensions.replaceAll(',',',.');
+        }
+        System.debug('getNetworkInfos: END with ' + result);
+        return result;
+    }
+
+    /***
     * @description  Method to upload base64 content as a new ContentDocument and 
     *               automatically link it to a record (as new ContentDocumentLink).
     * @param        content     File content encoded in Base64
@@ -269,4 +291,5 @@ public with sharing class dsfrFileUpload_CTL {
         System.debug('registerLinks: END with ' + newLinks);
         return newLinks;
     }
+    
 }

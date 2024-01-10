@@ -27,6 +27,10 @@
                         label="Extensions"
                         type="String"
                         description="Liste des extensions de fichiers autorisées (surcharge de la valeur par défaut)." />
+            <property   name="maxSize"
+                        label="Taille max."
+                        type="Integer"
+                        description="Taille max. de fichiers autorisée (surcharge de la valeur par défaut)." />
             <property   name="contentMeta"
                         label="Metadonnées"
                         type="String"
@@ -80,7 +84,13 @@
             <property   name="accept"
                         label="Extensions"
                         type="String"
-                        description="Liste des extensions de fichiers autorisées" />
+                        role="inputOnly"
+                        description="Liste des extensions de fichiers autorisées (surcharge de la valeur par défaut)." />
+            <property   name="maxSize"
+                        label="Taille max."
+                        type="Integer"
+                        role="inputOnly"
+                        description="Taille max. de fichiers autorisée (surcharge de la valeur par défaut)." />
             <property   name="contentMeta"
                         label="Metadonnées"
                         type="String"

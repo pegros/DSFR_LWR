@@ -129,16 +129,32 @@
         <categories>DSFR Component LWC Default Configuration</categories>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Commenaire par défaut du composant précisant les fichiers acceptés.</shortDescription>
-        <value>Taille maximale : 10Mo. Formats supportés : .pdf,.jpg,.png,.doc,.docx.</value>
+        <shortDescription>Commentaire par défaut du composant précisant les fichiers acceptés.</shortDescription>
+        <value>Taille maximale : 2Mo. Formats supportés : .pdf,.jpg,.png,.doc,.docx.</value>
     </labels>
     <labels>
         <fullName>dsfrFileUploadTypes</fullName>
         <categories>DSFR Component LWC Default Configuration</categories>
         <language>en_US</language>
         <protected>false</protected>
-        <shortDescription>Liste par défaut des types de fichiers acceptés.</shortDescription>
+        <shortDescription>Types de fichiers acceptés (si vide pour la communauté).</shortDescription>
         <value>.pdf,.jpg,.png,.doc,.docx</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileUploadSize</fullName>
+        <categories>DSFR Component LWC Default Configuration</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Taille max. (en MB) de fichiers acceptée (si vide pour la communauté).</shortDescription>
+        <value>2</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileUploadSizeError</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur à l'import de fichier (taille trop grande).</shortDescription>
+        <value>Le fichier sélectionné a une taille trop importante.</value>
     </labels>
     
     <labels>

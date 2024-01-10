@@ -3,11 +3,14 @@ import uploadFile       from '@salesforce/apex/dsfrFileUpload_CTL.uploadFile';
 import uploadVersion    from '@salesforce/apex/dsfrFileUpload_CTL.uploadVersion';
 import userId           from '@salesforce/user/Id';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
-import basePathName from '@salesforce/community/basePath';
+import basePathName     from '@salesforce/community/basePath';
+import getNetworkInfos  from '@salesforce/apex/dsfrFileUpload_CTL.getNetworkInfos';
 
-import UPLOAD_SUCCESS from '@salesforce/label/c.dsfrFileUploadSuccess';
-import UPLOAD_COMMENT from '@salesforce/label/c.dsfrFileUploadComment';
-import UPLOAD_TYPES from '@salesforce/label/c.dsfrFileUploadTypes';
+import UPLOAD_SUCCESS   from '@salesforce/label/c.dsfrFileUploadSuccess';
+import UPLOAD_COMMENT   from '@salesforce/label/c.dsfrFileUploadComment';
+import UPLOAD_TYPES     from '@salesforce/label/c.dsfrFileUploadTypes';
+import UPLOAD_SIZE      from '@salesforce/label/c.dsfrFileUploadSize';
+import UPLOAD_SIZE_ERROR from '@salesforce/label/c.dsfrFileUploadSizeError';
 
 import { publish, MessageContext } from 'lightning/messageService';
 import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
@@ -20,6 +23,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
     @api comment;
     @api tag; // for GA4 tracking
     @api accept;
+    @api maxSize;
     @api contentMeta;
     @api shareMode = 'I';
     @api disabled = false;
@@ -52,6 +56,36 @@ export default class DsfrFileUploadCmp extends LightningElement {
     @wire(MessageContext)
     messageContext;
 
+    networkData;
+    @wire(getNetworkInfos,{})
+    wiredNetworkData({data,error}) {
+        if (this.isDebug) console.log('wiredNetworkData: START for File Upload');
+        if (data) {
+            if (this.isDebug) console.log('wiredNetworkData: data received ', JSON.stringify(data));
+            this.networkData = data;
+
+            this.accept = this.accept || this.networkData.AllowedExtensions || UPLOAD_TYPES;
+            if (this.isDebug) console.log('wiredNetworkData: accept reworked ',this.accept);
+
+            this.maxSize = (this.maxSize * 1024 || this.networkData.MaxFileSizeKb || parseInt(UPLOAD_SIZE) * 1024) * 1024;
+            if (this.isDebug) console.log('wiredNetworkData: maxSize reworked ',this.maxSize);
+
+            if (this.isDebug) console.log('wiredNetworkData: END for File Upload');
+        }
+        else if (error) {
+            this.accept = this.accept || UPLOAD_TYPES;
+            if (this.isDebug) console.log('wiredNetworkData: accept reworked ',this.accept);
+
+            this.maxSize = (this.maxSize * 1024 || parseInt(UPLOAD_TYPES) * 1024) * 1024;
+            if (this.isDebug) console.log('wiredNetworkData: maxSize reworked ',this.maxSize);
+
+            console.error('wiredNetworkData: END KO for File Upload / error raised ', error);
+        }
+        else {
+            console.warn('wiredNetworkData: END OK for File Upload / no data fetched');
+        }
+    };
+
     //-----------------------------------------------------
     // Custom Labels
     //-----------------------------------------------------
@@ -82,12 +116,10 @@ export default class DsfrFileUploadCmp extends LightningElement {
             console.log('connected: doNotify ', this.doNotify);
         }
         this.comment = this.comment || UPLOAD_COMMENT;
-        this.accept = this.accept || UPLOAD_TYPES;
         this.tag = this.tag || this.label || 'Undefined';
         if (this.isDebug) {
             console.log('connected: tag evaluated ', this.tag);
             console.log('connected: comment reworked ',this.comment);
-            console.log('connected: accept reworked ',this.accept);
             console.log('connected: END file upload');
         }
     }
@@ -139,6 +171,14 @@ export default class DsfrFileUploadCmp extends LightningElement {
 
         if (!selectedFile) {
             if (this.isDebug) console.log('handleUpload: END / no file selected');
+            fileInput.disabled = false;
+            return;
+        }
+        else if (selectedFile.size > this.maxSize) {
+            if (this.isDebug) console.log('handleUpload: max size is ', this.maxSize);
+            console.warn('handleUpload: END / file selected too large ',selectedFile.size);
+            this.message = UPLOAD_SIZE_ERROR;
+            this.isError = true;
             fileInput.disabled = false;
             return;
         }
