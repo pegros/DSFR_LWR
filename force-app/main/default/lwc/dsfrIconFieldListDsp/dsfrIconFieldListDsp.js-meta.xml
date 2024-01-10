@@ -3,7 +3,7 @@
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>DSFR Liste d'Icônes et Textes</masterLabel>
-    <description>Affichage d'une liste de champs textuels avec ioône devant</description>
+    <description>Affichage d'une liste de champs textuels précédés d'une icône</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>  
