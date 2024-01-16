@@ -45,6 +45,7 @@
                 <div lwc:if={hasStart} class="fr-card__start">
                     <template lwc:if={hasBadgeList}>
                         <ul class="fr-badges-group">
+                            <template lwc:if={badgeList}>
                             <template for:each={badgeList} for:item="item">
                                 <template lwc:if={item.value}>
                                     <li key={item.value}>
@@ -54,6 +55,7 @@
                                         </c-dsfr-badge-dsp>
                                     </li>
                                 </template>
+                            </template>
                             </template>
                             <template lwc:if={isDebug}>
                                 <li>
@@ -66,10 +68,12 @@
                     </template>
                     <template lwc:if={cardTags}>
                         <ul class="fr-tags-group">
+                            <template lwc:if={tagList}>
                             <template for:each={tagList} for:item="item">
                                 <li key={item}>
                                     <c-dsfr-tag-dsp tag-label={item}></c-dsfr-tag-dsp>
                                 </li>
+                            </template>
                             </template>
                         </ul>
                     </template>
