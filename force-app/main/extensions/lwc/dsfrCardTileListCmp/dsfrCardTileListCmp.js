@@ -457,7 +457,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
 
         let selectedSort;
         this.configDetails.display.sort.forEach(item => {
-            if (this.isDebug) console.log('selectSort: processing sort option ',item);
+            if (this.isDebug) console.log('selectSort: processing sort option ',JSON.stringify(item));
             if (item.field != selectedLink) {
                 item.selected = false;
                 item.up = true;
@@ -493,12 +493,13 @@ export default class DsfrCardTileListCmp extends LightningElement {
             let results2sort = [...this.recordList];
             if (this.isDebug) console.log('selectSort: results2sort init ', JSON.stringify(results2sort));
             if (this.isDebug) console.log('selectSort: sort by field ', ('_' + selectedSort.field));
-            if (this.isDebug) console.log('selectSort: revers sorting? ', !selectedSort.up);
+            if (this.isDebug) console.log('selectSort: reverse sorting? ', !selectedSort.up);
             sfpegJsonUtl.sfpegJsonUtl.isDebug = this.isDebug;
             results2sort.sort(sfpegJsonUtl.sfpegJsonUtl.sortBy(('_' + selectedSort.field), !selectedSort.up));
-            if (this.isDebug) console.log('handleSort: results2sort sorted ',results2sort);
+            if (this.isDebug) console.log('handleSort: results2sort sorted ',JSON.stringify(results2sort));
             this.recordList = results2sort;
-            if (this.isDebug) console.log('selectSort: recordList sorted ',JSON.stringify(this.recordList));
+            //this.recordList = JSON.parse(JSON.stringify(results2sort));
+            if (this.isDebug) console.log('selectSort: recordList updated ');
         }
         else {
             console.warn('selectSort: no selected sorting field');
