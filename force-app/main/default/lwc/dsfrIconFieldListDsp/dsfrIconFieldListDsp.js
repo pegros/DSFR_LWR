@@ -11,7 +11,7 @@ export default class DsfrIconFieldListDsp extends LightningElement {
     }
     set values(data) {
         if (!data) {
-            console.warn('set values: no data provided for IconFieldList ');
+            console.warn('set iconFieldList values: no data provided for IconFieldList ');
             this._values = null;
             return;
         }
@@ -20,33 +20,33 @@ export default class DsfrIconFieldListDsp extends LightningElement {
             let values;
             if (Array.isArray(data)) {
                 values = data;
-                if (this.isDebug) console.log('set values: data array used ',JSON.stringify(values));
+                if (this.isDebug) console.log('set iconFieldList values: data array used ',JSON.stringify(values));
             }
             else {
                 values = JSON.parse(data);
-                if (this.isDebug) console.log('set values: data string parsed ',JSON.stringify(values));
+                if (this.isDebug) console.log('set iconFieldList values: data string parsed ',JSON.stringify(values));
             }
 
             let valueList = [];
             values.forEach(item => {
                 if (item.showEmpty || item.value) {
                     if (item.value !== '[object Object]') {
-                        if (this.isDebug) console.log('set values: item registered ',JSON.stringify(item));
+                        if (this.isDebug) console.log('set iconFieldList values: item registered ',JSON.stringify(item));
                         valueList.push(item);
                     }
                     else {
-                        if (this.isDebug) console.log('set values: bad value item ignored ',JSON.stringify(item));
+                        if (this.isDebug) console.log('set iconFieldList values: bad value item ignored ',JSON.stringify(item));
                     }
                 }
                 else {
-                    if (this.isDebug) console.log('set values: null value item ignored ',JSON.stringify(item));
+                    if (this.isDebug) console.log('set iconFieldList values: null value item ignored ',JSON.stringify(item));
                 }
             });
-            if (this.isDebug) console.log('set values: valueList init ', JSON.stringify(valueList));
+            if (this.isDebug) console.log('set iconFieldList values: valueList init ', JSON.stringify(valueList));
             this._values = valueList;
         }
         catch(error) {
-            console.error('set values: error while parsing input data ',error);
+            console.error('set iconFieldList values: error while parsing input data ',error);
             this._values = null;
         }
     }
