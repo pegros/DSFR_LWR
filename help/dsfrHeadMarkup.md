@@ -10,8 +10,8 @@ style standard Salesforce components (if used).
 <title>Community Title</title>
 
 <!-- DSFR Styling -->
-<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfr/dsfr.min.css" />
-<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfr/utility/utility.min.css" />
+<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfr/dsfr.min.css?{ versionKey }" />
+<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfr/utility/utility.min.css?{ versionKey }" />
 
 <!-- Salesforce Styling -->
 <link rel="stylesheet" href="{ basePath }/assets/styles/styles.css?{ versionKey }" />
@@ -21,7 +21,7 @@ style standard Salesforce components (if used).
 <link rel="stylesheet" href="{ basePath }/assets/styles/dxp-slds-extensions.min.css?{ versionKey }" />
 
 <!-- Salesforce Styling Overrides (with DSFR values)-->
-<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfrSlds" />
+<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfrSlds?{ versionKey }" />
 
 <style>
    :root {
