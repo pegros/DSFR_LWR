@@ -144,61 +144,61 @@
                     <nav class="fr-nav" role="navigation" aria-label="Menu principal">
                         <ul class="headerMenu fr-nav__list">
                             <template lwc:if={complexMenuItems}>
-                            <template for:each={complexMenuItems} for:item="item">
-                                <template lwc:if={item.hidden}>
-                                </template>
-                                <template lwc:else>
-                                    <li key={item.name} class="fr-nav__item">
-                                        <!-- Menu Display aria-current="false" -->
-                                        <template lwc:if={item.items}> 
-                                            <button class="fr-nav__btn"         disabled={item.disabled}
-                                                    aria-expanded="false"       aria-controls={item.name}   
-                                                    value={item.name}           onclick={toggleMenu}>
-                                                {item.label}
-                                            </button>
-                                            <div class="headerSubMenu fr-collapse fr-menu" id={item.name}>
-                                                <ul class="fr-menu__list">
-                                                    <template for:each={item.items} for:item="subItem">
-                                                        <template lwc:if={subItem.hidden}>
-                                                        </template>
-                                                        <template lwc:else>
-                                                            <li key={subItem.name}>
-                                                                <template lwc:if={subItem.disabled}>
-                                                                    <p  class="disabledLink fr-nav__link" >
-                                                                        {subItem.label}
-                                                                    </p>
-                                                                </template>
-                                                                <template lwc:else>
-                                                                    <a  class="fr-nav__link"
-                                                                        href="#"                    target="_self"                                             
-                                                                        data-value={subItem.name}   onclick={handleActionTrigger} >
-                                                                        {subItem.label}
-                                                                    </a>
-                                                                </template>
-                                                            </li>
-                                                        </template>
-                                                    </template>
-                                                </ul>
-                                            </div>
-                                        </template>
-                                        <!-- Direct Link Display -->
-                                        <template lwc:else>
-                                            <template lwc:if={item.disabled}>
-                                                <p  class="disabledLink fr-nav__link" >
+                                <template for:each={complexMenuItems} for:item="item">
+                                    <template lwc:if={item.hidden}>
+                                    </template>
+                                    <template lwc:else>
+                                        <li key={item.name} class="fr-nav__item">
+                                            <!-- Menu Display aria-current="false" -->
+                                            <template lwc:if={item.items}> 
+                                                <button class="fr-nav__btn"         disabled={item.disabled}
+                                                        aria-expanded="false"       aria-controls={item.name}   
+                                                        value={item.name}           onclick={toggleMenu}>
                                                     {item.label}
-                                                </p>
+                                                </button>
+                                                <div class="headerSubMenu fr-collapse fr-menu" id={item.name} data-name={item.name}>
+                                                    <ul class="fr-menu__list">
+                                                        <template for:each={item.items} for:item="subItem">
+                                                            <template lwc:if={subItem.hidden}>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <li key={subItem.name}>
+                                                                    <template lwc:if={subItem.disabled}>
+                                                                        <p  class="disabledLink fr-nav__link" >
+                                                                            {subItem.label}
+                                                                        </p>
+                                                                    </template>
+                                                                    <template lwc:else>
+                                                                        <a  class="fr-nav__link"
+                                                                            href="#"                    target="_self"                                             
+                                                                            data-value={subItem.name}   onclick={handleActionTrigger} >
+                                                                            {subItem.label}
+                                                                        </a>
+                                                                    </template>
+                                                                </li>
+                                                            </template>
+                                                        </template>
+                                                    </ul>
+                                                </div>
                                             </template>
+                                            <!-- Direct Link Display -->
                                             <template lwc:else>
-                                                <a  class="fr-nav__link"
-                                                    href="#"                target="_self"
-                                                    data-value={item.name}  onclick={handleActionTrigger} >
-                                                    {item.label}
-                                                </a>
+                                                <template lwc:if={item.disabled}>
+                                                    <p  class="disabledLink fr-nav__link" >
+                                                        {item.label}
+                                                    </p>
+                                                </template>
+                                                <template lwc:else>
+                                                    <a  class="fr-nav__link"
+                                                        href="#"                target="_self"
+                                                        data-value={item.name}  onclick={handleActionTrigger} >
+                                                        {item.label}
+                                                    </a>
+                                                </template>
                                             </template>
-                                        </template>
-                                    </li>
+                                        </li>
+                                    </template>
                                 </template>
-                            </template>
                             </template>
                         </ul>
                     </nav>

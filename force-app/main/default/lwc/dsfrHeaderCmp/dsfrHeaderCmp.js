@@ -686,6 +686,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleActionTrigger: event details ',JSON.stringify(event.detail));
 
         this.collapseMenu();
+        this.collapseModals();
 
         const actionName = event.target.dataset.value;
         if (this.isDebug) console.log('handleActionTrigger: actionName identified ',actionName);
@@ -735,15 +736,22 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
         let currentTarget = event.target?.value;
         if (this.isDebug) console.log('toggleMenu: current target fetched ', currentTarget);
-        let currentTargetId = event.target?.ariaControls;
+        let currentTargetId = event.target?.ariaControls || currentTarget;
         if (this.isDebug) console.log('toggleMenu: current target ID fetched ', currentTargetId);
+        
 
         let currentStatus =  event.target?.ariaExpanded;
         if (this.isDebug) console.log('toggleMenu: current status fetched ', currentStatus);
 
-        let currentMenu = this.template.querySelector("div.fr-collapse[id='" + currentTargetId + "']");
+        let currentMenu = this.template.querySelector("div.fr-collapse[id='" + currentTargetId + "']")
+                        || this.template.querySelector("div.fr-collapse[data-name='" + currentTargetId + "']");
         if (this.isDebug) console.log('toggleMenu: current menu fetched ', currentMenu);
         
+        if (!currentMenu) {
+            console.warn('toggleMenu: END KO / menu not found ',currentTargetId);
+            return;
+        }
+
         if (currentStatus == "true") {
             if (this.isDebug) console.log('toggleMenu: collapsing menu');
             currentMenu.classList?.remove("fr-collapse--expanded");
