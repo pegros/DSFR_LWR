@@ -51,7 +51,39 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     // Context Data
     //-----------------------------------------------------
-    @wire(getPicklistValues, { fieldList: '$mainFieldList' })
+
+    handleMainPicklists(event){
+        if (this.isDebug) console.log('handleMainPicklists: START with event ',JSON.stringify(this.mainFieldList));
+        
+        if (event.detail?.error) {
+            console.warn('handleMainPicklists: Picklist fetch failed ', JSON.stringify(event.detail.error));
+            this.mainCriteriaList = [];
+        }
+        else {
+            if (this.isDebug) console.log('handleMainPicklists: picklist details loaded', JSON.stringify(event.detail));
+            let criteriaList = JSON.parse(JSON.stringify(event.detail));
+
+            if (this.currentState) {
+                if (this.isDebug) console.log('handleMainPicklists: setting initial states');
+                let mainCriteriaSelected = [];
+                this.mainCriteriaList = this.initCriteria(criteriaList,this.currentState,mainCriteriaSelected);
+                if (mainCriteriaSelected.length > 0) {
+                    this.mainCriteriaSelected = mainCriteriaSelected;
+                    if (this.isDebug) console.log('handleMainPicklists: initial selection set', JSON.stringify(this.mainCriteriaSelected));
+                }
+                else {
+                    if (this.isDebug) console.log('handleMainPicklists: no initial selection');
+                }
+            }
+            else {
+                if (this.isDebug) console.log('handleMainPicklists: no current state to set');
+                this.mainCriteriaList = criteriaList;
+            }
+        }   
+        if (this.isDebug) console.log('handleMainPicklists: END');
+    }
+
+    /*@wire(getPicklistValues, { fieldList: '$mainFieldList' })
     wiredMainPicklists({ error, data }) {
         if (this.isDebug) console.log('wiredMainPicklists: START for main search criteria');
         if (data) {
@@ -81,7 +113,54 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         if (this.isDebug) console.log('wiredMainPicklists: END for main search criteria');
     }
+    */
 
+    handlePicklists(event){
+        if (this.isDebug) console.log('handlePicklists: START with event ',JSON.stringify(event.detail));
+        if (this.isDebug) console.log('handlePicklists: for fields ',JSON.stringify(this.fieldList));
+        
+        if (event.detail?.error) {
+            console.warn('handlePicklists: Picklist fetch failed ', JSON.stringify(event.detail.error));
+            this.criteriaList = [];
+        }
+        else {
+            if (this.isDebug) console.log('handlePicklists: picklist details loaded', JSON.stringify(event.detail));
+            let criteriaList = JSON.parse(JSON.stringify(event.detail));
+
+            if (!criteriaList) {
+                console.warn('handlePicklists: no Picklist returned failed ', JSON.stringify(event.detail.error));
+                this.criteriaList = [];
+            }
+            else {
+
+                criteriaList.forEach(item => {
+                    if (item.values.length < 11) {
+                        item.isTag = true;
+                    }
+                });
+                if (this.isDebug) console.log('handlePicklists: Picklist tags init ', JSON.stringify(criteriaList));
+
+                if (this.currentState) {
+                    if (this.isDebug) console.log('handlePicklists: setting initial states');
+                    let criteriaSelected = [];
+                    this.criteriaList = this.initCriteria(criteriaList,this.currentState,criteriaSelected);
+                    if (criteriaSelected.length > 0) {
+                        this.criteriaSelected = criteriaSelected;
+                        if (this.isDebug) console.log('handlePicklists: initial selection set', JSON.stringify(this.criteriaSelected));
+                    }
+                    else {
+                        if (this.isDebug) console.log('handlePicklists: no initial selection');
+                    }
+                }
+                else {
+                    if (this.isDebug) console.log('handlePicklists: no current state to set');
+                    this.criteriaList = criteriaList;
+                }
+            }
+        }   
+        if (this.isDebug) console.log('handlePicklists: END'); 
+    }
+    /*
     @wire(getPicklistValues, { fieldList: '$fieldList' })
     wiredPicklists({ error, data }) {
         if (this.isDebug) console.log('wiredPicklists: START for search criteria ');
@@ -119,6 +198,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         if (this.isDebug) console.log('wiredPicklists: END for search criteria');
     }
+    */
 
     @wire(CurrentPageReference) 
     wiredPageRef(data) {
@@ -418,7 +498,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         if (this.isDebug) console.log('handleSearchKey: END');
     }
-    
+
     updateSearch(event) {
         if (this.isDebug) console.log('updateSearch: START for search');
 
@@ -527,6 +607,57 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         criteriaList.forEach(item => {
             if (this.isDebug) console.log('initCriteria: processing criteria ', item.fullName);
 
+            if (this.isDebug) console.log('initCriteria: controlled by ', item.controlledBy);
+            if (item.controlledBy) {
+                item.controllingField = (item.controlledBy.split('.'))[1];
+                if (this.isDebug) console.log('initCriteria: controllingField init ', item.controllingField);
+            }
+
+            if (this.isDebug) console.log('initCriteria: controlling ', JSON.stringify(item.controlling));
+            if (item.controlling) {
+                item.controlledCriteria = [];
+                item.controlling.forEach(iterField => {
+                    item.controlledCriteria.push(iterField.replace('.','_'));
+                });
+                if (this.isDebug) console.log('initCriteria: controlledCriteria init ', JSON.stringify(item.controlledCriteria));
+            }
+
+            let itemSelection = this.resetCriteria(item,pageState);
+            if (itemSelection && itemSelection.length > 0) {
+                if (this.isDebug) console.log('initCriteria: registering #selected values ',itemSelection.length);
+                //itemSelection.forEach(item => {selectionList.push(item);});
+                selectionList.push(...itemSelection);
+            }
+            else {
+                if (this.isDebug) console.log('initCriteria: no selected value');
+            }
+
+            /*
+            if (item.controllingField && pageState[item.controllingField]) {
+                if (this.isDebug) console.log('initCriteria: processing parent criteria state ', pageState[item.controllingField]);
+
+                let selectedParentItems = new Set((pageState[item.controllingField]).split(';'));
+                if (this.isDebug) console.log('initCriteria: selectedParentItems extracted ',JSON.stringify(selectedParentItems));
+
+                item.values.forEach(iterVal => {
+                    if (this.isDebug) console.log('initCriteria: selectedParentItems extracted ',JSON.stringify(selectedParentItems));
+                    if (iterVal.validFor) {
+                        let hidden = true;
+                        iterVal.validFor.forEach(iterV => {
+                            if (selectedParentItems.has(iterV)) {hidden = false;}
+                        });
+                        iterVal.hidden = hidden;
+                    }
+                    else {
+                        iterVal.hidden = true;
+                    }
+                });
+                if (this.isDebug) console.log('initCriteria: values filtered ', JSON.stringify(item.values));
+            }
+            else {
+                if (this.isDebug) console.log('initCriteria: no parent criteria state set');
+            }
+
             if (pageState[item.name]) {
                 if (this.isDebug) console.log('initCriteria: processing criteria state ', pageState[item.name]);
 
@@ -540,8 +671,13 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                     if (this.isDebug) console.log('initCriteria: criteria item found ', JSON.stringify(itemValue));
 
                     if (itemValue) {
-                        itemValue.selected = true;
-                        selectionList.push(itemValue);
+                        if (itemValue.hidden) {
+                            itemValue.selected = false;
+                        }
+                        else {
+                            itemValue.selected = true;
+                            selectionList.push(itemValue);
+                        }
                     }
                     else {
                         console.warn('initCriteria: value not found ',selectItem);
@@ -551,11 +687,12 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('initCriteria: criteria values selection updated ',JSON.stringify(item.values));
             }
             else {
-                if (this.isDebug) console.log('initCriteria: ignoring picklist (no state)');
-            }
+                if (this.isDebug) console.log('initCriteria: no criteria state set');
+            }*/
         });
 
-        if (this.isDebug) console.log('initCriteria: END with ', JSON.stringify(criteriaList));
+        if (this.isDebug) console.log('initCriteria: selection init ', JSON.stringify(selectionList));
+        if (this.isDebug) console.log('initCriteria: END returning ', JSON.stringify(criteriaList));
         return criteriaList;
     }
     reviewCriteria = function(criteriaList, pageState) {
@@ -567,7 +704,17 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         criteriaList.forEach(item => {
             if (this.isDebug) console.log('reviewCriteria: processing criteria ', item.fullName);
 
-            if (pageState[item.name]) {
+            let itemSelection = this.resetCriteria(item,pageState);
+            if (itemSelection && itemSelection.length > 0) {
+                if (this.isDebug) console.log('initCriteria: registering #selected values ',itemSelection.length);
+                //itemSelection.forEach(item => {selectionList.push(item);});
+                selectionList.push(...itemSelection);
+            }
+            else {
+                if (this.isDebug) console.log('initCriteria: no selected value');
+            }
+
+            /*if (pageState[item.name]) {
                 if (this.isDebug) console.log('reviewCriteria: processing criteria state ', pageState[item.name]);
 
                 let selectedItems = (pageState[item.name]).split(';');
@@ -588,12 +735,78 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('reviewCriteria: resetting all values (no criteria state)');
                 item.values.forEach(iterVal => {iterVal.selected = false;});
                 if (this.isDebug) console.log('reviewCriteria: criteria values selection reset ',JSON.stringify(item.values));
-            }
+            }*/
         });
 
-        if (this.isDebug) console.log('reviewCriteria: END with ', JSON.stringify(criteriaList));
+        if (this.isDebug) console.log('reviewCriteria: criteriaList reset ', JSON.stringify(criteriaList));
+        if (this.isDebug) console.log('reviewCriteria: END returning selection ', JSON.stringify(selectionList));
         return selectionList;
     }
+    resetCriteria = (criteria,pageState) => {
+        if (this.isDebug) console.log('resetCriteria: START with ', JSON.stringify(criteria));
+
+        let criteriaSelection = [];
+        if (criteria.controllingField && pageState[criteria.controllingField]) {
+            if (this.isDebug) console.log('resetCriteria: processing parent criteria state ', pageState[criteria.controllingField]);
+
+            let selectedParentValues = new Set((pageState[criteria.controllingField]).split(';'));
+            if (this.isDebug) console.log('resetCriteria: selectedParentValues extracted ',JSON.stringify(selectedParentValues));
+
+            criteria.values.forEach(iterVal => {
+                if (this.isDebug) console.log('resetCriteria: processing criteria value ',JSON.stringify(iterVal));
+                if (iterVal.validFor) {
+                    let hidden = true;
+                    iterVal.validFor.forEach(iterV => {
+                        if (selectedParentValues.has(iterV)) {hidden = false;}
+                    });
+                    iterVal.hidden = hidden;
+                }
+                else {
+                    iterVal.hidden = true;
+                }
+            });
+            if (this.isDebug) console.log('resetCriteria: criteria values filtered ', JSON.stringify(criteria.values));
+        }
+        else {
+            if (this.isDebug) console.log('resetCriteria: no parent criteria state set');
+        }
+
+        if (pageState[criteria.name]) {
+            if (this.isDebug) console.log('resetCriteria: processing criteria state ', pageState[criteria.name]);
+
+            let selectedValues = (pageState[criteria.name]).split(';');
+            if (this.isDebug) console.log('resetCriteria: selectedValues extracted ',selectedValues);
+
+            selectedValues.forEach(iterSelect => {
+                if (this.isDebug) console.log('resetCriteria: processing selected value ',JSON.stringify(iterSelect));
+
+                let iterValue = (criteria.values).find(iter => {return (iter.value === iterSelect);});
+                if (this.isDebug) console.log('resetCriteria: criteria value found ', JSON.stringify(iterValue));
+
+                if (iterValue) {
+                    if (iterValue.hidden) {
+                        iterValue.selected = false;
+                    }
+                    else {
+                        iterValue.selected = true;
+                        criteriaSelection.push(iterValue);
+                    }
+                }
+                else {
+                    console.warn('resetCriteria: value not found ',iterSelect);
+                    console.warn('resetCriteria: for criteria ',criteria.fullName);
+                }
+            });
+            if (this.isDebug) console.log('resetCriteria: criteria values selection updated ',JSON.stringify(criteria.values));
+        }
+        else {
+            if (this.isDebug) console.log('resetCriteria: no criteria state set');
+        }
+
+        if (this.isDebug) console.log('resetCriteria: END with selection ', JSON.stringify(criteriaSelection));
+        return criteriaSelection;
+    }
+
     activateApply = function(state) {
         if (this.isDebug) console.log('activateApply: START for state ',state);
         let applyButton = this.template.querySelector('.applyButton');
@@ -618,6 +831,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.warn('activateSearch: no searchButton to activate');
         }
     }
+
     selectOption = function(optionName,sourceList,selectionList,isSelected) {
         if (this.isDebug) console.log('selectOption: START for optionName ',optionName);
         if (this.isDebug) console.log('selectOption: isSelected? ',isSelected);
@@ -625,18 +839,31 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('selectOption: selectionList ',JSON.stringify(selectionList));
 
         if (isSelected) {
-            if (this.isDebug) console.log('selectOption: adding selection');
-
+            if (this.isDebug) console.log('selectOption: adding new selection');
             let selectedOption;
+            let selectedCriteria;
             sourceList.forEach(itemL => {
-                if ((!selectedOption) && (itemL.values)) selectedOption = itemL.values.find(itemO => itemO.fullName === optionName);
+                if ((!selectedOption) && (itemL.values)) {
+                    selectedCriteria = itemL;
+                    selectedOption = itemL.values.find(itemO => itemO.fullName === optionName);
+                }
             })
             if (this.isDebug) console.log('selectOption: selectedOption found ',JSON.stringify(selectedOption));
+            if (this.isDebug) console.log('selectOption: selectedCriteria found ',JSON.stringify(selectedCriteria));
 
             if (selectedOption) {
                 selectedOption.selected = true;
                 let newSelectionList = (selectionList ? [... selectionList] : []);
                 newSelectionList.push(selectedOption);
+
+                if (selectedCriteria.controlledCriteria) {
+                    if (this.isDebug) console.log('selectOption: propagating to dependent criteria');
+                    this.propagateOptions(selectedCriteria,sourceList,newSelectionList);
+                }
+                else {
+                    if (this.isDebug) console.log('selectOption: no dependent picklists to check');
+                }
+
                 if (this.isDebug) console.log('selectOption: END / selectionList updated ',JSON.stringify(newSelectionList));
                 return newSelectionList;
             }
@@ -646,9 +873,22 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         else {
             if (this.isDebug) console.log('selectOption: removing selection');
             let selectedOption = selectionList.find(item => item.fullName === optionName);
+            let selectedCriteria = sourceList.find(item => optionName.startsWith(item.fullName));
+            if (this.isDebug) console.log('selectOption: selectedOption found ',JSON.stringify(selectedOption));
+            if (this.isDebug) console.log('selectOption: selectedCriteria found ',JSON.stringify(selectedCriteria));
+
             if (selectedOption) {
                 selectedOption.selected = false;
                 let newSelectionList = selectionList.filter(item => item.fullName !== optionName);
+
+                if (selectedCriteria.controlledCriteria) {
+                    if (this.isDebug) console.log('selectOption: propagating to dependent criteria ');
+                    this.propagateOptions(selectedCriteria,sourceList,newSelectionList);
+                }
+                else {
+                    if (this.isDebug) console.log('selectOption: no dependent picklists to check');
+                }
+
                 if (this.isDebug) console.log('selectOption: END / selectionList updated ',JSON.stringify(newSelectionList));
                 return newSelectionList;
             }
@@ -656,4 +896,95 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             return selectionList;
         }
     } 
+    propagateOptions = (criteria,sourceList,selectionList) => {
+        if (this.isDebug) console.log('propagateOptions: START for ', criteria.fullName);
+        if (this.isDebug) console.log('propagateOptions: with #criteria ', sourceList.length);
+        if (this.isDebug) console.log('propagateOptions: with #selected items ', selectionList.length);
+
+        let criteriaSelections = selectionList.filter(item => item.fullName.startsWith(criteria.fullName));
+        if (this.isDebug) console.log('propagateOptions: criteriaSelections determined ', JSON.stringify(criteriaSelections));
+
+        if (criteriaSelections.length > 0) {
+            if (this.isDebug) console.log('propagateOptions: filtering dependent Criteria ');
+
+            let selectedValues = new Set();
+            criteriaSelections.forEach(item => selectedValues.add(item.value));
+            if (this.isDebug) console.log('propagateOptions: selectedValues init ', selectedValues);
+
+            criteria.controlledCriteria.forEach(iter => {
+                if (this.isDebug) console.log('propagateOptions: processing dependency ', iter);
+                let iterCriteria = sourceList.find(itemC => itemC.fullName === iter);
+
+                if (iterCriteria) {
+                    if (this.isDebug) console.log('propagateOptions: resetting dependent criteria ', JSON.stringify(iterCriteria));
+                    iterCriteria.values.forEach(iterValue => {
+                        if (this.isDebug) console.log('propagateOptions: processing value ', iterValue.value);
+                        iterValue.hidden = !(iterValue.validFor.reduce((result,iterVF) => (result || selectedValues.has(iterVF)), false));
+                        if (iterValue.selected && iterValue.hidden) {
+                            if (this.isDebug) console.log('propagateOptions: deselecting value');
+                            iterValue.selected = false;
+                            let iterIndex = selectionList.findIndex(iterS => iterS.fullName === iterValue.fullName);
+                            if (this.isDebug) console.log('propagateOptions: index found in selection');
+                            if (iterIndex !== -1) selectionList.splice(iterIndex,1);
+                            if (this.isDebug) console.log('propagateOptions: selectionList updated');
+                        }
+                    });
+                    if (this.isDebug) console.log('propagateOptions: all values reevaluated ', JSON.stringify(iterCriteria));
+                    if (this.isDebug) console.log('propagateOptions: selectionList reevaluated ', JSON.stringify(selectionList));
+
+                    if (iterCriteria.controlledCriteria) {
+                        if (this.isDebug) console.log('propagateOptions: propagating to further dependent criteria ');
+                        this.propagateOptions(iterCriteria,sourceList,selectionList);
+                    }
+                    else {
+                        if (this.isDebug) console.log('propagateOptions: no further propagation required ');
+                    }
+                }
+                else {
+                    if (this.isDebug) console.log('propagateOptions: ignoring dependent criteria');
+                }
+            });
+        }
+        else {
+            if (this.isDebug) console.log('propagateOptions: unfiltering dependent Criteria ');
+
+            let validValues = new Set();
+            criteria.values.forEach(item => {if (!item.hidden)  validValues.add(item.value);});
+            if (this.isDebug) console.log('propagateOptions: validValues init ', validValues);
+
+            criteria.controlledCriteria.forEach(iter => {
+                if (this.isDebug) console.log('propagateOptions: processing dependency ', iter);
+                let iterCriteria = sourceList.find(itemC => itemC.fullName === iter);
+                if (iterCriteria) {
+                    if (this.isDebug) console.log('propagateOptions: resetting dependent criteria ');
+                    iterCriteria.values.forEach(iterValue => {
+                        if (this.isDebug) console.log('propagateOptions: processing dependent value ',iterValue.value);
+                        iterValue.hidden = !(iterValue.validFor.reduce((result,iterVF) => (result || validValues.has(iterVF)), false));
+                        if (iterValue.selected && iterValue.hidden) {
+                            if (this.isDebug) console.log('propagateOptions: deselecting value');
+                            iterValue.selected = false;
+                            let iterIndex = selectionList.findIndex(iterS => iterS.fullName === iterValue.fullName);
+                            if (this.isDebug) console.log('propagateOptions: index found in selection');
+                            if (iterIndex !== -1) selectionList.splice(iterIndex,1);
+                            if (this.isDebug) console.log('propagateOptions: selectionList updated');
+                        }
+                    });
+                    if (this.isDebug) console.log('propagateOptions: display of all values reevaluated ', JSON.stringify(iterCriteria));
+
+                    if (iterCriteria.controlledCriteria) {
+                        if (this.isDebug) console.log('propagateOptions: propagating to further dependent criteria ');
+                        this.propagateOptions(iterCriteria,sourceList,selectionList);
+                    }
+                    else {
+                        if (this.isDebug) console.log('propagateOptions: no further propagation required ');
+                    }
+                }
+                else {
+                    if (this.isDebug) console.log('propagateOptions: ignoring dependent criteria');
+                }
+            });
+        }
+
+        if (this.isDebug) console.log('propagateOptions: END for ', criteria.fullName);
+    }
 }

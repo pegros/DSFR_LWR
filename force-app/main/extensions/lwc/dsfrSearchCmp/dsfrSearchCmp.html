@@ -23,10 +23,13 @@
                                             <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton" aria-expanded="false" value={iterC.fullName} onclick={expandCollapse}>
                                                 {iterC.label}
                                             </button>
-                                            <!--   -->
                                             <div class="fr-collapse fr-menu" data-name={iterC.fullName}>
                                                 <ul class="fr-menu__list">
                                                     <template for:each={iterC.values} for:item="iterVal">
+                                                        <template lwc:if={iterVal.hidden}>
+                                                            <!--<li key={iterVal.fullName} class="fr-nav__link">{iterVal.label} {iterVal.selected}</li>-->
+                                                        </template>
+                                                        <template lwc:else>
                                                         <li key={iterVal.fullName}>
                                                             <template lwc:if={iterVal.selected}>
                                                                 <a  class="fr-nav__link menuSelector"   href="#"                        
@@ -45,6 +48,7 @@
                                                                 </a>
                                                             </template>
                                                         </li>
+                                                        </template>
                                                     </template>
                                                 </ul>
                                             </div>    
@@ -139,15 +143,19 @@
                         <template lwc:if={iterC.isTag}>
                             <ul class="fr-tags-group">
                                 <template for:each={iterC.values} for:item="iterVal">
-                                    <li key={iterVal.fullName} class="selectionItem">
-                                        <!--<p class="fr-tag fr-tag--sm selectionTag" data-name={itemVal.fullName} >{itemVal.label}</p>-->
-                                        <button class="fr-tag fr-tag--sm tagSelector"
-                                                data-name={iterVal.fullName}
-                                                data-value={iterVal.value}      data-criteria={iterC.name}
-                                                aria-pressed={iterVal.selected} onclick={toggleTagSelect}>
-                                                {iterVal.label}
-                                        </button>
-                                    </li>
+                                    <template lwc:if={iterVal.hidden}>
+                                        <!--<li key={iterVal.fullName} class="fr-tag fr-tag--sm">{iterVal.label} {iterVal.selected}</li>-->
+                                    </template>
+                                    <template lwc:else>
+                                        <li key={iterVal.fullName} class="selectionItem">
+                                            <button class="fr-tag fr-tag--sm tagSelector"
+                                                    data-name={iterVal.fullName}
+                                                    data-value={iterVal.value}      data-criteria={iterC.name}
+                                                    aria-pressed={iterVal.selected} onclick={toggleTagSelect}>
+                                                    {iterVal.label}
+                                            </button>
+                                        </li>
+                                    </template>
                                 </template>
                             </ul>
                         </template>
@@ -156,19 +164,24 @@
                         <template lwc:else>
                             <fieldset class="fr-fieldset">
                                 <template for:each={iterC.values} for:item="iterVal">
-                                    <div key={iterVal.fullName} class="fr-fieldset__element">
-                                        <div class="fr-checkbox-group">
-                                            <input  class="checkSelector"       type="checkbox"
-                                                    name={iterVal.fullName}     aria-describedby={iterVal.fullName}
-                                                    data-value={iterVal.value}  data-criteria={iterC.name}  
-                                                    checked={iterVal.selected}  id={iterVal.fullName}>
-                                            <label  class="fr-label"                    data-name={iterVal.fullName}
-                                                    data-parent-name={iterC.fullName}   for={iterVal.fullName}
-                                                    onclick={toggleCheckSelect} >
-                                                    {iterVal.label}
-                                            </label>
+                                    <template lwc:if={iterVal.hidden}>
+                                        <!--<p class="fr-label">{iterVal.label} {iterVal.selected}</p>-->
+                                    </template>
+                                    <template lwc:else>
+                                        <div key={iterVal.fullName} class="fr-fieldset__element">
+                                            <div class="fr-checkbox-group">
+                                                <input  class="checkSelector"       type="checkbox"
+                                                        name={iterVal.fullName}     aria-describedby={iterVal.fullName}
+                                                        data-value={iterVal.value}  data-criteria={iterC.name}  
+                                                        checked={iterVal.selected}  id={iterVal.fullName}>
+                                                <label  class="fr-label"                    data-name={iterVal.fullName}
+                                                        data-parent-name={iterC.fullName}   for={iterVal.fullName}
+                                                        onclick={toggleCheckSelect} >
+                                                        {iterVal.label}
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </template>
                                 </template>
                             </fieldset>
                         </template>
@@ -201,4 +214,19 @@
             </p>
         </div>
     </template>
+
+    <!-- METADATA LOADING -->
+    <template lwc:if={mainFieldList}>
+        <c-dsfr-picklists-loader-utl    picklist-fields={mainFieldList}
+                                        is-debug={isDebug}
+                                        onloaded={handleMainPicklists}>
+        </c-dsfr-picklists-loader-utl>
+    </template>
+    <template lwc:if={fieldList}>
+        <c-dsfr-picklists-loader-utl    picklist-fields={fieldList}
+                                        is-debug={isDebug}
+                                        onloaded={handlePicklists}>
+        </c-dsfr-picklists-loader-utl>
+    </template>
+
 </template>
