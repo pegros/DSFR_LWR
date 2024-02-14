@@ -56,7 +56,8 @@ public with sharing class dsfrPicklist_CTL {
                 throw new System.AuraHandledException('Invalid field name structure : ' + iter);
             }
 
-            SObjectType iterObj = Schema.getGlobalDescribe().get(iterParts[0]);
+            //SObjectType iterObj = Schema.getGlobalDescribe().get(iterParts[0]);
+            SObjectType iterObj = ((SObject)Type.forName(iterParts[0]).newInstance()).getSObjectType();
             if (iterObj == null) {
                 System.debug(LoggingLevel.ERROR, 'getPicklistValues: END KO / bad object name ' + iter);
                 throw new System.AuraHandledException('Invalid object name: ' + iter);
