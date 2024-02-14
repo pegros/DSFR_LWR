@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Bouton (Action contextuelle)</masterLabel>
+    <description>Affichage d'un bouton (d'action contextuelle) du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="buttonLabel"
+                        label="Libellé"
+                        type="String"
+                        description="Libellé du bouton" />
+            <property   name="buttonTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre du bouton" />
+            <property   name="buttonTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors d'un click à destination de Google Analytics" />
+            
+            <property   name="buttonSize"
+                        label="Taille"
+                        type="String"
+                        datasource="small,medium,large"
+                        default="medium"
+                        description="Taille du bouton" />
+            <property   name="buttonVariant"
+                        label="Variante"
+                        type="String"
+                        datasource="primary,secondary,tertiary,tertiary-no-outline"
+                        default="primary"
+                        description="Variante d'affichage du bouton" />
+            <property   name="buttonIcon"
+                        label="Icône"
+                        type="String"
+                        description="Nom de l'icone DFSR à afficher (e.g. checkbox-circle-line)" />
+            <property   name="buttonIconPosition"
+                        label="Position de l'icône"
+                        type="String"
+                        datasource="left,right"
+                        default="left"
+                        description="Position de l'icone par rapport au libellé du bouton" />
+            <property   name="buttonInactive"
+                        label="Inactif ?"
+                        type="String"
+                        default="false"
+                        description="Statut du bouton" />
+            <property   name="buttonAlign"
+                        label="Alignement"
+                        type="String"
+                        default="left"
+                        datasource="left,center,right"
+                        description="Positionnement du bouton dans son conteneur." />
+
+            <property   name="buttonConfig"
+                        label="Configuration"
+                        type="String"
+                        description="Nom de la configuration sfpegAction à utiliser" />
+            <property   name="buttonAction"
+                        label="Action"
+                        type="String"
+                        description="Nom de l'action à déclencher dans la configuration" />
+            
+            <property   name="objectApiName"
+                        label="Objet"
+                        type="String"
+                        default="{!Route.objectApiName}"
+                        description="API Name de l'objet cible de l'action (le cas échéant)" />
+            <property   name="recordId"
+                        label="ID Enregistrement"
+                        type="String"
+                        default="{!Route.recordId}"
+                        description="ID de l'enregistrement cible de l'action (le cas échéant)" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

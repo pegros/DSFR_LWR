@@ -1,0 +1,20 @@
+<template>
+    <!-- Main Button Display -->
+    <c-dsfr-button-dsp  button-icon={buttonIcon}    button-icon-position={buttonIconPosition}
+                        button-label={buttonLabel}  button-title={buttonTitle} 
+                        button-size={buttonSize}    button-variant={buttonVariant} 
+                        button-align={buttonAlign}  button-inactive={buttonInactive}
+                        ontrigger={handleAction}    is-debug={isDebug}>
+    </c-dsfr-button-dsp>
+
+    <!-- Action Configuration -->
+    <c-sfpeg-action-bar-cmp lwc:ref="buttonActions" 
+                            bar-class= "slds-hide"
+                            config-name={buttonConfig}
+                            object-api-name={objectApiName}
+                            record-id={recordId}
+                            user-id={userId}
+                            is-hidden="true"
+                            is-debug={isDebug}>
+    </c-sfpeg-action-bar-cmp>
+</template>
