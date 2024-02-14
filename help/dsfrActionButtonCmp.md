@@ -50,6 +50,35 @@ Par exemple, la configuration suivante permet de modifier le champ `Etat__c` du 
 }
 ```
 
+## Actions post-soumission de l'action
+
+Il est possible de:
+* ajuster le message de confimation de l'opération au travers des propriétés textuelles `title`et `message`.
+* déclencher une navigation vers l'enregistrement créé / modifié via la propriété booléenne  `navigate`
+* demander un raffraichissement d'un ensemble d'enregistrements via la propriété `reload`au format attendu par le service standard [notifyRecordUpdateAvailable](https://developer.salesforce.com/docs/platform/lwc/guide/reference-notify-record-update.html?q=notifyRecordUpdateAvailable)
+* déclencher un raffraichissement spécifique aux composants [PEG_LIST](https://github.com/pegros/PEG_LIST) (utilisés dans certains composants DSFR) via la propriété booléenne `refresh`
+
+L'exemple suivant propose une action de création d'un nouvel objet avec popup de
+confirmation personnalisée et redirection automatique vers le nouvel enregistrement créé.
+
+```
+{
+    "type": "create",
+    "params": {
+        "apiName": "Candidature__c",
+        "fields": {
+            "Name": "Candidature-{!Item.Name}",
+            "Candidat__c": "{!User.Record.AccountId}",
+            "OffreEmploi__c": "{!Route.recordId}",
+            "StatutInterne__c": "Brouillon"
+        }
+    },
+    "title": "Candidature initialisée.",
+    "message": "Merci de bien founir les informations complémentaires demandées dans l'écran suivant et soumettre votre candidature pour prise en compte.",
+    "navigate": true
+}
+```
+
 
 ## Précisions techniques
 
