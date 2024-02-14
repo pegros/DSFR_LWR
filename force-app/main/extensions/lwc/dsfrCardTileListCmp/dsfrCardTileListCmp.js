@@ -333,6 +333,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
                             if (this.isDebug) console.log('handleRecordLoad: registering icon field ',JSON.stringify(targetField));
                             iconFields.push(targetField);
                         }
+                        else {
+                            console.warn('handleRecordLoad: no field property set');
+                        }
                     });
                     if (this.isDebug) console.log('handleRecordLoad: iconFields init ', JSON.stringify(iconFields));
                     newItem.iconFields = iconFields;

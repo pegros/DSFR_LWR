@@ -1,5 +1,5 @@
 import { LightningElement, api } from 'lwc';
-
+import basePath from "@salesforce/community/basePath";
 export default class DsfrContainerDsp extends LightningElement {
 
     //-----------------------------------------------------
@@ -25,7 +25,8 @@ export default class DsfrContainerDsp extends LightningElement {
     get ariaExpanded() {
         return '' + !this.isCollapsed;
     }
-    
+    urlReworked = false;
+
 
     //-----------------------------------------------------
     // Initialisation
@@ -90,6 +91,14 @@ export default class DsfrContainerDsp extends LightningElement {
             else if (typeof this.message !== 'string') {
                 this.message = null;
                 if (this.isDebug)console.log('resetInput: message reset ');
+            }
+            else if (!this.urlReworked) {
+                // @TODO : START Remove after Summer24 fix
+                let prefix = `${basePath}/sfsites/c`;
+                let regEx = new RegExp(`(?:${prefix})?(/cms/)`, "g");
+                this.message = this.message.replace(regEx, prefix + "$1");
+                this.urlReworked = true;
+                // @TODO : END Remove after Summer24 fix
             }
         }
         else {

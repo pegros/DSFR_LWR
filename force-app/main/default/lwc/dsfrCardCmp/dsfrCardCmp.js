@@ -30,23 +30,41 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     set cardButtons(value) {
         if (this.isDebug) console.log('setting cardButtons ',value);
         if (value) {
+            let cardButtons;
             if (typeof value == 'string') {
                 try {
-                    this._cardButtons = JSON.parse(value);
+                    cardButtons = JSON.parse(value);
                 }
                 catch (error) {
-                    console.warn('Issue when parsing cardButtons provided ',value);
-                    this._cardButtons = null;
+                    console.warn('Issue when parsing cardButtons provided ', value);
+                    console.warn('Issue details ',JSON.stringify(error));
+                    cardButtons = null;
                 }
             }
             else {
-                this._cardButtons = value;
-            }            
+                cardButtons = value;
+            }
+
+            // For future use
+            /*if (cardButtons) {
+                cardButtons.forEach(item => {
+                    if (typeof item.hidden == 'string') {
+                        try {
+                            item.hidden = eval(item.hidden);
+                        }
+                        catch (error) {
+                            console.warn('Issue when evaluting hidden property for ',JSON.stringify(item));
+                            console.warn('Issue details ',JSON.stringify(error));
+                        }
+                    }
+                });
+                if (this.isDebug) console.log('Hidden properties reevaluated ',JSON.stringify(cardButtons));
+            }*/
+            this._cardButtons = cardButtons;      
         }
         else {
             this._cardButtons = null;
         }
-        
     }
     @api cardSize = 'medium';
     @api cardCss;
