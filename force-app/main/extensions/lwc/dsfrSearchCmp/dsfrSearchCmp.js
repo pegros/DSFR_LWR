@@ -769,6 +769,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         else {
             if (this.isDebug) console.log('resetCriteria: no parent criteria state set');
+            (criteria.values).forEach(iterVal => {iterVal.hidden = false;});
+            if (this.isDebug) console.log('resetCriteria: all values displayed');
         }
 
         if (pageState[criteria.name]) {
@@ -801,6 +803,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
         else {
             if (this.isDebug) console.log('resetCriteria: no criteria state set');
+            (criteria.values).forEach(iterVal => {iterVal.selected = false;});
+            if (this.isDebug) console.log('resetCriteria: all values deselected');
         }
 
         if (this.isDebug) console.log('resetCriteria: END with selection ', JSON.stringify(criteriaSelection));
