@@ -273,6 +273,15 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
         if (this.isDebug) console.log('formatValues: START with ',JSON.stringify(picklistDesc));
         if (this.isDebug) console.log('formatValues: for field ',fieldFullName);
 
+        let controllingValues = {};
+        Object.keys(picklistDesc.controllerValues).forEach(iter => {
+            if (this.isDebug) console.log('formatValues: registering controlling value ',iter);
+            let iterVal = '' + picklistDesc.controllerValues[iter];
+            if (this.isDebug) console.log('formatValues: with code ',iterVal);
+            controllingValues[iterVal] = iter;
+        });
+        if (this.isDebug) console.log('formatValues: for field ',JSON.stringify(controllingValues));
+
         let result = [];
         picklistDesc.values.forEach(item => {
             if (this.isDebug) console.log('formatValues: formatting value ',JSON.stringify(item));
@@ -280,7 +289,9 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
             if (item.validFor.length > 0) {
                 let itemValid = [];
                 item.validFor.forEach(ctlItem => {
-                    itemValid.push(Object.keys(picklistDesc.controllerValues)[ctlItem]);
+                    if (this.isDebug) console.log('formatValues: setting validFor item ',ctlItem);
+                    //itemValid.push(Object.keys(picklistDesc.controllerValues)[ctlItem]);
+                    itemValid.push(controllingValues['' + ctlItem]);
                 });
                 itemVal.validFor = itemValid;
             }
