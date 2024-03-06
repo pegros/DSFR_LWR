@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getObjectInfos }   from "lightning/uiObjectInfoApi";
+import getConfig from '@salesforce/apex/sfpegMerge_CTL.getConfig';
 
 var DSFR_PICKLIST_VALUES = {};
 var DSFR_OBJECT_DESCS = {};
@@ -11,13 +12,20 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
     //----------------------------------------------------------------
     @api picklistFields;    // List of picklist fields
     @api isDebug = false;   // Debug logs activation
+    @api isDebugFine = false; // Fine Debug logs activation (on children components)
 
     //-----------------------------------------------------
     // Technical Parameters
     //-----------------------------------------------------
     isInitDone = false;     // Flag to track that init has been done (for first render)
-    fields2load = [];       // List of picklist Fields desc to load
+    rtsReady = false;       // Flag to track that RTs have been loaded (or no RT loading required)
+    objectsReady = false;   // Flag to track that Object Descs have been loaded
+    picklistsReady = false; // Flag to track that Picslist are ready to load
+
+    rts2load = {RT:[]};    // List of RT IDs to fetch (identified as "Object.DevName")
     objects2load = [];      // List of Objects desc to load
+    fields2load = [];       // List of picklist Fields desc to load
+
     loadedObjects;          // Object descs loaded
     fieldsLoaded = [];      // List of picklist Fields with descs loaded
     loadedPicklists = {};   // Picklist descs loaded
@@ -58,16 +66,33 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
                 if (this.isDebug) console.log('rendered: analysing field for values load ',item);
 
                 if (item.includes('.')) {
-                    let itemObject = (item.split('.'))[0];
+                    let itemParts = item.split('.');
+                    let itemObject = itemParts[0];
+                    let itemField = itemParts[1];
+                    let itemRTname = itemParts[2];
                     if (this.isDebug) console.log('rendered: objectName extracted ',itemObject);
+                    if (this.isDebug) console.log('rendered: field extracted ',itemField);
+                    if (this.isDebug) console.log('rendered: RT name extracted ',itemRTname);
 
-                    if (!this.fields2load.includes(itemObject)) {
-                        if (this.isDebug) console.log('rendered: registering object desc to load ');
+                    if (!this.objects2load.includes(itemObject)) {
+                        if (this.isDebug) console.log('rendered: registering new object desc to load',itemObject);
                         this.objects2load.push(itemObject);
                     }
                     
-                    // Loading master RT systematically to fetch all possible values
-                    this.fields2load.push({name: item, rtId: '012000000000000AAA'});
+                    if (itemRTname) {
+                        let itemRT = itemObject + '.' + itemRTname;
+                        if (this.isDebug) console.log('rendered: registering field with RT',itemRT);
+                        if (!this.rts2load.RT.includes(itemRT)) {
+                            if (this.isDebug) console.log('rendered: registering new RT ID to load',itemRT);
+                            this.rts2load.RT.push(itemRT);
+                        }
+                        this.fields2load.push({name: item, field: itemObject + '.' + itemField, rt: itemRT});
+                    }
+                    else {
+                        // Loading master RT systematically to fetch all possible values
+                        if (this.isDebug) console.log('rendered: registering field with master RT');
+                        this.fields2load.push({name: item, field: item, rtId: '012000000000000AAA'});
+                    }
                 }
                 else {
                     console.warn('rendered: bad picklist field name provided ', item);
@@ -82,21 +107,31 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
                 if (this.isDebug) console.log('rendered: field values already available ', JSON.stringify(configMap[item]));
             }
         });
+        if (this.isDebug) console.log('rendered: RTs to load init ',JSON.stringify(this.rts2load));
         if (this.isDebug) console.log('rendered: objects to load init ',JSON.stringify(this.objects2load));
         if (this.isDebug) console.log('rendered: fields to load init ',JSON.stringify(this.fields2load));
 
+        this.isInitDone = true;
         if (this.objects2load.length > 0) {
-            if (this.isDebug) console.log('rendered: END / waiting for object desc to load');     
-            this.isInitDone = true;       
+            if (this.rts2load.RT.length == 0) {
+                if (this.isDebug) console.log('rendered: no RT to load');
+                this.rtsReady = true;
+                if (this.isDebug) console.log('rendered: END / waiting for object and RT descs to load');
+            }
+            else {
+                if (this.isDebug) console.log('rendered: END / waiting for object descs to load');
+            }
         }
         else {
             if (this.isDebug) console.log('rendered: END / returning field descs directly');
             this.returnValues();
         }
-
-        if (this.isDebug) console.log('rendered: END Loader for picklist fields ',JSON.stringify(this.picklistFields));
     }
 
+    //----------------------------------------------------------------
+    // Data fetch  
+    //----------------------------------------------------------------   
+  
     @wire(getObjectInfos, { objectApiNames: "$objects2load" })
     wiredObjects({ error, data }) {
         if (this.isDebug) console.log('wiredObjects: START for objects ', JSON.stringify(this.objects2load));
@@ -109,16 +144,17 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
                 data.results.forEach(item => {
                     if (this.isDebug) console.log('wiredObjects: registering Object desc for ', item.result.apiName);
                     loadedObjects[item.result.apiName] = item.result;
-                })
+                });
                 this.loadedObjects = loadedObjects;
+                this.objectsReady = true;
                 if (this.isDebug) console.log('wiredObjects: Object descs registered');
 
-                if (this.fieldsLoaded.length < this.fields2load.length) {
-                    if (this.isDebug) console.log('wiredObjects: END / waiting for additional field descs');
+                if (this.rtsReady) {
+                    if (this.isDebug) console.log('wiredObjects: END / triggering picklist load');
+                    this.picklistsReady = true;
                 }
                 else {
-                    if (this.isDebug) console.log('wiredObjects: END / returning all field descs');
-                    this.returnValues();
+                    if (this.isDebug) console.log('wiredObjects: END / waiting for RT descs');
                 }
             }
             else {
@@ -129,6 +165,43 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
             console.warn('wiredObjects: Picklist fetch failed ', JSON.stringify(error));
             let loadEvt = new CustomEvent('loaded', { detail: { error: error }});
             if (this.isDebug) console.log('wiredObjects: END / triggering error load event for parent component ', JSON.stringify(loadEvt.detail));
+            this.dispatchEvent(loadEvt);
+        }
+    }
+
+    @wire(getConfig, { configMap: "$rts2load" })
+    wiredRTs({ error, data }) {
+        if (this.isDebug) console.log('wiredRTs: START for RTs ', JSON.stringify(this.rts2load));
+
+        if (data) {
+            if (this.isDebug) console.log('wiredRTs: RTs fetched ', JSON.stringify(data));
+
+            this.fields2load.forEach(iterField => {
+                if (this.isDebug) console.log('wiredRTs: processing field ', iterField.name);
+
+                if (iterField.rt) {
+                    if (this.isDebug) console.log('wiredRTs: setting RT ID for ', iterField.rt);
+                    iterField.rtId = data.RT[iterField.rt];
+                }
+                else {
+                    if (this.isDebug) console.log('wiredRTs: master RT used');
+                }
+            });
+            this.rtsReady = true;
+            if (this.isDebug) console.log('wiredRTs: All RT IDs registered',JSON.stringify(this.fields2load));
+
+            if (this.objectsReady) {
+                if (this.isDebug) console.log('wiredRTs: END / triggering picklist load');
+                this.picklistsReady = true;
+            }
+            else {
+                if (this.isDebug) console.log('wiredRTs: END / waiting for Object descs');
+            }
+        }
+        else if (error) {
+            console.warn('wiredRTs: END / RT ID fetch failed ', JSON.stringify(error));
+            let loadEvt = new CustomEvent('loaded', { detail: { error: error }});
+            if (this.isDebug) console.log('wiredRTs: END / triggering error load event for parent component ', JSON.stringify(loadEvt.detail));
             this.dispatchEvent(loadEvt);
         }
     }
@@ -146,19 +219,16 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
             this.dispatchEvent(loadEvt);
         }
         else {
-            if (this.isDebug) console.log('handleLoaded: registering field values for ', event.detail.field);
-            this.loadedPicklists[event.detail.field] = event.detail.values;
-            this.fieldsLoaded.push(event.detail.field);
+            if (this.isDebug) console.log('handleLoaded: registering field values for ', event.detail.name);
+            this.loadedPicklists[event.detail.name] = event.detail.values;
+            this.fieldsLoaded.push(event.detail.name);
 
             if (this.fieldsLoaded.length < this.fields2load.length) {
-                if (this.isDebug) console.log('handleLoaded: END / waiting for additional field descs');
-            }
-            else if (this.loadedObjects) {
-                if (this.isDebug) console.log('handleLoaded: END / returning all field descs');
-                this.returnValues();
+                if (this.isDebug) console.log('handleLoaded: END / waiting for additional field descs',this.fields2load.length - this.fieldsLoaded.length);
             }
             else {
-                if (this.isDebug) console.log('handleLoaded: END / waiting for object descs');
+                if (this.isDebug) console.log('handleLoaded: END / returning all field descs', JSON.stringify(this.fieldsLoaded));
+                this.returnValues();
             }
         }
     }
@@ -173,7 +243,7 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
         let configMap = this.refs.configUtl.getMap('dsfrPicklists') || {};
         if (this.isDebug) console.log('returnValues: configMap fetched ', JSON.stringify(configMap));
 
-        if (this.isDebug) console.log('returnValues: Object descs loaded ',JSON.stringify(this.loadedObjects));
+        if (this.isDebug) console.log('returnValues: Picklist descs loaded ',JSON.stringify(this.loadedPicklists));
 
         let picklistDescs = [];
         this.picklistFields.forEach(item => {
@@ -188,7 +258,9 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
                 let itemParts = item.split('.');
                 let itemObject = itemParts[0];
                 let itemField = itemParts[1];
+                let itemRT = itemParts[2];
                 if (this.isDebug) console.log('returnValues: for object ',itemObject);
+                if (this.isDebug) console.log('returnValues: and RT ',itemRT);
 
                 let itemObjDeps = this.loadedObjects[itemObject].dependentFields;
                 if (this.isDebug) console.log('returnValues: with deps ',JSON.stringify(itemObjDeps));
@@ -196,6 +268,7 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
                 let itemFieldDesc = this.loadedObjects[itemObject].fields[itemField];
                 if (this.isDebug) console.log('returnValues: and field desc ',JSON.stringify(itemFieldDesc));
 
+                //let itemFullName = itemObject + '_' + itemField + (itemRT ? '_' + itemRT : '');
                 let itemFullName = itemObject + '_' + itemField;
                 if (this.isDebug) console.log('returnValues: fullName init ',itemFullName);
 
@@ -270,8 +343,8 @@ export default class DsfrPicklistsLoaderUtl extends LightningElement {
     }
 
     formatValues = (fieldFullName, picklistDesc) => {
-        if (this.isDebug) console.log('formatValues: START with ',JSON.stringify(picklistDesc));
-        if (this.isDebug) console.log('formatValues: for field ',fieldFullName);
+        if (this.isDebug) console.log('formatValues: START for field ',fieldFullName);
+        if (this.isDebug) console.log('formatValues: with desc ',JSON.stringify(picklistDesc));
 
         let controllingValues = {};
         Object.keys(picklistDesc.controllerValues).forEach(iter => {

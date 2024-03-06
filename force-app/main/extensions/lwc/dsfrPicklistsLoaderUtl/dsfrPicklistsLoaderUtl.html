@@ -1,12 +1,13 @@
 <template>
-    <c-dsfr-config-utl  is-debug={isDebug} lwc:ref="configUtl">
+    <c-dsfr-config-utl  is-debug={isDebugFine} lwc:ref="configUtl">
     </c-dsfr-config-utl>
-    <template lwc:if={isInitDone}>
+    <template lwc:if={picklistsReady}>
         <template for:each={fields2load} for:item="iterField">
             <c-dsfr-picklist-utl    key={iterField.name}
-                                    picklist-field={iterField.name}
+                                    name={iterField.name}
+                                    picklist-field={iterField.field}
                                     record-type-id={iterField.rtId}
-                                    is-debug={isDebug}
+                                    is-debug={isDebugFine}
                                     onloaded={handleLoaded}>
             </c-dsfr-picklist-utl>
         </template>

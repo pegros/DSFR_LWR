@@ -234,20 +234,20 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('connected: processing mainCriteria ', this.mainCriteria);
             try {
                 this.mainFieldList = JSON.parse(this.mainCriteria);
-                if (this.isDebug) console.log('connected: main field list registered ', mainFieldList);
+                if (this.isDebug) console.log('connected: main field list registered ', this.mainFieldList);
             }
             catch (error) {
-                console.warn('connected: main criteria parsing failed ', error);
+                console.warn('connected: main criteria parsing failed ', JSON.stringify(error));
             }
         }
         if (this.criteria) {
             if (this.isDebug) console.log('connected: processing criteria ', this.criteria);
             try {
                 this.fieldList = JSON.parse(this.criteria);
-                if (this.isDebug) console.log('connected: additional field list registered ', fieldList);
+                if (this.isDebug) console.log('connected: additional field list registered ', this.fieldList);
             }
             catch (error) {
-                console.warn('connected: additional criteria parsing failed ', error);
+                console.warn('connected: additional criteria parsing failed ', JSON.stringify(error));
             }
         }
 
