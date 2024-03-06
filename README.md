@@ -39,6 +39,9 @@ Chaque composant est documenté dans sa propre page.
 * **[dsfrActionButtonCmp](/help/dsfrActionButtonCmp.md)** pour déclencher une création / MAJ d'un enregistrement (par ex. MAJ d'un statut)
 * **[dsfrFormButtonCmp](/help/dsfrFormButtonCmp.md)** pour déclencher un formulaire de création / modification en popup modale
 * **[dsfrFlowPopupCmp](/help/dsfrFlowPopupCmp.md)** pour déclencher un processus guidé (Salesforce Flow) en popup modale
+* **[dsfrSearchCmp](/help/dsfrSearchCmp.md)** pour définir des critères de sélection
+et naviguer vers une page de recherche (ou mettre à jour le contexte de sélection d'une
+page de recherche)
 
 ### Composants de structure
 
