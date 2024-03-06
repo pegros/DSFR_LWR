@@ -104,6 +104,6 @@ Par ex.
 
 ## Précisions techniques
 
-A l'heure actuelle, une picklist donnée ne peut être incluse dans les critères avec un unique
+A l'heure actuelle, une picklist donnée ne peut être incluse dans les critères qu'avec un seul
 record type maximum. Quand aucun record type n'est spécifié, c'est le `master` qui est utilisé
 (listant toutes les valeurs possibles).
