@@ -66,7 +66,11 @@ Exemple de liste de critères (sans record type):
 
 Exemple de liste de critères (avec record type):
 ```
-_à compléter_
+[
+    "DemandeFormation__c.PeriodeSouhaitee__c",
+    "DemandeFormation__c.Statut__c.BesoinFormation",
+    "DemandeFormation__c.Priorite__c"
+]
 ```
 
 ### RAZ des critères
@@ -102,8 +106,29 @@ Par ex.
 }
 ```
 
+### Affichage des résultats
+
+Les résultats de recherche peuvent être facilement affichés au travers d'une **dsfrCardTileListCmp** en passant
+dans son paramètre `Contexte de Liste` les différents critères de recherche disponibles dans le contexte de la page au travers du **[data binding](https://developer.salesforce.com/docs/atlas.en-us.244.0.exp_cloud_lwr.meta/exp_cloud_lwr/advanced_expressions.htm?q=Data+Binding)** `Route`.
+
+Par ex.
+```
+{
+    "term":"{!Route.term}",
+    "ps":"{!Route.PeriodeSouhaitee__c}",
+    "status":"{!Route.Statut__c}",
+    "pr":"{!Route.Priorite__c}"
+}
+```
+
 ## Précisions techniques
 
-A l'heure actuelle, une picklist donnée ne peut être incluse dans les critères qu'avec un seul
+⚠️ A l'heure actuelle,
+* une picklist donnée ne peut être incluse dans les critères qu'avec un seul
 record type maximum. Quand aucun record type n'est spécifié, c'est le `master` qui est utilisé
 (listant toutes les valeurs possibles).
+* un API name de champ picklist ne peut être utilisé qu'une seule fois dans une page de
+recherche car c'est lui qui est utilisé dans le contexte de page (e.g. pas possible d'avoir
+simultanément `Òbjet1__c.Picklist__c` et `Òbjet2__c.Picklist__c` car les deux positionnent
+la propriété `Picklist__c` du contexte de page) 
+
