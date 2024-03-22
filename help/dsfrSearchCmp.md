@@ -109,7 +109,7 @@ Par ex.
 ### Affichage des résultats
 
 Les résultats de recherche peuvent être facilement affichés au travers d'une **dsfrCardTileListCmp** en passant
-dans son paramètre `Contexte de Liste` les différents critères de recherche disponibles dans le contexte de la page au travers du **[data binding](https://developer.salesforce.com/docs/atlas.en-us.244.0.exp_cloud_lwr.meta/exp_cloud_lwr/advanced_expressions.htm?q=Data+Binding)** `Route`.
+dans son paramètre `Contexte de Liste` les différents critères de recherche disponibles dans le contexte de la page au travers du **[data binding LWR](https://developer.salesforce.com/docs/atlas.en-us.244.0.exp_cloud_lwr.meta/exp_cloud_lwr/advanced_expressions.htm?q=Data+Binding)** `Route`.
 
 Par ex.
 ```
