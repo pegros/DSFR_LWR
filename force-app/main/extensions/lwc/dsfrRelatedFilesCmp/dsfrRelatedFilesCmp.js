@@ -15,6 +15,11 @@ import UPLOAD_TITLE     from '@salesforce/label/c.dsfrRelatedFilesUploadTitle';
 import DELETE_TITLE     from '@salesforce/label/c.dsfrRelatedFilesDeleteTitle';
 import UPLOAD_TYPES     from '@salesforce/label/c.dsfrFileUploadTypes';
 
+
+/**
+* @slot emptySection
+*/
+
 export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElement)  {
 
     //-----------------------------------------------------
@@ -28,6 +33,8 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     @api showUpload = false;
     @api showDelete = false;
     @api disabled = false;
+    @api hasEmptySection;
+    @api forceDisplay;
     @api showRefresh = false;
 
     _listContext;
@@ -106,6 +113,13 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
         return {label: SORT_DEFAULT};
     }
 
+    get hasNoResult() {
+        return ((this.hasEmptySection) && ((this.forceDisplay) || ((this.fileList?.length || 0) == 0)));
+    }
+    get hasResults() {
+        return (this.fileList?.length > 0);
+    }
+    
     //-----------------------------------------------------
     // Initialisation
     //-----------------------------------------------------
