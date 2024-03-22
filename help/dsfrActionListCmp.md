@@ -4,10 +4,10 @@
 
 Le composant **dsfrActionListCmp** permet d'afficher un groupe de boutons d'actions standard du DSFR (cf. [description officielle](https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/groupe-de-boutons)).
 
-![Inline display](/media/dsfActionListCmp.png)
-_Affichage hoorizontal (avec classe fr-btns-group--inline-md)_
+![Inline display](/media/dsfrActionListCmp.png)
+_Affichage horizontal (avec classe fr-btns-group--inline-md)_
 
-![Stacked display](/media/dsfActionListCmpNarrow.png)
+![Stacked display](/media/dsfrActionListCmpNarrow.png)
 _Affichage vertical (avec classe _fr-btns-group_ seule ou quand l'affichage est étroit)_
 
 
