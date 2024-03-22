@@ -28,15 +28,15 @@ La configuration s'effectue en partie dans **Site Builder** mais repose principa
 ### Configuration dans **Site Builder**
 
 Les propriétés suivantes sont disponibles directement dans **Site Builder**:
-* `Configuration d'actions`: Nom du custom metadata **sfpegAction** de configuration
-* `Contexte d'action`: Contexte au format JSON nécessaire à la configuration de la liste d'actions
+* `Configuration d'actions`: Nom du custom metadata **sfpegAction** de configuration (obligatoire)
+* `Contexte d'action`: Contexte (optionnel) au format JSON nécessaire à la configuration de la liste d'actions
     * par ex. `{"Type":"OPE_TYP"}`, qui permet ensuite d'utiliser cett valeur `Type` dans un token `CTX`
     de la configuration d'action (via `{{{CTX.Type}}}`)
-* `CSS additionnelle`: "Classes pour modifier le style du conteneur du composant
+* `CSS additionnelle`: Classes pour modifier le style du conteneur du composant
     * par défault, la configuration **DSFR** `fr-btns-group fr-btns-group--inline-md` est proposée
     * il est possible de forcer un alignement à droite (via la classe `align-right`) ou au centre (via la classe `align-center`)
-* `Object Name`: API Name de l'objet courant
-* `Record ID`: Id Salesforce de l'enregistrement courant (pour les token `RCD`)
+* `Object Name`: API Name de l'objet courant de la page (typiquement `{!Route.objectApiName}`)
+* `Record ID`: Id Salesforce de l'enregistrement courant (pour les token `RCD`, typiquement `{!Route.recordId}`)
 * `Debug ?`: Activation de détails pour l'analyse de problèmes
 
 
@@ -116,8 +116,8 @@ L'exemple suivant couvre la configuration de ces différentstypes d'action.
 ```
 
 ## Précisions techniques
-_à compléter_
 
+⚠️ Ce composant a pour prerequis le package **[PEG_LIST](https://github.com/pegros/PEG_LIST)**.
 
 
 
