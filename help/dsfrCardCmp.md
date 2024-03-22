@@ -29,7 +29,7 @@ Seul l'ID Salesforce est implicitement disponible (via `{!Item.Id}`).
 ### Configuration d'une liste de boutons d'action
 
 Dans l'exemple suivant, sur une liste `Mes Comptes` récupérées par le composant standard **Liste** de Salesforce, des ***Cartes DSFR*** sont affichées avec 3 boutons d'action correspondant aux 3 types de boutons actuellement disponibles:
-* Bouton DSFR de navigation (cf. composant **[dsfrDuttonDsp](/help/dsfrDuttonDsp.md)**)
+* Bouton DSFR de navigation (cf. composant **[dsfrButtonDsp](/help/dsfrButtonDsp.md)**)
 * Bouton DSFR d'action (cf. composant **[dsfrActionDuttonCmp](/help/dsfrActionDuttonCmp.md)**)
 * Bouton de Popup de Processus (cf. composant **[dsfrFlowPopupCmp](/help/dsfrFlowPopupCmp.md)**)
 * Bouton de Popup de Formulaire (cf. composant **[dsfrFormButtonCmp](/help/dsfrFormButtonCmp.md)**)

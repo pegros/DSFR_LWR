@@ -12,7 +12,7 @@ _Affichage vertical (avec classe _fr-btns-group_ seule ou quand l'affichage est 
 
 
 Les 4 types de boutons unitaires **DSFR** actuellement disponibles peuvent être utilisés dans sa configuration:
-* Bouton DSFR de navigation (cf. composant **[dsfrDuttonDsp](/help/dsfrDuttonDsp.md)**)
+* Bouton DSFR de navigation (cf. composant **[dsfrButtonDsp](/help/dsfrButtonDsp.md)**)
 * Bouton DSFR d'action (cf. composant **[dsfrActionDuttonCmp](/help/dsfrActionDuttonCmp.md)**)
 * Bouton de Popup de Processus (cf. composant **[dsfrFlowPopupCmp](/help/dsfrFlowPopupCmp.md)**)
 * Bouton de Popup de Formulaire (cf. composant **[dsfrFormButtonCmp](/help/dsfrFormButtonCmp.md)**)
