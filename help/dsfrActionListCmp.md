@@ -48,7 +48,7 @@ elle même profitant des services du composant **[sfpegMergeUtl](https://github.
 ⚠️ Seule la metadonnée du composant **sfpegActionBarCmp** et sa contextualisation via **sfpegMergeUtl** sont utilisées.
 
 Les seules actions disponibles sont celles offertes par les composants DSFR d'action
-* Bouton DSFR de navigation (cf. composant **[dsfrDuttonDsp](/help/dsfrDuttonDsp.md)**)
+* Bouton DSFR de navigation (cf. composant **[dsfrButtonDsp](/help/dsfrButtonDsp.md)**)
 * Bouton DSFR d'action (cf. composant **[dsfrActionDuttonCmp](/help/dsfrActionDuttonCmp.md)**)
 * Bouton de Popup de Processus (cf. composant **[dsfrFlowPopupCmp](/help/dsfrFlowPopupCmp.md)**)
 * Bouton de Popup de Formulaire (cf. composant **[dsfrFormButtonCmp](/help/dsfrFormButtonCmp.md)**)
