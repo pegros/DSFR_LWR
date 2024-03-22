@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Liste d'Actions</masterLabel>
+    <description>Affichage d'une liste de boutons DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="actionConfig"
+                        label="Configuration d'actions"
+                        type="String"
+                        description="Nom du custom metadata sfpegAction de configuration" />
+            <property   name="actionContext"
+                        label="Contexte d'action"
+                        type="String"
+                        description="Contexte au format JSON nécessaire à la configuration de la liste d'actions" />
+                    
+            <property   name="wrappingCss"
+                        label="CSS additionnelle"
+                        type="String"
+                        default="fr-btns-group fr-btns-group--inline-md"
+                        description="Classes pour modifier le style du conteneur du composant (align-center and align-right possibles pour contrôler l'alignement)" />
+        
+            <property   name="objectApiName"
+                        label="Object Name"
+                        type="String"
+                        description="API Name de l'objet courant" />
+            <property   name="recordId"
+                        label="Record ID"
+                        type="String"
+                        description="Id Salesforce de l'enregistrement courant" />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>     
+</LightningComponentBundle>

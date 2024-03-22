@@ -1,0 +1,21 @@
+.align-right {
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
+    max-width: 100%;
+    /*    text-align: end;
+align-self: self-end;*
+    /*display: inline-block;
+    margin-left: auto;
+    margin-right: 0;*/
+}
+.align-center {
+    align-items: center !important;
+    justify-content: center !important;
+    max-width: 100%;
+    /*text-align: center;
+    align-self: center;
+    /*justify-content: center;
+    /*display: block;
+    margin-left: auto;
+    margin-right: auto;*/
+}

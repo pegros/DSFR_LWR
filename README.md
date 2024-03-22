@@ -42,6 +42,7 @@ Chaque composant est documenté dans sa propre page.
 * **[dsfrSearchCmp](/help/dsfrSearchCmp.md)** pour définir des critères de sélection
 et naviguer vers une page de recherche (ou mettre à jour le contexte de sélection d'une
 page de recherche)
+* **[dsfrActionListCmp](/help/dsfrActionListCmp.md)** pour afficher un groupe de bouton activable dynamiquement
 
 ### Composants de structure
 
