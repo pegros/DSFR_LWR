@@ -50,7 +50,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
         this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
         if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
 
-        this.isInactive = (this.buttonInactive === 'true');
+        this.isInactive = ((typeof this.buttonInactive == 'boolean') ? this.buttonInactive : (this.buttonInactive === 'true'));
         if (this.isDebug) console.log('connected: isInactive evaluated ', this.isInactive);
 
         let buttonClass = 'fr-btn  fr-btn--' + this.buttonVariant;
