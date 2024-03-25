@@ -1,5 +1,5 @@
 import { api, LightningElement, wire } from 'lwc';
-import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
+import { notifyRecordUpdateAvailable, getRecordNotifyChange } from 'lightning/uiRecordApi';
 import basePathName from '@salesforce/community/basePath';
 
 import CLOSE_TITLE from '@salesforce/label/c.dsfrFlowPopupCloseTitle';
@@ -77,6 +77,7 @@ export default class DsfrFlowPopupCmp extends LightningElement {
             console.log('connected: Modal Title ', this.modalTitle);
             console.log('connected: Flow Name ', this.flowName);
             console.log('connected: Flow Parameters ', this.flowParameters);
+            console.log('connected: recordId ', this.recordId);
             console.log('connected: do refresh? ', this.doRefresh);
         }
 
@@ -92,6 +93,7 @@ export default class DsfrFlowPopupCmp extends LightningElement {
             console.log('rendered: START Flow Popup for ',this.buttonLabel);
             console.log('rendered: button title ',this.buttonTitle);
             console.log('rendered: Flow Name ', this.flowName);
+            console.log('rendered: recordId ', this.recordId);
             console.log('rendered: END Flow Popup');
         }
     }
@@ -179,33 +181,38 @@ export default class DsfrFlowPopupCmp extends LightningElement {
 
         if (event.detail.status === 'FINISHED') {
             document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrFlowPopupCmp',event_site: basePathName,event_category:'flow_popup',event_label:this.buttonTag}}}));
-            if (this.isDebug) console.log('openModal: GA notified - flow termination');
+            if (this.isDebug) console.log('closeModal: GA notified - flow termination');
         }
         else {
             document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_cancel',params:{event_source:'dsfrFlowPopupCmp',event_site: basePathName,event_category:'flow_popup',event_label:this.buttonTag}}}));
-            if (this.isDebug) console.log('openModal: GA notified - popup close');
+            if (this.isDebug) console.log('closeModal: GA notified - popup close');
         }
 
         if ((this.doRefresh) && (event.detail.status === 'FINISHED')) {
             if (this.isDebug) console.log('closeModal: Triggering refresh');
+            
+            if (this.recordId) {
+                if (this.isDebug) console.log('closeModal: refreshing record ', this.recordId);
+                notifyRecordUpdateAvailable([{recordId: this.recordId}]);
+                //getRecordNotifyChange([{recordId: this.recordId}]);
+                if (this.isDebug) console.log('closeModal: record refresh triggered ');
+            }
+
             let actionNotif = {
                 channel: "dsfrRefresh",
                 action: {"type": "done","params": {"type": "refresh"}},
                 context: null
             };
-            if (this.isDebug) console.log('closeModal: actionNotif prepared ',JSON.stringify(actionNotif));
-            if (this.isDebug) console.log('closeModal: END / Publishing page refresh notification');
+            if (this.isDebug) console.log('closeModal: actionNotif prepared for page refresh ',JSON.stringify(actionNotif));
             publish(this.messageContext, sfpegCustomNotification, actionNotif);
+            if (this.isDebug) console.log('closeModal: Page refresh notification published');
 
-            if (this.recordId) {
-                if (this.isDebug) console.log('redirect: refreshing record ', this.recordId);
-                notifyRecordUpdateAvailable([{recordId: this.recordId}]);
-                if (this.isDebug) console.log('redirect: record refresh triggered ');
-            }
+            
             //if (this.isDebug) console.log('closeModal: refreshing page');
             //this.dispatchEvent(new RefreshEvent());
             //window.location.reload();
         }
+        
         if (this.isDebug) console.log('closeModal: END');
     }
 

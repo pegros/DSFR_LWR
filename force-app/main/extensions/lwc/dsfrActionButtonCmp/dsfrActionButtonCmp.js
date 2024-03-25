@@ -123,24 +123,26 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                         if (this.isDebug) console.log('handleAction: END / Navigating to ', JSON.stringify(newRecordPageRef));
                         this[NavigationMixin.Navigate](newRecordPageRef);
                     }
-                    else if (actionDetails.reload) {
-                        if (this.isDebug) console.log('handleAction: END / Triggering record data reload on ',actionDetails.reload);
-                        notifyRecordUpdateAvailable(actionDetails.reload);
+                    else {
+                        if (actionDetails.reload) {
+                            if (this.isDebug) console.log('handleAction: Triggering record data reload on ',actionDetails.reload);
+                            notifyRecordUpdateAvailable(actionDetails.reload);
+                        }
+                        if (actionDetails.refresh) {
+                            if (this.isDebug) console.log('handleAction: Triggering refresh');
+                            //this.dispatchEvent(new RefreshEvent());
+                            //window.location.reload();
+                            let actionNotif = {
+                                'channel': "dsfrRefresh",
+                                'action': {"type": "done","params": {"type": "refresh"}},
+                                'context': null
+                            };
+                            if (this.isDebug) console.log('handleAction: actionNotif prepared ',JSON.stringify(actionNotif));
+                            if (this.isDebug) console.log('handleAction: Publishing page refresh notification');
+                            publish(this.messageContext, sfpegCustomNotification, actionNotif);
+                        }
+                        if (this.isDebug) console.log('handleAction: END');
                     }
-                    else if (actionDetails.refresh) {
-                        if (this.isDebug) console.log('handleAction: Triggering refresh');
-                        //this.dispatchEvent(new RefreshEvent());
-                        //window.location.reload();
-                        let actionNotif = {
-                            'channel': "dsfrRefresh",
-                            'action': {"type": "done","params": {"type": "refresh"}},
-                            'context': null
-                        };
-                        if (this.isDebug) console.log('handleAction: actionNotif prepared ',JSON.stringify(actionNotif));
-                        if (this.isDebug) console.log('handleAction: END / Publishing page refresh notification');
-                        publish(this.messageContext, sfpegCustomNotification, actionNotif);
-                    }
-                    else if (this.isDebug) console.log('handleAction: END');
                     this.toggleSpinner();
                 });
                 if (this.isDebug) console.log('handleAction: popup displayed');

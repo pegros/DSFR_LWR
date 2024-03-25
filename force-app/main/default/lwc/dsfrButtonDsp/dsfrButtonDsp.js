@@ -14,7 +14,18 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonTarget;
-    @api buttonInactive = 'false';
+    
+    //@api buttonInactive = 'false';
+    _buttonInactive;
+    @api
+    get buttonInactive() {
+        return this._buttonInactive;
+    }
+    set buttonInactive(value) {
+        if (this.isDebug) console.log('setting buttonInactive provided ',value);
+        this.isInactive = ((typeof value == 'boolean') ? value : (value === 'true'));
+        if (this.isDebug) console.log('setting buttonInactive evaluated ', this.isInactive);
+    }
     @api buttonAlign = 'right';
 
     @api isDebug = false;
@@ -50,8 +61,8 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
         this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
         if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
 
-        this.isInactive = ((typeof this.buttonInactive == 'boolean') ? this.buttonInactive : (this.buttonInactive === 'true'));
-        if (this.isDebug) console.log('connected: isInactive evaluated ', this.isInactive);
+        //this.isInactive = ((typeof this.buttonInactive == 'boolean') ? this.buttonInactive : (this.buttonInactive === 'true'));
+        //if (this.isDebug) console.log('connected: isInactive evaluated ', this.isInactive);
 
         let buttonClass = 'fr-btn  fr-btn--' + this.buttonVariant;
         switch (this.buttonSize) {
