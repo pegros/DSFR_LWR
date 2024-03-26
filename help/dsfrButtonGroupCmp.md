@@ -114,4 +114,4 @@ L'exemple suivant couvre la configuration de ces différents types d'action.
 
 ## Précisions techniques
 
-_A compléter_
+Ce composant est une approche indépendante DSFR ne reposant pas sur un composant **PEG_LIST** comme le composant **[dsfrActionListCmp](/help/dsfrActionListCmp.md)**).

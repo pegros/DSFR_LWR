@@ -34,7 +34,7 @@ Les propriétés suivantes sont disponibles directement dans **Site Builder**:
     de la configuration d'action (via `{{{CTX.Type}}}`)
 * `CSS additionnelle`: Classes pour modifier le style du conteneur du composant
     * par défault, la configuration **DSFR** `fr-btns-group fr-btns-group--inline-md` est proposée
-    * il est possible de forcer un alignement à droite (via la classe `align-right`) ou au centre (via la classe `align-center`)
+    * il est possible de forcer un alignement à droite (via la classe `fr-btns-group--right`) ou au centre (via la classe `fr-btns-group--center`) 
 * `Object Name`: API Name de l'objet courant de la page (typiquement `{!Route.objectApiName}`)
 * `Record ID`: Id Salesforce de l'enregistrement courant (pour les token `RCD`, typiquement `{!Route.recordId}`)
 * `Debug ?`: Activation de détails pour l'analyse de problèmes
@@ -119,5 +119,4 @@ L'exemple suivant couvre la configuration de ces différentstypes d'action.
 
 ⚠️ Ce composant a pour prerequis le package **[PEG_LIST](https://github.com/pegros/PEG_LIST)**.
 
-
-
+Pour une approche indépendante DSFR ne reposant pas sur ce package, cf. le composant **[dsfrButtonGroupCmp](/help/dsfrButtonGroupCmp.md)**).
