@@ -139,17 +139,28 @@ export default class DsfrFormCmp extends LightningElement {
                         label:      result.MasterLabel,
                         size:       config.size || 12,
                         sections:   config.sections || [],
-                        context:    config.context
+                        context:    config.context,
+                        labelOk:    false
                     };
                     this.configDetails = FORM_CONFIGS[this.configName];
                     if (this.isDebug) console.log('connected: configuration registered ',JSON.stringify(this.configDetails));
+
+                    if ((config.fields) || (config.description) || (config.help)) {
+                        (this.configDetails).sections.unshift({
+                            fields: config.fields || [],
+                            description: config.description,
+                            help: config.help
+                        })
+                        if (this.isDebug) console.log('connected: default section info added ');
+                    }
 
                     ((this.configDetails).sections).forEach((iterSection, iterIndex) => {
 
                         iterSection.key = 'section-' + iterIndex;
                         iterSection.legendKey = 'section-legend-' + iterIndex;
-                        iterSection.legendClass = 'fr-fieldset__legend ' + (iterSection.title ? '' : 'slds-hide');
-                        iterSection.title = iterSection.title || 'Section ' + iterIndex;
+                        iterSection.legendClass = 'fr-fieldset__legend ' + (iterSection.label ? '' : 'slds-hide');
+                        iterSection.labelClass = iterSection.labelClass || 'fr-h3';
+                        iterSection.title = iterSection.label || 'Section ' + iterIndex;
 
                         if (iterSection.fields) {
                             (iterSection.fields).forEach(iterField => {
@@ -209,11 +220,39 @@ export default class DsfrFormCmp extends LightningElement {
     // Edit Form management
     handleLoad(event) {
         if (this.isDebug) console.log('handleLoad: START for form',event);
+        if (this.isDebug) console.log('handleLoad: event details',JSON.stringify(event.details));
         this.toggleSpinner(false);
 
         if ((!this.recordTypeId) && (this.recordId)){
             this.recordTypeId = (event.detail.records)[this.recordId]?.recordTypeId;
             if (this.isDebug) console.log('handleLoad: recordTypeId init ', this.recordTypeId);
+        }
+
+        if (!this.configDetails.labelOk) {
+            if (this.isDebug) console.log('handleLoad: initialising labels');
+            if (this.isDebug) console.log('handleLoad: details provided ',JSON.stringify(event.detail));
+
+            let objectFields = ((event.detail.objectInfos)[this.objectApiName])?.fields;
+            if (this.isDebug) console.log('handleLoad: objectFields fetched ',JSON.stringify(objectFields));
+
+            ((this.configDetails).sections).forEach((iterSection) => {
+                if (this.isDebug) console.log('handleLoad: processing section ',JSON.stringify(iterSection));
+
+                if (iterSection.fields) {
+                    (iterSection.fields).forEach(iterField => {
+                        if (this.isDebug) console.log('handleLoad: processing field ',JSON.stringify(iterField));
+                        if ((!iterField?.hideHelp) && (!iterField?.help) && (objectFields[iterField?.name]?.inlineHelpText)) {
+                            iterField.help = objectFields[iterField.name].inlineHelpText;
+                        }
+                    });
+                    console.warn('handleLoad: all section fields reworked');
+                }
+                else {
+                    console.warn('handleLoad: section with no fields ');
+                }
+            });
+            this.configDetails.labelOk = true;
+            if (this.isDebug) console.log('handleLoad: configDetails updated ',JSON.stringify(this.configDetails));
         }
 
         if (this.isEditMode) {

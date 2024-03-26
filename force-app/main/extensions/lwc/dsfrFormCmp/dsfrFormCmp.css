@@ -10,3 +10,8 @@
     top: 20px;
     left: 10px;
 }
+
+/* DSFR Overrides */
+.fr-fieldset legend {
+    display: block !important;
+}

@@ -29,10 +29,10 @@
                                         onsuccess={handleSuccess}   onerror={handleError}>
                 <!-- FORM SECTIONS -->
                 <template for:each={configDetails.sections} for:item="iterSection">
-                    <fieldset   key={iterSection.key}   class={sectionClass}
-                                id={iterSection.key}    aria-labelledby={iterSection.legendKey}>
+                    <fieldset   key={iterSection.key} class={sectionClass}
+                                id={iterSection.key}  aria-labelledby={iterSection.legendKey}>
                         <legend class={iterSection.legendClass} id={iterSection.legendKey}>
-                            <h3>{iterSection.title}</h3>
+                            <h3 class={iterSection.labelClass}>{iterSection.label}</h3>
                         </legend>
                         <template lwc:if={iterSection.description}>
                             <div class="fr-fieldset__element">
@@ -49,6 +49,8 @@
                                 <lightning-layout-item  key={iterSectionField.name}
                                                         size="12"                   medium-device-size={iterSectionField.size} 
                                                         padding="horizontal-medium" class="fieldItem" >
+                                    <template lwc:if={iterSectionField.isSpace}>
+                                    </template>
                                     <template lwc:if={iterSectionField.hidden}>
                                         <div class="fr-fieldset__element slds-hide">
                                             <div class="fr-input-group fr-input-group--disabled">
@@ -63,17 +65,26 @@
                                                 <template lwc:if={iterSectionField.disabled}>
                                                     <lightning-output-field class="dsfrInput"       variant="label-stacked"
                                                                             field-name={iterSectionField.name}>
+                                                        <template lwc:if={iterSectionField.help}>
+                                                            <span class="fr-hint-text">{iterSectionField.help}</span>
+                                                        </template>
                                                     </lightning-output-field>
                                                 </template>
                                                 <template lwc:elseif={iterSectionField.required} >
                                                     <lightning-input-field  class="dsfrInput"       variant="label-stacked"
                                                                             field-name={iterSectionField.name}  required>
+                                                        <template lwc:if={iterSectionField.help}>
+                                                            <span class="fr-hint-text">{iterSectionField.help}</span>
+                                                        </template>
                                                     </lightning-input-field>
                                                 </template>
                                                 <template lwc:else>
                                                     <lightning-input-field  class="dsfrInput"       variant="label-stacked"
                                                                             field-name={iterSectionField.name} >
                                                     </lightning-input-field>
+                                                    <template lwc:if={iterSectionField.help}>
+                                                        <span class="slds-p-horizontal_x-small fr-hint-text">{iterSectionField.help}</span>
+                                                    </template>
                                                 </template>
                                             </div>
                                         </div>
@@ -83,6 +94,9 @@
                                             <div class="fr-input-group fr-input-group--disabled">
                                                 <lightning-output-field class="dsfrInput"       variant="label-stacked"
                                                                         field-name={iterSectionField.name} >
+                                                    <template lwc:if={iterSectionField.help}>
+                                                        <span class="fr-hint-text">{iterSectionField.help}</span>
+                                                    </template>
                                                 </lightning-output-field>
                                             </div>
                                         </div>
@@ -93,7 +107,7 @@
                     </fieldset>
                 </template>
 
-                <!-- FORM SECTIONS -->
+                <!-- FORM CONTEXT -->
                 <template lwc:if={configDetails.context}>
                     <fieldset class="slds-hide" id="context" aria-labelledby="context-legend">
                         <legend class="fr-fieldset__legend slds-hide" id="context-legend">
