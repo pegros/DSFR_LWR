@@ -63,7 +63,7 @@ export default class DsfrIconFieldListDsp extends LightningElement {
     connectedCallback() {
         this.wrappingClass = this.wrappingClass || 'horizontalUL'; 
         if (this.isDebug) console.log('connected: START for icon field list');
-        if (this.isDebug) console.log('connected: values ', this.values);
+        if (this.isDebug) console.log('connected: values ', JSON.stringify(this.values));
         if (this.isDebug) console.log('connected: wrappingClass ', this.wrappingClass);
         if (this.isDebug) console.log('connected: fieldClass ', this.fieldClass);
         if (this.isDebug) console.log('connected: iconClass ', this.iconClass);
@@ -72,7 +72,7 @@ export default class DsfrIconFieldListDsp extends LightningElement {
 
     renderedCallback() {
         if (this.isDebug) console.log('rendered: START for icon field list');
-        if (this.isDebug) console.log('rendered: values ', this.values);
+        if (this.isDebug) console.log('rendered: values ', JSON.stringify(this.values));
         if (this.isDebug) console.log('rendered: wrappingClass ', this.wrappingClass);
         if (this.isDebug) console.log('rendered: fieldClass ', this.fieldClass);
         if (this.isDebug) console.log('rendered: iconClass ', this.iconClass);
