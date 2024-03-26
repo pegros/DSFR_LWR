@@ -1,0 +1,79 @@
+<template>
+    <!-- GROUP DISPLAY -->
+    <template lwc:if={buttonList}>
+        <ul class={groupClass}>
+            <template for:each={buttonList} for:item="iter">
+                <template lwc:if={iter.hidden}>
+                </template>
+                <template lwc:elseif={iter.target}>
+                    <li key={iter.label}  >
+                        <c-dsfr-button-dsp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                            button-label={iter.label}   button-title={iter.title}
+                                            button-tag={iter.tag}
+                                            button-size={iter.size}     button-variant={iter.variant}
+                                            button-target={iter.target} button-inactive={iter.inactive}
+                                            button-align="left"         is-debug={isDebug}>
+                        </c-dsfr-button-dsp>
+                    </li>
+                </template>
+                <template lwc:elseif={iter.flowName}>
+                    <li key={iter.label}  >
+                        <c-dsfr-flow-popup-cmp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                                button-label={iter.label}   button-title={iter.title}
+                                                button-tag={iter.tag}
+                                                button-size={iter.size}     button-variant={iter.variant}
+                                                button-inactive={iter.inactive}
+                                                flow-name={iter.flowName}   flow-parameters={iter.flowParameters}
+                                                modal-title={iter.modalTitle}
+                                                do-refresh={iter.refresh}   record-id={iter.refreshId}
+                                                button-align="left"         is-debug={isDebug}>
+                        </c-dsfr-flow-popup-cmp>
+                    </li>
+                </template>
+                <template lwc:elseif={iter.action}>
+                    <li key={iter.label}  >
+                        <c-dsfr-action-button-cmp   button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                                    button-label={iter.label}   button-title={iter.title}
+                                                    button-tag={iter.tag}
+                                                    button-size={iter.size}     button-variant={iter.variant}
+                                                    button-action={iter.action} button-inactive={iter.inactive}
+                                                    button-align="left"         is-debug={isDebug}>
+                        </c-dsfr-action-button-cmp>
+                    </li>
+                </template>
+                <template lwc:elseif={iter.formFields}>
+                    <li key={iter.label}  >
+                        <c-dsfr-form-button-cmp button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                                button-label={iter.label}   button-title={iter.title}
+                                                button-tag={iter.tag}
+                                                button-size={iter.size}     button-variant={iter.variant}
+                                                button-align="left"         button-inactive={iter.inactive}
+                                                form-title={iter.formTitle} form-message={iter.formMessage}
+                                                form-field-list={iter.formFields}
+                                                record-id={iter.recordId}   object-api-name={iter.objectApiName} 
+                                                do-refresh={iter.refresh}   is-debug={isDebug}>
+                        </c-dsfr-form-button-cmp>
+                    </li>
+                </template>
+                <template lwc:else>
+                    <li key={iter.label}>⚠️ {iter.label}</li>
+                </template>
+            </template>
+        </ul>
+    </template>
+
+    <!-- DEBUG INFO -->
+    <template lwc:if={isDebug}>
+        <div class="">
+            <p class="fr-py-4v">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrButtonGroupCmp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </div>
+    </template>
+</template>
