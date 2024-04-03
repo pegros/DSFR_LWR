@@ -1,5 +1,9 @@
 import { LightningElement, api } from 'lwc';
 import basePath from "@salesforce/community/basePath";
+
+/**
+* @slot foldableSection
+*/
 export default class DsfrContainerDsp extends LightningElement {
 
     //-----------------------------------------------------
@@ -9,12 +13,14 @@ export default class DsfrContainerDsp extends LightningElement {
     @api titleClass;
     @api message;
     @api messageClass;
+    
     @api wrappingClass;
 
     @api isCollapsible;
     @api isCollapsed;
 
     @api isDebug = false;
+
 
     //-----------------------------------------------------
     // Initialisation
@@ -33,27 +39,25 @@ export default class DsfrContainerDsp extends LightningElement {
     //-----------------------------------------------------
     connectedCallback() {
         if (this.isDebug) {
-            console.log('connected: START for container');
-            console.log('connected: title', this.title);
+            console.log('connected: START for container ',this.title);
             console.log('connected: titleClass', this.titleClass);
             console.log('connected: message', this.message);
             console.log('connected: messageClass', this.messageClass);
         }
         //Handling strange LWR inputs for fields reset to empty (object value instead of null)
         this.resetInput();
-        if (this.isDebug) console.log('connected: END for container');
+        if (this.isDebug) console.log('connected: END for container ',this.title);
     }
     renderedCallback() {
         if (this.isDebug) {
-            console.log('rendered: START for container');
-            console.log('rendered: title', this.title);
+            console.log('rendered: START for container ',this.title);
             console.log('rendered: titleClass', this.titleClass);
             console.log('rendered: message', this.message);
             console.log('rendered: messageClass', this.messageClass);
         }
         //Handling strange LWR inputs for fields reset to empty (object value instead of null)
         this.resetInput();
-        if (this.isDebug) console.log('rendered: END for container');
+        if (this.isDebug) console.log('rendered: END for container ',this.title);
     }
 
     //-----------------------------------------------------
