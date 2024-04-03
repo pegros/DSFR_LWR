@@ -239,10 +239,11 @@ public with sharing class dsfrSiteManagement_CTL {
         newAccount.OwnerId = siteInfos.GuestRecordDefaultOwnerId;
         System.debug('registerUser: newAccount OwnerId updated ' + newAccount.OwnerId);
 
+        String newUsername = newAccount.FirstName.replace(' ','').left(5) + newAccount.LastName.replace(' ','').left(20) + '#' + nwUserCount;
         User newUser = new User(
-            Username = nwInfos.UrlPathPrefix.substringBefore('vforcesite') + nwUserCount + '@' + currentDomain,
+            Username = newUsername + '#' + nwInfos.UrlPathPrefix.substringBefore('vforcesite') + '@' + currentDomain,
             Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(2) + nwUserCount,
-            CommunityNickname = newAccount.FirstName.left(1) + newAccount.LastName.left(2) + nwUserCount,
+            CommunityNickname = newUsername,
             FirstName = newAccount.FirstName,
             LastName = newAccount.LastName,
             Email = newAccount.PersonEmail,
