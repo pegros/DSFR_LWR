@@ -50,6 +50,16 @@
                                                         size="12"                   medium-device-size={iterSectionField.size} 
                                                         padding="horizontal-medium" class="fieldItem" >
                                     <template lwc:if={iterSectionField.isSpace}>
+                                        <template lwc:if={iterSectionField.description}>
+                                            <div class="fr-fieldset__element">
+                                                <p class="fr-text--sm">{iterSectionField.description}</p>
+                                            </div>
+                                        </template>
+                                        <template lwc:if={iterSectionField.help}>
+                                            <div class="fr-fieldset__element">
+                                                <span class="fr-hint-text">{iterSectionField.help}</span>
+                                            </div>
+                                        </template>
                                     </template>
                                     <template lwc:if={iterSectionField.hidden}>
                                         <div class="fr-fieldset__element slds-hide">
