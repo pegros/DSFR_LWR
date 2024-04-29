@@ -59,6 +59,12 @@
                         type="Boolean"
                         default="false"
                         description="Flag pour demander le refresh des données utilisateur après l'upload." />
+            <property   name="doRefresh"
+                        label="Raffraichir la page?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation d'un raffraichissement automatique de la page après l'upload." />
+                        
             <property   name="fileId"
                         label="ID Document"
                         type="String"
@@ -124,6 +130,12 @@
                         default="false"
                         role="inputOnly"
                         description="Flag pour demander le refresh des données utilisateur après l'upload." />
+            <property   name="doRefresh"
+                        label="Raffraichir la page?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation d'un raffraichissement automatique de la page après l'upload." />
+                        
             <property   name="fileId"
                         label="ID Document"
                         type="String"
