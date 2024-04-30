@@ -98,6 +98,8 @@ export default class DsfrFormCmp extends LightningElement {
         if (this.isDebug) console.log('connected: START for form');
         if (this.isDebug) console.log('connected: recordId provided ',this.recordId);
         if (this.isDebug) console.log('connected: objectApiName provided ',this.objectApiName);
+        if (this.isDebug) console.log('connected: isReadOnly provided ',this.isReadOnly);
+        if (this.isDebug) console.log('connected: isEditMode provided ',this.isEditMode);
 
         if (this.isReady) {
             console.warn('connected: END / already ready');
@@ -200,6 +202,7 @@ export default class DsfrFormCmp extends LightningElement {
     // Read / Edit mode management
     toggleMode(event) {
         if (this.isDebug) console.log('toggleMode: START for form with edit? ',this.isEditMode);
+        if (this.isDebug) console.log('toggleMode: is ReadOnly? ',this.isReadOnly);
         event?.preventDefault();
 
         if (!this.isReadOnly) {
