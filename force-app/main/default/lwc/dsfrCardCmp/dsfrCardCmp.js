@@ -105,7 +105,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         return (this.cardEndIcon ? 'fr-card__detail fr-icon-' + this.cardEndIcon : 'fr-card__detail');
     }
     get cardStartEndStr() {
-        if (this.isDebug) console.log('cardStartDetailsStr: valmue ',this.cardEndDetails);
+        if (this.isDebug) console.log('cardStartDetailsStr: value ',this.cardEndDetails);
         if (this.isDebug) console.log('cardStartDetailsStr: type ',(typeof this.cardEndDetails));
         if (this.isDebug) console.log('cardStartEndStr: returning ',(typeof this.cardEndDetails == 'number' ? '' + this.cardEndDetails : this.cardEndDetails));
         return (typeof this.cardEndDetails == 'number' ? '' + this.cardEndDetails : this.cardEndDetails);
