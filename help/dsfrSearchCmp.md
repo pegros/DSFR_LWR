@@ -129,6 +129,6 @@ record type maximum. Quand aucun record type n'est spécifié, c'est le `master`
 (listant toutes les valeurs possibles).
 * un API name de champ picklist ne peut être utilisé qu'une seule fois dans une page de
 recherche car c'est lui qui est utilisé dans le contexte de page (e.g. pas possible d'avoir
-simultanément `Òbjet1__c.Picklist__c` et `Òbjet2__c.Picklist__c` car les deux positionnent
+simultanément `Objet1__c.Picklist__c` et `Objet2__c.Picklist__c` car les deux positionnent
 la propriété `Picklist__c` du contexte de page) 
 
