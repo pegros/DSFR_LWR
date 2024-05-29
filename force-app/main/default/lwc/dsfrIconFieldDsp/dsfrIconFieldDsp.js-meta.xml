@@ -33,6 +33,11 @@
                         type="Boolean"
                         default="false"
                         description="Pour forcer l'affichage du contenu même si la valeur est vide" />
+            <property   name="isMpl"
+                        label="Convertir Multi-Picklist ?"
+                        type="Boolean"
+                        default="false"
+                        description="Pour forcer la conversion de la valeur d'une multi-picklist (remplacement de ';' par ', ')" />
             
             <property   name="wrappingClass"
                         label="CSS additionnelle"
@@ -77,6 +82,12 @@
                         default="false"
                         role="inputOnly"
                         description="Pour forcer l'affichage du contenu même si la valeur est vide" />
+            <property   name="isMpl"
+                        label="Convertir Multi-Picklist ?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
+                        description="Pour forcer la conversion de la valeur d'une multi-picklist (remplacement de ';' par ', ')" />
             
             <property   name="wrappingClass"
                         label="CSS additionnelle"

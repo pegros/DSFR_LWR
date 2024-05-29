@@ -6,10 +6,25 @@
                     <c-dsfr-icon-field-dsp  value={iter.value}          icon-name={iter.icon}
                                             value-prefix={iter.prefix}  value-suffix={iter.suffix}
                                             wrapping-class={fieldClass} icon-class={iconClass}
-                                            show-empty={iter.showEmpty} is-debug={isDebug}>
+                                            show-empty={iter.showEmpty} is-mpl={iter.isMpl}
+                                            is-debug={isDebug}>
                     </c-dsfr-icon-field-dsp>
                 </li>
             </template>
         </ul>
+    </template>
+
+    <template lwc:if={isDebug}>
+        <div class={wrappingCss}>
+            <p class="fr-py-4v">
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrIconFieldListDsp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </div>
     </template>
 </template>
