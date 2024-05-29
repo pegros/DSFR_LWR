@@ -1,4 +1,4 @@
-# Composant Icône et Texte **DSFR**
+# Composant Liste d'Icônes et Textes **DSFR**
 
 ## Introduction
 
