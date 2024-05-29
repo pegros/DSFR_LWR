@@ -11,7 +11,7 @@ Ces composants sont construits/maintenus en tant qu'exemples/contributions de [P
 * Merci de le contacter si vous souhaitez participer à cette initiative (par ex. via des pull requests)
 * Vous pouvez également utiliser les **[issues](https://github.com/pegros/DSFR_LWR/issues)** pour poser des questions, remonter des problèmes ou demander des améliorations.
 
-⚠️ Ce package est actuellement basé sur la version **v1.10.0** du **DSFR** (see [here](https://www.systeme-de-design.gouv.fr/comment-utiliser-le-dsfr/developpeurs/prise-en-main-du-dsfr) to download a newer version). Les nouvelles versions du *DSFR** sont intégrées en _best effort_. 
+⚠️ Ce package est actuellement basé sur la version **v1.10.0** du **DSFR** (see [here](https://www.systeme-de-design.gouv.fr/comment-utiliser-le-dsfr/developpeurs/prise-en-main-du-dsfr) to download a newer version). Les nouvelles versions du **DSFR** sont intégrées en _best effort_. 
 
 ℹ️ Un autre package à destination des sites **LWR Build Your Own**  plus générique est également disponible pour enrichir les capacités de configuration des pages : cf. **[PEG_LWR](https://github.com/pegros/PEG_LWR)**
 
@@ -47,6 +47,7 @@ page de recherche)
 ### Composants de structure
 
 * **[dsfrIconFieldDsp](/help/dsfrIconFieldDsp.md)**
+* **[dsfrIconFieldListDsp](/help/dsfrIconFieldListDsp.md)**
 * **[dsfrCardCmp](/help/dsfrCardCmp.md)**
 
 
