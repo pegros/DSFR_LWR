@@ -27,7 +27,7 @@
                                 <!-- Main Registration Form -->
                                 <div class="registrationForm">
                                     <template lwc:if={defaultRecordTypeId}>
-                                        <lightning-record-edit-form class="fr-mb-0"             id="loginForm"
+                                        <lightning-record-edit-form class="fr-mb-0"             aria-label="Formulaire d'inscription" id="loginForm"
                                                                     object-api-name="Account"   record-type-id={defaultRecordTypeId}
                                                                     onload={handleLoad}         onsubmit={handleSubmit}
                                                                     onerror={handleError}>
@@ -116,7 +116,7 @@
                                                         </label>
                                                         <div class="fr-input-wrap">
                                                             <input  class="fr-password__input fr-input"
-                                                                   aria-describedby="password-2-input-messages" aria-required="true"
+                                                                    aria-describedby="password-2-input-messages" aria-required="true"
                                                                     name="password" autocomplete="new-password" id="password-2-input" type="password">
                                                         </div>
                                                         <div class="fr-messages-group" id="password-2-input-messages" aria-live="assertive">
@@ -164,7 +164,7 @@
 
                                 <!-- Validation Form -->
                                 <div class="validationForm slds-hide">
-                                    <form >
+                                    <form aria-label="Formulaire de validation d'inscription">
                                         <fieldset class="fr-fieldset" aria-labelledby="validation-legend">
                                             <legend class="fr-fieldset__legend" id="validation-legend">
                                                 <h2 class="fr-h2">{validationTitle}</h2>
