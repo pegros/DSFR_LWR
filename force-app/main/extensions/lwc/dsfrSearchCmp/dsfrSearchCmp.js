@@ -22,7 +22,9 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     @api wrappingClass;         // Classes pour modifier le style du conteneur du composant 
     @api headerClass;           // Classes pour modifier le style du titre des critères complémentaires.
 
+    @api alwaysActive = false;  // Flag to enforce permanently active search button
     @api isDebug = false;
+    @api isDebugFine = false;
 
     //-----------------------------------------------------
     // Technical parameters
@@ -72,6 +74,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                     if (this.isDebug) console.log('handleMainPicklists: initial selection set', JSON.stringify(this.mainCriteriaSelected));
                 }
                 else {
+                    this.mainCriteriaSelected = null;
                     if (this.isDebug) console.log('handleMainPicklists: no initial selection');
                 }
             }
@@ -228,8 +231,9 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     connectedCallback() {
         if (this.isDebug) console.log('connected: START for search');
-        if (this.isDebug) console.log('connected: showSearch ', this.showSearch);
-        
+        if (this.isDebug) console.log('connected: show Search? ', this.showSearch);
+        if (this.isDebug) console.log('connected: always Active? ', this.alwaysActive);
+
         if (this.mainCriteria) {
             if (this.isDebug) console.log('connected: processing mainCriteria ', this.mainCriteria);
             try {
@@ -257,14 +261,14 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('connected: END for search');
     }
 
-    /*renderedCallback() {
+    renderedCallback() {
         if (this.isDebug) console.log('rendered: START for search');
 
         if (this.isDebug) console.log('rendered: currentState ', JSON.stringify(this.currentState));
         if (this.isDebug) console.log('rendered: searchTerm ',this.searchTerm);
 
         if (this.isDebug) console.log('rendered: END for search');
-    }*/
+    }
 
     //-----------------------------------------------------
     // Event Handlers
@@ -348,7 +352,19 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
         this.activateApply(false);
         this.activateSearch(false);
-        this.mainCriteriaSelected = this.selectOption(event.srcElement.dataset.name,this.mainCriteriaList,this.mainCriteriaSelected,(event.srcElement.ariaCurrent === 'selection'));
+
+        //this.mainCriteriaSelected = this.selectOption(event.srcElement.dataset.name,this.mainCriteriaList,this.mainCriteriaSelected,(event.srcElement.ariaCurrent === 'selection'));
+        let mainCriteriaSelected = this.selectOption(event.srcElement.dataset.name,this.mainCriteriaList,this.mainCriteriaSelected,(event.srcElement.ariaCurrent === 'selection'));
+        if (this.isDebug) console.log('toggleMenuSelect: selection updated ', JSON.stringify(mainCriteriaSelected));
+        if ((mainCriteriaSelected) && (mainCriteriaSelected.length > 0)) {
+            this.mainCriteriaSelected = mainCriteriaSelected;
+            if (this.isDebug) console.log('toggleMenuSelect: selection updated', JSON.stringify(this.mainCriteriaSelected));
+        }
+        else {
+            this.mainCriteriaSelected = null;
+            if (this.isDebug) console.log('toggleMenuSelect: no more selection');
+        }
+
         if (this.isDebug) console.log('toggleMenuSelect: END for search');
     }
     toggleTagSelect(event){
@@ -421,8 +437,18 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             return;
         }
         selectedOption.selected = false;
-        this.mainCriteriaSelected = this.mainCriteriaSelected.filter(item => item.fullName !== selectName);
-        if (this.isDebug) console.log('deselectMainCriteria: selection updated ', JSON.stringify(this.mainCriteriaSelected));
+        //this.mainCriteriaSelected = this.mainCriteriaSelected.filter(item => item.fullName !== selectName);
+        //if (this.isDebug) console.log('deselectMainCriteria: selection updated ', JSON.stringify(this.mainCriteriaSelected));
+        let mainCriteriaSelected = this.mainCriteriaSelected.filter(item => item.fullName !== selectName);
+        if (this.isDebug) console.log('deselectMainCriteria: selection filtered ', JSON.stringify(mainCriteriaSelected));
+        if ((mainCriteriaSelected) && (mainCriteriaSelected.length > 0)) {
+            this.mainCriteriaSelected = mainCriteriaSelected;
+            if (this.isDebug) console.log('deselectMainCriteria: selection updated', JSON.stringify(this.mainCriteriaSelected));
+        }
+        else {
+            this.mainCriteriaSelected = null;
+            if (this.isDebug) console.log('deselectMainCriteria: no more selection');
+        }
 
         let menuElement = this.template.querySelector("a.menuSelector[data-name='" + selectName + "']");
         if (this.isDebug) console.log('deselectMainCriteria: menuElement found ', menuElement);
@@ -488,9 +514,12 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     // Search trigger events
     handleSearchKey(event) {
         if (this.isDebug) console.log('handleSearchKey: START',event);
+        
         if (event.key === 'Enter' || event.keyCode === 13) {
             if (this.isDebug) console.log('handleSearchKey: triggering search');
-            this.updateSearch(event);
+            /*event.preventDefault();
+            event.stopPropagation();
+            this.updateSearch(event);*/
         }
         else {
             this.activateApply(false);
@@ -501,6 +530,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
     updateSearch(event) {
         if (this.isDebug) console.log('updateSearch: START for search');
+        event.preventDefault();
 
         let newState = JSON.parse(JSON.stringify(this.currentState));
         if (this.isDebug) console.log('updateSearch: newState prepared ', JSON.stringify(newState));
@@ -557,10 +587,11 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 if (this.isDebug) console.log('updateSearch: unregistering criteria');
                 delete newState[iterCriteria];
             }
+            if (this.isDebug) console.log('updateSearch: newState updated ', JSON.stringify(newState));
         }
         if (this.isDebug) console.log('updateSearch: newState finalized ', JSON.stringify(newState));
 
-        let expandedElements = this.template.querySelectorAll(".fr-collapse--expanded");
+        /*let expandedElements = this.template.querySelectorAll(".fr-collapse--expanded");
         if (this.isDebug) console.log('updateSearch: expandedElements fetched ', expandedElements);
         if (expandedElements) {
             if (this.isDebug) console.log('updateSearch: closing expanded items');
@@ -569,13 +600,13 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 item.classList?.remove("fr-collapse--expanded");
             });
         }
-        if (this.isDebug) console.log('updateSearch: expandedElements closed');
+        if (this.isDebug) console.log('updateSearch: expandedElements closed');*/
 
         let searchPage = (this.searchPage ? {"type":"comm__namedPage","attributes":{"name":this.searchPage}} : {"type":"standard__search"});
         searchPage.state = newState;
         if (this.isDebug) console.log('updateSearch: searchPage init ', JSON.stringify(searchPage));
 
-        if (this.isDebug) console.log('handleDownload: notifying GA'); this.searchTag
+        if (this.isDebug) console.log('updateSearch: notifying GA'); this.searchTag
         document.dispatchEvent(new CustomEvent('gaEvent',{detail:{
             label:'dsfr_search',
             params:{
@@ -586,7 +617,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 search_term: this.searchTerm
             }
         }}));
-        
+
+        if (this.isDebug) console.log('updateSearch: navigation to launch');
         setTimeout(() => {
             if (this.isDebug) console.log('updateSearch: navigating ');
             this[NavigationMixin.Navigate](searchPage);
@@ -604,6 +636,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('initCriteria: criteria list ', JSON.stringify(criteriaList));
         if (this.isDebug) console.log('initCriteria: page state ', JSON.stringify(pageState));
 
+        selectionList = selectionList || [];
         criteriaList.forEach(item => {
             if (this.isDebug) console.log('initCriteria: processing criteria ', item.fullName);
 
@@ -691,6 +724,10 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             }*/
         });
 
+        if (selectionList.size == 0){
+            selectionList = null;
+        }
+
         if (this.isDebug) console.log('initCriteria: selection init ', JSON.stringify(selectionList));
         if (this.isDebug) console.log('initCriteria: END returning ', JSON.stringify(criteriaList));
         return criteriaList;
@@ -711,7 +748,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 selectionList.push(...itemSelection);
             }
             else {
-                if (this.isDebug) console.log('initCriteria: no selected value');
+                if (this.isDebug) console.log('reviewCriteria: no selected value');
             }
 
             /*if (pageState[item.name]) {
@@ -740,7 +777,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('reviewCriteria: criteriaList reset ', JSON.stringify(criteriaList));
         if (this.isDebug) console.log('reviewCriteria: END returning selection ', JSON.stringify(selectionList));
-        return selectionList;
+        return (selectionList.length > 0 ? selectionList : null);
     }
     resetCriteria = (criteria,pageState) => {
         if (this.isDebug) console.log('resetCriteria: START with ', JSON.stringify(criteria));
@@ -808,7 +845,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
 
         if (this.isDebug) console.log('resetCriteria: END with selection ', JSON.stringify(criteriaSelection));
-        return criteriaSelection;
+        return (criteriaSelection.length > 0 ? criteriaSelection : null);
     }
 
     activateApply = function(state) {
@@ -827,9 +864,10 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('activateSearch: START for state ',state);
         let searchButton = this.template.querySelector('.searchButton');
         if (this.isDebug) console.warn('activateSearch: searchButton found ', searchButton);
-        if (searchButton) {
-            searchButton.disabled = state;
-            if (this.isDebug) console.warn('activateSearch: searchButton activated');
+        if ((searchButton) && (!this.alwaysActive)){
+        //if (searchButton) {
+                searchButton.disabled = state;
+            if (this.isDebug) console.warn('activateSearch: searchButton disabled state reset to',state);
         }
         else {
             if (this.isDebug) console.warn('activateSearch: no searchButton to activate');

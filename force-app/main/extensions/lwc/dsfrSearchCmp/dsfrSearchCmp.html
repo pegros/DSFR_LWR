@@ -1,5 +1,6 @@
 <template>
     <div class={wrappingClass}>
+        <form aria-label="Formulaire de recherche">
 
         <!-- MAIN SEARCH BAR DISPLAY -->
         <template lwc:if={showSearch}>
@@ -7,7 +8,7 @@
                 <lightning-layout  multiple-rows="true" vertical-align="top" class="mainSearchLayout">
                     <!-- slds-grid_vertical-stretch flexibility="auto"  alignment-bump="right"  horizontal-align="spread" -->
                     <lightning-layout-item size="9" large-device-size={searchTermInput} class="slds-order_1 " >
-                        <label class="fr-label" for="SearchTerm">Mots clés recherchés</label>
+                        <label class="fr-label" for="SearchTerm">Mots clés pour la recherche</label>
                         <input  class="fr-input mainSearch" id="SearchTerm"
                                 placeholder={inputPlaceholder}
                                 type="search"               name="search"
@@ -20,7 +21,11 @@
                                 <template for:each={mainCriteriaList} for:item="iterC" >
                                     <lightning-layout-item flexibility="auto,no-shrink" key={iterC.fullName}>
                                         <div  class="fr-nav__item selectMenu" >
-                                            <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton" aria-expanded="false" value={iterC.fullName} onclick={expandCollapse}>
+                                            <label class="fr-label" for={iterC.fullName}>Critère {iterC.fullName}</label>
+                                            <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton"    id={iterC.fullName}
+                                                    aria-label="Critère de sélection"   aria-expanded="false"
+                                                    value={iterC.fullName}              type="button" 
+                                                    onclick={expandCollapse}>
                                                 {iterC.label}
                                             </button>
                                             <div class="fr-collapse fr-menu" data-name={iterC.fullName}>
@@ -60,9 +65,16 @@
                     </template>
                     <!-- flexibility="no-shrink,no-grow" -->
                     <lightning-layout-item size="3" large-device-size="2" class="slds-order_2 slds-large-order_3">
-                        <button class="fr-btn searchButton" title={searchButtonTitle} disabled onclick={updateSearch}>
-                            Rechercher
-                        </button>
+                        <template lwc:if={alwaysActive}>
+                            <button class="fr-btn searchButton" aria-label={searchButtonTitle} title={searchButtonTitle} onclick={updateSearch}>
+                                Rechercher
+                            </button>
+                        </template>
+                        <template lwc:else>
+                            <button class="fr-btn searchButton" aria-label={searchButtonTitle} title={searchButtonTitle} disabled onclick={updateSearch}>
+                                Rechercher
+                            </button>
+                        </template>
                     </lightning-layout-item>
 
                     <!-- Current main selection synthesis -->
@@ -96,10 +108,10 @@
             </div>
         </template>
     
-        
+
         <!-- ADDITIONAL CRITERIA DISPLAY -->
         <div class="fr-accordions-group criteriaDiv" lwc:if={criteriaList}>
-            <h3 class={headerClass}>Affiner la recherche</h3>
+            <h2 class={headerClass}>Affiner la recherche</h2>
 
             <!-- Current additional selection synthesis -->
             <template lwc:if={criteriaSelected} >
@@ -197,6 +209,8 @@
                 </button>
             </div>
         </div>
+
+        </form> 
     </div>
 
     
@@ -218,13 +232,13 @@
     <!-- METADATA LOADING -->
     <template lwc:if={mainFieldList}>
         <c-dsfr-picklists-loader-utl    picklist-fields={mainFieldList}
-                                        is-debug={isDebug}
+                                        is-debug={isDebugFine}
                                         onloaded={handleMainPicklists}>
         </c-dsfr-picklists-loader-utl>
     </template>
     <template lwc:if={fieldList}>
         <c-dsfr-picklists-loader-utl    picklist-fields={fieldList}
-                                        is-debug={isDebug}
+                                        is-debug={isDebugFine}
                                         onloaded={handlePicklists}>
         </c-dsfr-picklists-loader-utl>
     </template>

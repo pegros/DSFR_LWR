@@ -86,6 +86,7 @@ input[type="search"] {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
     vertical-align: middle !important;
+    box-shadow: 0 0 5px 3px white;
 }
 
 .mainSearch {
@@ -132,4 +133,14 @@ input[type="search"] {
     border-bottom-right-radius: .25rem;
     margin-bottom: 2px;
     /*text-shadow: 1px 0px .5em rgb(255,255,255), 0px 1px .5em rgb(255,255,255), -1px 0px .5em rgb(255,255,255), 0px -1px .5em rgb(255,255,255);*/
+}
+.applyButton {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+@media (min-width: 48em) {
+    .applyButton {
+        width: fit-content;
+    }
 }

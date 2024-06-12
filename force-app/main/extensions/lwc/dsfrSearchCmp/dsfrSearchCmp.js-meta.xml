@@ -34,6 +34,12 @@
                         type="String"
                         default="Lancer la recherche"
                         description="Titre explicatif sur le bouton rechercher principal" />
+            <property   name="alwaysActive"
+                        label="Bouton Rechercher actif ?"
+                        type="Boolean"
+                        default="false"
+                        description="Contrôle booléen permettant de forcer un état toujours actif du bouton rechercher principal." />
+
             <property   name="mainCriteria"
                         label="Critères principaux"
                         type="String"
