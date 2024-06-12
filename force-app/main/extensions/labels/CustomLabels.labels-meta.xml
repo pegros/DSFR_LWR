@@ -50,6 +50,14 @@
         <value>Sauvegarder</value>
     </labels>
     <labels>
+        <fullName>dsfrRecordFormSaveTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Title du bouton de sauvegarde</shortDescription>
+        <value>Sauvegarder les modifications du formulaire</value>
+    </labels>
+    <labels>
         <fullName>dsfrRecordFormCancel</fullName>
         <categories>DSFR Component LWC Button Label</categories>
         <language>en_US</language>
@@ -58,12 +66,28 @@
         <value>Annuler</value>
     </labels>
     <labels>
+        <fullName>dsfrRecordFormCancelTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Title du bouton d'annulation</shortDescription>
+        <value>Annuler les modifications du formulaire</value>
+    </labels>
+    <labels>
         <fullName>dsfrRecordFormEdit</fullName>
         <categories>DSFR Component LWC Button Label</categories>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Libellé du bouton d'édition</shortDescription>
         <value>Modifier</value>
+    </labels>
+    <labels>
+        <fullName>dsfrRecordFormEditTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Title du bouton d'édition</shortDescription>
+        <value>Basculer le formulaire en mode édition</value>
     </labels>
 
     <labels>
