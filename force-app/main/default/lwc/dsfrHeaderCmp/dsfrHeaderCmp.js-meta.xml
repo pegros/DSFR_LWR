@@ -16,9 +16,13 @@
                         default="Intitulé Officiel"
                         description="Libellé du ministère/service pour lequel le site est configuré" />
             <property   name="loginUrl"
-                        label="URL du Logo"
+                        label="Lien du Logo"
                         type="String"
                         description="URL de redirection sur le logo principal de l'entête (par ex. https://xxx.yyy.zzz)."/>
+            <property   name="logoUrlTitle"
+                        label="Titre du lien Logo"
+                        type="String"
+                        description="Titre affiché au survol du lien du logo principal de l'entête."/>            
             <property   name="siteTitle"
                         label="Nom du Site / Service"
                         type="String"

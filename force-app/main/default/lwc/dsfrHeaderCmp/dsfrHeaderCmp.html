@@ -11,11 +11,12 @@
         </c-sfpeg-action-bar-cmp>
     </template>
 
-     <!-- ERROR NOTFICATION UTILITY -->
+     <!-- ERROR NOTIFICATION UTILITY -->
      <c-dsfr-alert-popup-dsp is-debug={isDebug} >
     </c-dsfr-alert-popup-dsp>
 
     <!-- COMPONENT DISPLAY -->
+    <section aria-label="Entête">
     <header role="banner" class="fr-header">
         <!-- STANDARD HEADER DISPLAY -->
         <div class="fr-header__body">
@@ -40,8 +41,8 @@
                         </div>
                         <div class="fr-header__service">
                             <template lwc:if={loginUrl}>
-                                <a href="#" title={siteTitle} onclick={handleLogoClick}>
-                                    <p class="fr-header__service-title">{siteTitle}</p>
+                                <a href="#" tabindex="0" title={logoUrlTitle} onclick={handleLogoClick}>
+                                    <p class="fr-header__service-title" >{siteTitle}</p>
                                 </a>
                             </template>
                             <template lwc:else>
@@ -64,33 +65,33 @@
                     </div>
                     <div class="fr-header__tools">
                         <div class="fr-header__tools-links ">
-                            <ul class="fr-btns-group">
+                            <ul class="fr-btns-group" role="presentation">
                                 <template lwc:if={isGuestUser}>
                                     <template lwc:if={showLogin}>
                                         <li>
-                                            <a class="fr-btn fr-icon-account-circle-line" href="#" onclick={handleLogin} >{loginLabel}</a>
+                                            <a class="fr-btn fr-icon-account-circle-line" href="#" tabindex="0" onclick={handleLogin} >{loginLabel}</a>
                                         </li>
                                     </template>
                                 </template>
                                 <template lwc:elseif={showTopMenu}>
                                     <template lwc:if={topMenuItems}>
-                                    <template for:each={topMenuItems} for:item="item">
-                                        <li key={item.label} >
-                                            <a  class={item.class} href="#" data-value={item.label} onclick={handleTopClick} >
-                                                {item.label}
-                                            </a>
-                                        </li>
-                                    </template>
+                                        <template for:each={topMenuItems} for:item="item">
+                                            <li key={item.label} >
+                                                <a  class={item.class} href="#" tabindex="0" data-value={item.label} onclick={handleTopClick} >
+                                                    {item.label}
+                                                </a>
+                                            </li>
+                                        </template>
                                     </template>
                                     <template lwc:if={showLogin}>
                                         <li>
-                                            <a class="fr-btn fr-icon-logout-box-r-line dsfrLogout" href="#" onclick={handleLogout} >{logoutLabel}</a>
+                                            <a class="fr-btn fr-icon-logout-box-r-line dsfrLogout" href="#" tabindex="0" onclick={handleLogout} >{logoutLabel}</a>
                                         </li>
                                     </template>
                                     <template lwc:if={userName}>
                                         <template lwc:if={userTarget}>
                                             <li>
-                                                <a class="fr-btn fr-icon-account-pin-circle-fill" href="#" onclick={handleUserOpen} >{userName}</a>
+                                                <a class="fr-btn fr-icon-account-pin-circle-fill" href="#" tabindex="0" onclick={handleUserOpen} >{userName}</a>
                                             </li>
                                         </template>
                                         <template lwc:else>
@@ -102,10 +103,7 @@
                                 </template>
                                 <template lwc:if={showModes}>
                                     <li>
-                                        <!--
-                                        <button class="fr-btn fr-icon-theme-fill" title="mode clair/sombre" onclick={toggleTheme}></button>
-                                        -->
-                                        <a class="fr-btn fr-icon-theme-fill" href="#" title="Bascule entre modes clair et sombre"  onclick={toggleTheme} ></a>
+                                        <a class="fr-btn fr-icon-theme-fill" href="#" tabindex="0" title="Bascule entre modes clair et sombre"  onclick={toggleTheme} ></a>
                                     </li>
                                 </template>
                             </ul>
@@ -133,14 +131,58 @@
 
         <!-- MAIN MENU -->
         <div data-modal="menu" class="fr-header__menu fr-modal" aria-labelledby="menu">
-            <!-- Complex Menu variant (sfpegAction based)-->
-            <template lwc:if={complexMenuItems}>
-                <div class="fr-container">
-                    <button data-modal="menu" class="fr-btn--close fr-btn" aria-controls="menu" title={closeLabel} onclick={toggleModal}>
-                        {closeLabel}
-                    </button>
-                    <div class="fr-header__menu-links">
-                    </div>
+            <div class="fr-container" role="dialog" >
+                <button data-modal="menu" class="fr-btn--close fr-btn" aria-controls="menu" title={closeLabel} onclick={toggleModal}>
+                    {closeLabel}
+                </button>
+                <!-- Menu links repeat -->
+                <div class="fr-header__menu-links">
+                    <ul class="fr-nav__list">
+                        <template lwc:if={isGuestUser}>
+                            <template lwc:if={showLogin}>
+                                <li class="fr-nav__item" tabindex="0" >
+                                    <a class="fr-nav__link" href="#" tabindex="0" target="_self" name="userLogin" onclick={handleLogin} >{loginLabel}</a>
+                                </li>
+                            </template>
+                        </template>
+                        <template lwc:elseif={showTopMenu}>
+                            <template lwc:if={topMenuItems}>
+                            <template for:each={topMenuItems} for:item="item">
+                                <li key={item.label} class="fr-nav__item"  >
+                                    <a  class="fr-nav__link" href="#" tabindex="0" target="_self" name={item.label} data-value={item.label} onclick={handleTopClick} >
+                                        {item.label}
+                                    </a>
+                                </li>
+                            </template>
+                            </template>
+                            <template lwc:if={showLogin}>
+                                <li class="fr-nav__item" >
+                                    <a class="fr-nav__link dsfrLogout" href="#" tabindex="0" target="_self" name="userLogout" onclick={handleLogout} >{logoutLabel}</a>
+                                </li>
+                            </template>
+                            <template lwc:if={userName}>
+                                <template lwc:if={userTarget}>
+                                    <li class="fr-nav__item"  >
+                                        <a class="fr-nav__link" href="#" tabindex="0" target="_self" name="userLink" onclick={handleUserOpen} >{userName}</a>
+                                    </li>
+                                </template>
+                                <template lwc:else>
+                                    <li class="fr-nav__item">
+                                        <p class="fr-nav__link" >{userName}</p>
+                                    </li>
+                                </template>
+                            </template>
+                        </template>
+                        <template lwc:if={showModes}>
+                            <li class="fr-nav__item" >
+                                <a class="fr-nav__link" href="#" tabindex="0" target="_self" name="modeToggle" title="Bascule entre modes clair et sombre"  onclick={toggleTheme} >Bascule d'affichage</a>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+
+                <!-- Complex Menu variant (sfpegAction based)-->
+                <template lwc:if={complexMenuItems}>
                     <nav class="fr-nav" role="navigation" aria-label="Menu principal">
                         <ul class="headerMenu fr-nav__list">
                             <template lwc:if={complexMenuItems}>
@@ -151,47 +193,48 @@
                                         <li key={item.name} class="fr-nav__item">
                                             <!-- Menu Display aria-current="false" -->
                                             <template lwc:if={item.items}> 
-                                                <button class="fr-nav__btn"         disabled={item.disabled}
-                                                        aria-expanded="false"       aria-controls={item.name}   
-                                                        value={item.name}           onclick={toggleMenu}>
-                                                    {item.label}
-                                                </button>
-                                                <div class="headerSubMenu fr-collapse fr-menu" id={item.name} data-name={item.name}>
-                                                    <ul class="fr-menu__list">
-                                                        <template for:each={item.items} for:item="subItem">
-                                                            <template lwc:if={subItem.hidden}>
+                                                    <button class="fr-nav__btn"         disabled={item.disabled}
+                                                            aria-expanded="false"       aria-controls={item.name}   
+                                                            value={item.name}           onclick={toggleMenu}>
+                                                        {item.label}
+                                                    </button>
+                                                    <div class="headerSubMenu fr-collapse fr-menu" id={item.name} data-name={item.name}>
+                                                        <ul class="fr-menu__list">
+                                                            <template for:each={item.items} for:item="subItem">
+                                                                <template lwc:if={subItem.hidden}>
+                                                                </template>
+                                                                <template lwc:else>
+                                                                    <li key={subItem.name}>
+                                                                        <template lwc:if={subItem.disabled}>
+                                                                            <p  class="disabledLink fr-nav__link" >
+                                                                                {subItem.label}
+                                                                            </p>
+                                                                        </template>
+                                                                        <template lwc:else>
+                                                                            <a  class="fr-nav__link"
+                                                                                href="#"                    tabindex="0"        target="_self"                                             
+                                                                                data-value={subItem.name}   onclick={handleActionTrigger} >
+                                                                                {subItem.label}
+                                                                            </a>
+                                                                        </template>
+                                                                    </li>
+                                                                </template>
                                                             </template>
-                                                            <template lwc:else>
-                                                                <li key={subItem.name}>
-                                                                    <template lwc:if={subItem.disabled}>
-                                                                        <p  class="disabledLink fr-nav__link" >
-                                                                            {subItem.label}
-                                                                        </p>
-                                                                    </template>
-                                                                    <template lwc:else>
-                                                                        <a  class="fr-nav__link"
-                                                                            href="#"                    target="_self"                                             
-                                                                            data-value={subItem.name}   onclick={handleActionTrigger} >
-                                                                            {subItem.label}
-                                                                        </a>
-                                                                    </template>
-                                                                </li>
-                                                            </template>
-                                                        </template>
-                                                    </ul>
-                                                </div>
+                                                        </ul>
+                                                    </div>
                                             </template>
                                             <!-- Direct Link Display -->
                                             <template lwc:else>
                                                 <template lwc:if={item.disabled}>
-                                                    <p  class="disabledLink fr-nav__link" >
+                                                    <p  class="disabledLink fr-nav__link">
                                                         {item.label}
                                                     </p>
                                                 </template>
                                                 <template lwc:else>
-                                                    <a  class="fr-nav__link"
-                                                        href="#"                target="_self"
-                                                        data-value={item.name}  onclick={handleActionTrigger} >
+                                                    <a  class="fr-nav__link"    target="_self"
+                                                        href="#"                tabindex="0"
+                                                        data-value={item.name}  name={item.name}
+                                                        onclick={handleActionTrigger} >
                                                         {item.label}
                                                     </a>
                                                 </template>
@@ -202,32 +245,27 @@
                             </template>
                         </ul>
                     </nav>
-                </div>
-            </template>
-            <!-- Simple Menu variant (Site navigation menu based)-->
-            <template lwc:elseif={mainMenuItems}>
-                <div class="fr-container">
-                    <button data-modal="menu" class="fr-btn--close fr-btn" aria-controls="menu" title={closeLabel} onclick={toggleModal}>
-                        {closeLabel}
-                    </button>
-                    <div class="fr-header__menu-links">
-                    </div>
+                </template>
+                
+                <!-- Simple Menu variant (Site navigation menu based)-->
+                <template lwc:elseif={mainMenuItems}>
                     <nav class="fr-nav" role="navigation" aria-label="Menu principal">
                         <ul class="fr-nav__list">
                             <template lwc:if={mainMenuItems}>
-                            <template for:each={mainMenuItems} for:item="item">
-                                <li key={item.label} class="fr-nav__item">
-                                    <!-- {item.isCurrent} -->
-                                    <a  class="fr-nav__link" href="#" target="_self" data-value={item.label} onclick={handleMainClick} >
-                                        {item.label}
-                                    </a>
-                                </li>
-                            </template>
+                                <template for:each={mainMenuItems} for:item="item">
+                                    <li key={item.label} class="fr-nav__item">
+                                        <!-- {item.isCurrent} -->
+                                        <a  class="fr-nav__link" href="#" tabindex="0" target="_self" data-value={item.label} onclick={handleMainClick} >
+                                            {item.label}
+                                        </a>
+                                    </li>
+                                </template>
                             </template>
                         </ul>
                     </nav>
-                </div>
-            </template>
+                </template>
+            </div>
+            <!--
             <div class="fr-container toolsModal">
                 <ul class="fr-btns-group">
                     <template lwc:if={isGuestUser}>
@@ -272,6 +310,8 @@
                     </template>
                 </ul>
             </div>
+            -->
         </div>
     </header>
+    </section>
 </template>

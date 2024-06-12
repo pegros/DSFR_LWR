@@ -21,6 +21,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------
     @api logoTitle = 'Nom du Ministère';
     @api loginUrl; // Obsolete name, now corresponding to the main logo URL
+    @api logoUrlTitle;
     @api siteTitle = 'Titre du Site';
     @api siteTagline = 'Précisions sur l\'organisation';
     @api tag = 'site_header'; // for GA4 tracking
@@ -54,6 +55,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     topMenuItems;
     mainMenuItems;
     complexMenuItems;
+    currentIndex = -1;
 
     //-----------------------------------
     // Custom Labels
@@ -74,12 +76,6 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     get showTopMenu() {
         return (this.topMenuItems || this.userName || !this.hideLogin);
     }
-    /*get loginUrl() {
-        return basePathName + '/login';
-    }*/
-    /*get logoutUrl() {
-        return basePathName + '/logout';
-    }*/
 
     //-----------------------------------
     // Context Handling (to set selected tab)
@@ -657,13 +653,90 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
             if (modalDiv.classList.contains('fr-modal--opened')) {
                 if (this.isDebug) console.log('toggleModal: closing modal');
                 modalDiv.classList.remove('fr-modal--opened');
+
+                let status = document.removeEventListener('keydown',this.handlePopupKeys);
+                if (this.isDebug) console.log('toggleModal: keydown listener removed on document ',status);
             }
             else {
                 if (this.isDebug) console.log('toggleModal: opening modal');
                 modalDiv.classList.add('fr-modal--opened');
+
+                let status = document.addEventListener('keydown',this.handlePopupKeys, false);
+                if (this.isDebug) console.log('toggleModal: keydown listener registered on document ',status);
+
+                setTimeout(() => { 
+                    let closeButton = this.template.querySelector('button.fr-btn--close');
+                    if (this.isDebug) console.log('toggleModal: START fetching closeButton ',closeButton);
+                    closeButton.focus({ focusVisible: true });
+                    this.currentIndex = -1;
+                    //event.preventDefault();
+                    if (this.isDebug) console.log('showAlert: END closeButton focused');
+                }, 150);
             }
         }
         if (this.isDebug) console.log('toggleModal: END for Header');
+    }
+
+    // Escape and tab key handling for modal close and tab navigation
+    // implementing a tab trapping mechanism (in the popup) to support RGAA requirement
+    handlePopupKeys = event => {
+        if (this.isDebug) console.log('handlePopupKeys: START',event);
+        if (event?.key === 'Escape') {
+            if (this.isDebug) console.log('handlePopupKeys: END / closing modal');
+            this.collapseModals();
+            /*let modalDiv = this.template.querySelector('div.fr-modal--opened');
+            if (this.isDebug) console.log('handlePopupKeys: modalDiv found ',modalDiv);
+
+            if (modalDiv) {
+                if (this.isDebug) console.log('handlePopupKeys: closing modalDiv');
+                modalDiv.classList.remove('fr-modal--opened');
+            }
+            else {
+                if (this.isDebug) console.log('handlePopupKeys: END / no open modalDiv found');
+            }
+            let status = document.removeEventListener('keydown',this.handlePopupKeys);
+            if (this.isDebug) console.log('handlePopupKeys: END / keydown listener removed on document ',status);*/
+        }
+        // event?.key 'Tab' === KEYCODE_TAB
+        else if (event?.key === 'Tab') { 
+            let popupLinks = this.template.querySelectorAll('a.fr-nav__link');
+            if (this.isDebug) console.log('handlePopupKeys: popupLinks fetched',popupLinks);
+            if (this.isDebug) console.log('handlePopupKeys: #popupLinks fetched',popupLinks.length);
+
+            if (this.isDebug) console.log('handlePopupKeys: current selection index',this.currentIndex);
+            
+            if (event.shiftKey) {
+                if (this.isDebug) console.log('handlePopupKeys: handling SHIFT + tab ',event.key);
+                if ((this.currentIndex == -1) || (this.currentIndex == 0)) {
+                    if (this.isDebug) console.log('handlePopupKeys: selecting close button');
+                    let closeButton = this.template.querySelector('button.fr-btn--close');
+                    if (this.isDebug) console.log('handlePopupKeys: focusing on closeButton ',closeButton);
+                    this.currentIndex = -1;
+                    closeButton.focus({ focusVisible: true });
+                }
+                else {
+                    this.currentIndex -= 1;
+                    if (this.isDebug) console.log('handlePopupKeys: selecting previous link',this.currentIndex);
+                    let newFocus = popupLinks[this.currentIndex];
+                    if (this.isDebug) console.log('handlePopupKeys: focusing on previous link ',newFocus);
+                    newFocus.focus({ focusVisible: true });
+                }
+                event.preventDefault();
+            }
+            else {
+                if (this.isDebug) console.log('handlePopupKeys: handling tab ',event.key);
+                this.currentIndex = (this.currentIndex >= popupLinks.length - 1 ? popupLinks.length - 1 : this.currentIndex += 1);
+                if (this.isDebug) console.log('handlePopupKeys: selecting next link',this.currentIndex);
+                let newFocus = popupLinks[this.currentIndex];
+                if (this.isDebug) console.log('handlePopupKeys: focusing on first/next link ',newFocus);
+                newFocus.focus({ focusVisible: true });
+                event.preventDefault();
+            }
+            if (this.isDebug) console.log('handlePopupKeys: END / tab key processed');
+        }
+        else {
+            if (this.isDebug) console.log('handlePopupKeys: END / ignoring key ',event?.key);
+        }
     }
 
     // Custom Action Menu Handling
@@ -808,7 +881,8 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
             openModal.classList.remove('fr-modal--opened');
         }
 
-        if (this.isDebug) console.log('collapseModals: END');
+        let status = document.removeEventListener('keydown',this.handlePopupKeys);
+        if (this.isDebug) console.log('collapseModals: END / keydown listener removed on document ',status);
     }
 
     collapseMenu = function() {
