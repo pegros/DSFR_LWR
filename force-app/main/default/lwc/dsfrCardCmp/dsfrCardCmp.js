@@ -2,6 +2,7 @@ import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import basePathName from '@salesforce/community/basePath';
 
+/*var CARD_SIZE = {};*/
 export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
 
     //-----------------------------------------------------
@@ -50,6 +51,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             this._cardButtons = null;
         }
     }
+    @api areCardLinks = false; // Flag to indicate that the cardButtons should be actually displayed as links
     @api cardSize = 'medium';
     @api cardCss;
     @api fieldClass;
@@ -79,10 +81,10 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     get pictoSrc() {
         return (((this.cardImage?.includes('/')) && (!this.cardImage?.includes('delivery/media'))) ? this.cardImage : null);
     }
-    get imageTitle() {
+    /*get imageTitle() {
         //return 'Image pour ' + this.cardTitle;
-        return null;
-    }
+        return "";
+    }*/
     get hasBadgeList() {
         return (this.cardBadgeListJson || this.cardBadgeList || this.isDebug);
     }
@@ -198,6 +200,27 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
             console.log('rendered: card target ',this.cardTarget);
             console.log('rendered: card buttons ',JSON.stringify(this.cardButtons));
             console.log('rendered: vertical variant? ', this.isVertical);
+            
+            /*console.log('rendered: card height for ', this.cardTitle);
+            console.log('rendered: max card height', CARD_SIZE['height']);
+            let currentHeight = this.refs.cardArticle?.getBoundingClientRect()?.height;
+            console.log('rendered: current card height', currentHeight);
+            console.log('rendered: current card height from style', this.refs.cardArticle.style.height);
+            if (CARD_SIZE?.height) {
+                if (currentHeight < CARD_SIZE['height']) {
+                    this.refs.cardArticle.style.minHeight = '' + CARD_SIZE.height + 'px';
+                    console.log('rendered: current card height upgraded',this.refs.cardArticle.getBoundingClientRect().height);
+                }
+                else {
+                    CARD_SIZE['height'] = currentHeight;
+                    console.log('rendered: max card height upgraded',CARD_SIZE['height']);
+                }
+            }
+            else {
+                CARD_SIZE['height'] = currentHeight;
+                console.log('rendered: max card height init',CARD_SIZE['height']);
+            }*/
+
         }
 
         // Handling strange LWR inputs for fields reset to empty (object value instead of null)

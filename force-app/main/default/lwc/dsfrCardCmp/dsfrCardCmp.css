@@ -39,6 +39,26 @@ p.[class*=" fr-icon-"]:before {
     overflow-wrap: break-word;
     word-break: break-word;
 }
+.fr-card__content {
+    margin-bottom: auto;
+}
+.fr-card__footer {
+    margin-top: auto;
+}
+.fr-links-group {
+    align-items: stretch;
+    display: flex;
+    flex-wrap: wrap;
+}
+.fr-links-group li {
+    display: flex;
+    white-space:normal;
+    /*overflow:hidden;
+    text-overflow: ellipsis;*/
+    overflow-wrap: break-word;
+    max-width: 100%;
+    /*padding-right: 1em;*/
+}
 .debugSection {
     position: relative;
     bottom: 20px;

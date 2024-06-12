@@ -76,6 +76,11 @@
                         label="Boutons"
                         type="String"
                         description="Configuration d'une liste de boutons (Liste JSON de configurations)" />
+            <property   name="areCardLinks"
+                        label="Affichage en liens ?"
+                        type="Boolean"
+                        default="false"
+                        description="Affichage des boutons en tant que liens de navigation." />
 
             <property   name="cardSize"
                         label="Taille"
