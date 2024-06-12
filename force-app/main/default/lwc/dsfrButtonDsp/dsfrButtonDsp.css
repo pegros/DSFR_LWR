@@ -20,3 +20,13 @@
     margin-left: auto;
     margin-right: auto;*/
 }
+.fr-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+@media (min-width: 48em) {
+    .fr-btn {
+        width: fit-content;
+    }
+}

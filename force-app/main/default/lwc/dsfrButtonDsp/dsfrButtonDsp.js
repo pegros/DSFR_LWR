@@ -16,10 +16,9 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     @api buttonTarget;
     
     //@api buttonInactive = 'false';
-    _buttonInactive;
     @api
     get buttonInactive() {
-        return this._buttonInactive;
+        return this.isInactive;
     }
     set buttonInactive(value) {
         if (this.isDebug) console.log('setting buttonInactive provided ',value);
@@ -37,7 +36,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     buttonClass = 'fr-btn';
 
     //-----------------------------------------------------
-    // Configuration parameters
+    // Custom Getters
     //-----------------------------------------------------
     get alignClass() {
         return 'align-' + this.buttonAlign;

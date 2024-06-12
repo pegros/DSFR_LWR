@@ -1,10 +1,14 @@
 <template>
     <div class={alignClass}>
-        <button type="button" if:false={isInactive} class={buttonClass} onclick={openTarget} title={buttonTitle}>
-            {buttonLabel}
-        </button>
-        <button type="button" if:true={isInactive} class={buttonClass} title={buttonTitle} disabled >
-            {buttonLabel}
-        </button>
+        <template lwc:if={isInactive}>
+            <button type="button" class={buttonClass} title={buttonTitle} disabled >
+                {buttonLabel}
+            </button>
+        </template>
+        <template lwc:else>
+            <button type="button" class={buttonClass} onclick={openTarget} title={buttonTitle}>
+                {buttonLabel}
+            </button>
+        </template>
     </div>
 </template>
