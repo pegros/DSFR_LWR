@@ -1,36 +1,96 @@
 <template>
+    <!-- Collapsible variant display -->
     <template lwc:if={isCollapsible}>
         <section class="fr-accordion">
-            <h3 class="fr-accordion__title">
-                <button class="fr-accordion__btn"   aria-expanded={ariaExpanded}
-                        aria-controls="accordion"   onclick={expandCollapse}>
+            <template lwc:if={isH2}>
+                <h2 class="fr-accordion__title">
+                    <button class="fr-accordion__btn"   aria-label={ariaLabel}
+                            aria-controls="accordion"   aria-expanded={ariaExpanded}
+                            onclick={expandCollapse}>
                         {title}
-                </button>
-            </h3>
+                    </button>
+                </h2>
+            </template>
+            <template lwc:elseif={isH1}>
+                <h1 class="fr-accordion__title">
+                    <button class="fr-accordion__btn"   aria-label={ariaLabel}
+                            aria-controls="accordion"   aria-expanded={ariaExpanded}
+                            onclick={expandCollapse}>
+                        {title}
+                    </button>
+                </h1>
+            </template>
+            <template lwc:elseif={isH3}>
+                <h3 class="fr-accordion__title">
+                    <button class="fr-accordion__btn"   aria-label={ariaLabel}
+                            aria-controls="accordion"   aria-expanded={ariaExpanded}
+                            onclick={expandCollapse}>
+                        {title}
+                    </button>
+                </h3>
+            </template>
+            <template lwc:else>
+                <h4 class="fr-accordion__title">
+                    <button class="fr-accordion__btn"   aria-label={ariaLabel}
+                            aria-controls="accordion"   aria-expanded={ariaExpanded}
+                            onclick={expandCollapse}>
+                        {title}
+                    </button>
+                </h4>
+            </template>
+
             <div class={sectionClass} id="accordion">
-                <p class={messageClass}>
+                <div class={messageClass}>
                     <lightning-formatted-rich-text class={messageClass} value={message}>
                     </lightning-formatted-rich-text>
-                </p>
+                </div>
                 <slot name="foldableSection"></slot>
             </div>
         </section>
     </template>
+
+    <!-- Standard variant display -->
     <template lwc:else>
-        <div class={wrappingClass}>
+        <article class={wrappingClass}>
             <template lwc:if={title}>
-                <h2 class={titleClass}>
-                    <lightning-formatted-text class={titleClass} value={title} linkify>
+                <template lwc:if={isH2}>
+                    <h2 class={titleClass}>
+                        <lightning-formatted-text class={titleClass} value={title} linkify>
+                        </lightning-formatted-text>
+                    </h2>
+                </template>
+                <template lwc:elseif={isH1}>
+                    <h1 class={titleClass}>
+                        <lightning-formatted-text class={titleClass} value={title} linkify>
+                        </lightning-formatted-text>
+                    </h1>
+                </template>
+                <template lwc:elseif={isH3}>
+                    <h3 class={titleClass}>
+                        <lightning-formatted-text class={titleClass} value={title} linkify>
+                        </lightning-formatted-text>
+                    </h3>
+                </template>
+                <template lwc:else>
+                    <h4 class={titleClass}>
+                        <lightning-formatted-text class={titleClass} value={title} linkify>
+                        </lightning-formatted-text>
+                    </h4>
+                </template>
+            </template>
+            <template lwc:if={excerpt}>
+                <section class={excerptClass}>
+                    <lightning-formatted-text class={excerptClass} value={excerpt} linkify>
                     </lightning-formatted-text>
-                </h2>
+                </section>
             </template>
             <template lwc:if={message}>
-                <p class={messageClass}>
+                <section class={messageClass}>
                     <lightning-formatted-rich-text class={messageClass} value={message}>
                     </lightning-formatted-rich-text>
-                </p>
+                </section>
             </template>
-        </div>
+        </article>
     </template>
 
     <template lwc:if={isDebug}>

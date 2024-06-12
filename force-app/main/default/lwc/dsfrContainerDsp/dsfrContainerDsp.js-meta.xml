@@ -23,6 +23,17 @@
                         default="fr-h2"
                         description="Style d'affichage du titre" />
 
+            <property   name="excerpt"
+                        label="Entête"
+                        type="String"
+                        description="Contenu richtext à afficher en entête." />
+            <property   name="excerptClass"
+                        label="Variante de l'entête"
+                        type="String"
+                        datasource="fr-text--lead,fr-text--lg,fr-text,fr-text--sm,fr-text--xs"
+                        default="fr-text"
+                        description="Style d'affichage de l'entête" />
+
             <property   name="message"
                         label="Message"
                         type="String"
@@ -69,6 +80,18 @@
                         role="inputOnly"
                         default="fr-h2"
                         description="Style d'affichage du titre (fr-h1,fr-h2,fr-h3,fr-h4)" />
+
+            <property   name="excerpt"
+                        label="Entête"
+                        type="String"
+                        role="inputOnly"
+                        description="Contenu richtext à afficher en entête." />
+            <property   name="excerptClass"
+                        label="Variante de l'entête"
+                        type="String"
+                        role="inputOnly"
+                        default="fr-text"
+                        description="Style d'affichage de l'entête" />
 
             <property   name="message"
                         label="Message"
