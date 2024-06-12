@@ -5,8 +5,11 @@ import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import basePathName from '@salesforce/community/basePath';
 
 import CANCEL_LABEL from '@salesforce/label/c.dsfrRecordFormCancel';
+import CANCEL_TITLE from '@salesforce/label/c.dsfrRecordFormCancelTitle';
 import SAVE_LABEL   from '@salesforce/label/c.dsfrRecordFormSave';
+import SAVE_TITLE   from '@salesforce/label/c.dsfrRecordFormSaveTitle';
 import EDIT_LABEL   from '@salesforce/label/c.dsfrRecordFormEdit';
+import EDIT_TITLE   from '@salesforce/label/c.dsfrRecordFormEditTitle';
 
 
 var FORM_CONFIGS = {};
@@ -44,9 +47,12 @@ export default class DsfrFormCmp extends LightningElement {
     //-----------------------------------------------------
 
     cancelLabel     = CANCEL_LABEL;
+    cancelTitle     = CANCEL_TITLE;
     saveLabel       = SAVE_LABEL;
+    saveTitle       = SAVE__TITLE;
     forceSaveLabel  = SAVE_LABEL + ' (forcer)';
     editLabel       = EDIT_LABEL;
+    editTitle       = EDIT_TITLE;
 
     //----------------------------------------------------------------
     // Internal Initialization Parameters
