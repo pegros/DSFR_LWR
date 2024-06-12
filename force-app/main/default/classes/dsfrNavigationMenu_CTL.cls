@@ -147,61 +147,61 @@ public with sharing class dsfrNavigationMenu_CTL {
                                     WHERE NetworkId = :networkId AND MasterLabel in :menuMap.keySet()];
         }
         else {
-            System.debug(LoggingLevel.ERROR, 'getMenuItems: setting test navigation set');
+            System.debug(LoggingLevel.ERROR, 'getNavigations: setting test navigation set');
             navigationLinkSets = new List<NavigationLinkSet>();
             for (String iter : menuMap.keySet()) {
                 if (iter != 'NONE') {
-                    System.debug(LoggingLevel.ERROR, 'getMenuItems: registering menu ' + iter);
+                    System.debug(LoggingLevel.FINEST, 'getNavigations: registering menu ' + iter);
                     navigationLinkSets.add(new NavigationLinkSet(DeveloperName = iter, MasterLabel = iter));
                 }
                 else {
-                    System.debug(LoggingLevel.ERROR, 'getMenuItems: ignoring menu ' + iter);
+                    System.debug(LoggingLevel.FINEST, 'getNavigations: ignoring menu ' + iter);
                     navigationLinkSets = null;
                     break;
                 }
             }
         }
         if (navigationLinkSets == null) {
-            System.debug(LoggingLevel.ERROR, 'getMenuItems: END KO / No navigation menus found with labels ' + menuMap.keySet() + ' on network ' + networkId);
+            System.debug(LoggingLevel.ERROR, 'getNavigations: END KO / No navigation menus found with labels ' + menuMap.keySet() + ' on network ' + networkId);
             throw new System.AuraHandledException('Navigation menus not found!');
         }
-        System.debug('getMenuItems: navigationLinkSet retrieved ' + navigationLinkSets);
+        System.debug('getNavigations: navigationLinkSet retrieved ' + navigationLinkSets);
 
         Map<String,List<ConnectApi.NavigationMenuItem>> resultMap = new Map<String,List<ConnectApi.NavigationMenuItem>>();
         for (NavigationLinkSet iter : navigationLinkSets) {
-            System.debug('getMenuItems: processing menu ' + iter);
+            System.debug('getNavigations: processing menu ' + iter);
 
             Boolean iterShowHome = menuMap.get(iter.MasterLabel);
-            System.debug('getMenuItems: ShowHome? ' + iterShowHome);
+            System.debug('getNavigations: ShowHome? ' + iterShowHome);
 
             ConnectApi.NavigationMenuItemCollection iterMenu;
             if (!Test.isRunningTest()) {
                 iterMenu =  ConnectApi.NavigationMenu.getCommunityNavigationMenu(
                                     networkId, null, iter.DeveloperName,
                                     ConnectApi.PublishStatus.Live, false, iterShowHome, EXCLUDED_TYPES);
-                System.debug('getMenuItems: navigation Menu retrieved ' + iterMenu);
+                System.debug('getNavigations: navigation Menu retrieved ' + iterMenu);
             }
             else {
-                System.debug('getMenuItems: setting test navigation menu');
+                System.debug('getNavigations: setting test navigation menu');
                 iterMenu = new ConnectApi.NavigationMenuItemCollection();
                 iterMenu.menuItems = new List<ConnectApi.NavigationMenuItem>();
                 ConnectApi.NavigationMenuItem newItem = new ConnectApi.NavigationMenuItem();
                 if (iterShowHome) {
-                    System.debug('getMenuItems: home option');
+                    System.debug('getNavigations: home option');
                     newItem.Label = 'Home';
                     newItem.actionValue = 'www.home.test';
                 }
                 else {
-                    System.debug('getMenuItems: no home option');
+                    System.debug('getNavigations: no home option');
                     newItem.Label = 'Other';
                     newItem.actionValue = 'www.other.test';
                 }
                 iterMenu.menuItems.add(newItem);
             }
             resultMap.put(iter.MasterLabel,iterMenu.menuItems);
-            System.debug('getMenuItems: menuItems registered ' + iterMenu.menuItems);
+            System.debug('getNavigations: menuItems registered ' + iterMenu.menuItems);
         }
-        System.debug('getMenuItems: END returning ' + resultMap);
+        System.debug('getNavigations: END returning ' + resultMap);
         return resultMap;
     }
 }
