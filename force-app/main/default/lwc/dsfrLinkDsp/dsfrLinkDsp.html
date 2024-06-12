@@ -1,0 +1,12 @@
+<template>
+    <template lwc:if={isInactive}>
+        <a class={linkClass} href="#" target={linkTarget} title={linkTitle} aria-label={linkTitle} disabled>
+            {linkLabel}
+        </a>
+    </template>
+    <template lwc:else>
+        <a class={linkClass} href="#" target={linkTarget} title={linkTitle} aria-label={linkTitle} onclick={openTarget}>
+            {linkLabel}
+        </a>
+    </template>
+</template>

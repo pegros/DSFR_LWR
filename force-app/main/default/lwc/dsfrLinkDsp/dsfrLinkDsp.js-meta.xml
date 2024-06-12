@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Lien</masterLabel>
+    <description>Affichage d'un lien de navigation du DSFR</description>
+    <targets>
+        <target>lightningCommunity__Page</target>  
+        <target>lightningCommunity__Default</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="linkLabel"
+                        label="Libellé"
+                        type="String"
+                        description="Libellé du lien" />
+            <property   name="linkTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre du lien" />
+            <property   name="linkTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        description="Label de l'évènement généré lors d'un click à destination de Google Analytics" />
+            <property   name="linkSize"
+                        label="Taille"
+                        type="String"
+                        datasource="small,medium,large"
+                        default="medium"
+                        description="Taille du lien" />
+            <property   name="linkIcon"
+                        label="Icône"
+                        type="String"
+                        description="Nom de l'icone DFSR à afficher (e.g. checkbox-circle-line)" />
+            <property   name="linkIconPosition"
+                        label="Position de l'icône"
+                        type="String"
+                        datasource="left,right"
+                        default="left"
+                        description="Position de l'icone par rapport au libellé du lien" />
+            <property   name="linkInactive"
+                        label="Inactif ?"
+                        type="String"
+                        default="false"
+                        description="Statut du lien" />
+                        
+            <property   name="linkPageRef"
+                        label="Ref page cible"
+                        type="String"
+                        description="Salesforce page reference (JSON)" />
+            <property   name="linkTarget"
+                        label="Target"
+                        type="String"
+                        description="Propriété target à positionner sur le lien." />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+        <targetConfig targets="lightning__FlowScreen">
+            <property   name="linkLabel"
+                        label="Libellé"
+                        type="String"
+                        role="inputOnly"
+                        description="Libellé du lien" />
+            <property   name="linkTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre du lien" />
+            <property   name="linkTag"
+                        label="Tag Google Analytics"
+                        type="String"
+                        role="inputOnly"
+                        description="Label de l'évènement généré lors d'un click à destination de Google Analytics" />
+            <property   name="linkSize"
+                        label="Taille"
+                        type="String"
+                        default="medium"
+                        role="inputOnly"
+                        description="Taille du lien (small,medium,large)" />
+            <property   name="linkIcon"
+                        label="Icône"
+                        type="String"
+                        role="inputOnly"
+                        description="Nom de l'icone DFSR à afficher (e.g. checkbox-circle-line)" />
+            <property   name="linkIconPosition"
+                        label="Position de l'icône"
+                        type="String"
+                        default="left"
+                        role="inputOnly"
+                        description="Position de l'icone par rapport au libellé du lien (left,right)" />
+            <property   name="linkInactive"
+                        label="Inactif ?"
+                        type="String"
+                        default="false"
+                        role="inputOnly"
+                        description="Statut du lien" />
+              
+            <property   name="linkPageRef"
+                        label="Ref page cible"
+                        type="String"
+                        role="inputOnly"
+                        description="Salesforce page reference (JSON)" />
+            <property   name="linkTarget"
+                        label="Target"
+                        type="String"
+                        role="inputOnly"
+                        description="Propriété target à positionner sur le lien." />
+
+            <property   name="isDebug"
+                        label="Debug ?"
+                        type="Boolean"
+                        default="false"
+                        role="inputOnly"
+                        description="Activation de détails pour l'analyse de problèmes" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

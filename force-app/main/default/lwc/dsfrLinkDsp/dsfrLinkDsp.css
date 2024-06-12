@@ -1,0 +1,4 @@
+.linkLabel {
+    white-space: nowrap;
+    overflow-wrap: break-word;
+}
