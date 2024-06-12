@@ -6,7 +6,8 @@ export default class DsfrBadgeDsp extends LightningElement {
     // Configuration parameters
     //-----------------------------------------------------
     @api badgeValue;
-    @api badgeSize = 'medium'; // trest
+    @api badgeTitle;
+    @api badgeSize = 'medium';
     @api badgeVariant; 
     @api showIcon = false; 
     @api isDebug = false; 
@@ -22,6 +23,7 @@ export default class DsfrBadgeDsp extends LightningElement {
     connectedCallback() {
         if (this.isDebug) console.log('connected: START badge');
         if (this.isDebug) console.log('connected: badge value ', this.badgeValue);
+        if (this.isDebug) console.log('connected: badge title ', this.badgeTitle);
         if (typeof this.badgeValue == 'number') {
             this.badgeValue = '' + this.badgeValue;
             if (this.isDebug) console.log('connected: badge value converted');

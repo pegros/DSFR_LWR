@@ -15,6 +15,10 @@
                         label="Libellé"
                         type="String"
                         description="Libellé du badge" />
+            <property   name="badgeTitle"
+                        label="Titre"
+                        type="String"
+                        description="Titre du badge (affiché au survol)" />
             <property   name="badgeSize"
                         label="Taille"
                         type="String"
@@ -45,6 +49,11 @@
                         type="String"
                         role="inputOnly"
                         description="Libellé du badge" />
+            <property   name="badgeTitle"
+                        label="Titre"
+                        type="String"
+                        role="inputOnly"
+                        description="Titre du badge (affiché au survol)" />
             <property   name="badgeSize"
                         label="Taille"
                         type="String"
