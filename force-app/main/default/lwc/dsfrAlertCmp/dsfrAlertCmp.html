@@ -1,9 +1,11 @@
 <template>
     <div class={alertClass} lwc:if={showAlert}>
-        <h3 if:true={alertTitle} class="fr-alert__title">
-            <lightning-formatted-text value={alertTitle} class="fr-alert__title alertText" >
-            </lightning-formatted-text>
-        </h3>
+        <template lwc:if={alertTitle}>
+            <h4 class="fr-alert__title">
+                <lightning-formatted-text value={alertTitle} class="fr-alert__title alertText" >
+                </lightning-formatted-text>
+            </h4>
+        </template>
         <template lwc:if={isTags}>
             <ul class="fr-tags-group alertMessage">
                 <template for:each={tagList} for:item="item">
@@ -15,13 +17,14 @@
         </template>
         <template lwc:elseif={alertMessage}>
             <p class="alertMessage">
-                <!-- fr-display-md  -->
                 <lightning-formatted-rich-text value={alertMessage} class="alertText" >
                 </lightning-formatted-rich-text>
             </p>
         </template>
-        <p if:true={alertActionLabel}>
-            <a href="#"  target="_blank" rel="noopener" onclick={openTarget} >{alertActionLabel}</a>
-        </p>
+        <template lwc:if={alertActionLabel}>
+            <p>
+                <a href="#"  target="_blank" rel="noopener" onclick={openTarget} >{alertActionLabel}</a>
+            </p>
+        </template>
     </div>
 </template>

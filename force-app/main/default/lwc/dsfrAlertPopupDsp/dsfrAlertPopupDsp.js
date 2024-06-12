@@ -72,7 +72,8 @@ export default class DsfrAlertPopupDsp extends LightningElement {
         this.alertConfig = alertConfig;
         this.isModalOpen = true;
 
-        let modalCmp = this.template.querySelector('dialog');
+        //let modalCmp = this.template.querySelector('dialog');
+        let modalCmp = this.refs.modalDialog;
         if (this.isDebug) console.log('showAlert: modalCmp fetched ',modalCmp);
         modalCmp.showModal();
         if (this.isDebug) console.log('showAlert: modalCmp shown');
@@ -85,12 +86,13 @@ export default class DsfrAlertPopupDsp extends LightningElement {
         document.body.style.overflowY = 'hidden';
         if (this.isDebug) console.log('showAlert: document style updated ',document.body.style.overflowY);
 
-        /*setTimeout(() => { 
+        setTimeout(() => { 
             let closeButton = this.template.querySelector('button.fr-link--close');
             if (this.isDebug) console.log('showAlert: START fetching closeButton ',closeButton);
             closeButton.focus({ focusVisible: true });
+            //event.preventDefault();
             if (this.isDebug) console.log('showAlert: END closeButton focused');
-        }, 150);*/
+        }, 150);
         
         if (this.isDebug) console.log('showAlert: END Alert Popup returning Promise');
         return  new Promise((resolve,reject)=> {
@@ -110,7 +112,8 @@ export default class DsfrAlertPopupDsp extends LightningElement {
         if (event) event.preventDefault();
         this.isModalOpen = false;
 
-        let modalCmp = this.template.querySelector('dialog');
+        //let modalCmp = this.template.querySelector('dialog');
+        let modalCmp = this.refs.modalDialog;
         if (this.isDebug) console.log('closeModal: modalCmp fetched ',modalCmp);
         modalCmp.close();
         if (this.isDebug) console.log('closeModal: modalCmp closed');
