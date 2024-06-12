@@ -489,7 +489,7 @@ button.slds-combobox__input-value {
         height: 1.5rem !important;
         width: 1.5rem !important;
         font-size: 1rem !important;
-        margin-top:0 px;
+        margin-top: 0px;
         margin-left: 0px;
     }
     .slds-checkbox_faux {
@@ -597,13 +597,13 @@ button.slds-combobox__input-value {
     
 	/* Header / Footer fixes for lightning-formatted-richtext*/
 
-    @media (min-width: 48em)
-	.fr-footer__brand .fr-logo span {
-    	font-size: 1.3125rem;
-    	margin: -1.25rem;
-    	padding: 1.25rem;
+    @media(min-width: 48em) {
+	    .fr-footer__brand .fr-logo span {
+    	    font-size: 1.3125rem;
+    	    margin: -1.25rem;
+    	    padding: 1.25rem;
+        }
     }
-
     .fr-footer__brand .fr-logo span {
     	font-size: 1.05rem;
     	margin: -1rem;
