@@ -111,13 +111,14 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
             console.warn('handleAction: field list parsing failed ', error);
         }
 
-        let modalCmp = this.template.querySelector('dialog');
+        this.isModalOpen = true;
+        //let modalCmp = this.template.querySelector('dialog');
+        let modalCmp = this.refs.modalDialog;
         if (this.isDebug) console.log('handleAction: modalCmp fetched ',modalCmp);
         modalCmp.showModal();
         if (this.isDebug) console.log('handleAction: modalCmp shown');
         modalCmp.classList.add('fr-modal--opened');
         if (this.isDebug) console.log('handleAction: modalCmp classList updated');
-
 
         let status = document.addEventListener('keydown',this.handleEscape, false);
         if (this.isDebug) console.log('handleAction: keydown listener registered on document ',status);
@@ -133,7 +134,7 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
         }, 150);
 
         //this.toggleSpinner();
-        this.isModalOpen = true;
+        //this.isModalOpen = true;
 
         document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_init',params:{event_source:'dsfrFormButtonCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.buttonTag}}}));
         if (this.isDebug) console.log('handleAction: GA notified');
@@ -266,7 +267,8 @@ export default class DsfrFormButtonCmp extends  NavigationMixin(LightningElement
         event.preventDefault();
         this.isModalOpen = false;
 
-        let modalCmp = this.template.querySelector('dialog');
+        //let modalCmp = this.template.querySelector('dialog');
+        let modalCmp = this.refs.modalDialog;
         if (this.isDebug) console.log('closeModal: modalCmp fetched ',modalCmp);
         modalCmp.close();
         if (this.isDebug) console.log('closeModal: modalCmp closed');

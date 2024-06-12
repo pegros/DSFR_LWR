@@ -9,99 +9,104 @@
     
 
     <!-- Form Popup Display -->
-    <dialog role="dialog"                       class="fr-modal"
+    <dialog lwc:ref="modalDialog"
+            role="dialog"                       class="fr-modal"
             aria-labelledby="fr-modal-title"    aria-describedby="fr-modal-content">
-        <div class="fr-container fr-container--fluid fr-container-md">
-            <div class="fr-grid-row fr-grid-row--center">
-                <div class="fr-col-12 fr-col-md-8">
-                    <div class="fr-modal__body">
-                        <div class="fr-modal__header">
-                            <button class="fr-link--close fr-link"  title={closeTitle}
-                                    onclick={handleClose}           onkeypressed={handleEnter}>
-                                    {closeLabel}
-                            </button>
-                        </div>
-                        <div class="fr-modal__content">
-                            <h3 class={titleClass} id="fr-modal-title">{titleLabel}</h3>
-                            <div id="fr-modal-content">
-                                <template lwc:if={isModalOpen}>
-                                    <template lwc:if={formMessage}>
-                                        <p class="fr-text fr-mb-4v">
-                                            <lightning-formatted-rich-text class="fr-text" value={formMessage}>
-                                            </lightning-formatted-rich-text>
-                                        </p>
-                                    </template>
+        <template lwc:if={isModalOpen}>
+            <div class="fr-container fr-container--fluid fr-container-md">
+                <div class="fr-grid-row fr-grid-row--center">
+                    <div class="fr-col-12 fr-col-md-8">
+                        <div class="fr-modal__body">
+                            <div class="fr-modal__header">
+                                <button class="fr-link--close fr-link"  title={closeTitle}
+                                        onclick={handleClose}           onkeypressed={handleEnter}>
+                                        {closeLabel}
+                                </button>
+                            </div>
+                            <div class="fr-modal__content">
+                                <template lwc:if={titleLabel}>
+                                    <h3 class={titleClass} id="fr-modal-title">{titleLabel}</h3>
+                                </template>
+                                <div id="fr-modal-content">
+                                    <template lwc:if={isModalOpen}>
+                                        <template lwc:if={formMessage}>
+                                            <p class="fr-text fr-mb-4v">
+                                                <lightning-formatted-rich-text class="fr-text" value={formMessage}>
+                                                </lightning-formatted-rich-text>
+                                            </p>
+                                        </template>
 
-                                     <!-- Record Form -->
-                                    <lightning-record-edit-form class="popupForm"           object-api-name={objectApiName}
-                                                                record-id={recordId}        record-type-id={recordTypeId}
-                                                                onload={handleLoad}         onsubmit={handleSubmit}
-                                                                onsuccess={handleSuccess}   onerror={handleError}>
-                                        <template for:each={formFields} for:item="iter">
-                                            <template lwc:if={iter.disabled}>
-                                                <template lwc:if={iter.value}>
+                                         <!-- Record Form -->
+                                        <lightning-record-edit-form class="popupForm"           object-api-name={objectApiName}
+                                                                    record-id={recordId}        record-type-id={recordTypeId}
+                                                                    onload={handleLoad}         onsubmit={handleSubmit}
+                                                                    onsuccess={handleSuccess}   onerror={handleError}>
+                                            <template for:each={formFields} for:item="iter">
+                                                <template lwc:if={iter.disabled}>
+                                                    <template lwc:if={iter.value}>
+                                                        <lightning-input-field  key={iter.name}         class="dsfrInput"
+                                                                                field-name={iter.name}  value={iter.value}
+                                                                                variant="label-stacked" disabled>
+                                                        </lightning-input-field>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <lightning-output-field key={iter.name}         class="dsfrInput"
+                                                                                field-name={iter.name}
+                                                                                variant="label-stacked" >
+                                                        </lightning-output-field>
+                                                    </template>
+                                                </template>
+                                                <template lwc:elseif={iter.required}>
                                                     <lightning-input-field  key={iter.name}         class="dsfrInput"
                                                                             field-name={iter.name}  value={iter.value}
-                                                                            variant="label-stacked" disabled>
+                                                                            variant="label-stacked" required>
                                                     </lightning-input-field>
                                                 </template>
-                                                <template lwc:else>
-                                                    <lightning-output-field key={iter.name}         class="dsfrInput"
-                                                                            field-name={iter.name}
-                                                                            variant="label-stacked" >
-                                                    </lightning-output-field>
+                                                <template lwc:elseif={iter.hidden}>
+                                                    <lightning-input-field  key={iter.name}         class="slds-hide"
+                                                                            field-name={iter.name}  value={iter.value}
+                                                                            variant="label-hidden">
+                                                    </lightning-input-field>
+                                                </template>
+                                                 <template lwc:else>
+                                                    <lightning-input-field  key={iter.name}         class="dsfrInput"
+                                                                            field-name={iter.name}  value={iter.value}
+                                                                            variant="label-stacked">
+                                                    </lightning-input-field>
                                                 </template>
                                             </template>
-                                            <template lwc:elseif={iter.required}>
-                                                <lightning-input-field  key={iter.name}         class="dsfrInput"
-                                                                        field-name={iter.name}  value={iter.value}
-                                                                        variant="label-stacked" required>
-                                                </lightning-input-field>
-                                            </template>
-                                            <template lwc:elseif={iter.hidden}>
-                                                <lightning-input-field  key={iter.name}         class="slds-hide"
-                                                                        field-name={iter.name}  value={iter.value}
-                                                                        variant="label-hidden">
-                                                </lightning-input-field>
-                                            </template>
-                                             <template lwc:else>
-                                                <lightning-input-field  key={iter.name}         class="dsfrInput"
-                                                                        field-name={iter.name}  value={iter.value}
-                                                                        variant="label-stacked">
-                                                </lightning-input-field>
-                                            </template>
-                                        </template>
                                         
-                                        <!-- class="fr-alert fr-background- -default-grey fr-alert- -error fr-mt-4v" -->
-                                        <lightning-messages class="formAlert"></lightning-messages>
+                                            <!-- class="fr-alert fr-background- -default-grey fr-alert- -error fr-mt-4v" -->
+                                            <lightning-messages class="formAlert"></lightning-messages>
 
-                                        <!-- Form Buttons -->
-                                        <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
-                                            <li>
-                                                <button class="fr-btn fr-btn--secondary formButton" type="reset" onclick={handleCancel}>
-                                                    {cancelLabel}
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button class="fr-btn formButton" type="submit" >
-                                                    {saveLabel}
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <div class="slds-is-relative spinnerDiv">
-                                                    <lightning-spinner alternative-text="..." size="small" variant="brand" class="formSpinner slds-spinner_inline" >
-                                                    </lightning-spinner>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </lightning-record-edit-form>
-                                </template>
+                                            <!-- Form Buttons -->
+                                            <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
+                                                <li>
+                                                    <button class="fr-btn fr-btn--secondary formButton" type="reset" onclick={handleCancel}>
+                                                        {cancelLabel}
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button class="fr-btn formButton" type="submit" >
+                                                        {saveLabel}
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <div class="slds-is-relative spinnerDiv">
+                                                        <lightning-spinner alternative-text="..." size="small" variant="brand" class="formSpinner slds-spinner_inline" >
+                                                        </lightning-spinner>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </lightning-record-edit-form>
+                                    </template>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </template>
     </dialog>
 
 </template>
