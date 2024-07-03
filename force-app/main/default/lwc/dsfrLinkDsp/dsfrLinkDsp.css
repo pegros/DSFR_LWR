@@ -2,3 +2,13 @@
     white-space: nowrap;
     overflow-wrap: break-word;
 }
+.align-right {
+    text-align: end;
+    max-width: 100%;
+    /*float: right;*/
+}
+.align-center {
+    text-align: center;
+    max-width: 100%;
+    /*display: inline-block;*/
+}

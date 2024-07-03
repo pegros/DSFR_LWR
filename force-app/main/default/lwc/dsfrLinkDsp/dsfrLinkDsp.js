@@ -13,6 +13,7 @@ export default class DsfrLinkDsp extends NavigationMixin(LightningElement) {
     @api linkTitle;
     @api linkTag; // for GA4 tracking
     @api linkSize = 'medium';
+    @api linkAlign = 'left';
     @api linkPageRef;
     @api linkTarget = '_self';
     
@@ -36,6 +37,13 @@ export default class DsfrLinkDsp extends NavigationMixin(LightningElement) {
     linkClass = 'fr-link';
 
     //-----------------------------------------------------
+    // Custom Getters
+    //-----------------------------------------------------
+    get alignClass() {
+        return 'align-' + this.linkAlign;
+    }
+
+    //-----------------------------------------------------
     // Initialisation
     //-----------------------------------------------------
     connectedCallback() {
@@ -45,6 +53,7 @@ export default class DsfrLinkDsp extends NavigationMixin(LightningElement) {
             console.log('connected: link icon ',this.linkIcon);
             console.log('connected: link icon position ',this.linkIconPosition);
             console.log('connected: link size ',this.linkSize);
+            console.log('connected: link page ref ',this.linkPageRef);
             console.log('connected: link target ',this.linkTarget);
             console.log('connected: link _blank ref? ', this.isBlank);
             console.log('connected: link inactive? ', this.linkInactive);
@@ -79,11 +88,17 @@ export default class DsfrLinkDsp extends NavigationMixin(LightningElement) {
     openTarget(event) {
         if (this.isDebug) console.log('openTarget: START for link ',this.linkLabel);
         if (this.isDebug) console.log('openTarget: event ',event);
-        event.stopPropagation();
-        event.preventDefault();
-
+        
         if (this.isDebug) console.log('openTarget: page ref fetched ',this.linkPageRef);
         if (this.isDebug) console.log('openTarget: page ref stringified ',JSON.stringify(this.linkPageRef));
+
+        if (this.linkPageRef === '#'){
+            if (this.isDebug) console.log('openTarget: END / Going back to top');
+            return;
+        }
+
+        event.stopPropagation();
+        event.preventDefault();
         if (this.linkPageRef) {
             if (this.isDebug) console.log('openTarget: navigating to page');
             if (this.isDebug) console.log('openTarget: linkPageRef type ',typeof this.linkPageRef);

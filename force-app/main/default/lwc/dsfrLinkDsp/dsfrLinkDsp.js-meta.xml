@@ -29,6 +29,12 @@
                         datasource="small,medium,large"
                         default="medium"
                         description="Taille du lien" />
+            <property   name="linkAlign"
+                        label="Alignement"
+                        type="String"
+                        default="left"
+                        datasource="left,center,right"
+                        description="Positionnement du lien dans son conteneur." />
             <property   name="linkIcon"
                         label="Icône"
                         type="String"
