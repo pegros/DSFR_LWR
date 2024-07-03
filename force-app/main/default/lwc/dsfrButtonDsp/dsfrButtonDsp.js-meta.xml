@@ -54,7 +54,7 @@
                         label="Alignement"
                         type="String"
                         default="left"
-                        datasource="left,center,right"
+                        datasource="left,center,right,spread"
                         description="Positionnement du bouton dans son conteneur." />
                         
             <property   name="buttonTarget"

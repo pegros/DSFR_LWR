@@ -30,3 +30,13 @@
         width: fit-content;
     }
 }
+/*.align-spread {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}*/
+.align-spread .fr-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
