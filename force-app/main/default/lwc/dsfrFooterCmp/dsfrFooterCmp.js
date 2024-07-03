@@ -88,6 +88,10 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
                 else {
                     item._target = "_self";
                 }
+                if (item.label?.includes('&')) {
+                    if (this.isDebug) console.log('wiredFooterMenus: unescaping label');
+                    item.label = this.htmlDecode(item.label);
+                }
             });
             //this.topMenuItems = data[this.topMenu] || [];
             if (this.isDebug) console.log('wiredFooterMenus: topMenuItems updated',this.topMenuItems);
@@ -99,6 +103,10 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
                 }
                 else {
                     item._target = "_self";
+                }
+                if (item.label?.includes('&')) {
+                    if (this.isDebug) console.log('wiredFooterMenus: unescaping label');
+                    item.label = this.htmlDecode(item.label);
                 }
             });
             //this.bottomMenuItems = data[this.bottomMenu] || [];
@@ -217,6 +225,9 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('handleBottomClick: END for footer menu',this.bottomMenu);
     }
 
+    //----------------------------------------------------------------
+    // Utilities
+    //----------------------------------------------------------------   
     navigate = function(event,menuItems) {
         if (this.isDebug) console.log('navigate: START for menu ', JSON.stringify(menuItems));
         
@@ -237,5 +248,13 @@ export default class DsfrFooterCmp extends NavigationMixin(LightningElement) {
         this[NavigationMixin.Navigate](newPageRef);
         if (this.isDebug) console.log('navigate: END for navigation menu / Navigation triggered');
         return;
+    }
+
+    htmlDecode = function(input) {
+        if (this.isDebug) console.log('htmlDecode: START with ',input);
+        const doc = new DOMParser().parseFromString(input, "text/html");
+        let result = doc.documentElement.textContent;
+        if (this.isDebug) console.log('htmlDecode: END with ',result);
+        return result;
     }
 }
