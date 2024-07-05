@@ -215,8 +215,8 @@ export default class DsfrFileAttachCmp extends LightningElement {
         if (this.isDebug) console.log('initOptions: recordId ', this.recordId);
         if (this.isDebug) console.log('initOptions: objectApiName ', this.objectApiName);
         let options = [];
-        let optionLabels = this.optionLabels.split(';');
-        let optionValues = this.optionValues.split(';');
+        let optionLabels = this.optionLabels.split(';').sort();
+        let optionValues = this.optionValues.split(';').sort();
         optionLabels.forEach((item,index) => {
             if (this.isDebug) console.log('initOptions: processing item ',item);
             if (this.isDebug) console.log('initOptions: at index ',index);
