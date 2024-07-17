@@ -19,6 +19,12 @@
                         label="Titre"
                         type="String"
                         description="Titre de la tuile" />
+            <property   name="tileTitleLevel"
+                        label="Niveau Titre"
+                        type="String"
+                        datasource="h2,h3,h4,h5"
+                        default="h4"
+                        description="Niveau de titre de la tuile" />
             <property   name="tileDescription"
                         label="Description"
                         type="String"
@@ -64,6 +70,12 @@
                         type="String"
                         role="inputOnly"
                         description="Titre de la tuile" />
+            <property   name="tileTitleLevel"
+                        label="Niveau Titre"
+                        type="String"
+                        role="inputOnly"
+                        default="h4"
+                        description="Niveau de titre de la tuile (h2, h3, h4 ou h5)" />
             <property   name="tileDescription"
                         label="Description"
                         type="String"

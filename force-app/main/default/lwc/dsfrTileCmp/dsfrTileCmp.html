@@ -1,14 +1,46 @@
 <template>
     <article class={tileClass}>
         <div class="fr-tile__body">
-            <h4 class="fr-tile__title">
-                <template lwc:if={tileTarget}>
-                    <a class="fr-tile__link" href="#" onclick={openTarget}>{tileTitle}</a>
-                </template>
-                <template lwc:else>
-                    {tileTitle}
-                </template>
-            </h4>
+            <template lwc:if={isH4}>
+                <h4 class="fr-tile__title">
+                    <template lwc:if={tileTarget}>
+                        <a class="fr-tile__link" href="#" onclick={openTarget}>{tileTitle}</a>
+                    </template>
+                    <template lwc:else>
+                        {tileTitle}
+                    </template>
+                </h4>
+            </template>
+            <template lwc:elseif={isH3}>
+                <h3 class="fr-tile__title">
+                    <template lwc:if={tileTarget}>
+                        <a class="fr-tile__link" href="#" onclick={openTarget}>{tileTitle}</a>
+                    </template>
+                    <template lwc:else>
+                        {tileTitle}
+                    </template>
+                </h3>
+            </template>
+            <template lwc:elseif={isH2}>
+                <h2 class="fr-tile__title">
+                    <template lwc:if={tileTarget}>
+                        <a class="fr-tile__link" href="#" onclick={openTarget}>{tileTitle}</a>
+                    </template>
+                    <template lwc:else>
+                        {tileTitle}
+                    </template>
+                </h2>
+            </template>
+            <template lwc:else>
+                <h5 class="fr-tile__title">
+                    <template lwc:if={tileTarget}>
+                        <a class="fr-tile__link" href="#" onclick={openTarget}>{tileTitle}</a>
+                    </template>
+                    <template lwc:else>
+                        {tileTitle}
+                    </template>
+                </h5>
+            </template>
             <template lwc:if={tileDescription}>
                 <p class="fr-tile__desc">
                     <lightning-formatted-rich-text class="fr-tile__desc" value={tileDescription}>

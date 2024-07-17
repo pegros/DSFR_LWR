@@ -9,6 +9,7 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     @api tileImage = 'logo';
     @api tileTitle;
+    @api tileTitleLevel = 'h4';
     @api tileDescription;
     @api tileTag; // For GA4 link tracking
     @api tileTarget;
@@ -20,6 +21,16 @@ export default class DsfrTileCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     // Custom getter
     //-----------------------------------------------------
+
+    get isH2() {
+        return this.tileTitleLevel === 'h2';
+    }
+    get isH3() {
+        return this.tileTitleLevel === 'h3';
+    }
+    get isH4() {
+        return this.tileTitleLevel === 'h4';
+    }
 
     get imageSrc() {
         return (this.tileImage?.includes('delivery/media') ? this.tileImage : '/file-asset/' + this.tileImage);
