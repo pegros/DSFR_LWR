@@ -55,7 +55,22 @@
             <property   name="modalTitle"
                         label="Titre modale"
                         type="String"
-                        description="Libellé supérieur dans la modale" />
+                        description="Titre de la modale (accessibilité)" />
+            <property   name="showTitle"
+                        label="Affichage titre?"
+                        type="Boolean"
+                        default="false"
+                        description="Affichage explicite ou non du titre de la modale en entête de la fenêtre de modale" />
+            <property   name="modalDesc"
+                        label="Description modale"
+                        type="String"
+                        description="Description ARIA du processus executé dans la modale (accessibilité)" />
+            <property   name="showClose"
+                        label="Affichage bouton fermer?"
+                        type="Boolean"
+                        default="false"
+                        description="Affichage d'un bouton de fermeture de la modale en pied de la fenêtre de modale" />
+
             <property   name="flowName"
                         label="Processus"
                         type="String"
@@ -75,6 +90,13 @@
                         type="String"
                         description="ID de l'enregistrement à raffraichir" />
 
+            <property   name="popupChannel"
+                        label="Canal de notification"
+                        type="String"
+                        default="DsfrFlowPopup"
+                        description="Notification channel to contact the Popup handler" />
+
+                        
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean"

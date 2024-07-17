@@ -1,0 +1,26 @@
+<template>
+    <template lwc:if={isDebug}>
+        <div>
+            <p class="fr-p-2v">
+                <span class="fr-badge fr-badge--success  fr-mr-4v">
+                    dsfrFlowPopupUtl
+                </span>
+                <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                    Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--new  fr-mr-4v">
+                    Channel {notifChannel}
+                </span>
+                <template lwc:if={addDSFR}>
+                    <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                        isDSFR valorisé
+                    </span>
+                </template>
+                <span class="fr-badge fr-badge--info">
+                    <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrFlowPopupCmp.md" target="_blank">
+                        Voir la documentation</a>
+                </span>
+            </p>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,54 @@
+<template>
+    <template lwc:if={showTitle}>
+        <lightning-modal-header label={modalTitle}>
+        </lightning-modal-header>
+    </template>
+    <lightning-modal-body>
+            <template lwc:if={errorMsg}>
+                <c-dsfr-alert-cmp   alert-type="error"
+                                    alert-title="Problème d'initialisation"   alert-message={errorMsg}>
+                </c-dsfr-alert-cmp>
+            </template>
+            <template lwc:else>
+                <lightning-flow flow-api-name={flowName}
+                                flow-input-variables={flowInput}
+                                flow-finish-behavior="NONE"
+                                onstatuschange={handleStatusChange} >
+                </lightning-flow>
+            </template>
+
+        <template lwc:if={isDebug}>
+            <div class="fr-p-4v slds-border_top">
+                <div>
+                    <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                        Mode debug activé!
+                    </span>
+                    <span class="fr-badge fr-badge--new  fr-mr-4v">
+                        flowName {flowName}
+                    </span>
+                    <template lwc:if={addDSFR}>
+                        <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                            isDSFR valorisé
+                        </span>
+                    </template>
+                    <span class="fr-badge fr-badge--info">
+                        <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrSearchPopupCmp.md" target="_blank">
+                            Voir la documentation</a>
+                    </span>
+                </div>
+                <div class="fr-text--sm fr-mt-2v">
+                    <ul>
+                        <li><b>showTitle</b>: {showTitle} / <b>modalTitle</b>: {modalTitle}</li>
+                        <li><b>(aria-)description</b>: {description}</li>
+                        <li><b>flowParams</b>: {flowInputStr}</li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+    </lightning-modal-body>
+    <template lwc:if={showClose}>
+        <lightning-modal-footer>
+            <lightning-button label={closeLabel} title={closeTitle} onclick={handleClose}></lightning-button>
+        </lightning-modal-footer>
+    </template>
+</template>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>DSFR Modales de processus</masterLabel>
+    <description>Ce composant permet de gérer l'ouverture / la fermeture de fenêtres modales contenant un processus.</description>
+
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property   name="notifChannel"
+                        label="Notif. Channel"
+                        type="String"
+                        default="DsfrFlowPopup"
+                        description="Name of the sfpegCustomAction notification channel to subscribe to (to activate component display)."/>
+            
+            <property   name="addDSFR"
+                        label="Ajout isDSFR?"
+                        type="Boolean"
+                        default="false"
+                        description="Flag to systematically set the isDSFR Flow property to true when opening Flows."/>
+
+            <property   name="isDebug"
+                        label="Debug?"
+                        type="Boolean"
+                        default="false"
+                        description="Flag to show debug information."/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
