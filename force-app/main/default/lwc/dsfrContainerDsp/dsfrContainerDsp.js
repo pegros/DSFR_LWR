@@ -46,6 +46,13 @@ export default class DsfrContainerDsp extends LightningElement {
     get ariaLabel() {
         return (this.isCollapsed ? 'Ouvrir la section ' : 'Fermer la section ') + this.title;
     }
+    get finalExcerptClass() {
+        return (this.message ? this.excerptClass + ' fr-mb-4v' : this.excerptClass);
+    }
+
+    //----------------------------------------------------------------
+    // Technical internal properties
+    //----------------------------------------------------------------
     urlReworked = false;
 
 
