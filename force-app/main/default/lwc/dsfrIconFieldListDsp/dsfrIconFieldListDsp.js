@@ -1,5 +1,5 @@
-import { LightningElement,api } from 'lwc';
-
+import { LightningElement,api,wire } from 'lwc';
+import { CurrentPageReference } from 'lightning/navigation';
 export default class DsfrIconFieldListDsp extends LightningElement {
     //-----------------------------------------------------
     // Configuration parameters
@@ -43,7 +43,7 @@ export default class DsfrIconFieldListDsp extends LightningElement {
                 }
             });
             if (this.isDebug) console.log('set iconFieldList values: valueList init ', JSON.stringify(valueList));
-            this._values = valueList;
+            this._values = (valueList.length > 0 ? valueList : null);
         }
         catch(error) {
             console.error('set iconFieldList values: error while parsing input data ',error);
@@ -56,6 +56,26 @@ export default class DsfrIconFieldListDsp extends LightningElement {
     @api iconClass;
 
     @api isDebug = false;
+
+    //-----------------------------------------------------
+    // Technical parameters
+    //-----------------------------------------------------
+    isSiteBuilder = false;
+
+    //-----------------------------------------------------
+    // Context parameters
+    //-----------------------------------------------------
+    @wire(CurrentPageReference)
+    wiredPage(data){
+        if (this.isDebug) console.log('wiredPage: START iconFieldList for values ',this._values);
+        if (this.isDebug) console.log('wiredPage: with page ',JSON.stringify(data));
+
+        let app = data && data.state && data.state.app;
+        if (this.isDebug) console.log('wiredPage: app extracted ',app);
+        this.isSiteBuilder = (app === 'commeditor');
+
+        if (this.isDebug) console.log('wiredPage: END iconFieldList with isSiteBuilder',this.isSiteBuilder);
+    };
 
     //-----------------------------------------------------
     // Component Initialisation

@@ -13,6 +13,11 @@
             </template>
         </ul>
     </template>
+    <template lwc:else>
+        <p lwc:if={isSiteBuilder} class="slds-text-heading_small slds-p-around_small slds-theme_shade slds-theme_alert-texture">
+            DSFR Icon Field List
+        </p>
+    </template>
 
     <template lwc:if={isDebug}>
         <div class={wrappingCss}>
