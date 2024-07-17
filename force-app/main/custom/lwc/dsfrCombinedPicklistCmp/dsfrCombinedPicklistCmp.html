@@ -7,13 +7,13 @@
                         <h2 class="fr-h2">{title}</h2>
                     </legend>
 
-                    <!-- Liste des langues sélectionnées -->
+                    <!-- Liste des éléments sélectionnés -->
                     <div class="fr-fieldset__element">
                         <p lwc:if={message} class="fr-text--sm">
                             <lightning-formatted-rich-text class="fr-text--sm" value={message}>
                             </lightning-formatted-rich-text>
                         </p>
-                        <div class="fr-table fr-table--bordered fr-table--layout-fixed fr-table--no-caption">
+                        <div class="fr-table fr-table--bordered fr-table--layout-fixed fr-table--no-caption picklistTable">
                             <table role="presentation">
                                 <caption>{title}</caption>
                                 <thead>
@@ -33,9 +33,8 @@
                                                 </template>
                                                 <td>
                                                     <button class="fr-btn fr-icon-delete-line fr-btn--tertiary-no-outline"
-                                                            value={iterValue.value}
-                                                            title={deleteTitle}
-                                                            onclick={handleRemove}>
+                                                            title={deleteTitle}     aria-label={iterValue.deleteTitle}
+                                                            value={iterValue.value} onclick={handleRemove}>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -46,19 +45,25 @@
                         </div>
                     </div>
 
-                    <!-- Section d'ajout de langue -->
+                    <!-- Section d'ajout d'éléments  -->
                     <template lwc:if={fieldValues} >
-                        <p class="fr-hr"></p>
                         <div class="actionContainer fr-fieldset__element">
                              <fieldset class=" fr-fieldset" id="picklist-entry" >
-                                <div class="actionGrid fr-grid-row fr-grid-row-gutters fr-grid-row--bottom ">
+                                <div class="actionGrid fr-grid-row fr-grid-row-gutters fr-grid-row--top ">
                                     <template for:each={fieldValues} for:item="iterField">
-                                        <div class="fr-fieldset__element fr-col-12 fr-col-md-5 fr-px-2v" key={iterField.label}>
+                                        <div class="fr-fieldset__element fr-col-12 fr-col-md-5 fr-px-2v fr-mb-8v" key={iterField.label}>
+                                            <!--  -->
+                                            <lightning-select   class="fr-select-group"     value={iterField.selection}
+                                                                name={iterField.label}      label={iterField.label}
+                                                                options={iterField.values}  onchange={handleSelect} >
+                                            </lightning-select>
+                                            <!--
                                             <div class="fr-select-group">
                                                 <label class="fr-label" for={iterField.label}>
                                                     {iterField.label}
                                                 </label>
-                                                <select class="fr-select" id={iterField.label} name={iterField.label}
+                                                <select class="fr-select optionSelect"          id={iterField.label}
+                                                        title={iterField.selectAriaLabel}  name={iterField.label}
                                                         onchange={handleSelect}>
                                                     <option value="" selected disabled hidden>Selectionnez une option</option>
                                                     <template for:each={iterField.values} for:item="iterFieldValue">
@@ -72,11 +77,12 @@
                                                     </template>
                                                 </select>
                                             </div>
+                                            -->
                                         </div>
                                     </template>
-                                    <div class="fr-fieldset__element fr-col-12 fr-col-md-2 fr-px-2v">
+                                    <div class="fr-fieldset__element fr-col-12 fr-col-md-2 fr-px-2v fr-mt-9v">
                                         <button class="addButton fr-btn fr-icon-add-circle-line fr-btn--icon-left fr-btn--primary"
-                                                disabled
+                                                lwc:ref="addButton"     aria-label={addLabel}
                                                 onclick={handleAdd}>
                                             {addLabel}
                                         </button>
@@ -101,5 +107,9 @@
                 </div>
             </template>
         </div>
+        <template lwc:if={isSaving}>
+            <lightning-spinner alternative-text="..." variant="brand">
+            </lightning-spinner>
+       </template>
     </div>
 </template>

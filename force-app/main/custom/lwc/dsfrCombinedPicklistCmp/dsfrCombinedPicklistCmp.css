@@ -1,5 +1,9 @@
-
-.actionContainer {
+/* DSFR override to limit table bottom margin */
+.picklistTable {
+    margin-bottom: 1rem;
+}
+/* DSFR override to limit picklist bottom margin */
+.actionContainer, .actionContainer .fr-fieldset {
     margin-bottom: 0px;
 }
 .actionGrid {

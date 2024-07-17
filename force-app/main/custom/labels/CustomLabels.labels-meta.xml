@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>dsfrCombinedPicklistSelectLabel</fullName>
+        <categories>DSFR Component LWC Select Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>ARIA Label des listes de sélection</shortDescription>
+        <value>Sélectionner une valeur de</value>
+    </labels>
+    <labels>
         <fullName>dsfrCombinedPicklistAddLabel</fullName>
         <categories>DSFR Component LWC Button Label</categories>
         <language>en_US</language>
@@ -16,4 +24,22 @@
         <shortDescription>Titre du bouton icône de destruction</shortDescription>
         <value>Retirer</value>
     </labels>
+    <labels>
+        <fullName>dsfrCombinedPicklistSelectMissing</fullName>
+        <categories>DSFR Component LWC Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message affiché quand une selection est manquante</shortDescription>
+        <value>Merci de sélectionner une valeur à ajouter.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrCombinedPicklistSelectMessage</fullName>
+        <categories>DSFR Component LWC Select Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message affiché quand aucune option n'est sélectionnée</shortDescription>
+        <value>Sélectionner une valeur</value>
+    </labels>
+    
+    
 </CustomLabels>

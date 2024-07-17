@@ -3,9 +3,11 @@ import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi'; 
 import basePathName from '@salesforce/community/basePath';
 
+import SELECT_LABEL from '@salesforce/label/c.dsfrCombinedPicklistSelectLabel';
+import SELECT_MESSAGE from '@salesforce/label/c.dsfrCombinedPicklistSelectMessage';
+import SELECT_MISSING from '@salesforce/label/c.dsfrCombinedPicklistSelectMissing';
 import ADD_LABEL from '@salesforce/label/c.dsfrCombinedPicklistAddLabel';
 import DELETE_TITLE from '@salesforce/label/c.dsfrCombinedPicklistDeleteTitle';
-
 
 export default class DsfrCombinedPicklistCmp extends LightningElement {
 
@@ -22,7 +24,7 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
     @api wrappingCss;
     @api separator = ' - ';
-    @api inactive = false;
+    //@api inactive = false;
     //@api filterValues = true;
 
     @api isDebug = false;
@@ -36,12 +38,15 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
     recordTypeId;
     recordValues;
     isReady;
+    isSaving = false;   // spinner display control
 
     //-----------------------------------------------------
     // Custom Labels
     //-----------------------------------------------------
+    selectLabel = SELECT_LABEL;
     addLabel = ADD_LABEL;
     deleteTitle = DELETE_TITLE;
+    //addMessage = ADD_MESSAGE;
 
     //-----------------------------------------------------
     // Context Data
@@ -112,13 +117,13 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
                 let fieldValues = [];
                 this.labels.forEach(itemLabel => {
-                    fieldValues.push({label: itemLabel, values: new Map()});
+                    fieldValues.push({label: itemLabel, selectAriaLabel: SELECT_LABEL + ' ' +  itemLabel, values: new Map()});
                 });
                 if (this.isDebug) console.log('wiredPicklists: fieldValues init ', JSON.stringify(fieldValues));
 
                 if (this.isDebug) console.log('wiredPicklists: processing Picklist values ', JSON.stringify(data.values));
                 data.values.forEach( (item) => {
-                    if (this.isDebug) console.log('wiredPicklist: processing value ', JSON.stringify(item));
+                    if (this.isDebug) console.log('wiredPicklist: processing picklist value ', JSON.stringify(item));
 
                     let itemValues = item.value.split(this.separator);
                     //if (this.isDebug) console.log('wiredPicklist: values split ', JSON.stringify(itemValues));
@@ -139,7 +144,8 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                 });
                 fieldValues.forEach( item => {
                     item.values = Array.from(item.values.values());
-                })
+                    item.values.unshift({label:SELECT_MESSAGE,value:"",key:item.label});
+                });
                 this.fieldValues = fieldValues;
                 if (this.isDebug) console.log('wiredPicklist: fieldValues finalized ', JSON.stringify(this.fieldValues));
 
@@ -197,7 +203,26 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
     //-----------------------------------------------------
     handleSelect(event) {
         if (this.isDebug) console.log('handleSelect: START for Combined Picklist',event);    
-        let selectValues = this.template.querySelectorAll('.fr-select');
+        if (this.isDebug) console.log('handleSelect: event details ',JSON.stringify(event.detail));    
+        if (this.isDebug) console.log('handleSelect: event src name',event.srcElement.name);    
+        if (this.isDebug) console.log('handleSelect: event src name',event.srcElement);    
+        
+        let selectItem = event.srcElement;
+        if (event.detail.value) {
+            if (this.isDebug) console.log('handleSelect: value properly set ',event.detail.value); 
+            selectItem.setCustomValidity('');
+            selectItem.reportValidity();
+            if (this.isDebug) console.log('handleSelect: END OK for Combined Picklist'); 
+        }
+        else {
+            console.warn('handleSelect: missing value for selector ',selectItem.name); 
+            selectItem.setCustomValidity(SELECT_MISSING);
+            selectItem.reportValidity();
+            console.warn('handleSelect: END KO for Combined Picklist'); 
+        }
+    }
+        
+        /*let selectValues = this.template.querySelectorAll('.fr-select');
          
         let isReady = true;
         selectValues.forEach(item => {
@@ -211,40 +236,69 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
         });
 
         if (isReady) {
+            if (this.isDebug) console.log('handleSelect: isAddActive ', this.isAddActive);
             if (this.isDebug) console.log('handleSelect: activating add button');  
-            let addButton = this.template.querySelector('.addButton');
+            //let addButton = this.template.querySelector('.addButton');
+            let addButton = this.refs.addButton;
             addButton.disabled = false;
+            this.isAddActive = true;
         }
         else {
             if (this.isDebug) console.log('handleSelect: add button remains disabled');  
         }
 
         if (this.isDebug) console.log('handleSelect: END for Combined Picklist');    
-    }
+    }*/
 
     handleAdd(event) {
         if (this.isDebug) console.log('handleAdd: START for Combined Picklist',event);    
 
-        let selectValues = this.template.querySelectorAll('.fr-select');
+        //let selectValues = this.template.querySelectorAll('.fr-select');
+        let selectValues = this.template.querySelectorAll('lightning-select');
         if (this.isDebug) console.log('handleAdd: select elements found',selectValues);  
         
         let newValue = {details: []};
         let valueList = [];
         let labelList = [];
+        if (this.isDebug) console.log('handleAdd: fieldValues fetched ', JSON.stringify(this.fieldValues));
+
+        let isKO = false;
         selectValues.forEach(item => {
             if (this.isDebug) console.log('handleAdd: processing selector ',item);  
             if (this.isDebug) console.log('handleAdd: with name ',item.name);  
             if (this.isDebug) console.log('handleAdd: with current value ',item.value);  
-            if (this.isDebug) console.log('handleAdd: and label ',item.options[item.selectedIndex].innerHTML);  
-            newValue.details.push({label: item.options[item.selectedIndex].innerHTML, value: item.value});
-            valueList.push(item.value);
-            labelList.push(item.options[item.selectedIndex].innerHTML);
 
-            for(var i = 0; i < (item.options).length; i++) {
-                if (this.isDebug) console.log('handleAdd: resetting option ', (item.options)[i].innerHTML);  
-                (item.options)[i].selected = (i == 0);
+            if (item.value) {
+                let itemValues = this.fieldValues.find(iterField => iterField.label === item.name);
+                if (this.isDebug) console.log('handleAdd: itemValues fetched ', JSON.stringify(itemValues));  
+                let itemValue = itemValues.values.find(iterValue => iterValue.value === item.value)
+                if (this.isDebug) console.log('handleAdd: itemValue found ',JSON.stringify(itemValue));  
+                //if (this.isDebug) console.log('handleAdd: and label ',item.options[item.selectedIndex].innerHTML);  
+                //newValue.details.push({label: item.options[item.selectedIndex].innerHTML, value: item.value});
+                newValue.details.push({label: itemValue.label, value: item.value});
+                valueList.push(item.value);
+                //labelList.push(item.options[item.selectedIndex].innerHTML);
+                labelList.push(itemValue.label);
+
+                /*for(var i = 0; i < (item.options).length; i++) {
+                    if (this.isDebug) console.log('handleAdd: resetting option ', (item.options)[i].innerHTML);  
+                    (item.options)[i].selected = (i == 0);
+                }*/
+                item.setCustomValidity('');
             }
+            else {
+                console.warn('handleAdd: missing value for selector ',item.name); 
+                isKO = true;
+                item.setCustomValidity(SELECT_MISSING);
+            }
+            item.reportValidity();
         });
+
+        if (isKO) {
+            if (this.isDebug) console.log('handleAdd: END KO for Combined Picklist');
+            return;
+        }
+
         newValue.value = valueList.join(this.separator);
         newValue.displayValue = labelList.join(this.separator);
         if (this.isDebug) console.log('handleAdd: newValue init', JSON.stringify(newValue));  
@@ -255,13 +309,16 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
         if (this.isDebug) console.log('handleAdd: recordValues updated ', JSON.stringify(this.recordValues));  
         if (this.isDebug) console.log('handleAdd: recordValues updated ', JSON.stringify(this.recordValues.slice()));  
 
+        /*if (this.isDebug) console.log('handleAdd: isAddActive ', this.isAddActive);
         if (this.isDebug) console.log('handleAdd: disabling add button');  
-        let addButton = this.template.querySelector('.addButton');
+        //let addButton = this.template.querySelector('.addButton');
+        let addButton = this.refs.addButton;
         addButton.disabled = true;
+        this.isAddActive = false;*/
 
         this.updateRecord('add_value');
             
-        if (this.isDebug) console.log('handleAdd: END for Combined Picklist');
+        if (this.isDebug) console.log('handleAdd: END OK for Combined Picklist');
     }
 
     handleRemove(event) {
@@ -309,7 +366,13 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                     item.disabled = false;
                 }
             });
-            if (this.isDebug) console.log('filterValues: fieldValues updated ', JSON.stringify((this.fieldValues[0]).values));
+            //this.fieldValues[0] = [...this.fieldValues[0]];
+            this.fieldValues.forEach(item => {
+                item.selection = '';
+            });
+            this.fieldValues = JSON.parse(JSON.stringify(this.fieldValues));
+
+            if (this.isDebug) console.log('filterValues: fieldValues #0 updated ', JSON.stringify((this.fieldValues[0])));
         }
         else {
             if (this.isDebug) console.log('filterValues: ignoring');
@@ -343,6 +406,7 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                     item.details.push({value: itemV, label: itemL.label});
                 });
                 item.displayValue = itemLabels.join(this.separator);
+                item.deleteTitle = DELETE_TITLE + ' ' + itemLabels.join(' ');
                 if (this.isDebug) console.log('initLabels: item finalized ', JSON.stringify(item));
             });
             if (this.isDebug) console.log('initLabels: recordValues updated ', JSON.stringify(this.recordValues));
@@ -355,9 +419,10 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
     updateRecord = (operation) => {
         if (this.isDebug) console.log('updateRecord: START for Combined Picklist ',operation);
+        this.isSaving = true;
 
         document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_submit',params:{event_source:'dsfrCombinedPicklistCmp',event_site: basePathName,event_category:operation,event_label:this.tag}}}));
-        if (this.isDebug) console.log('handleAdd: notifying GA');
+        if (this.isDebug) console.log('updateRecord: notifying GA');
 
         let valueList = [];
         this.recordValues.forEach(item => {
@@ -372,11 +437,27 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
         updateRecord(recordData)
         .then(() => {
-            if (this.isDebug) console.log('handleAdd: notifying GA');
+            if (this.isDebug) console.log('updateRecord: setting focus on first selector');
+            //let firstOptionSelector = this.template.querySelector('.optionSelect');
+            let firstOptionSelector = this.template.querySelector('lightning-select');
+            if (this.isDebug) console.log('updateRecord: firstOptionSelector fetched', firstOptionSelector);
+            firstOptionSelector?.focus();
+            if (this.isDebug) console.log('updateRecord: focus set on first option selector');
+
+            this.filterValues();
+            if (this.isDebug) console.log('updateRecord: values refiltered', JSON.stringify(this.fieldValues));
+
+            this.template.querySelectorAll('lightning-select').forEach(selector => {
+                selector.value = '';
+            });
+            this.isSaving = false;
+
+            if (this.isDebug) console.log('updateRecord: notifying GA');
             document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrCombinedPicklistCmp',event_site: basePathName,event_category:operation,event_label:this.tag}}}));
             if (this.isDebug) console.log('updateRecord: END for Combined Picklist');
         }).catch((error) => {
-            if (this.isDebug) console.log('handleAdd: notifying GA');
+            this.isSaving = false;
+            if (this.isDebug) console.log('updateRecord: notifying GA');
             document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrCombinedPicklistCmp',event_site: basePathName,event_category:operation,event_label:this.tag}}}));
             console.warn('updateRecord: END KO / for Combined Picklist ',JSON.stringify(error));
         });
