@@ -24,14 +24,46 @@
         </div>
         <div class="fr-card__body">
             <div class="fr-card__content">
-                <h3 class="fr-card__title">
-                    <template lwc:if={cardTarget}>
-                        <a href="#" onclick={openTarget} >{cardTitle}</a>
-                    </template>
-                    <template lwc:else>
-                        {cardTitle}
-                    </template>
-                </h3>
+                <template lwc:if={isH3}>
+                    <h3 class="fr-card__title">
+                        <template lwc:if={cardTarget}>
+                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                        </template>
+                        <template lwc:else>
+                            {cardTitle}
+                        </template>
+                    </h3>
+                </template>
+                <template lwc:elseif={isH2}>
+                    <h2 class="fr-card__title">
+                        <template lwc:if={cardTarget}>
+                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                        </template>
+                        <template lwc:else>
+                            {cardTitle}
+                        </template>
+                    </h2>
+                </template>
+                <template lwc:elseif={isH4}>
+                    <h4 class="fr-card__title">
+                        <template lwc:if={cardTarget}>
+                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                        </template>
+                        <template lwc:else>
+                            {cardTitle}
+                        </template>
+                    </h4>
+                </template>
+                <template lwc:else>
+                    <h5 class="fr-card__title">
+                        <template lwc:if={cardTarget}>
+                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                        </template>
+                        <template lwc:else>
+                            {cardTitle}
+                        </template>
+                    </h5>
+                </template>
                 <p lwc:if={cardDescription} class="fr-card__desc">
                     <lightning-formatted-rich-text class="fr-card__desc" value={cardDescription}>
                     </lightning-formatted-rich-text>
@@ -134,15 +166,17 @@
                                 </template>
                                 <template lwc:elseif={iter.flowName}>
                                     <li key={iter.label}  >
-                                        <c-dsfr-flow-popup-cmp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
-                                                                button-label={iter.label}   button-title={iter.title}
+                                        <c-dsfr-flow-popup-cmp  button-icon={iter.icon}         button-icon-position={iter.iconPosition}
+                                                                button-label={iter.label}       button-title={iter.title}
                                                                 button-tag={iter.tag}
-                                                                button-size={iter.size}     button-variant={iter.variant}
+                                                                button-size={iter.size}         button-variant={iter.variant}
                                                                 button-inactive={iter.inactive}
-                                                                flow-name={iter.flowName}   flow-parameters={iter.flowParameters}
-                                                                modal-title={iter.modalTitle}
-                                                                do-refresh={iter.refresh}   record-id={iter.refreshId}
-                                                                button-align="left"         is-debug={isDebug}>
+                                                                flow-name={iter.flowName}       flow-parameters={iter.flowParameters}
+                                                                modal-title={iter.modalTitle}   show-title={iter.showTitle}
+                                                                modal-desc={iter.modalDesc}     show-close={iter.showClose}
+                                                                do-refresh={iter.refresh}       record-id={iter.refreshId}
+                                                                popup-channel={iter.popupChannel}
+                                                                button-align="left"             is-debug={isDebug}>
                                         </c-dsfr-flow-popup-cmp>
                                     </li>
                                 </template>

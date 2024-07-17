@@ -31,6 +31,13 @@
                         label="Titre"
                         type="String"
                         description="Titre de la carte" />
+            <property   name="cardTitleLevel"
+                        label="Niveau Titre"
+                        type="String"
+                        datasource="h2,h3,h4,h5"
+                        default="h3"
+                        description="Niveau de titre de la carte" />
+
             <property   name="cardDescription"
                         label="Description"
                         type="String"
@@ -142,6 +149,13 @@
                         type="String"
                         role="inputOnly"
                         description="Titre de la carte" />
+            <property   name="cardTitleLevel"
+                        label="Niveau Titre"
+                        type="String"
+                        role="inputOnly"
+                        default="h3"
+                        description="Niveau de titre de la carte (h2, h3, h4 ou h5)" />
+
             <property   name="cardDescription"
                         label="Description"
                         type="String"

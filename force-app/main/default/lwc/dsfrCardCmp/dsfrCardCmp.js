@@ -12,6 +12,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api cardBadge;
     @api cardBadgeVariant;
     @api cardTitle;
+    @api cardTitleLevel = 'h3';
     @api cardTag; // for GA4 link tracking
     @api cardDescription;
     @api cardDescriptionFields;
@@ -68,6 +69,16 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     //-----------------------------------------------------
     // Custom getter
     //-----------------------------------------------------
+
+    get isH2() {
+        return this.cardTitleLevel === 'h2';
+    }
+    get isH3() {
+        return this.cardTitleLevel === 'h3';
+    }
+    get isH4() {
+        return this.cardTitleLevel === 'h4';
+    }
 
     get cardTitleStr() {
         if (this.isDebug) console.log('cardTitleStr: value ', this.cardTitle);
