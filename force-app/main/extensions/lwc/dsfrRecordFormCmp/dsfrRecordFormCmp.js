@@ -1,3 +1,6 @@
+// OBSOLETE 
+// Utiliser de préférence le composant dsfrFormCmp
+
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import basePathName from '@salesforce/community/basePath';
@@ -163,9 +166,12 @@ export default class DsfrRecordFormCmp extends LightningElement {
                 console.warn('wiredRecord: no ID value provided');
             }
         }
-        else {
-            console.warn('wiredRecord: record data fetche failed ', error);
+        else if (error) {
+            console.warn('wiredRecord: record data fetch failed ', JSON.stringify(error));
             this.formRecordId = null;
+        }
+        else {
+            if (this.isDebug) console.log('wiredRecord: nothing received');
         }
 
         if (this.isDebug) console.log('wiredRecord: END for recordForm');

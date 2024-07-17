@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Formulaire</masterLabel>
-    <description>Affichage d'un formulaire pour éditer un enregistrement</description>
+    <masterLabel>DSFR Formulaire (OBSOLETE)</masterLabel>
+    <description>Affichage d'un formulaire pour éditer un enregistrement, remplacé par nouveau formulaire</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
