@@ -107,6 +107,7 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                     alerts:[{type: "success", title: actionDetails.title || "Opération effectuée",  message: actionDetails.message }],
                     size:'small'};
                     //alerts:[{type: "success", title: actionDetails.title || "Opération effectuée", actionDetails.title message: "Vos changements ont bien été sauvegardés."}],
+                //event.preventDefault();
                 popupUtil.showAlert(alertConfig).then(() => {
                     if (this.isDebug) console.log('handleAction: analysing next steps in action details ', JSON.stringify(actionDetails));                    
                     if (this.isDebug) console.log('handleAction: for data ', JSON.stringify(data));                    
