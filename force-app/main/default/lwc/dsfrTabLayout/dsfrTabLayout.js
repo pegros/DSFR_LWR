@@ -1,3 +1,6 @@
+// OBSOLETE 
+// Utiliser de préférence les onglets standards Salesforce avec les overrides de CSS.c/dsfrAccordionLayout
+
 import { LightningElement,api } from 'lwc';
 
     //-----------------------------------------------------

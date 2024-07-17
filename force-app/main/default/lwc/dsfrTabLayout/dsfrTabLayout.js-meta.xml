@@ -2,8 +2,8 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>DSFR Onglets</masterLabel>
-    <description>Structuration de page en mode onglets DSFR</description>
+    <masterLabel>DSFR Onglets (OBSOLETE)</masterLabel>
+    <description>Structuration de page en mode onglets DSFR, remplacé par CSS overrides des onglets standards SF</description>
     <targets>
         <target>lightningCommunity__Page</target>  
         <target>lightningCommunity__Default</target>
