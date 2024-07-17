@@ -12,12 +12,16 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     // Configuration parameters
     //-----------------------------------------------------
     @api inputPlaceholder;      // search term input placeholder
+    @api searchButtonLabel;     // search button label
     @api searchButtonTitle;     // search button title
     @api searchTag              // for GA4 tracking
     @api showSearch = false;    // Display search bar
     @api searchPage;            // Search page name (if not standard one)
     @api mainCriteria;          // Main criteria configuration
     @api criteria;              // Additional criteria configuration
+    @api filterSectionTitle;    // filter section title
+    @api filterButtonLabel;     // filter button label
+    @api filterButtonTitle;     // filter button title
 
     @api wrappingClass;         // Classes pour modifier le style du conteneur du composant 
     @api headerClass;           // Classes pour modifier le style du titre des critères complémentaires.
@@ -48,6 +52,12 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
     get searchTermInput() {
         return (this.mainCriteriaList?.length > 0 ? 5 : 9);
+    }
+    get currentMainSelectionHeader() {
+        return this.mainCriteriaSelected.length + (this.mainCriteriaSelected.length > 1 ? ' critères positionnés' : ' critère positionné');
+    }
+    get currentSelectionHeader() {
+        return this.criteriaSelected.length + (this.criteriaSelected.length > 1 ? ' critères positionnés' : ' critère positionné');
     }
 
     //-----------------------------------------------------
@@ -320,7 +330,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     }
 
     // Option Selection events
-    toggleMenuSelect(event){
+    /*toggleMenuSelect(event){
         if (this.isDebug) console.log('toggleMenuSelect: START for search');
         event.stopPropagation();
         event.preventDefault();
@@ -330,9 +340,9 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('toggleMenuSelect: selected Name ',event.srcElement.dataset.name);
         if (this.isDebug) console.log('toggleMenuSelect: previous situation ', event.srcElement.ariaCurrent);
 
-        /*let srcCmp = this.template.querySelector("a.menuSelector[data-name='"+ event.srcElement.dataset.name +"']");
-        if (this.isDebug) console.log('toggleMenuSelect: srcCmp fetched ', srcCmp);
-        if (this.isDebug) console.log('toggleMenuSelect: with attributes ',srcCmp.getAttributeNames());*/
+        //let srcCmp = this.template.querySelector("a.menuSelector[data-name='"+ event.srcElement.dataset.name +"']");
+        //if (this.isDebug) console.log('toggleMenuSelect: srcCmp fetched ', srcCmp);
+        //if (this.isDebug) console.log('toggleMenuSelect: with attributes ',srcCmp.getAttributeNames());
 
         if (event.srcElement.ariaCurrent) {
             if (this.isDebug) console.log('toggleMenuSelect: deselecting item');
@@ -366,6 +376,55 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }
 
         if (this.isDebug) console.log('toggleMenuSelect: END for search');
+    }*/
+    toggleMenuOption(event){
+        if (this.isDebug) console.log('toggleMenuOption: START for search');
+        
+        if (this.isDebug) console.log('toggleMenuOption: event ',event);
+        if (this.isDebug) console.log('toggleMenuOption: event detail ',event.detail);
+
+        if (    (event.type == 'click')
+            ||  ((event.type == 'keyup') && (event.code == 'Space'))    ) {
+            if (this.isDebug) console.log('toggleMenuOption: handling click or Space key');
+            event.stopPropagation();
+            event.preventDefault();
+
+            const selectName = event.srcElement.dataset.name;
+            if (this.isDebug) console.log('toggleMenuOption: selected Name ', selectName);
+
+            let selectInput = this.template.querySelector("input.menuSelector[name='" + selectName + "']");
+            if (this.isDebug) console.log('toggleMenuOption: selectInput found ', selectInput);
+
+            if (selectInput) {
+                let selectState = selectInput.checked;
+                if (this.isDebug) console.log('toggleMenuOption: selectInput check state ',selectState);
+                selectInput.checked = !selectState;
+                if (this.isDebug) console.log('toggleMenuOption: selectInput updated ',selectInput);
+                if (this.isDebug) console.log('toggleMenuOption: selectInput state ',selectInput.checked);
+                this.activateApply(false);
+                this.activateSearch(false);
+
+                //this.mainCriteriaSelected = this.selectOption(event.srcElement.dataset.name,this.mainCriteriaList,this.mainCriteriaSelected,(event.srcElement.ariaCurrent === 'selection'));
+                let mainCriteriaSelected = this.selectOption(selectName,this.mainCriteriaList,this.mainCriteriaSelected,selectInput.checked);
+                if (this.isDebug) console.log('toggleMenuOption: selection updated ', JSON.stringify(mainCriteriaSelected));
+                if ((mainCriteriaSelected) && (mainCriteriaSelected.length > 0)) {
+                    this.mainCriteriaSelected = mainCriteriaSelected;
+                    if (this.isDebug) console.log('toggleMenuOption: main selection updated', JSON.stringify(this.mainCriteriaSelected));
+                }
+                else {
+                    this.mainCriteriaSelected = null;
+                    if (this.isDebug) console.log('toggleMenuOption: no more main selection');
+                }
+            }
+            else {
+                console.warn('toggleCheckSelectKey: selectInput not found ', selectName);
+            }
+        }
+        else {
+            if (this.isDebug) console.log('toggleMenuOption: ignoring event with code ',event.code);
+        }
+        if (this.isDebug) console.log('toggleMenuOption: END for search');
+
     }
     toggleTagSelect(event){
         if (this.isDebug) console.log('toggleTagSelect: START for search');
@@ -385,37 +444,45 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
         if (this.isDebug) console.log('toggleTagSelect: END for search');
     }
-    toggleCheckSelect(event) {
+    toggleCheckSelect(event){
         if (this.isDebug) console.log('toggleCheckSelect: START for search');
-        event.stopPropagation();
-        event.preventDefault();
-
+        
         if (this.isDebug) console.log('toggleCheckSelect: event ',event);
         if (this.isDebug) console.log('toggleCheckSelect: event detail ',event.detail);
 
-        const selectName = event.srcElement.dataset.name;
-        if (this.isDebug) console.log('toggleCheckSelect: selected Name ', selectName);
-        
-        let selectInput = this.template.querySelector("input.checkSelector[name='" + selectName + "']");
-        if (this.isDebug) console.log('toggleCheckSelect: selectInput found ', selectInput);
+        if (    (event.type == 'click')
+            ||  ((event.type == 'keyup') && (event.code == 'Space'))    ) {
+            if (this.isDebug) console.log('toggleCheckSelect: handling click or Space key');
+            event.stopPropagation();
+            event.preventDefault();
 
-        if (selectInput) {
-            let selectState = selectInput.checked;
-            if (this.isDebug) console.log('toggleCheckSelect: selectInput check state ',selectState);
-            selectInput.checked = !selectState;
-            if (this.isDebug) console.log('toggleCheckSelect: selectInput updated ',selectInput);
-            if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
-            this.activateApply(false);
-            this.activateSearch(false);
-            this.criteriaSelected = this.selectOption(selectName,this.criteriaList,this.criteriaSelected,selectInput.checked);
-            if (this.isDebug) console.log('toggleCheckSelect: selectInput finalized ',selectInput);
-            if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
+            const selectName = event.srcElement.dataset.name;
+            if (this.isDebug) console.log('toggleCheckSelect: selected Name ', selectName);
+
+            let selectInput = this.template.querySelector("input.checkSelector[name='" + selectName + "']");
+            if (this.isDebug) console.log('toggleCheckSelect: selectInput found ', selectInput);
+
+            if (selectInput) {
+                let selectState = selectInput.checked;
+                if (this.isDebug) console.log('toggleCheckSelect: selectInput check state ',selectState);
+                selectInput.checked = !selectState;
+                if (this.isDebug) console.log('toggleCheckSelect: selectInput updated ',selectInput);
+                if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
+                this.activateApply(false);
+                this.activateSearch(false);
+                this.criteriaSelected = this.selectOption(selectName,this.criteriaList,this.criteriaSelected,selectInput.checked);
+                if (this.isDebug) console.log('toggleCheckSelect: selectInput finalized ',selectInput);
+                if (this.isDebug) console.log('toggleCheckSelect: selectInput state ',selectInput.checked);
+            }
+            else {
+                console.warn('toggleCheckSelect: selectInput not found ', selectName);
+            }
         }
         else {
-            console.warn('toggleCheckSelect: selectInput not found ', selectName);
+            if (this.isDebug) console.log('toggleCheckSelect: ignoring event with code ',event.code);
         }
-
         if (this.isDebug) console.log('toggleCheckSelect: END for search');
+
     }
 
     deselectMainCriteria(event) {
@@ -450,11 +517,17 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('deselectMainCriteria: no more selection');
         }
 
-        let menuElement = this.template.querySelector("a.menuSelector[data-name='" + selectName + "']");
+        //let menuElement = this.template.querySelector("a.menuSelector[data-name='" + selectName + "']");
+        let menuElement = this.template.querySelector("input.menuSelector[data-name='" + selectName + "']");
         if (this.isDebug) console.log('deselectMainCriteria: menuElement found ', menuElement);
         if (menuElement) {
-            menuElement.removeAttribute('aria-current');
-            if (this.isDebug) console.log('deselectMainCriteria: menuElement unselected ',menuElement);
+            let selectState = menuElement.checked;
+            if (this.isDebug) console.log('deselectMainCriteria: selectInput check state ',selectState);
+            menuElement.checked = !selectState;
+            if (this.isDebug) console.log('deselectMainCriteria: selectInput updated ',menuElement);
+            if (this.isDebug) console.log('deselectMainCriteria: selectInput state ',menuElement.checked);
+            /*menuElement.removeAttribute('aria-current');
+            if (this.isDebug) console.log('deselectMainCriteria: menuElement unselected ',menuElement);*/
             this.activateApply(false);
             this.activateSearch(false);
         }
@@ -544,12 +617,14 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         
         let criteriaSelections = {};
 
-        let menuSelectors = this.template.querySelectorAll('a.menuSelector');
+        //let menuSelectors = this.template.querySelectorAll('a.menuSelector');
+        let menuSelectors = this.template.querySelectorAll('input.menuSelector');
         if (this.isDebug) console.log('updateSearch: all menu Selectors fetched ',menuSelectors);
         for (let item of menuSelectors) {
             if (this.isDebug) console.log('updateSearch: processing menu option ',item);
             if (!criteriaSelections[item.dataset.criteria]) criteriaSelections[item.dataset.criteria] = [];
-            if (item.ariaCurrent === 'selection') {
+            //if (item.ariaCurrent === 'selection') {
+            if (item.checked) {
                 (criteriaSelections[item.dataset.criteria]).push(item.dataset.value);
             }
         }
@@ -639,6 +714,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         selectionList = selectionList || [];
         criteriaList.forEach(item => {
             if (this.isDebug) console.log('initCriteria: processing criteria ', item.fullName);
+            item.ariaLabel = 'Critère de sélection: ' + item.label;
+            if (this.isDebug) console.log('initCriteria: ariaLabel set ', item.ariaLabel);
 
             if (this.isDebug) console.log('initCriteria: controlled by ', item.controlledBy);
             if (item.controlledBy) {
@@ -851,26 +928,26 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     activateApply = function(state) {
         if (this.isDebug) console.log('activateApply: START for state ',state);
         let applyButton = this.template.querySelector('.applyButton');
-        if (this.isDebug) console.warn('activateApply: applyButton found ', applyButton);
+        if (this.isDebug) console.log('activateApply: applyButton found ', applyButton);
         if (applyButton) {
             applyButton.disabled = state;
-            if (this.isDebug) console.warn('activateApply: applyButton activated');
+            if (this.isDebug) console.log('activateApply: applyButton activated');
         }
         else {
-            if (this.isDebug) console.warn('activateApply: no applyButton to activate');
+            if (this.isDebug) console.log('activateApply: no applyButton to activate');
         }
     }
     activateSearch = function(state) {
         if (this.isDebug) console.log('activateSearch: START for state ',state);
         let searchButton = this.template.querySelector('.searchButton');
-        if (this.isDebug) console.warn('activateSearch: searchButton found ', searchButton);
+        if (this.isDebug) console.log('activateSearch: searchButton found ', searchButton);
         if ((searchButton) && (!this.alwaysActive)){
         //if (searchButton) {
                 searchButton.disabled = state;
-            if (this.isDebug) console.warn('activateSearch: searchButton disabled state reset to',state);
+            if (this.isDebug) console.log('activateSearch: searchButton disabled state reset to',state);
         }
         else {
-            if (this.isDebug) console.warn('activateSearch: no searchButton to activate');
+            if (this.isDebug) console.log('activateSearch: no searchButton to activate');
         }
     }
 
@@ -895,6 +972,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
 
             if (selectedOption) {
                 selectedOption.selected = true;
+                selectedOption.ariaRemoveLabel = 'Retirer le critère: ' + selectedOption.label;
                 let newSelectionList = (selectionList ? [... selectionList] : []);
                 newSelectionList.push(selectedOption);
 

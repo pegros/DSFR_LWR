@@ -29,11 +29,16 @@
                         type="String"
                         default="Mots clé de recherche"
                         description="Placeholder affiché dans le composant de saisie des mots clés de recherche" />
+            <property   name="searchButtonLabel"
+                        label="Libellé du bouton rechercher"
+                        type="String"
+                        default="Rechercher"
+                        description="Libellé du bouton de recherche principal" />
             <property   name="searchButtonTitle"
                         label="Titre du bouton rechercher"
                         type="String"
                         default="Lancer la recherche"
-                        description="Titre explicatif sur le bouton rechercher principal" />
+                        description="Titre explicatif sur le bouton de recherche principale affiché au survol" />
             <property   name="alwaysActive"
                         label="Bouton Rechercher actif ?"
                         type="Boolean"
@@ -48,6 +53,23 @@
                         label="Critères complémentaires"
                         type="String"
                         description="Liste de noms API de champs picklist fournissant la liste des valeurs possibles de chaque critère (au format liste JSON de Object.Field)" />
+
+                        
+            <property   name="filterSectionTitle"
+                        label="Titre de la section de filtres"
+                        type="String"
+                        default="Affiner votre recherche"
+                        description="Totre de la section présentant les différents filtres complémentaires" />            
+            <property   name="filterButtonLabel"
+                        label="Libellé du bouton filtrer"
+                        type="String"
+                        default="Appliquer"
+                        description="Libellé du bouton d'application des filtres complémentaires" />
+            <property   name="filterButtonTitle"
+                        label="Titre du bouton filtrer"
+                        type="String"
+                        default="Appliquer les nouvelles valeurs de filtre"
+                        description="Titre explicatif sur le bouton de validation des filtres complémentaires affiché au survol" />
 
             <property   name="wrappingClass"
                         label="CSS additionnelle"
@@ -64,6 +86,11 @@
                         type="Boolean"
                         default="false"
                         description="Activation de détails pour l'analyse de problèmes" />
+            <property   name="isDebugFine"
+                        label="Fine Debug ?"
+                        type="Boolean"
+                        default="false"
+                        description="Activation de détails pour l'analyse de problèmes sur les sous-composants" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

@@ -1,6 +1,6 @@
 <template>
     <div class={wrappingClass}>
-        <form aria-label="Formulaire de recherche">
+        <form aria-label="Critères de recherche principaux">
 
         <!-- MAIN SEARCH BAR DISPLAY -->
         <template lwc:if={showSearch}>
@@ -13,6 +13,7 @@
                                 placeholder={inputPlaceholder}
                                 type="search"               name="search"
                                 value={searchTerm}
+                                aria-label="Mots clés pour la recherche"
                                 onkeyup={handleSearchKey}   onfocusout={handleInputLeave}>
                     </lightning-layout-item>
                     <template lwc:if={mainCriteriaList}>
@@ -21,18 +22,40 @@
                                 <template for:each={mainCriteriaList} for:item="iterC" >
                                     <lightning-layout-item flexibility="auto,no-shrink" key={iterC.fullName}>
                                         <div  class="fr-nav__item selectMenu" >
-                                            <label class="fr-label" for={iterC.fullName}>Critère {iterC.fullName}</label>
+                                            <label class="fr-label" for={iterC.fullName}>{iterC.ariaLabel}</label>
                                             <button class="fr-nav__btn fr-btn fr-btn--tertiary selectButton"    id={iterC.fullName}
-                                                    aria-label="Critère de sélection"   aria-expanded="false"
+                                                    aria-label={iterC.ariaLabel}   aria-expanded="false"
                                                     value={iterC.fullName}              type="button" 
                                                     onclick={expandCollapse}>
                                                 {iterC.label}
                                             </button>
                                             <div class="fr-collapse fr-menu" data-name={iterC.fullName}>
+                                                <fieldset class="fr-fieldset">
+                                                    <template for:each={iterC.values} for:item="iterVal">
+                                                        <template lwc:if={iterVal.hidden}>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <div key={iterVal.fullName} class="fr-fieldset__element">
+                                                                <div class="fr-checkbox-group">
+                                                                    <input  class="menuSelector"            type="checkbox"
+                                                                            name={iterVal.fullName}     
+                                                                            data-value={iterVal.value}      data-criteria={iterC.name}  
+                                                                            checked={iterVal.selected}      id={iterVal.fullName}
+                                                                            data-name={iterVal.fullName}    onkeyup={toggleMenuOption} >
+                                                                    <label  class="fr-label optionLabel"    data-name={iterVal.fullName}
+                                                                            data-parent-name={iterC.fullName}   for={iterVal.fullName}
+                                                                            onclick={toggleMenuOption} >
+                                                                            {iterVal.label}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                </fieldset>
+                                                <!--
                                                 <ul class="fr-menu__list">
                                                     <template for:each={iterC.values} for:item="iterVal">
                                                         <template lwc:if={iterVal.hidden}>
-                                                            <!--<li key={iterVal.fullName} class="fr-nav__link">{iterVal.label} {iterVal.selected}</li>-->
                                                         </template>
                                                         <template lwc:else>
                                                         <li key={iterVal.fullName}>
@@ -56,6 +79,7 @@
                                                         </template>
                                                     </template>
                                                 </ul>
+                                                -->
                                             </div>    
                                         </div>
                                     </lightning-layout-item>
@@ -67,12 +91,12 @@
                     <lightning-layout-item size="3" large-device-size="2" class="slds-order_2 slds-large-order_3">
                         <template lwc:if={alwaysActive}>
                             <button class="fr-btn searchButton" aria-label={searchButtonTitle} title={searchButtonTitle} onclick={updateSearch}>
-                                Rechercher
+                                {searchButtonLabel}
                             </button>
                         </template>
                         <template lwc:else>
                             <button class="fr-btn searchButton" aria-label={searchButtonTitle} title={searchButtonTitle} disabled onclick={updateSearch}>
-                                Rechercher
+                                {searchButtonLabel}
                             </button>
                         </template>
                     </lightning-layout-item>
@@ -83,17 +107,19 @@
                             <lightning-layout  multiple-rows="true" vertical-align="top" class="mainSearchLayout">
                                 <lightning-layout-item size="3">
                                     <p class="fr-icon-filter-line fr-icon--sm text-title-blue-france fr-px-2v fr-pt-1v mainSelectionTitle">
-                                        &nbsp;{mainCriteriaSelected.length} critère(s) positionné(s)
+                                        <!--&nbsp;{mainCriteriaSelected.length} critère(s) positionné(s)-->
+                                        &nbsp;{currentMainSelectionHeader}
                                     </p>
                                 </lightning-layout-item>
                                 <lightning-layout-item size="9">
-                                    <ul class="fr-tags-group fr-px-2v">
+                                    <ul class="fr-tags-group fr-px-2v" aria-label="Valeurs sélectionnées">
                                         <template for:each={mainCriteriaSelected} for:item="iterS" >
                                             <li key={iterS.fullName} class="mainSelectSummary">
+                                                <!-- aria-pressed="true" -->
                                                 <button class="fr-tag fr-tag--sm fr-tag--dismiss tagSelection"
                                                         data-name={iterS.fullName}
                                                         data-criteria={iterS.name}
-                                                        aria-label="Retirer la valeur"
+                                                        aria-label={iterS.ariaRemoveLabel}
                                                         onclick={deselectMainCriteria}>
                                                     {iterS.label}
                                                 </button>
@@ -111,25 +137,28 @@
 
         <!-- ADDITIONAL CRITERIA DISPLAY -->
         <div class="fr-accordions-group criteriaDiv" lwc:if={criteriaList}>
-            <h2 class={headerClass}>Affiner la recherche</h2>
+            <h2 class={headerClass} aria-label={filterSectionTitle}>{filterSectionTitle}</h2>
 
             <!-- Current additional selection synthesis -->
             <template lwc:if={criteriaSelected} >
                 <section class="fr-accordion" >
-                    <h3 class="fr-accordion__title">
-                        <button class="fr-accordion__btn fr-icon-filter-fill fr-icon--sm text-title-blue-france"   aria-expanded="false"
-                                value="selectSummary"       onclick={expandCollapse}>
-                                {criteriaSelected.length} critère(s) positionné(s)
+                    <h3 class="fr-accordion__title" aria-label="Liste des valeurs sélectionnées">
+                        <button class="fr-accordion__btn fr-icon-filter-fill fr-icon--sm text-title-blue-france"
+                                aria-label={currentSelectionHeader} aria-expanded="false"
+                                value="selectSummary"               onclick={expandCollapse}>
+                                {currentSelectionHeader}
+                                <!--{criteriaSelected.length} critère(s) positionné(s)-->
                         </button>
                     </h3>
-                    <div class="fr-collapse" data-name="selectSummary" >
-                        <ul class="fr-tags-group"> 
+                    <div class="fr-collapse" data-name="selectSummary" aria-label="Liste des valeurs sélectionnées" >
+                        <ul class="fr-tags-group" aria-label="Valeurs sélectionnées"> 
                             <template for:each={criteriaSelected} for:item="iterS" >
                                 <li key={iterS.fullName}>
                                     <button class="fr-tag fr-tag--sm fr-tag--dismiss tagSelection"
+                                            title={iterS.ariaRemoveLabel}
+                                            aria-label={iterS.ariaRemoveLabel}
                                             data-name={iterS.fullName}
                                             data-criteria={iterS.name}
-                                            aria-label="Retirer la valeur"
                                             onclick={deselectCriteria}>
                                         {iterS.label}
                                     </button>
@@ -143,9 +172,10 @@
             <!-- Additional Criteria selection accordion -->
             <template for:each={criteriaList} for:item="iterC" >
                 <section class="fr-accordion" key={iterC.fullName} >
-                    <h3 class="fr-accordion__title">
-                        <button class="fr-accordion__btn"   aria-expanded="false"
-                                value={iterC.fullName}      onclick={expandCollapse}>
+                    <h3 class="fr-accordion__title" aria-label={iterC.ariaLabel}>
+                        <button class="fr-accordion__btn"
+                                aria-label={iterC.ariaLabel}    aria-expanded="false"
+                                value={iterC.fullName}          onclick={expandCollapse}>
                                 {iterC.label}
                         </button>
                     </h3>
@@ -153,7 +183,7 @@
 
                         <!-- Tag list mode display -->
                         <template lwc:if={iterC.isTag}>
-                            <ul class="fr-tags-group">
+                            <ul class="fr-tags-group" aria-label={iterC.arialLabel}>
                                 <template for:each={iterC.values} for:item="iterVal">
                                     <template lwc:if={iterVal.hidden}>
                                         <!--<li key={iterVal.fullName} class="fr-tag fr-tag--sm">{iterVal.label} {iterVal.selected}</li>-->
@@ -162,6 +192,7 @@
                                         <li key={iterVal.fullName} class="selectionItem">
                                             <button class="fr-tag fr-tag--sm tagSelector"
                                                     data-name={iterVal.fullName}
+                                                    aria-label={iterVal.label}
                                                     data-value={iterVal.value}      data-criteria={iterC.name}
                                                     aria-pressed={iterVal.selected} onclick={toggleTagSelect}>
                                                     {iterVal.label}
@@ -174,7 +205,7 @@
 
                          <!-- Checkbox list mode display -->
                         <template lwc:else>
-                            <fieldset class="fr-fieldset">
+                            <fieldset class="fr-fieldset" aria-label={iterC.arialLabel}>
                                 <template for:each={iterC.values} for:item="iterVal">
                                     <template lwc:if={iterVal.hidden}>
                                         <!--<p class="fr-label">{iterVal.label} {iterVal.selected}</p>-->
@@ -182,10 +213,12 @@
                                     <template lwc:else>
                                         <div key={iterVal.fullName} class="fr-fieldset__element">
                                             <div class="fr-checkbox-group">
+                                                <!-- aria-describedby={iterVal.fullName} -->
                                                 <input  class="checkSelector"       type="checkbox"
-                                                        name={iterVal.fullName}     aria-describedby={iterVal.fullName}
+                                                        name={iterVal.fullName}     aria-label={iterVal.label}
                                                         data-value={iterVal.value}  data-criteria={iterC.name}  
-                                                        checked={iterVal.selected}  id={iterVal.fullName}>
+                                                        checked={iterVal.selected}  id={iterVal.fullName}
+                                                        data-name={iterVal.fullName} onkeyup={toggleCheckSelect} >
                                                 <label  class="fr-label"                    data-name={iterVal.fullName}
                                                         data-parent-name={iterC.fullName}   for={iterVal.fullName}
                                                         onclick={toggleCheckSelect} >
@@ -204,8 +237,8 @@
             <!-- class="fr-btn fr-btn-tertiary-no-outline fr-btn-icon-left fr-icon-checkbox-line applyButton" -->
             <div class="applyContainer">
                 <button class="fr-btn fr-btn--primary fr-btn--icon-left fr-icon-search-line applyButton"
-                        title={searchButtonTitle} disabled onclick={updateSearch}>
-                        Rechercher
+                        aria-label={filterButtonTitle} title={filterButtonTitle} disabled onclick={updateSearch}>
+                        {filterButtonLabel}
                 </button>
             </div>
         </div>
