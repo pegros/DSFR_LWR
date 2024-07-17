@@ -10,6 +10,10 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
+            <property   name="isMain"
+                        label="Main cache ?"
+                        default="true"
+                        type="Boolean" />
             <property   name="isDebug"
                         label="Debug ?"
                         type="Boolean" />

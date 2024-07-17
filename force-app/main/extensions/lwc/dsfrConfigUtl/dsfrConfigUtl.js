@@ -1,4 +1,5 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, wire } from 'lwc';
+import { CurrentPageReference } from 'lightning/navigation';
 
 const CONFIG_MAP = {test:{test:'test'}};
 
@@ -7,8 +8,36 @@ export default class DsfrConfigUtl extends LightningElement {
     //----------------------------------------------------------------
     // Configuration fields
     //----------------------------------------------------------------
-
+    @api isMain = false;    // Component display activation in Site Builder
     @api isDebug = false;   // Debug logs activation
+
+    //----------------------------------------------------------------
+    // Technical internal fields
+    //----------------------------------------------------------------
+    isSiteBuilder = false;
+
+    //----------------------------------------------------------------
+    // Custom Getters
+    //----------------------------------------------------------------
+    get showUtil() {
+        return this.isMain && this.isSiteBuilder;
+    }
+
+    //----------------------------------------------------------------
+    // Context Initialization
+    //----------------------------------------------------------------
+
+    @wire(CurrentPageReference)
+    wiredPage(data){
+        if (this.isDebug) console.log('wiredPage: START config');
+        if (this.isDebug) console.log('wiredPage: with page ',JSON.stringify(data));
+
+        let app = data && data.state && data.state.app;
+        if (this.isDebug) console.log('wiredPage: app extracted ',app);
+        this.isSiteBuilder = (app === 'commeditor');
+
+        if (this.isDebug) console.log('wiredPage: END config',this.isSiteBuilder);
+    };
 
     //----------------------------------------------------------------
     // Component Initialization
