@@ -1,5 +1,5 @@
 <template>
-    <div class={alertClass} lwc:if={showAlert}>
+    <div class={alertClass} role="alert" lwc:if={showAlert}>
         <template lwc:if={alertTitle}>
             <h4 class="fr-alert__title">
                 <lightning-formatted-text value={alertTitle} class="fr-alert__title alertText" >
