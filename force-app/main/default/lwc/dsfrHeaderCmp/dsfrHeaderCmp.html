@@ -69,7 +69,7 @@
                                 <template lwc:if={isGuestUser}>
                                     <template lwc:if={showLogin}>
                                         <li>
-                                            <a class="fr-btn fr-icon-account-circle-line" href="#" tabindex="0" onclick={handleLogin} >{loginLabel}</a>
+                                            <a class="fr-btn fr-icon-account-circle-line" href="#" tabindex="0" aria-label={loginLabel} onclick={handleLogin} >{loginLabel}</a>
                                         </li>
                                     </template>
                                 </template>
@@ -77,7 +77,7 @@
                                     <template lwc:if={topMenuItems}>
                                         <template for:each={topMenuItems} for:item="item">
                                             <li key={item.label} >
-                                                <a  class={item.class} href="#" tabindex="0" data-value={item.label} onclick={handleTopClick} >
+                                                <a  class={item.class} href="#" tabindex="0" data-value={item.label} aria-label={item.label} onclick={handleTopClick} >
                                                     {item.label}
                                                 </a>
                                             </li>
@@ -85,13 +85,13 @@
                                     </template>
                                     <template lwc:if={showLogin}>
                                         <li>
-                                            <a class="fr-btn fr-icon-logout-box-r-line dsfrLogout" href="#" tabindex="0" onclick={handleLogout} >{logoutLabel}</a>
+                                            <a class="fr-btn fr-icon-logout-box-r-line dsfrLogout" href="#" tabindex="0" aria-label={logoutLabel} onclick={handleLogout} >{logoutLabel}</a>
                                         </li>
                                     </template>
                                     <template lwc:if={userName}>
                                         <template lwc:if={userTarget}>
                                             <li>
-                                                <a class="fr-btn fr-icon-account-pin-circle-fill" href="#" tabindex="0" onclick={handleUserOpen} >{userName}</a>
+                                                <a class="fr-btn fr-icon-account-pin-circle-fill" href="#" tabindex="0" aria-label="Accès à mon espace personnel" onclick={handleUserOpen} >{userName}</a>
                                             </li>
                                         </template>
                                         <template lwc:else>
@@ -255,7 +255,7 @@
                                 <template for:each={mainMenuItems} for:item="item">
                                     <li key={item.label} class="fr-nav__item">
                                         <!-- {item.isCurrent} -->
-                                        <a  class="fr-nav__link" href="#" tabindex="0" target="_self" data-value={item.label} onclick={handleMainClick} >
+                                        <a  class="fr-nav__link" href="#" tabindex="0" target="_self" data-value={item.label} aria-label={item.label} onclick={handleMainClick} >
                                             {item.label}
                                         </a>
                                     </li>
