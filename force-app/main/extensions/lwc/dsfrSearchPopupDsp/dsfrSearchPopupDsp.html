@@ -1,0 +1,76 @@
+<template>
+    <lightning-modal-header label={popupLabel}>
+    </lightning-modal-header>
+    <lightning-modal-body>
+        <div class="slds-p-horizontal_x-small">
+            <template lwc:if={searchForm}>
+                <div class="slds-border_bottom slds-p-bottom_small slds-m-bottom_small">
+                    <lightning-record-edit-form     object-api-name={searchForm.objectApiName}
+                                                    record-type-id={searchForm.recordTypeId}
+                                                    onsubmit={handleSubmit}>
+                        <lightning-messages>
+                        </lightning-messages>
+                        
+                        <lightning-layout   multiple-rows="true"  vertical-align="bottom"
+                                            pull-to-boundary="small" >
+                            <template for:each={searchForm.fields} for:item="iterForm">
+                                <lightning-layout-item  key={iterForm.name}
+                                                        size="12"   large-device-size={fieldsize}
+                                                        padding="horizontal-small"> 
+                                    <div class="fr-fieldset__element">
+                                        <div class="fr-input-group">
+                                            <lightning-input-field  class="dsfrInput"               variant="label-stacked"
+                                                                    field-name={iterForm.name}      value={iterForm.value}
+                                                                    required={iterForm.required}    disabled={iterForm.disabled}>
+                                            </lightning-input-field>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                        
+                        <div class="slds-align_absolute-center slds-m-top_small">
+                            <button class="fr-btn"  aria-label={searchLabel}    type="submit">
+                                {searchLabel}
+                            </button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </template>
+            <template lwc:if={isDebug}>
+                <div class="fr-p-4v slds-border_bottom slds-m-bottom_small">
+                    <div>
+                        <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                            Mode debug activé!
+                        </span>
+                        <span class="fr-badge fr-badge--info">
+                            <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrSearchPopupCmp.md" target="_blank">
+                                Voir la documentation</a>
+                        </span>
+                    </div>
+                    <div class="fr-text--sm fr-my-2v">
+                        <ul>
+                            <li><b>(aria-)description</b>: {description}</li>
+                            <li><b>searchForm fields</b>:  {searchFormFields}</li>
+                            <li><b>resultsConfig name</b>: {resultsConfig.name}</li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+            <template lwc:if={showResults}>
+                <c-dsfr-card-tile-list-cmp  list-title={resultsTitle}
+                                            config-name={resultsConfig.name}
+                                            list-context={queryContext}
+                                            header-css="fr-h3"
+                                            display-height={resultsConfig.displayHeight}
+                                            object-api-name={resultsConfig.objectApiName}
+                                            record-id={resultsConfig.recordId}
+                                            is-debug={isDebug}>
+                </c-dsfr-card-tile-list-cmp>
+            </template>
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label={closeLabel} onclick={handleClose}></lightning-button>
+    </lightning-modal-footer>
+</template>

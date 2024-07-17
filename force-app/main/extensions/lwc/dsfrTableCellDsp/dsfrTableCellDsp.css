@@ -1,0 +1,87 @@
+:host {
+    width: 100%;
+    display:block;
+}
+:host:has(.numberCell) {
+    text-align: end;
+}
+:host:has(.booleanCell) {
+    text-align: center;
+}
+
+
+/* Header sort feature overrides */
+.menuNav {
+    /*margin-top: -2px;
+    background-color: blue;
+    padding: 2px;*/
+    display: block;
+    position: static;
+    vertical-align: middle;
+    flex: none;
+    z-index: 5;
+}
+.menuDiv {
+    /*background-color: green;
+    padding: 2px;*/
+    display: block;
+    position: relative;
+}
+.menuDiv::before {
+    display: none !important;
+    width: var(--icon-size);
+    margin-left: .5rem;
+}
+.menuButton {
+    /*background-color: red;*/
+    padding-top:  0.5rem !important;
+    padding-bottom:  0.5rem !important;
+    min-height: auto !important;
+    min-height: auto !important;
+    /*justify-content: flex-start !important;*/
+    font-size: .875rem !important;
+    padding-right: .25rem !important;
+    margin-right: 1.5rem !important;
+    display: block !important;
+}
+.menuButton::after {
+    display: inline-block;
+    /*color: var(--text-inverted-blue-france);*/
+}
+.actionMenu {
+    display: none;
+    max-height: none !important;
+    background-color: white;
+    color: black;
+    z-index: 5;
+    position: absolute !important;
+    padding-left:  0rem !important;
+    padding-right:  0rem !important;
+    padding-bottom:  0rem !important;
+    margin-left:  0rem !important;
+    margin-right:  0rem !important;
+    margin-bottom:  0rem !important;
+    top: 120% !important;
+    right: 0 !important;
+    position: absolute !important;
+    filter: drop-shadow(var(--overlap-shadow));
+}
+.actionMenu.fr-collapse--expanded {
+    display: block  !important;
+}
+.actionList {
+    max-width: 20 rem !important;
+    background-color: var(--background-overlap-grey);
+    margin-bottom: 1rem;
+}
+.menuAction {
+    color: var(--text-default-grey) !important;
+    font-size: .875rem !important;
+    box-shadow: 0 calc(-1rem - 1px) 0 -1rem var(--border-default-grey) !important;
+}
+.menuAction:before {
+    box-shadow: none !important;
+}
+.menuAction:hover {
+    background-color: var(--hover-tint);
+}

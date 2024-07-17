@@ -1,0 +1,81 @@
+<template>
+    <template lwc:if={isButton}>
+        <c-dsfr-button-dsp  button-icon={buttonDesc.dsfrIcon}   button-icon-position={buttonDesc.iconPosition}
+                            button-label={buttonDesc.label}     button-title={buttonDesc.title} 
+                            button-size={buttonDesc.iconSize}   button-variant={buttonDesc.dsfrVariant} 
+                            button-align="center"               button-inactive={buttonDesc.inactive}
+                            name={buttonDesc.name}              value={buttonDesc}
+                            ontrigger={handleAction} >
+        </c-dsfr-button-dsp>
+    </template>
+    <template lwc:elseif={isMenu}>
+        <nav role="menu" class="fr-nav menuNav">
+        <div class="fr-nav__item menuDiv">
+            <!-- fr-btn- -tertiary-no-outline -->
+            <button class="fr-nav__btn fr-btn fr-btn--tertiary menuButton" aria-expanded="false" title={field.typeAttributes.title} lwc:ref="menuButton" onclick={toggleMenu}>
+                <span>{field.typeAttributes.label}</span>
+            </button>
+            <div class="fr-collapse fr-menu actionMenu" data-menu="sort" lwc:ref="actionMenu">
+                <ul class="fr-menu__list actionList">
+                    <template for:each={field.typeAttributes.rowActions} for:item="iter">
+                        <li key={iter.name} class="actionItem">
+                            <template lwc:if={iter.inactive}>
+                                <a class="fr-nav__link menuAction" href="#" aria-current="page" disabled>{iter.label}</a>
+                            </template>
+                            <template lwc:else>
+                                <a class="fr-nav__link menuAction" href="#" title={iter.title} data-action={iter.name} onclick={handleAction}>{iter.label}</a>
+                            </template>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+        </nav>
+        <!--
+        <ul class="fr-btns-group fr-btns-group--inline-sm">
+            <template for:each={field.typeAttributes.rowActions} for:item="iter">
+                <li key={iter.name}>
+                <c-dsfr-button-dsp  
+                                    button-icon={iter.dsfrIcon} button-icon-position={iter.iconPosition}
+                                    button-label={iter.label}   button-title={iter.title} 
+                                    button-size={iter.iconSize} button-variant={iter.dsfrVariant} 
+                                    button-align="center"       button-inactive={iter.inactive}
+                                    name={iter.name}            value={iter}
+                                    ontrigger={handleAction} >
+                </c-dsfr-button-dsp>
+                </li>
+            </template>
+        </ul>
+        -->
+    </template>
+    <template lwc:elseif={isBoolean}> 
+        <template lwc:if={fieldValue}>
+            <span class="fr-icon-checkbox-line fr-label--success booleanCell" arial-label="Validé"></span>
+        </template>
+        <template lwc:else>
+            <span class="fr-icon-close-line fr-label--error booleanCell" arial-label="Non validé"></span>
+        </template>
+    </template>
+    <template lwc:elseif={isDatetime}>
+        <lightning-formatted-date-time value={fieldValue}></lightning-formatted-date-time>
+    </template>
+    <template lwc:elseif={isDate}> 
+        <lightning-formatted-date-time value={fieldValue}></lightning-formatted-date-time>
+    </template>
+    <template lwc:elseif={isNumber}> 
+        <lightning-formatted-number class="numberCell" value={fieldValue}></lightning-formatted-number>    
+    </template>
+    <template lwc:elseif={isPercent}> 
+        <!-- percent-fixed -->
+        <lightning-formatted-number class="numberCell" format-style="percent" value={fieldValue}></lightning-formatted-number>
+    </template>
+    <template lwc:elseif={isEmail}> 
+        <lightning-formatted-email value={fieldValue}></lightning-formatted-email>
+    </template>
+    <template lwc:elseif={isUrl}> 
+        <lightning-formatted-url value={fieldValue}></lightning-formatted-url>
+    </template>
+    <template lwc:else> 
+        <lightning-formatted-text value={fieldValue}></lightning-formatted-text>
+    </template>
+</template>
