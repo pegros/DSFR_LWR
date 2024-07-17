@@ -42,6 +42,46 @@
         <value>Problème de création de votre compte: mot de passe manquant.</value>
     </labels>
     <labels>
+        <fullName>dsfrSiteMgtRegistrationPwdMissingError</fullName>
+        <categories>DSFR UX Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (password manquant)</shortDescription>
+        <value>Un mot de passe doit être renseigné.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationPwdMismatchError</fullName>
+        <categories>DSFR UX Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (2 passwords différents)</shortDescription>
+        <value>Les deux valeurs de mot de passe doivent être identiques.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationEmailTemplate</fullName>
+        <categories>DSFR UX Help Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'aide pour préciser le format attendu pour l'adresse email</shortDescription>
+        <value>Format attendu: nom@domaine.xx</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationEmailMismatchError</fullName>
+        <categories>DSFR UX Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (2 emails différents)</shortDescription>
+        <value>Les deux valeurs d'adresse électronique doivent être identiques.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrSiteMgtRegistrationCnilError</fullName>
+        <categories>DSFR UX Error Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur en cas de problème d'enregistrement (mention CNIL KO)</shortDescription>
+        <value>Les mentions légales doivent être validées.</value>
+    </labels>
+    <labels>
         <fullName>dsfrSiteMgtRegistrationUserError</fullName>
         <categories>DSFR Apex Error Message</categories>
         <language>en_US</language>
