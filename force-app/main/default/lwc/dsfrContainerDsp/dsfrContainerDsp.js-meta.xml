@@ -26,7 +26,7 @@
             <property   name="excerpt"
                         label="Entête"
                         type="String"
-                        description="Contenu richtext à afficher en entête." />
+                        description="Contenu texte standard à afficher en entête." />
             <property   name="excerptClass"
                         label="Variante de l'entête"
                         type="String"
@@ -85,7 +85,7 @@
                         label="Entête"
                         type="String"
                         role="inputOnly"
-                        description="Contenu richtext à afficher en entête." />
+                        description="Contenu texte à afficher en entête." />
             <property   name="excerptClass"
                         label="Variante de l'entête"
                         type="String"

@@ -40,6 +40,10 @@
             </template>
 
             <div class={sectionClass} id="accordion">
+                <section class={finalExcerptClass}>
+                    <lightning-formatted-text class={excerptClass} value={excerpt} linkify>
+                    </lightning-formatted-text>
+                </section>
                 <div class={messageClass}>
                     <lightning-formatted-rich-text class={messageClass} value={message}>
                     </lightning-formatted-rich-text>
