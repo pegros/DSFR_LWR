@@ -17,7 +17,12 @@
             <property   name="formDescription"
                         label="Description"
                         type="String"
-                        description="Libellé de titre du formulaire" />
+                        description="Message introductif du formulaire" />
+            <property   name="formEditMessage"
+                        label="Alerte en mode édition"
+                        type="String"
+                        description="Information complémentaire en mode edition" />
+                        
             <property   name="formTag"
                         label="Tag Google Analytics"
                         type="String"
@@ -49,6 +54,10 @@
                         label="Mode Edition (dynamique)?"
                         type="String"
                         description="Flag pour afficher le composant en mode édition dynamiquement (si non lecture seule)." />
+            <property   name="showBottomEdit"
+                        label="Edit sous formulaire?"
+                        type="Boolean"
+                        description="Flag pour répéter le bouton Editer en bas du formulaire (si non lecture seule)." />
 
             <property   name="objectApiName"
                         label="Objet"

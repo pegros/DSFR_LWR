@@ -9,7 +9,7 @@
             </template>
             <template lwc:if={showEdit}>
                 <lightning-layout-item flexibility="auto, no-grow, no-shrink" alignment-bump="left" >
-                    <button class="fr-btn fr-btn--secondary formButton" title={editTitle} type="button" onclick={toggleMode}>
+                    <button class="fr-btn fr-btn--secondary formButton" aria-label={editAriaLabel} title={editTitle} type="button" onclick={toggleMode}>
                         {editLabel}
                     </button>
                 </lightning-layout-item>
@@ -18,6 +18,13 @@
                 <lightning-layout-item size="12" >
                     <p class="fr-text--sm">{formDescription}</p>
                 </lightning-layout-item>
+            </template>
+            <template lwc:if={isEditMode}>
+                <template lwc:if={formEditMessage}>
+                    <lightning-layout-item size="12" >
+                        <p class="fr-text--sm">{formEditMessage}</p>
+                    </lightning-layout-item>
+                </template>
             </template>
         </lightning-layout>
 
@@ -31,9 +38,11 @@
                 <template for:each={configDetails.sections} for:item="iterSection">
                     <fieldset   key={iterSection.key} class={sectionClass}
                                 id={iterSection.key}  aria-labelledby={iterSection.legendKey}>
-                        <legend class={iterSection.legendClass} id={iterSection.legendKey}>
-                            <h3 class={iterSection.labelClass}>{iterSection.label}</h3>
-                        </legend>
+                        <template lwc:if={iterSection.label}>
+                            <legend class={iterSection.legendClass} id={iterSection.legendKey}>
+                                <h3 class={iterSection.labelClass}>{iterSection.label}</h3>
+                            </legend>
+                        </template>
                         <template lwc:if={iterSection.description}>
                             <div class="fr-fieldset__element">
                                 <p class="fr-text--sm">{iterSection.description}</p>
@@ -44,11 +53,12 @@
                                 <span class="fr-hint-text">{iterSection.help}</span>
                             </div>
                         </template>
-                        <lightning-layout multiple-rows="true" pull-to-boundary="medium" class="formSection">
+                        <!-- pull-to-boundary="small" -->
+                        <lightning-layout multiple-rows="true"  vertical-align="bottom" class="formSection">
                             <template for:each={iterSection.fields} for:item="iterSectionField">
-                                <lightning-layout-item  key={iterSectionField.name}
-                                                        size="12"                   medium-device-size={iterSectionField.size} 
-                                                        padding="horizontal-medium" class="fieldItem" >
+                                <!-- padding="horizontal-small" -->
+                                <lightning-layout-item  key={iterSectionField.name} class="fieldItem"
+                                                        size="12"                   medium-device-size={iterSectionField.size} >
                                     <template lwc:if={iterSectionField.isSpace}>
                                         <template lwc:if={iterSectionField.description}>
                                             <div class="fr-fieldset__element">
@@ -83,10 +93,10 @@
                                                 <template lwc:elseif={iterSectionField.required} >
                                                     <lightning-input-field  class="dsfrInput"       variant="label-stacked"
                                                                             field-name={iterSectionField.name}  required>
-                                                        <template lwc:if={iterSectionField.help}>
-                                                            <span class="fr-hint-text">{iterSectionField.help}</span>
-                                                        </template>
                                                     </lightning-input-field>
+                                                    <template lwc:if={iterSectionField.help}>
+                                                        <span class="fr-hint-text">{iterSectionField.help}</span>
+                                                    </template>
                                                 </template>
                                                 <template lwc:else>
                                                     <lightning-input-field  class="dsfrInput"       variant="label-stacked"
@@ -143,31 +153,34 @@
                 <template lwc:elseif={isEditMode}>
                     <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
                         <li>
-                            <button class="fr-btn fr-btn--secondary formButton" title={cancelTitle} type="reset" onclick={handleCancel}>
+                            <button class="fr-btn fr-btn--secondary formButton"
+                                    title={cancelTitle} aria-label={cancelLabel} 
+                                    type="reset"        onclick={handleCancel}>
                                 {cancelLabel}
                             </button>
                         </li>
                         <li>
-                            <button class="fr-btn formButton" title={saveTitle} type="submit" >
+                            <button class="fr-btn formButton"
+                                    title={saveTitle} aria-label={saveDynamicLabel}
+                                    type="submit" >
                                 {saveDynamicLabel}
                             </button>
                         </li>
-                        <li>
-                            <div class="slds-is-relative spinnerDiv">
-                                <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
-                                </lightning-spinner>
-                            </div>
-                        </li>
                     </ul>
                </template>
-               <template lwc:else>
-                    <ul class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--center fr-mt-4v">
-                        <li>
-                            <button class="fr-btn fr-btn--secondary formButton" title={editTitle} type="button" onclick={toggleMode}>
-                                {editLabel}
-                            </button>
-                        </li>
-                    </ul>
+               <template lwc:elseif={showBottomEdit}>
+                    <div class="slds-align_absolute-center">
+                        <button class="fr-btn fr-btn--secondary fr-mt-4v formButton"
+                                title={editTitle}   aria-label={editLabel}
+                                type="button"       onclick={toggleMode}>
+                            {editLabel}
+                        </button>
+                    </div>
+               </template>
+
+               <template lwc:if={isSaving}>
+                    <lightning-spinner alternative-text="..." variant="brand">
+                    </lightning-spinner>
                </template>
             </lightning-record-edit-form>
         </template>

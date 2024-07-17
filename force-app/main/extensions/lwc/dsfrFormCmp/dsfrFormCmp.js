@@ -21,6 +21,7 @@ export default class DsfrFormCmp extends LightningElement {
     //----------------------------------------------------------------
     @api formTitle;             // Main Title of the form
     @api formDescription;       // Main Description of the form
+    @api formEditMessage;       // Special message when in edit mode
     @api formTag;               // for GA4
     @api formClass = "fr-container fr-background-alt--grey fr-py-4v";   // CSS Classes for the wrapping form div
     @api sectionClass = "fr-mb-0 fr-fieldset" ; // CSS Classes for the wrapping form div
@@ -29,6 +30,7 @@ export default class DsfrFormCmp extends LightningElement {
 
     @api isReadOnly = false;    // Display card in readonly mode
     @api isEditMode = false;    // edit mode mode activation
+    @api showBottomEdit = false;    // repeat edit mode mode toggle button below form
 
     @api
     get isEditModeString() {
@@ -49,7 +51,7 @@ export default class DsfrFormCmp extends LightningElement {
     cancelLabel     = CANCEL_LABEL;
     cancelTitle     = CANCEL_TITLE;
     saveLabel       = SAVE_LABEL;
-    saveTitle       = SAVE__TITLE;
+    saveTitle       = SAVE_TITLE;
     forceSaveLabel  = SAVE_LABEL + ' (forcer)';
     editLabel       = EDIT_LABEL;
     editTitle       = EDIT_TITLE;
@@ -59,7 +61,8 @@ export default class DsfrFormCmp extends LightningElement {
     //----------------------------------------------------------------
     isReady = false;        // Initialization state of the component (to control spinner)
     configDetails = null;   // Global configuration of the component
-    isForceSubmit = false;  // second save to bypass 
+    isForceSubmit = false;  // Second save to bypass 
+    isSaving = false;       // display spinner while saving
 
     //----------------------------------------------------------------
     // Context Data
@@ -90,6 +93,9 @@ export default class DsfrFormCmp extends LightningElement {
     // Custom UI Display getters
     //----------------------------------------------------------------
     
+    get editAriaLabel() {
+        return this.formTitle + '. ' + EDIT_LABEL;
+    }
     get showEdit() {
         return !(this.isReadOnly || this.isEditMode);
     }
@@ -141,7 +147,7 @@ export default class DsfrFormCmp extends LightningElement {
                 if (this.isDebug) console.log('connected: configuration received  ',result);
                 try {
                     let config = JSON.parse(result.DisplayConfig__c);
-                    if (this.isDebug) console.log('connected: config parsed ');
+                    if (this.isDebug) console.log('connected: config parsed ',JSON.stringify(config));
 
                     FORM_CONFIGS[this.configName] = {
                         label:      result.MasterLabel,
@@ -160,6 +166,11 @@ export default class DsfrFormCmp extends LightningElement {
                             help: config.help
                         })
                         if (this.isDebug) console.log('connected: default section info added ');
+                    }
+                    else {
+                        if (this.isDebug) console.log('connected: no config fields ',config.fields);
+                        if (this.isDebug) console.log('connected: nor description ',config.description);
+                        if (this.isDebug) console.log('connected: nor help ',config.help);
                     }
 
                     ((this.configDetails).sections).forEach((iterSection, iterIndex) => {
@@ -387,7 +398,15 @@ export default class DsfrFormCmp extends LightningElement {
     toggleSpinner = function(isShown) {
         if (this.isDebug) console.log('toggleSpinner: START for form with',isShown);
 
-        let spinner = this.template.querySelector('lightning-spinner');
+        this.isSaving = isShown;
+
+        let buttons = this.template.querySelectorAll('button.formButton');
+        if (this.isDebug) console.log('toggleSpinner: buttons found',buttons);
+        buttons.forEach(item => {
+            item.disabled = isShown;
+        });
+
+        /*let spinner = this.template.querySelector('lightning-spinner');
         if (this.isDebug) console.log('toggleSpinner: spinner found',spinner);
 
         let buttons = this.template.querySelectorAll('button.formButton');
@@ -411,7 +430,7 @@ export default class DsfrFormCmp extends LightningElement {
         }
         else {
             if (this.isDebug) console.log('toggleSpinner: no spinner displayed');
-        }
+        }*/
         
         if (this.isDebug) console.log('toggleSpinner: END for form');
     }
