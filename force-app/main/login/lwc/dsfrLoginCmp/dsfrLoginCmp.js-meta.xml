@@ -30,6 +30,17 @@
                         type="String"
                         default="Valider"
                         description="Libellé du bouton de connexion" />
+            <property   name="loginTitle"
+                        label="Titre du bouton de connexion"
+                        type="String"
+                        default="Valider les informations de connexion"
+                        description="Titre du bouton de connexion, affiché au survol" />
+            <property   name="loginMessage"
+                        label="Message d'information du formulaire"
+                        type="String"
+                        default="Tous les champs marqués d'un astérisque rouge sont obligatoires."
+                        description="Message affiché en entête du formulaire de connexion" />
+                        
             <property   name="loginTarget"
                         label="URL après Login"
                         type="String"
@@ -49,6 +60,11 @@
                         type="String"
                         default="Créer un compte"
                         description="Libellé du bouton de redirection vers la création de compte" />
+            <property   name="registerTitle"
+                        label="Titre du bouton création de compte"
+                        type="String"
+                        default="Accéder à la page de création de compte"
+                        description="Titre du bouton de redirection vers la création de compte, affiché au survol" />
             <property   name="registerTarget"
                         label="Page Création de compte"
                         type="String"
@@ -63,6 +79,12 @@
                         type="String"
                         default="Mot de passe oublié ?"
                         description="Libellé du lien pour renouveler son mot de passe" />
+            <property   name="lostPwdTitle"
+                        label="Titre du lien mot de passe oublié"
+                        type="String"
+                        default="Ouvrir la page de récupération de mot de passe."
+                        description="Titre du lien pour renouveler son mot de passe affiché au survol." />
+                        
             <property   name="lostPwdTarget"
                         label="Page Mot de passe oublié"
                         type="String"

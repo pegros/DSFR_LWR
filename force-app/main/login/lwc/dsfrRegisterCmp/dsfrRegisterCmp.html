@@ -1,10 +1,10 @@
 <template>
-    <div role="main" id="content">
+    <!--<div role="main" id="content">-->
         <!-- Main Header -->
         <div class="fr-container fr-mt-8v fr-mt-md-14v fr-mb-2v fr-mb-md-8v">
             <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--center">
                 <div class="fr-col-12 fr-col-md-10 fr-col-lg-8">
-                    <h2 class="fr-h2">{mainTitle}</h2>
+                    <h1 class="fr-h1">{mainTitle}</h1>
                     <template lwc:if={mainDescription}>
                         <p class="fr-text--lead">{mainDescription}</p>
                     </template>
@@ -25,7 +25,8 @@
                                 </c-dsfr-stepper-cmp>
 
                                 <!-- Main Registration Form -->
-                                <div class="registrationForm">
+                                <template lwc:if={isStep1}>
+                                <div class="registrationForm" aria-label="Formulaire d'inscription">
                                     <template lwc:if={defaultRecordTypeId}>
                                         <lightning-record-edit-form class="fr-mb-0"             aria-label="Formulaire d'inscription" id="loginForm"
                                                                     object-api-name="Account"   record-type-id={defaultRecordTypeId}
@@ -33,7 +34,7 @@
                                                                     onerror={handleError}>
                                             <fieldset class="fr-mb-0 fr-fieldset" id="loginForm-fieldset" aria-labelledby="loginForm-fieldset-legend loginForm-fieldset-messages">
                                                 <legend class="fr-fieldset__legend" id="loginForm-fieldset-legend">
-                                                    <h6>{formTitle}</h6>
+                                                    <h2 class="fr-h2">{formTitle}</h2>
                                                 </legend>
                                                 <template lwc:if={formDescription}>
                                                     <div class="fr-fieldset__element">
@@ -52,185 +53,184 @@
                                                         <div class="fr-input-group">
                                                             <template lwc:if={iter.required} >
                                                                 <lightning-input-field  class="dsfrInput"       variant="label-stacked"
-                                                                                        field-name={iter.name}  required>
+                                                                                        field-name={iter.name}
+                                                                                        data-name={iter.name}   required>
                                                                 </lightning-input-field>
                                                             </template>
                                                             <template lwc:else>
                                                                 <lightning-input-field  class="dsfrInput"       variant="label-stacked"
-                                                                                        field-name={iter.name} >
+                                                                                        field-name={iter.name} 
+                                                                                        data-name={iter.name}>
                                                                 </lightning-input-field>
+                                                            </template>
+                                                            <template lwc:if={iter.help}>
+                                                                <div class="fr-messages-group">
+                                                                    <span class="fr-hint-text slds-p-horizontal_xx-small">{iter.help}</span>
+                                                                </div>
                                                             </template>
                                                         </div>
                                                     </div>
                                                 </template>
 
-                                                <!-- Standard email control field -->
+
+                                                <!-- Email control field -->
                                                 <div class="fr-fieldset__element">
-                                                    <div id="email-control">
-                                                        <label class="fr-label" for="email-control-input">
-                                                            Confirmer l'adresse électronique
-                                                            <abbr class="fr-required" title="obligatoire">*</abbr>
-                                                       </label>
-                                                        <div class="fr-input-wrap">
-                                                            <input  class="fr-input"
-                                                                    aria-describedby="email-control-input-messages" aria-required="true"
-                                                                    name="email-control" autocomplete="email" id="email-control-input" type="text">
-                                                        </div>
-                                                        <div class="fr-messages-group" id="email-control-input-messages" aria-live="assertive">
-                                                        </div>
+                                                    <div class="fr-input-group">
+                                                        <lightning-input    lwc:ref="emailConfirm"          name="emailConfirm"
+                                                                            class="dsfrInput"               variant="label-stacked"
+                                                                            type="email"                    label="Confirmer l'adresse électronique"
+                                                                            autocomplete="off"              required>
+                                                        </lightning-input>
                                                     </div>
                                                 </div>
 
-                                                <!-- Standard password input fields -->
+                                                <!-- Password input fields -->
                                                 <div class="fr-fieldset__element">
-                                                    <div class="fr-password" id="password-1">
-                                                        <label class="fr-label" for="password-1-input">
-                                                            Saisir un mot de passe
-                                                            <abbr class="fr-required" title="obligatoire">*</abbr>
-                                                        </label>
-                                                        <span class="fr-hint-text">{pwdPolicy}</span>
-                                                        <div class="fr-input-wrap">
-                                                            <input  class="fr-password__input fr-input"
-                                                                    aria-describedby="password-1-input-messages" aria-required="true"
-                                                                    name="password" autocomplete="new-password" id="password-1-input" type="password">
+                                                    <div class="fr-input-group fr-password">
+                                                        <!-- field-level-help={pwdPolicy} -->
+                                                        <lightning-input    lwc:ref="pwdInput"              name="pwdInput"
+                                                                            class="dsfrInput fr-password"   variant="label-stacked"
+                                                                            type="password"                 label="Saisir un mot de passe"
+                                                                            autocomplete="off"              required>
+                                                        </lightning-input>
+                                                        <div class="fr-password__checkbox fr-checkbox-group--sm slds-clearfix">
+                                                            <lightning-input    lwc:ref="passwordToggle"    class="slds-m-bottom_none slds-float_right" 
+                                                                                label="Afficher"            title="Afficher en clair le mot de passe" 
+                                                                                type="checkbox"             onchange={togglePassword}>
+                                                            </lightning-input>
                                                         </div>
-                                                        <div class="fr-messages-group" id="password-1-input-messages" aria-live="assertive">
-                                                        </div>
-                                                        <div class="fr-password__checkbox fr-checkbox-group fr-checkbox-group--sm">
-                                                            <input  id="password-1-show"                    type="checkbox"
-                                                                    aria-label="Afficher le mot de passe"   aria-describedby="password-1-show-messages"
-                                                                    onchange={togglePassword} >
-                                                            <label class="fr-password__checkbox fr-label" for="password-1-show">
-                                                                Afficher en clair
-                                                            </label>
-                                                            <div class="fr-messages-group" id="password-1-show-messages" aria-live="assertive">
-                                                            </div>
+                                                        <div class="fr-messages-group">
+                                                            <span class="fr-hint-text slds-p-horizontal_xx-small">{pwdPolicy}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="fr-fieldset__element">
-                                                    <div class="fr-password" id="password-2">
-                                                        <label class="fr-label" for="password-2-input">
-                                                            Confirmer le mot de passe
-                                                            <abbr class="fr-required" title="obligatoire">*</abbr>
-                                                        </label>
-                                                        <div class="fr-input-wrap">
-                                                            <input  class="fr-password__input fr-input"
-                                                                    aria-describedby="password-2-input-messages" aria-required="true"
-                                                                    name="password" autocomplete="new-password" id="password-2-input" type="password">
-                                                        </div>
-                                                        <div class="fr-messages-group" id="password-2-input-messages" aria-live="assertive">
-                                                        </div>
+                                                    <div class="fr-input-group">
+                                                        <lightning-input    lwc:ref="pwdConfirm"            name="pwdConfirm"
+                                                                            class="dsfrInput fr-password"   variant="label-stacked"
+                                                                            type="password"                 label="Confirmer le mot de passe"
+                                                                            autocomplete="off"
+                                                                            required>
+                                                        </lightning-input>
                                                     </div>
                                                 </div>
 
-                                                <!-- CNIL Mention -->
-                                                <template lwc:if={cnilMention}>
+                                                <!-- CNIL Mention checkbox -->
+                                                <template lwc:if={mentionLabel}>
                                                     <div class="fr-fieldset__element">
-                                                        <div class="fr-checkbox-group fr-checkbox-group--sm">
-                                                            <input  name="checkbox-cnil"    id="checkbox-cnil" required
-                                                                    type="checkbox"         aria-describedby="checkbox-cnil-messages">
-                                                            <label class="fr-label" for="checkbox-cnil">
-                                                                <lightning-formatted-rich-text class="fr-label" value={cnilMention}>
-                                                                </lightning-formatted-rich-text>
-                                                            </label>
-                                                            <div class="fr-messages-group" id="checkbox-cnil-messages" aria-live="assertive">
-                                                            </div>
+                                                        <div class="fr-input-group">
+                                                            <lightning-input    lwc:ref="mentionConfirm"    name="mentionConfirm"
+                                                                                label={mentionLabel}        class="slds-m-bottom_none"
+                                                                                type="checkbox"             required>
+                                                            </lightning-input>
+                                                            <template lwc:if={mentionDetails}>
+                                                                <div class="fr-messages-group fr-hint-text fr-pl-8v">
+                                                                    <lightning-formatted-rich-text  class="slds-text-body_small fr-hint-text"
+                                                                                                    value={mentionDetails}>
+                                                                    </lightning-formatted-rich-text>
+                                                                </div>
+                                                            </template>
                                                         </div>
                                                     </div>
                                                 </template>
 
-                                                <!-- Submit button -->
-                                                <div class="fr-fieldset__element">
-                                                    <ul class="fr-btns-group">
-                                                        <li>
-                                                            <button class="formButton fr-mt-2v fr-btn" type="submit" >
-                                                                Soumettre
-                                                            </button>
-                                                            <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-m-left_small slds-align_absolute-center">
-                                                            </lightning-spinner>
-                                                        </li>
-                                                    </ul>
+                                                <!-- Messages d'erreur -->
+                                                <div class="fr-messages-group" id="login-fieldset-messages" aria-live="assertive" >
+                                                    <lightning-messages class="fr-messages-group" lwc:ref="errorMsg"></lightning-messages>
                                                 </div>
 
-                                                <!-- Messages d'erreur -->
-                                                <div class="fr-messages-group" id="login-fieldset-messages" aria-live="assertive">
-                                                    <lightning-messages class="fr-messages-group"></lightning-messages>
+                                                <!-- Submit button -->
+                                                <div class="fr-fieldset__element">
+                                                    <!--<ul class="fr-btns-group">
+                                                        <li>-->
+                                                            <button class="formButton fr-mt-2v fr-btn singleButton" aria-label="Soumettre" type="submit" onclick={handleSubmitClick}>
+                                                                Soumettre
+                                                            </button>
+                                                            <template lwc:if={isProcessing}>
+                                                                <lightning-spinner alternative-text="..." size="large" variant="brand" class="slds-m-left_small slds-align_absolute-center">
+                                                                </lightning-spinner>
+                                                            </template>
+                                                        <!--</li>
+                                                    </ul>-->
                                                 </div>
                                             </fieldset>
                                         </lightning-record-edit-form>
                                     </template>
                                 </div>
+                                </template>
 
                                 <!-- Validation Form -->
-                                <div class="validationForm slds-hide">
-                                    <form aria-label="Formulaire de validation d'inscription">
-                                        <fieldset class="fr-fieldset" aria-labelledby="validation-legend">
-                                            <legend class="fr-fieldset__legend" id="validation-legend">
-                                                <h2 class="fr-h2">{validationTitle}</h2>
-                                            </legend>
-                                            <div class="fr-fieldset__element">
-                                                <p class="fr-text--sm">{validationDescription}</p>
-                                            </div>
-                                            <div class="fr-fieldset__element">
-                                                <fieldset class="fr-fieldset" id="validation" aria-labelledby="validation-messages">
-                                                    <div class="fr-fieldset__element">
-                                                        <span class="fr-hint-text">Sauf mention contraire, tous les champs sont obligatoires.</span>
-                                                    </div>
-                                                    <div class="fr-fieldset__element">
-                                                        <div class="fr-input-group">
-                                                            <label class="fr-label" for="validation-code-input">
-                                                                Code
-                                                                <abbr class="fr-required" title="obligatoire">*</abbr>
-                                                                <!--<span class="fr-hint-text">Format attendu : 6 caractères</span>-->
-                                                            </label>
-                                                            <input class="fr-input" aria-required="true" aria-describedby="code-messages" name="validationCode" id="validation-code-input" type="text">
-                                                            <div class="fr-messages-group" id="validation-code-messages" aria-live="assertive">
+                                <template lwc:else>
+                                    <div class="validationForm" aria-label="Formulaire de validation d'inscription">
+                                        <form aria-label="Formulaire de validation d'inscription">
+                                            <fieldset class="fr-fieldset" aria-labelledby="validation-legend">
+                                                <legend class="fr-fieldset__legend" id="validation-legend">
+                                                    <h2 class="fr-h2">{validationTitle}</h2>
+                                                </legend>
+                                                <div class="fr-fieldset__element">
+                                                    <p class="fr-text--sm">{validationDescription}</p>
+                                                </div>
+                                                <div class="fr-fieldset__element">
+                                                    <fieldset class="fr-fieldset" id="validation" aria-labelledby="validation-messages">
+                                                        <div class="fr-fieldset__element">
+                                                            <span class="fr-hint-text">Sauf mention contraire, tous les champs sont obligatoires.</span>
+                                                        </div>
+                                                        <div class="fr-fieldset__element">
+                                                            <div class="fr-input-group">
+                                                                <label class="fr-label" for="validation-code-input">
+                                                                    Code
+                                                                    <abbr class="fr-required" title="obligatoire">*</abbr>
+                                                                    <!--<span class="fr-hint-text">Format attendu : 6 caractères</span>-->
+                                                                </label>
+                                                                <input class="fr-input" aria-required="true" aria-describedby="code-messages" name="validationCode" id="validation-code-input" type="text">
+                                                                <div class="fr-messages-group" id="validation-code-messages" aria-live="assertive">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="fr-messages-group" id="validation-messages" aria-live="assertive">
-                                                        <template lwc:if={validationMessage}>
-                                                            <c-dsfr-alert-cmp   alert-type={validationMessage.type}
-                                                                                alert-size="small"
-                                                                                alert-title={validationMessage.title}
-                                                                                alert-message={validationMessage.details}
-                                                                                alert-css="fr-m-2v">
-                                                            </c-dsfr-alert-cmp>
-                                                        </template>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                            <div class="fr-fieldset__element">
-                                                <ul class="fr-btns-group">
-                                                    <li>
-                                                        <button class="formButton fr-mt-2v fr-btn" type="submit" onclick={handleValidate}>
-                                                            Valider
-                                                        </button>
-                                                        <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-m-left_small slds-align_absolute-center">
-                                                        </lightning-spinner>
-                                                    </li>
-                                                </ul>
-                                                <template lwc:if={showBack}>
-                                                    <div class="align-right">
-                                                        <button class="formButton fr-btn fr-btn--tertiary-no-outline fr-icon-arrow-go-back-line fr-btn--icon-right fr-mt-2v"
-                                                                type="button" onclick={handleBack}>
-                                                                Retour à l'étape précédente
-                                                        </button>
-                                                    </div>
-                                                </template>
-                                            </div>
-                                        </fieldset>
-                                    </form>
-                                </div>
-
+                                                        <div class="fr-messages-group" id="validation-messages" aria-live="assertive">
+                                                            <template lwc:if={validationMessage}>
+                                                                <c-dsfr-alert-cmp   alert-type={validationMessage.type}
+                                                                                    alert-size="small"
+                                                                                    alert-title={validationMessage.title}
+                                                                                    alert-message={validationMessage.details}
+                                                                                    alert-css="fr-m-2v">
+                                                                </c-dsfr-alert-cmp>
+                                                            </template>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="fr-fieldset__element">
+                                                    <ul class="fr-btns-group">
+                                                        <li>
+                                                            <button class="formButton fr-mt-2v fr-btn" aria-label="Valider" type="submit" onclick={handleValidate}>
+                                                                Valider
+                                                            </button>
+                                                            <template lwc:if={isProcessing}>
+                                                                <lightning-spinner alternative-text="..." size="large" variant="brand" class="slds-m-left_small slds-align_absolute-center">
+                                                                </lightning-spinner>
+                                                            </template>
+                                                        </li>
+                                                    </ul>
+                                                    <template lwc:if={showBack}>
+                                                        <div class="align-right">
+                                                            <button class="formButton fr-btn fr-btn--tertiary-no-outline fr-icon-arrow-go-back-line fr-btn--icon-right fr-mt-2v"
+                                                                    type="button" aria-label="Retour à l'étape précédente" onclick={handleBack}>
+                                                                    Retour à l'étape précédente
+                                                            </button>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    <!--</div>-->
 
     <!-- Debug Info -->
     <template lwc:if={isDebug}>
@@ -238,6 +238,9 @@
             <p class="fr-py-4v">
                 <span class="fr-badge fr-badge--warning  fr-mr-4v">
                     Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--new  fr-mr-4v">
+                    Processing? {isProcessing}
                 </span>
                 <span class="fr-badge fr-badge--info">
                     <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrLogin.md" target="_blank">

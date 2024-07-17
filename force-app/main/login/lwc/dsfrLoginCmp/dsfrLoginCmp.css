@@ -5,3 +5,8 @@
     position: relative;
     top : -.25rem;
 }
+.fr-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}

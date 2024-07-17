@@ -12,6 +12,7 @@ export default class DsfrLostPasswordCmp extends NavigationMixin(LightningElemen
     @api formHeader;
     @api tag; // for GA4 tracking
     @api formDescription;
+    @api formHelp;
     @api sendLabel;
     @api targetPage;
     @api useCaptcha = false;

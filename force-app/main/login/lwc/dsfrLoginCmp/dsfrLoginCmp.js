@@ -30,15 +30,20 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
     message;
     tmpIdentity;
     tmpPassword;
+    isProcessing = false;
 
     //-----------------------------------------------------
     // Custom Labels
     //-----------------------------------------------------
     @api loginHeader;
+    @api loginMessage;
     @api loginLabel;
+    @api loginTitle;
     @api registerHeader;
     @api registerLabel;
+    @api registerTitle;
     @api lostPwdLabel;
+    @api lostPwdTitle;
 
     //-----------------------------------------------------
     // Initialisation
@@ -196,31 +201,33 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
     toggleSpinner = function(isShown) {
         if (this.isDebug) console.log('toggleSpinner: START with',isShown);
 
-        let spinner = this.template.querySelector('lightning-spinner');
-        if (this.isDebug) console.log('toggleSpinner: spinner found',spinner);
+        this.isProcessing = isShown;
+
+        //let spinner = this.template.querySelector('lightning-spinner');
+        //if (this.isDebug) console.log('toggleSpinner: spinner found',spinner);
 
         let buttons = this.template.querySelectorAll('button.formButton');
         if (this.isDebug) console.log('toggleSpinner: buttons found',buttons);
 
-        if (spinner) {
+        //if (spinner) {
             if (isShown) {
                 if (this.isDebug) console.log('toggleSpinner: showing spinner');
-                spinner.classList.remove('slds-hide');
+                //spinner.classList.remove('slds-hide');
                 buttons.forEach(item => {
                     item.disabled = true;
                 });
             }
             else {
                 if (this.isDebug) console.log('toggleSpinner: hiding spinner');
-                spinner.classList.add('slds-hide');
+                //spinner.classList.add('slds-hide');
                 buttons.forEach(item => {
                     item.disabled = false;
                 });
             }
-        }
-        else {
-            if (this.isDebug) console.log('toggleSpinner: no spinner displayed');
-        }
+        //}
+        //else {
+        //    if (this.isDebug) console.log('toggleSpinner: no spinner displayed');
+        //}
         
         if (this.isDebug) console.log('toggleSpinner: END');
     }

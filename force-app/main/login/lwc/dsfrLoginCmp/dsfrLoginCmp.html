@@ -1,5 +1,5 @@
 <template>
-    <div class="fr-pt-md-14v" role="main" id="content">
+    <!-- <div  role="main" id="content">-->
         <div class="fr-container fr-container--fluid fr-mb-md-14v">
             <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
                 <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
@@ -19,7 +19,7 @@
                                             <div class="fr-fieldset__element">
                                                 <fieldset class="fr-fieldset" id="credentials" aria-labelledby="credentials-messages">
                                                     <div class="fr-fieldset__element">
-                                                        <span class="fr-hint-text">Sauf mention contraire, tous les champs sont obligatoires.</span>
+                                                        <span class="fr-hint-text">{loginMessage}</span>
                                                     </div>
                                                     <div class="fr-fieldset__element">
                                                         <div class="fr-input-group">
@@ -50,22 +50,30 @@
                                                             
                                                             <div class="fr-password__checkbox fr-checkbox-group fr-checkbox-group--sm">
                                                                 <input  id="password-show"                      type="checkbox"
-                                                                        aria-label="Afficher le mot de passe"   aria-describedby="password-show-messages"
-                                                                        onchange={togglePassword}>
+                                                                        aria-label="Afficher en clair le mot de passe"   aria-describedby="password-show-messages"
+                                                                        title="Afficher en clair le mot de passe"        onchange={togglePassword}>
                                                                 <label class="fr-password__checkbox fr-label" for="password-show">
-                                                                    Afficher en clair
+                                                                    Afficher
                                                                 </label>
                                                                 <div class="fr-messages-group" id="password-show-messages" aria-live="assertive">
                                                                 </div>
                                                             </div>
                                                             
                                                             <p>
+                                                                <c-dsfr-link-dsp    link-label={lostPwdLabel}
+                                                                                    link-title={lostPwdTitle}
+                                                                                    link-page-ref={lostPwdTarget}
+                                                                                    link-tag={lostPwdTag}
+                                                                                    is-debug={isDebug}>
+                                                                </c-dsfr-link-dsp>
+                                                                <!--
                                                                 <c-dsfr-button-dsp  button-label={lostPwdLabel}
                                                                                     button-variant="tertiary-no-outline"
                                                                                     button-target={lostPwdTarget}
                                                                                     button-tag={lostPwdTag}
                                                                                     is-debug={isDebug}>
                                                                 </c-dsfr-button-dsp>
+                                                                -->
                                                                 <!--
                                                                 <a href="#" class="fr-link" onclick={handleLostPassword}>Mot de passe oublié ?</a>
                                                                 -->
@@ -85,15 +93,17 @@
                                                 </fieldset>
                                             </div>
                                             <div class="fr-fieldset__element">
-                                                <ul class="fr-btns-group">
-                                                    <li>
-                                                        <button class="formButton fr-mt-2v fr-btn" type="submit" onclick={handleLogin}>
+                                                <!--<ul class="fr-btns-group">
+                                                    <li>-->
+                                                        <button class="formButton fr-mt-2v fr-btn" type="submit" title={loginTitle} onclick={handleLogin}>
                                                             {loginLabel}
                                                         </button>
-                                                        <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-hide slds-m-left_small slds-align_absolute-center">
-                                                        </lightning-spinner>
-                                                    </li>
-                                                </ul>
+                                                        <template lwc:if={isProcessing}>
+                                                            <lightning-spinner alternative-text="..." size="large" variant="brand" class="slds-m-left_small slds-align_absolute-center">
+                                                            </lightning-spinner>
+                                                        </template>
+                                                    <!--</li>
+                                                </ul>-->
                                             </div>
                                             <div class="fr-messages-group" id="login-messages" aria-live="assertive">
                                             </div>
@@ -102,28 +112,37 @@
                                 </div>
                                 <hr>
                                 <h2 class="fr-h2">{registerHeader}</h2>
+                                <!--
                                 <ul class="fr-btns-group">
                                     <li>
+                                -->
                                         <c-dsfr-button-dsp  button-label={registerLabel}
+                                                            button-title={registerTitle}
                                                             button-variant="secondary"
+                                                            button-align="spread"
                                                             button-target={registerTarget}
                                                             button-tag={registerTag}
                                                             is-debug={isDebug}>
                                         </c-dsfr-button-dsp>
+                                <!--
                                     </li>
                                 </ul>
+                                -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+   <!--</div>-->
     <template lwc:if={isDebug}>
         <div class="fr-container">
             <p class="fr-py-4v">
                 <span class="fr-badge fr-badge--warning  fr-mr-4v">
                     Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--new  fr-mr-4v">
+                    Processing? {isProcessing}
                 </span>
                 <span class="fr-badge fr-badge--info">
                     <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrLogin.md" target="_blank">

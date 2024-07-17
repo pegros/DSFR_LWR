@@ -11,7 +11,7 @@ export default class DsfrChangePasswordCmp extends LightningElement {
     @api formTitle;
     @api tag; // for GA4 tracking
     @api formDescription;
-    @api formHint = 'Sauf mention contraire, tous les champs sont obligatoires.';
+    @api formHint;
     @api formButton = 'Modifier';
     @api useCaptcha = false;
 

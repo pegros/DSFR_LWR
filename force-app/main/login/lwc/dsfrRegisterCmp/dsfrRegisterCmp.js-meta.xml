@@ -49,6 +49,14 @@
                         label="Mention CNIL"
                         type="String"
                         description="Activation et contenu d'une case d'acceptation de clauses CNIL" />
+            <property   name="mentionLabel"
+                        label="Mention à valider"
+                        type="String"
+                        description="Activation et libellé textuel d'une case d'acceptation de clauses d'usage" />
+            <property   name="mentionDetails"
+                        label="Details de la mention"
+                        type="String"
+                        description="Details (optionnels) au format richtext pour les clauses d'usage." />
 
             <property   name="validationTitle"
                         label="Entête de Validation"
