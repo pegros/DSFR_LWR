@@ -1,17 +1,4 @@
 <template>
-
-    <!-- DATA LOAD UTILITY -->
-    <!-- user-id={currentUserId} -->
-    <c-sfpeg-list-cmp   object-api-name={objectApiName} 
-                        record-id={recordId} 
-                        config-name={configName}
-                        parent-context={listContext}
-                        onload={handleRecordLoad}
-                        is-debug={isDebug}
-                        is-debug-fine={isDebug}
-                        class="listLoader">
-    </c-sfpeg-list-cmp>
-
     <!-- ACTUAL CONTENT DISPLAY -->
     <div class={wrappingCss} lwc:if={isReady}>
 
@@ -19,13 +6,27 @@
         <template lwc:if={isButton}>
             <!-- Empty result button group case -->
             <template lwc:if={hasNoResult}>
-                <p lwc:if={forceDisplay} class="debugInfo">AFFICHAGE SI AUCUN RESULTAT</p>
+                <p lwc:if={forceDisplay} class="slds-text-heading_small slds-p-around_small slds-theme_shade slds-theme_alert-texture">AFFICHAGE SI AUCUN RESULTAT</p>
                 <slot name="emptySection"></slot>
-                <p lwc:if={forceDisplay} class="debugInfo">AFFICHAGE SI RESULTATS</p>
+                <p lwc:if={forceDisplay} class="slds-text-heading_small slds-p-around_small slds-theme_shade slds-theme_alert-texture">AFFICHAGE SI RESULTATS</p>
             </template>
             
             <!-- Actual result button group case -->
             <template lwc:if={hasResults}>
+                <template lwc:if={hasSingleResult}>
+                    <!-- iteration on a single record !-->
+                    <template for:each={recordList} for:item="iter">
+                        <c-dsfr-button-dsp  key={iter.Id}
+                                            button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                            button-label={iter.label}   button-title={iter.title}
+                                            button-tag={iter.tag}
+                                            button-size={iter.size}     button-variant={iter.variant}
+                                            button-target={iter.target} button-inactive={iter.inactive}
+                                            button-align="left"         is-debug={isDebug}>
+                        </c-dsfr-button-dsp>
+                    </template>
+                </template>
+                <template lwc:else>
                 <!-- <ul class="fr-btns-group fr-btns-group_-inline-reverse fr-btns-group_-inline-sm"> -->
                 <ul class={buttonAlignClass}>
                     <template for:each={recordList} for:item="iter">
@@ -40,6 +41,7 @@
                         </li>
                     </template>
                 </ul>
+                </template>
             </template>
         </template>
 
@@ -49,16 +51,42 @@
             <!-- HEADER with Sorting -->
             <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
                 <lightning-layout-item flexibility="auto"  >
-                    <h3 class={headerClass}>{headerTitle}</h3>
+                    <template lwc:if={isH2}>
+                        <h2 class={headerClass} aria-label={headerTitle}>{headerTitle}</h2>
+                    </template>
+                    <template lwc:elseif={isH3}>
+                        <h3 class={headerClass} aria-label={headerTitle}>{headerTitle}</h3>
+                    </template>
+                    <template lwc:else>
+                        <h4 class={headerClass} aria-label={headerTitle}>{headerTitle}</h4>
+                    </template>
                 </lightning-layout-item>
                 <lightning-layout-item flexibility="auto, no-grow" alignment-bump="left">
-                    <nav role="sort" class="fr-nav sortNav">
-                        <template lwc:if={hasSort} >        
+                    <nav role="menu" class="fr-nav sortNav">
+                        <template lwc:if={hasSort} >
+                            <!--
+                            <div class="refreshDiv">
+                                <label for="sort-select">
+                                    List sort option
+                                </label>
+                                <select class="fr-btn fr-btn--tertiary-no-outline fr-select  selectTest" onchange={handleSelect} id="sort-select" name="sort-select">
+                                    <template for:each={configDetails.display.sort} for:item="iterSort">
+                                        <template lwc:if={iterSort.selected}>
+                                            <option key={iterSort.name} value={iterSort.field}  data-name={iterSort.field} aria-current="page" selected onclick={selectSort}>{iterSort.label}</option>
+                                        </template>
+                                        <template lwc:else>
+                                            <option key={iterSort.name} value={iterSort.field}  data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</option>
+                                        </template>
+                                    </template>
+                                </select>
+                            </div>
+                            -->
                             <div class="fr-nav__item sortDiv">
-                                <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
+                                <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" lwc:ref="sortButton"
+                                        title={sortTitle} aria-expanded="false" onclick={toggleSort}>
                                     <span class={currentSort.class}>{currentSort.label}</span>
                                 </button>
-                                <div class="fr-collapse fr-menu sortMenu" data-menu="sort">
+                                <div class="fr-collapse fr-menu sortMenu" data-menu="sort" lwc:ref="sortMenu">
                                     <ul class="fr-menu__list sortList">
                                         <template for:each={configDetails.display.sort} for:item="iterSort">
                                             <li key={iterSort.name} class="sortItem">
@@ -88,91 +116,172 @@
 
             <!-- Empty result list case -->
             <template lwc:if={hasNoResult}>
-                <p lwc:if={forceDisplay} class="debugInfo">AFFICHAGE SI AUCUN RESULTAT</p>
+                <p lwc:if={forceDisplay} class="slds-text-heading_small slds-p-around_small slds-theme_shade slds-theme_alert-texture">AFFICHAGE SI AUCUN RESULTAT</p>
                 <slot name="emptySection"></slot>
-                <p lwc:if={forceDisplay} class="debugInfo">AFFICHAGE SI RESULTATS</p>
+                <p lwc:if={forceDisplay} class="slds-text-heading_small slds-p-around_small slds-theme_shade slds-theme_alert-texture">AFFICHAGE SI RESULTATS</p>
             </template>
 
             <!-- Actual result list case -->
             <template lwc:if={hasResults}>
-                <!-- fr-container__fluid -->
-                <div class="fr-container__fluid">
-                    <!-- fr-grid-row fr-grid-row--gutters fr-grid-row-top -->
-                    <div    class="fr-grid-row fr-grid-row--gutters fr-grid-row-top slds-scrollable_y"
-                            style={resultListStyle} >
-                        <!-- Card List Display -->
-                        <template lwc:if={isCard}>
-                            <template for:each={recordList} for:item="item">
-                                <!-- fr-col-12 -->
-                                <div key={item.Id} class="fr-col-12">
-                                    <c-dsfr-card-cmp    card-image={item.image}                 card-title={item.title}
-                                                        card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
-                                                        card-description={item.description}     card-description-fields={item.iconFields}
-                                                        card-start-details={item.startDetails}  card-start-icon={item.startIcon}
-                                                        card-end-details={item.endDetails}      card-end-icon={item.endIcon}
-                                                        card-tags={item.tags}                   card-badge-list-json={item.badgeList}
-                                                        card-size={item.size}                   is-vertical={item.isVertical}
-                                                        card-css={elementCss}                   field-class={cardFieldClass}
-                                                        icon-class={cardIconClass}              fit-image={fitImage}
-                                                        card-tag={item.tag}                     card-target={item.target}
-                                                        card-buttons={item.buttons}             is-debug={isDebug}>
-                                    </c-dsfr-card-cmp>
-                                </div>
-                            </template>
-                        </template>
-                        <!-- Tile List Display -->
-                        <template lwc:elseif={isTile}>
-                            <template for:each={recordList} for:item="item">
-                                <div key={item.Id} class="fr-col-12">
-                                    <c-dsfr-tile-cmp    tile-image={item.image}         tile-title={item.title}
-                                                        tile-description={item.description}
-                                                        is-vertical={item.isVertical}   tile-css={elementCss}
-                                                        fit-image={fitImage}
-                                                        tile-tag={item.tag}              tile-target={item.target}
-                                                        is-debug={isDebug} >
-                                    </c-dsfr-tile-cmp>
-                                </div>
-                            </template>
-                        </template>
-                        <!-- Container List Display -->
-                        <template lwc:elseif={isContainer}>
-                            <template for:each={recordList} for:item="item">
-                                <div key={item.Id} class="fr-col-12">
-                                    <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
-                                                            message={item.message}  message-class={item.messageClass}
-                                                            wrapping-class={elementCss} 
-                                                            is-debug={isDebug} >
-                                    </c-dsfr-container-dsp>
-                                </div>
-                            </template>
-                        </template>   
-                        <!-- Icon Field List Display -->
-                        <template lwc:elseif={isIconField}>
-                            <ul class={iconFieldWrappingClass}>
-                                <template for:each={recordList} for:item="item">
-                                    <li key={item.icon}  >
-                                        <c-dsfr-icon-field-dsp  value={item.value}          icon-name={item.icon}
-                                                                value-prefix={item.prefix}  value-suffix={item.suffix}
-                                                                wrapping-class={configDetails.display.fieldClass} icon-class={configDetails.display.iconClass}
-                                                                is-debug={isDebug}>
-                                        </c-dsfr-icon-field-dsp>
-                                    </li>
+                <!-- List display -->
+                <div class="fr-container__fluid" >
+                    <template lwc:if={isTable}>
+                        <!-- fr-table fr-table- -bordered fr-table- -layout-fixed -->
+                        <div class={tableClass} style={resultListStyle}>
+                            
+                                <!-- <div class="slds-scrollable_y"> class="slds-table slds-table_header-fixed"-->
+                            <table >
+                                <caption>{tableCaption}</caption>
+                                <thead class="tableHeader">
+                                    <!-- class="slds-line-height-reset" -->
+                                    <tr>
+                                        <template for:each={configDetails.display.columns} for:item="item">
+                                            <th key={item.fieldName} role="columnheader" aria-label={item.label} scope="col">{item.label}</th>
+                                        </template>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={displayList} for:item="iter">
+                                        <c-dsfr-table-row-dsp   key={iter.Id}   class="fr-table-row"
+                                                                fields={configDetails.display.columns}
+                                                                value={iter}    onaction={handleAction}>
+                                        </c-dsfr-table-row-dsp>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <!--</div>-->
+                        </div>
+                    </template>
+                    <template lwc:else>
+                    <!-- fr-grid-row fr-grid-row-gutters fr-grid-row-top -->
+                        <div    class="fr-grid-row fr-grid-row--gutters fr-grid-row-top slds-scrollable_y"
+                                style={resultListStyle} lwc:ref="recordList">
+                            <!-- Card List Display -->
+                            <template lwc:if={isCard}>
+                                <template for:each={displayList} for:item="item">
+                                    <!-- fr-col-12 -->
+                                    <div key={item.Id} class="fr-col-12">
+                                        <c-dsfr-card-cmp    card-image={item.image}
+                                                            card-title={item.title}                 card-title-level={item.titleLevel}
+                                                            card-badge={item.badge}                 card-badge-variant={item.badgeVariant}
+                                                            card-description={item.description}     card-description-fields={item.iconFields}
+                                                            card-start-details={item.startDetails}  card-start-icon={item.startIcon}
+                                                            card-end-details={item.endDetails}      card-end-icon={item.endIcon}
+                                                            card-tags={item.tags}                   card-badge-list-json={item.badgeList}
+                                                            card-size={item.size}                   is-vertical={item.isVertical}
+                                                            card-css={elementCss}                   field-class={cardFieldClass}
+                                                            icon-class={cardIconClass}              fit-image={fitImage}
+                                                            card-tag={item.tag}                     card-target={item.target}
+                                                            card-buttons={item.buttons}             is-debug={isDebug}>
+                                        </c-dsfr-card-cmp>
+                                    </div>
                                 </template>
-                            </ul>
-                        </template>
-                        <!-- Unsupported/undefined Display Type -->
-                        <template lwc:else>
-                            <p class="fr-icon-alert-fill text-default-error">{typeError}: {displayType}</p>
-                        </template>
-                    </div>
+                            </template>
+                            <!-- Tile List Display -->
+                            <template lwc:elseif={isTile}>
+                                <template for:each={displayList} for:item="item">
+                                    <div key={item.Id} class="fr-col-12">
+                                        <c-dsfr-tile-cmp    tile-image={item.image}
+                                                            tile-title={item.title}         tile-title-level={item.titleLevel}
+                                                            tile-description={item.description}
+                                                            is-vertical={item.isVertical}   tile-css={elementCss}
+                                                            fit-image={fitImage}
+                                                            tile-tag={item.tag}              tile-target={item.target}
+                                                            is-debug={isDebug} >
+                                        </c-dsfr-tile-cmp>
+                                    </div>
+                                </template>
+                            </template>
+                            <!-- Container List Display -->
+                            <template lwc:elseif={isContainer}>
+                                <template for:each={displayList} for:item="item">
+                                    <div key={item.Id} class="fr-col-12">
+                                        <c-dsfr-container-dsp   title={item.title}      title-class={item.titleClass}
+                                                                message={item.message}  message-class={item.messageClass}
+                                                                wrapping-class={elementCss} 
+                                                                is-debug={isDebug} >
+                                        </c-dsfr-container-dsp>
+                                    </div>
+                                </template>
+                            </template>   
+                            <!-- Icon Field List Display -->
+                            <template lwc:elseif={isIconField}>
+                                <ul class={iconFieldWrappingClass}>
+                                    <template for:each={displayList} for:item="item">
+                                        <li key={item.icon}  >
+                                            <c-dsfr-icon-field-dsp  value={item.value}          icon-name={item.icon}
+                                                                    value-prefix={item.prefix}  value-suffix={item.suffix}
+                                                                    wrapping-class={configDetails.display.fieldClass} icon-class={configDetails.display.iconClass}
+                                                                    is-debug={isDebug}>
+                                            </c-dsfr-icon-field-dsp>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                            <!-- Unsupported/undefined Display Type -->
+                            <template lwc:else>
+                                <p class="fr-icon-alert-fill text-default-error">{typeError}: {displayType}</p>
+                            </template>
+                        </div>
+                    </template>
                 </div>
+
+                <!-- Pagination -->
+                <template lwc:if={hasPagination}>
+                    <nav role="navigation" class="fr-pagination fr-mt-8v" aria-label="Pagination de la liste">
+                        <ul class="fr-pagination__list paginationList">
+                            <!-- First pages links -->
+                            <template lwc:if={isFirstPage}>
+                                <li><a class="fr-pagination__link fr-pagination__link--first"   title="Première page"   aria-label="Première page"      aria-disabled="true" disabled>Première page</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--prev"    title="Page précédente" aria-label="Page précédente"    aria-disabled="true" disabled>Page précédente</a></li>
+                            </template>
+                            <template lwc:else>
+                                <li><a class="fr-pagination__link fr-pagination__link--first"   href="#" title="Première page"      data-value="1"              aria-label="Première page"      onclick={handlePagination}>Première page</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--prev"    href="#" title="Page précédente"    data-value={previousPage}   aria-label="Page précédente"    onclick={handlePagination}>Page précédente</a></li>
+                            </template>
+
+                            <!-- Before Current page links -->
+                            <template lwc:if={isAfterStartPage}>
+                                <li><a class="fr-pagination__link fr-displayed-lg" aria-disabled="true" disabled>…</a></li>
+                            </template>
+                            <template lwc:if={previousPage}>
+                                <li><a class="fr-pagination__link" href="#" title={previousPageTitle} data-value={previousPage} aria-label={previousPageTitle} onclick={handlePagination}>{previousPage}</a></li>
+                            </template>
+
+                            <!-- Current page link -->
+                            <li><a class="fr-pagination__link"  href="#" title={currentPageTitle} aria-current="page" data-value={currentPage} aria-label={currentPageTitle} onclick={handlePagination}>{currentPage}</a></li>
+                            
+                            <!-- Before Current page links -->
+                            <template lwc:if={nextPage}>
+                                <li><a class="fr-pagination__link" href="#" title={nextPageTitle} data-value={nextPage} aria-label={nextPageTitle} onclick={handlePagination}>{nextPage}</a></li>
+                            </template>
+                            <template lwc:if={isBeforeEndPage}>
+                                <li><a class="fr-pagination__link fr-displayed-lg" aria-disabled="true" disabled>…</a></li>
+                            </template>
+
+                            <!-- Last pages links -->
+                            <template lwc:if={isLastPage}>
+                                <li><a class="fr-pagination__link fr-pagination__link--next" title="Page suivante" aria-label="Page suivante"  aria-disabled="true" disabled>Page suivante</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--last" title="Dernière page" aria-label="Dernière page"  aria-disabled="true" disabled>Dernière page</a></li>
+                            </template>
+                            <template lwc:else>
+                                <li><a class="fr-pagination__link fr-pagination__link--next" href="#" title="Page suivante" aria-label="Page suivante" data-value={nextPage}    onclick={handlePagination}>Page suivante</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--last" href="#" title="Dernière page" aria-label="Dernière page" data-value={maxPage}     onclick={handlePagination}>Dernière page</a></li>
+                            </template>
+                        </ul>
+                    </nav>
+                </template>
             </template>
         </template>
     </div>
 
+    <!-- DEBUG INFO DISPLAY -->
     <template lwc:if={isDebug}>
         <div class={wrappingCss}>
             <p class="fr-py-4v">
+                <span class="fr-badge fr-badge--success  fr-mr-4v">
+                    dsfrCardTileListCmp
+                </span>
                 <span class="fr-badge fr-badge--warning  fr-mr-4v">
                     Mode debug activé!
                 </span>
@@ -187,4 +296,16 @@
         </div>
     </template>
 
+    <!-- DATA LOAD UTILITY -->
+    <!-- user-id={currentUserId} -->
+    <c-sfpeg-list-cmp   lwc:ref="listLoader"
+                        object-api-name={objectApiName} 
+                        record-id={recordId} 
+                        config-name={configName}
+                        parent-context={listContext}
+                        onload={handleRecordLoad}
+                        is-debug={isDebug}
+                        is-debug-fine={isDebug}
+                        force-hidden="true" >
+    </c-sfpeg-list-cmp>
 </template>

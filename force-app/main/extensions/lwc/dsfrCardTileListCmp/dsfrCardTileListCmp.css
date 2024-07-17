@@ -1,11 +1,6 @@
-/* Hide sfpegListCmp data loading utility */
-.listLoader {
-    display:none
-}
-
 /* Header global overrides */
 .listHeader {
-    margin-bottom:  0.5rem;
+    margin-bottom:  1rem;
 }
 .listTitle {
     padding-top:  0.25rem !important;
@@ -134,9 +129,48 @@ ul.horizontalUL {
     line-height: 0.5rem;
 }
 
+.paginationList {
+    justify-content: space-between;
+}
+
+.fr-pagination__link[aria-current] {
+    background-color: var(--background-active-blue-france);
+    color: var(--text-inverted-blue-france);
+}
+
 .debugInfo {
     padding: 1rem;
     color: navy;
     font-style: italic;
     font-weight: bold;
+}
+
+/* DSFR patch for table rows */
+.fr-table tbody .fr-table-row:nth-child(even) {
+    background-color: var(--background-contrast-grey);
+    --idle: transparent;
+    --hover: var(--background-contrast-grey-hover);
+    --active: var(--background-contrast-grey-active);
+}
+
+
+/* DSFR Rework for Sticky table header */
+.tableContainer {
+    position: relative;
+}
+.tableContainer table {
+    display: table;
+    border-collapse: separate;
+}
+.tableContainer.fr-table {
+    padding-top: 0;
+}
+.tableHeader th {
+    background-color: var(--background-contrast-grey);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-color: var(--background-alt-grey);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }

@@ -31,14 +31,15 @@
                 </template>
                 <template lwc:elseif={iter.flowName}>
                     <li key={iter.label}  >
-                        <c-dsfr-flow-popup-cmp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
-                                                button-label={iter.label}   button-title={iter.title}
+                        <c-dsfr-flow-popup-cmp  button-icon={iter.icon}         button-icon-position={iter.iconPosition}
+                                                button-label={iter.label}       button-title={iter.title}
                                                 button-tag={iter.tag}
-                                                button-size={iter.size}     button-variant={iter.variant}
+                                                button-size={iter.size}         button-variant={iter.variant}
                                                 button-inactive={iter.inactive}
-                                                flow-name={iter.flowName}   flow-parameters={iter.flowParameters}
-                                                modal-title={iter.modalTitle} do-refresh={iter.refresh}
-                                                button-align="left"         is-debug={isDebug}>
+                                                flow-name={iter.flowName}       flow-parameters={iter.flowParameters}
+                                                modal-title={iter.modalTitle}   show-title={iter.showTitle}
+                                                do-refresh={iter.refresh}
+                                                button-align="left"             is-debug={isDebug}>
                         </c-dsfr-flow-popup-cmp>
                     </li>
                 </template>
