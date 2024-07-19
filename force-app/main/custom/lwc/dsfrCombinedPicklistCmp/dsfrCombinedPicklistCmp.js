@@ -24,8 +24,6 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
     @api wrappingCss;
     @api separator = ' - ';
-    //@api inactive = false;
-    //@api filterValues = true;
 
     @api isDebug = false;
 
@@ -46,7 +44,6 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
     selectLabel = SELECT_LABEL;
     addLabel = ADD_LABEL;
     deleteTitle = DELETE_TITLE;
-    //addMessage = ADD_MESSAGE;
 
     //-----------------------------------------------------
     // Context Data
@@ -221,39 +218,10 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
             console.warn('handleSelect: END KO for Combined Picklist'); 
         }
     }
-        
-        /*let selectValues = this.template.querySelectorAll('.fr-select');
-         
-        let isReady = true;
-        selectValues.forEach(item => {
-            if (item.value) {
-                if (this.isDebug) console.log('handleSelect: selector OK ',item.label);    
-            }
-            else {
-                if (this.isDebug) console.log('handleSelect: selector KO ',item.label);    
-                isReady = false;
-            }
-        });
-
-        if (isReady) {
-            if (this.isDebug) console.log('handleSelect: isAddActive ', this.isAddActive);
-            if (this.isDebug) console.log('handleSelect: activating add button');  
-            //let addButton = this.template.querySelector('.addButton');
-            let addButton = this.refs.addButton;
-            addButton.disabled = false;
-            this.isAddActive = true;
-        }
-        else {
-            if (this.isDebug) console.log('handleSelect: add button remains disabled');  
-        }
-
-        if (this.isDebug) console.log('handleSelect: END for Combined Picklist');    
-    }*/
 
     handleAdd(event) {
         if (this.isDebug) console.log('handleAdd: START for Combined Picklist',event);    
 
-        //let selectValues = this.template.querySelectorAll('.fr-select');
         let selectValues = this.template.querySelectorAll('lightning-select');
         if (this.isDebug) console.log('handleAdd: select elements found',selectValues);  
         
@@ -273,17 +241,9 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                 if (this.isDebug) console.log('handleAdd: itemValues fetched ', JSON.stringify(itemValues));  
                 let itemValue = itemValues.values.find(iterValue => iterValue.value === item.value)
                 if (this.isDebug) console.log('handleAdd: itemValue found ',JSON.stringify(itemValue));  
-                //if (this.isDebug) console.log('handleAdd: and label ',item.options[item.selectedIndex].innerHTML);  
-                //newValue.details.push({label: item.options[item.selectedIndex].innerHTML, value: item.value});
                 newValue.details.push({label: itemValue.label, value: item.value});
                 valueList.push(item.value);
-                //labelList.push(item.options[item.selectedIndex].innerHTML);
                 labelList.push(itemValue.label);
-
-                /*for(var i = 0; i < (item.options).length; i++) {
-                    if (this.isDebug) console.log('handleAdd: resetting option ', (item.options)[i].innerHTML);  
-                    (item.options)[i].selected = (i == 0);
-                }*/
                 item.setCustomValidity('');
             }
             else {
@@ -308,13 +268,6 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
         this.recordValues.push(newValue);
         if (this.isDebug) console.log('handleAdd: recordValues updated ', JSON.stringify(this.recordValues));  
         if (this.isDebug) console.log('handleAdd: recordValues updated ', JSON.stringify(this.recordValues.slice()));  
-
-        /*if (this.isDebug) console.log('handleAdd: isAddActive ', this.isAddActive);
-        if (this.isDebug) console.log('handleAdd: disabling add button');  
-        //let addButton = this.template.querySelector('.addButton');
-        let addButton = this.refs.addButton;
-        addButton.disabled = true;
-        this.isAddActive = false;*/
 
         this.updateRecord('add_value');
             
@@ -366,7 +319,6 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
                     item.disabled = false;
                 }
             });
-            //this.fieldValues[0] = [...this.fieldValues[0]];
             this.fieldValues.forEach(item => {
                 item.selection = '';
             });
