@@ -192,4 +192,14 @@
         <shortDescription>Libellé du bouton de fermeture de la modale d'alerte</shortDescription>
         <value>Fermer</value>
     </labels>
+    <labels>
+        <fullName>dsfrCardNavigatePrefix</fullName>
+        <categories>DSFR Component LWC Label</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Prefixe du label ARIA du lien de navigation d'une carte</shortDescription>
+        <value>Ouvrir la page de l'enregistrement</value>
+    </labels>
+
+    
 </CustomLabels>

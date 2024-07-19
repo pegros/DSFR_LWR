@@ -2,6 +2,8 @@ import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import basePathName from '@salesforce/community/basePath';
 
+import NAV_PREVIX   from '@salesforce/label/c.dsfrCardNavigatePrefix';
+
 /*var CARD_SIZE = {};*/
 export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
 
@@ -85,6 +87,9 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('cardTitleStr: type ',(typeof this.cardTitle));
         if (this.isDebug) console.log('cardTitleStr: returning ',(typeof this.cardTitle == 'number' ? '' + this.cardTitle : this.cardTitle));
         return (typeof this.cardTitle == 'number' ? '' + this.cardTitle : this.cardTitle);
+    }
+    get cardTitleAriaLabel() {
+        return NAV_PREVIX + ' ' + this.cardTitle;
     }
     get imageSrc() {
         return (this.cardImage?.includes('delivery/media') ? this.cardImage : '/file-asset/' + this.cardImage);

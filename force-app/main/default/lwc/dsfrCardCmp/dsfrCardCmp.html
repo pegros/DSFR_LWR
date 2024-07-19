@@ -27,7 +27,7 @@
                 <template lwc:if={isH3}>
                     <h3 class="fr-card__title">
                         <template lwc:if={cardTarget}>
-                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                            <a href="#" aria-label={cardTitleAriaLabel} onclick={openTarget} >{cardTitle}</a>
                         </template>
                         <template lwc:else>
                             {cardTitle}
@@ -37,7 +37,7 @@
                 <template lwc:elseif={isH2}>
                     <h2 class="fr-card__title">
                         <template lwc:if={cardTarget}>
-                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                            <a href="#" aria-label={cardTitleAriaLabel} onclick={openTarget} >{cardTitle}</a>
                         </template>
                         <template lwc:else>
                             {cardTitle}
@@ -47,7 +47,7 @@
                 <template lwc:elseif={isH4}>
                     <h4 class="fr-card__title">
                         <template lwc:if={cardTarget}>
-                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                            <a href="#" aria-label={cardTitleAriaLabel} onclick={openTarget} >{cardTitle}</a>
                         </template>
                         <template lwc:else>
                             {cardTitle}
@@ -57,7 +57,7 @@
                 <template lwc:else>
                     <h5 class="fr-card__title">
                         <template lwc:if={cardTarget}>
-                            <a href="#" onclick={openTarget} >{cardTitle}</a>
+                            <a href="#" aria-label={cardTitleAriaLabel} onclick={openTarget} >{cardTitle}</a>
                         </template>
                         <template lwc:else>
                             {cardTitle}
