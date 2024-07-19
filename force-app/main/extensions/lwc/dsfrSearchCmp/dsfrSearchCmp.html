@@ -52,34 +52,6 @@
                                                         </template>
                                                     </template>
                                                 </fieldset>
-                                                <!--
-                                                <ul class="fr-menu__list">
-                                                    <template for:each={iterC.values} for:item="iterVal">
-                                                        <template lwc:if={iterVal.hidden}>
-                                                        </template>
-                                                        <template lwc:else>
-                                                        <li key={iterVal.fullName}>
-                                                            <template lwc:if={iterVal.selected}>
-                                                                <a  class="fr-nav__link menuSelector"   href="#"                        
-                                                                    data-name={iterVal.fullName}
-                                                                    data-value={iterVal.value}          data-criteria={iterC.name}
-                                                                    aria-current="selection"            onclick={toggleMenuSelect}>
-                                                                    {iterVal.label}
-                                                                </a>
-                                                            </template>
-                                                            <template lwc:else>
-                                                                <a  class="fr-nav__link menuSelector"   href="#"
-                                                                    data-name={iterVal.fullName}
-                                                                    data-value={iterVal.value}          data-criteria={iterC.name}
-                                                                    onclick={toggleMenuSelect}>
-                                                                    {iterVal.label}
-                                                                </a>
-                                                            </template>
-                                                        </li>
-                                                        </template>
-                                                    </template>
-                                                </ul>
-                                                -->
                                             </div>    
                                         </div>
                                     </lightning-layout-item>
@@ -107,7 +79,6 @@
                             <lightning-layout  multiple-rows="true" vertical-align="top" class="mainSearchLayout">
                                 <lightning-layout-item size="3">
                                     <p class="fr-icon-filter-line fr-icon--sm text-title-blue-france fr-px-2v fr-pt-1v mainSelectionTitle">
-                                        <!--&nbsp;{mainCriteriaSelected.length} critère(s) positionné(s)-->
                                         &nbsp;{currentMainSelectionHeader}
                                     </p>
                                 </lightning-layout-item>
@@ -115,7 +86,6 @@
                                     <ul class="fr-tags-group fr-px-2v" aria-label="Valeurs sélectionnées">
                                         <template for:each={mainCriteriaSelected} for:item="iterS" >
                                             <li key={iterS.fullName} class="mainSelectSummary">
-                                                <!-- aria-pressed="true" -->
                                                 <button class="fr-tag fr-tag--sm fr-tag--dismiss tagSelection"
                                                         data-name={iterS.fullName}
                                                         data-criteria={iterS.name}
@@ -147,7 +117,6 @@
                                 aria-label={currentSelectionHeader} aria-expanded="false"
                                 value="selectSummary"               onclick={expandCollapse}>
                                 {currentSelectionHeader}
-                                <!--{criteriaSelected.length} critère(s) positionné(s)-->
                         </button>
                     </h3>
                     <div class="fr-collapse" data-name="selectSummary" aria-label="Liste des valeurs sélectionnées" >
@@ -186,7 +155,6 @@
                             <ul class="fr-tags-group" aria-label={iterC.arialLabel}>
                                 <template for:each={iterC.values} for:item="iterVal">
                                     <template lwc:if={iterVal.hidden}>
-                                        <!--<li key={iterVal.fullName} class="fr-tag fr-tag--sm">{iterVal.label} {iterVal.selected}</li>-->
                                     </template>
                                     <template lwc:else>
                                         <li key={iterVal.fullName} class="selectionItem">

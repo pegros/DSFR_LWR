@@ -70,6 +70,11 @@
                         type="String"
                         default="Appliquer les nouvelles valeurs de filtre"
                         description="Titre explicatif sur le bouton de validation des filtres complémentaires affiché au survol" />
+            <property   name="tagThreshold"
+                        label="Bascule tags / liste de sélection"
+                        type="Integer"
+                        default="11"
+                        description="Nombre de valeurs de picklist à partir duquel on bascule d'un affichage en tags à une liste de sélection." />
 
             <property   name="wrappingClass"
                         label="CSS additionnelle"

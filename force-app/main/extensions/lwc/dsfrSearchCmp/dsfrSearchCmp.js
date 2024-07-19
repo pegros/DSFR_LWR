@@ -22,6 +22,7 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     @api filterSectionTitle;    // filter section title
     @api filterButtonLabel;     // filter button label
     @api filterButtonTitle;     // filter button title
+    @api tagThreshold = 11;   // limit on the #picklist values to toggle from tag to select widget
 
     @api wrappingClass;         // Classes pour modifier le style du conteneur du composant 
     @api headerClass;           // Classes pour modifier le style du titre des critères complémentaires.
@@ -145,9 +146,10 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
                 this.criteriaList = [];
             }
             else {
-
+                if (this.isDebug) console.log('handlePicklists: setting display type with current threshold ', this.tagThreshold);
                 criteriaList.forEach(item => {
-                    if (item.values.length < 11) {
+                    //if (item.values.length < 11) {
+                    if (item.values.length < this.tagThreshold) {
                         item.isTag = true;
                     }
                 });
@@ -173,45 +175,6 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         }   
         if (this.isDebug) console.log('handlePicklists: END'); 
     }
-    /*
-    @wire(getPicklistValues, { fieldList: '$fieldList' })
-    wiredPicklists({ error, data }) {
-        if (this.isDebug) console.log('wiredPicklists: START for search criteria ');
-        if (data) {
-            if (this.isDebug) console.log('wiredPicklists: Picklist descriptions fetched ', JSON.stringify(data));
-            let criteriaList = JSON.parse(JSON.stringify(data));
-
-            criteriaList.forEach(item => {
-                if (item.values.length < 11) {
-                    item.isTag = true;
-                }
-            });
-            if (this.isDebug) console.log('wiredPicklists: Picklist tags init ', JSON.stringify(criteriaList));
-
-            if (this.currentState) {
-                if (this.isDebug) console.log('wiredPicklists: setting initial states');
-                let criteriaSelected = [];
-                this.criteriaList = this.initCriteria(criteriaList,this.currentState,criteriaSelected);
-                if (criteriaSelected.length > 0) {
-                    this.criteriaSelected = criteriaSelected;
-                    if (this.isDebug) console.log('wiredPicklists: initial selection set', JSON.stringify(this.criteriaSelected));
-                }
-                else {
-                    if (this.isDebug) console.log('wiredPicklists: no initial selection');
-                }
-            }
-            else {
-                if (this.isDebug) console.log('wiredPicklists: no current state to set');
-                this.criteriaList = criteriaList;
-            }
-        }
-        else if (error) {
-            console.warn('wiredPicklists: Picklist fetch failed ', JSON.stringify(error));
-            this.criteriaList = [];
-        }
-        if (this.isDebug) console.log('wiredPicklists: END for search criteria');
-    }
-    */
 
     @wire(CurrentPageReference) 
     wiredPageRef(data) {
