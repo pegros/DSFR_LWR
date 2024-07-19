@@ -41,6 +41,9 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     get alignClass() {
         return 'align-' + this.buttonAlign;
     }
+    get buttonAriaLabel() {
+        return this.buttonTitle || this.buttonLabel;
+    }
 
     //-----------------------------------------------------
     // Initialisation
