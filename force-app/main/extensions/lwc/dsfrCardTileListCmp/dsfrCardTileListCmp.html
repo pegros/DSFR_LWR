@@ -83,7 +83,7 @@
                             -->
                             <div class="fr-nav__item sortDiv">
                                 <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" lwc:ref="sortButton"
-                                        title={sortTitle} aria-expanded="false" onclick={toggleSort}>
+                                        title={sortTitle} aria-label={currentSort.label} aria-expanded="false" onclick={toggleSort}>
                                     <span class={currentSort.class}>{currentSort.label}</span>
                                 </button>
                                 <div class="fr-collapse fr-menu sortMenu" data-menu="sort" lwc:ref="sortMenu">
@@ -91,10 +91,18 @@
                                         <template for:each={configDetails.display.sort} for:item="iterSort">
                                             <li key={iterSort.name} class="sortItem">
                                                 <template lwc:if={iterSort.selected}>
-                                                    <a class="fr-nav__link sortLink" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                    <a  class="fr-nav__link sortLink"   href="#"
+                                                        aria-label={iterSort.ariaLabel} aria-current="page" 
+                                                        data-name={iterSort.field}      onclick={selectSort}>
+                                                        {iterSort.label}
+                                                    </a>
                                                 </template>
                                                 <template lwc:else>
-                                                    <a class="fr-nav__link sortLink" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                    <a  class="fr-nav__link sortLink"   href="#"
+                                                        aria-label={iterSort.ariaLabel}
+                                                        data-name={iterSort.field}      onclick={selectSort}>
+                                                        {iterSort.label}
+                                                    </a>
                                                 </template>
                                             </li>
                                         </template>

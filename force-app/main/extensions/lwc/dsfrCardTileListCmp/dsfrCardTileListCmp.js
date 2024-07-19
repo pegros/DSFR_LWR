@@ -186,10 +186,17 @@ export default class DsfrCardTileListCmp extends LightningElement {
         if (this.isDebug) console.log('currentSort: currentSort found ',JSON.stringify(currentSort));
         if (currentSort) {
             if (this.isDebug) console.log('currentSort: END / returning current ');
-            return {label: SORT_PREFIX + ' ' + currentSort.label, class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line')};
+            return {
+                label: SORT_PREFIX + ' ' + currentSort.label,
+                class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line'),
+                ariaLabel: this.sortTitle + '. Actuellement ' + SORT_PREFIX + ' ' + currentSort.label + (currentSort.up ? ' croissant': ' décroissant')
+            };
         }
         if (this.isDebug) console.log('currentSort: END / returning default ');
-        return {label: SORT_DEFAULT};
+        return {
+            label: SORT_DEFAULT,
+            ariaLabel: this.sortTitle + '. Actuellement ' + SORT_DEFAULT
+        };
     }
     get cardFieldClass() {
         return this.configDetails?.display?.fieldClass || '';
@@ -258,8 +265,8 @@ export default class DsfrCardTileListCmp extends LightningElement {
         return 'Page ' + this.currentPage;
     }
     get nextPage() {
-        console.log('nextPage: currentPage ',this.currentPage);
-        console.log('nextPage: return ',(this.currentPage < this.maxPage ? this.currentPage + 1 : null));
+        //console.log('nextPage: currentPage ',this.currentPage);
+        //console.log('nextPage: return ',(this.currentPage < this.maxPage ? this.currentPage + 1 : null));
         return (this.currentPage < this.maxPage ? this.currentPage + 1 : null);
     }
     get nextPageTitle() {
@@ -758,6 +765,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
             this.configDetails.display.sort.forEach(item => {
                 item.selected = false;
                 item.up = true;
+                item.ariaLabel = SORT_PREFIX + ' ' + item.label;
             });
         }
         else if (this.configDetails?.display?.columns) {
