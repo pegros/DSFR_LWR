@@ -344,76 +344,6 @@ export default class DsfrCardTileListCmp extends LightningElement {
         if (!this.configDetails) {
             if (this.isDebug) console.log('handleRecordLoad: initializing configDetails');
             this.initConfigDetails();
-
-            /*
-            //let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
-            let listCmp = this.refs.listLoader;
-            if (this.isDebug) console.log('handleRecordLoad: fetching listCmp ',listCmp);
-            this.configDetails =  listCmp.configuration;
-
-            if (this.configDetails?.display?.target) {
-                this.configDetails.display.targetJson = (typeof this.configDetails.display.target == 'object' ? JSON.stringify(this.configDetails.display.target) : this.configDetails.display.target);
-                if (this.isDebug) console.log('handleRecordLoad: extracting tokens from target ', this.configDetails.display.targetJson);
-                this.targetTokens = this.extractTokens(this.configDetails.display.targetJson);
-                if (this.isDebug) console.log('handleRecordLoad: all target tokens extracted');
-            }
-            if (this.configDetails?.display?.buttons) {
-                this.configDetails.display.buttonsJson = (typeof this.configDetails.display.buttons == 'object' ? JSON.stringify(this.configDetails.display.buttons) : this.configDetails.display.buttons);
-                if (this.isDebug) console.log('handleRecordLoad: extracting tokens from buttons ', this.configDetails.display.buttonsJson);
-                this.buttonsTokens = this.extractTokens(this.configDetails.display.buttonsJson);
-                if (this.isDebug) console.log('handleRecordLoad: all buttons tokens extracted');
-            }
-            if (this.configDetails?.display?.sort) {
-                if (this.isDebug) console.log('handleRecordLoad: initializing sort from sort property');
-                this.configDetails.display.sort.forEach(item => {
-                    item.selected = false;
-                    item.up = true;
-                });
-            }
-            else if (this.configDetails?.display?.columns) {
-                if (this.isDebug) console.log('handleRecordLoad: initializing sort from columns property');
-                this.configDetails.display.sort = [];
-                this.configDetails.display.columns.forEach(item => {
-                    if (item.sortable) {
-                        this.configDetails.display.sort.push({
-                            label: item.label,
-                            field: item.fieldName,
-                            selected: false,
-                            up: true
-                        });
-                    }
-                });
-                if (this.configDetails.display.details) {
-                    if (this.isDebug) console.log('handleRecordLoad: complementing sort from details property');
-                    this.configDetails.display.details.forEach(item => {
-                        if (item.sortable) {
-                            this.configDetails.display.sort.push({
-                                label: item.label,
-                                field: item.fieldName,
-                                selected: false,
-                                up: true
-                            });
-                        }
-                    });
-                }
-                if (this.configDetails.display.title?.sortable) {
-                    if (this.configDetails.display.sort.some(item => item.field === this.configDetails.display.title.fieldName)) {
-                        if (this.isDebug) console.log('handleRecordLoad: title property already included');
-                    }
-                    else {
-                        if (this.isDebug) console.log('handleRecordLoad: complementing sort from title property');
-                        this.configDetails.display.sort.push({
-                            label: this.configDetails.display.title.label,
-                            field: this.configDetails.display.title.fieldName,
-                            selected: false,
-                            up: true
-                        });
-                    }
-                }
-            }
-
-            if (this.isDebug) console.log('handleRecordLoad: configDetails init ',JSON.stringify(this.configDetails));
-            */
         }
 
         let baseRecordList = event.detail;
@@ -768,34 +698,37 @@ export default class DsfrCardTileListCmp extends LightningElement {
                 item.ariaLabel = SORT_PREFIX + ' ' + item.label;
             });
         }
-        else if (this.configDetails?.display?.columns) {
-            if (this.isDebug) console.log('initConfigDetails: initializing sort from columns property');
-            this.configDetails.display.sort = [];
-            this.configDetails.display.columns.forEach(item => {
-                if (item.sortable) {
-                    this.configDetails.display.sort.push({label: item.label,field: item.fieldName,selected: false,up: true});
-                }
-            });
-            if (this.configDetails.display.details) {
-                if (this.isDebug) console.log('initConfigDetails: complementing sort from details property');
-                this.configDetails.display.details.forEach(item => {
+        else if (this.configDetails?.display?.type === 'Table') {
+            if (this.isDebug) console.log('initConfigDetails: initializing from table properties');
+            if (this.configDetails?.display?.(this.configDetails?.display?.columns)) {
+                if (this.isDebug) console.log('initConfigDetails: initializing sort from columns property');
+                this.configDetails.display.sort = [];
+                this.configDetails.display.columns.forEach(item => {
                     if (item.sortable) {
                         this.configDetails.display.sort.push({label: item.label,field: item.fieldName,selected: false,up: true});
                     }
                 });
-            }
-            if (this.configDetails.display.title?.sortable) {
-                if (this.configDetails.display.sort.some(item => item.field === this.configDetails.display.title.fieldName)) {
-                    if (this.isDebug) console.log('initConfigDetails: title property already included');
-                }
-                else {
-                    if (this.isDebug) console.log('initConfigDetails: complementing sort from title property');
-                    this.configDetails.display.sort.push({
-                        label: this.configDetails.display.title.label,
-                        field: this.configDetails.display.title.fieldName,
-                        selected: false,
-                        up: true
+                if (this.configDetails.display.details) {
+                    if (this.isDebug) console.log('initConfigDetails: complementing sort from details property');
+                    this.configDetails.display.details.forEach(item => {
+                        if (item.sortable) {
+                            this.configDetails.display.sort.push({label: item.label,field: item.fieldName,selected: false,up: true});
+                        }
                     });
+                }
+                if (this.configDetails.display.title?.sortable) {
+                    if (this.configDetails.display.sort.some(item => item.field === this.configDetails.display.title.fieldName)) {
+                        if (this.isDebug) console.log('initConfigDetails: title property already included');
+                    }
+                    else {
+                        if (this.isDebug) console.log('initConfigDetails: complementing sort from title property');
+                        this.configDetails.display.sort.push({
+                            label: this.configDetails.display.title.label,
+                            field: this.configDetails.display.title.fieldName,
+                            selected: false,
+                            up: true
+                        });
+                    }
                 }
             }
         }
