@@ -23,48 +23,6 @@ style standard Salesforce components (if used).
 <!-- Salesforce Styling Overrides (with DSFR values)-->
 <link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfrSlds?{ versionKey }" />
 
-<style>
-:root {
-    /** set the font for all root/body text **/
-    --dxp-g-root-font-family: 'Marianne', arial, sans-serif;
-    --dxp-s-body-font-family: 'Marianne', arial, sans-serif;
-    --dxp-s-body-small-font-family: 'Marianne', arial, sans-serif;
-
-    /** set the font for headings **/
-    --dxp-g-heading-font-family: 'Marianne', arial, serif;
-    --dxp-s-text-heading-medium-font-family: 'Marianne', arial, sans-serif;
-
-    /** set the font for headings **/
-    --dxp-s-form-element-label-font-size : 1rem;
-    --dxp-s-body-small-font-size : 0.75rem;
-       
-    /* Error color overrides */
-    --slds-g-color-error-base-40 : var(--text-default-error);
-    --lwc-colorTextError : var(--text-default-error);
-       
-    /* Select colors overrides */
-    --sds-c-select-color-background : var(--background-contrast-grey, rgb(238,238,238));
-    --sds-c-select-color-background-focus : var(--background-contrast-grey, rgb(238,238,238));
-
-    /* Checkbox colors overrides */
-    --sds-c-checkbox-color-background : white;
-    --sds-c-checkbox-color-background-checked : rgb(0,0,145);
-    --slds-c-checkbox-shadow: rgb(22,22,22) 0px 0px 0px 1px inset;
-    --sds-c-checkbox-radius-border: .25rem;
-       
-    /* Form color overrides */
-    --textarea-color-background : var(--background-contrast-grey);
-    --input-color-background : var(--background-contrast-grey):
-    --input-color-background-focus: var(--background-contrast-grey);
-    --slds-c-input-color-background: var(--background-contrast-grey);
-
-    /* Error color overrides */
-    --slds-c-radio-shadow : inset 0 0 0 1px var(--border-action-high-grey), inset 0 0 0 18px var(--background-default-grey);
-       
-    /* ul styling reset */
-    --ul-type: disc !important;
-    --dxp-c-link-text-color : var(--text-action-high-blue-france) !important;
-}
 </style>
 ```
 
