@@ -442,6 +442,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
                             if ((itemValue !== undefined) && (itemValue !== null))  {
                                 mergedTarget = mergedTarget.replace(tokenRegex,itemValue);
                             }
+                            else {
+                                console.warn('handleRecordLoad: No value found for item field in target ',itemToken.field);
+                            }
                         });
                         if (this.isDebug) console.log('handleRecordLoad: target merged ',JSON.stringify(mergedTarget));
                         newItem.target = mergedTarget;
@@ -700,7 +703,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
         }
         else if (this.configDetails?.display?.type === 'Table') {
             if (this.isDebug) console.log('initConfigDetails: initializing from table properties');
-            if (this.configDetails?.display?.(this.configDetails?.display?.columns)) {
+            if (this.configDetails?.display?.columns) {
                 if (this.isDebug) console.log('initConfigDetails: initializing sort from columns property');
                 this.configDetails.display.sort = [];
                 this.configDetails.display.columns.forEach(item => {
