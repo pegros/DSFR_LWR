@@ -71,10 +71,65 @@ html {
 }
 
 /* Debug/technical display of PEG_LWR components */
-
 .slds-theme_shade,  .slds-theme_shade .slds-text-heading--small, .slds-theme_shade p, .slds-theme_shade h1, .slds-theme_shade h2, .slds-theme_shade h3, .slds-theme_shade h4 {
     color: var(--text-default-grey);
 }
+
+/* Display enhacement of richtext content */
+h6 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    margin: var(--title-spacing);
+} 
+h5 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin: var(--title-spacing);
+}  
+h4 {
+    font-weight: 700;
+    font-size: 1.375rem;
+    line-height: 1.75rem;
+    margin: var(--title-spacing);
+}  
+h3 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin: var(--title-spacing);
+}
+h2 {
+    font-weight: 700;
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+    margin: var(--title-spacing);
+}
+h1 {
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 2.5rem;
+    margin: var(--title-spacing);
+}
+p {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: var(--text-spacing);
+}
+p[class*="ql-indent-"]:has(+ p[class*="ql-indent-"]) {
+    margin-bottom: var(--li-bottom);
+}
+p:has(+ ul){
+    margin : var(--li-bottom);
+}
+p:has(+ h1, + h2, + h3, + h4, + h5) {
+    margin: var(--title-spacing);
+}
+h2.slds-text-heading_small {
+    margin-bottom : 0;
+}
+
 
 /****************************/
 /* GLOBAL State Overrides   */
@@ -354,7 +409,8 @@ a:focus, a.fr-link:focus, a.fr-link:active, a:active {
     display: inline-block;
     flex: 0 0 auto;
     height: var(--icon-size);
-    margin-right: .25rem;
+    /*margin-right: .25rem;*/
+    margin-right: .5rem;
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     vertical-align: calc((.75em - var(--icon-size))*.5);
@@ -886,6 +942,9 @@ li.dxp-tab[data-active=false]:active  {
     background-color: var(--background-action-low-blue-france-active) !important;
     border-bottom-style: none !important;
 }    
+p.dxp-active-tab-text-style, p.dxp-tab-text-style {
+    margin-bottom: 0;
+}
 .dxp-text-body.dxp-active-tab-text-style {
     color: var(--text-active-blue-france);
 }
