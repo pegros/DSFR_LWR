@@ -154,9 +154,12 @@ export default class DsfrRegisterCmp extends LightningElement {
         if (this.isDebug) console.log('rendered: accountDesc ', JSON.stringify(this.accountDesc));
         if (this.isDebug) console.log('rendered: accountPicklistDesc ', JSON.stringify(this.accountPicklistDesc));
 
-        /*if (this.showCaptcha) {
-            if (this.isDebug) console.log('rendered: triggering showCaptcha');
-            this.triggerCaptcha();
+        // Does not work
+        /*let emailInput = this.template.querySelector('lightning-input-field[data-name="PersonEmail"]');
+        if (this.isDebug) console.log('rendered: emailInput fetched',emailInput);
+        if (emailInput) {
+            emailInput.onchange = this.validateEmailConfirm;
+            if (this.isDebug) console.log('rendered: validation registered on emailInput ',emailInput);
         }*/
 
         if (this.isDebug) console.log('rendered: END for Register');
@@ -185,154 +188,56 @@ export default class DsfrRegisterCmp extends LightningElement {
         if (this.isDebug) console.log('handleLoad: END for Register');
     }
 
-    handleSubmitClick(event) {
-        if (this.isDebug) console.log('handleSubmitClick: START for Register',event);
-        let hasError = false;
+    validateEmailConfirm(event) {
+        if (this.isDebug) console.log('validateEmailConfirm: START',event);
 
-        // Password control
-        if (this.isDebug) console.log('handleSubmitClick: pwdInput fetched',this.refs.pwdInput);
-        if (this.isDebug) console.log('handleSubmitClick: pwdInput value',this.refs.pwdInput?.value);
-        if (this.isDebug) console.log('handleSubmitClick: pwdInput validity',this.refs.pwdInput?.validity);
-        if (this.isDebug) console.log('handleSubmitClick: pwdConfirm fetched',this.refs.pwdConfirm);
-        if (this.isDebug) console.log('handleSubmitClick: pwdConfirm value',this.refs.pwdConfirm?.value);
-        if (this.isDebug) console.log('handleSubmitClick: pwdConfirm validity',this.refs.pwdConfirm?.validity);
-        if (!this.refs.pwdInput.validity.valid) {
-            console.warn('handleSubmitClick: invalid main password input');
-            this.refs.pwdInput.reportValidity();
-            hasError = true;
-        }
-        else if (!this.refs.pwdConfirm.validity.valid) {
-            console.warn('handleSubmitClick: invalid password confirm input');
-            this.refs.pwdConfirm.reportValidity();
-            hasError = true;
-        }
-        else if (this.refs.pwdInput?.value !==  this.refs.pwdConfirm?.value) {
-            console.warn('handleSubmitClick: password inputs should match, i.e. ',this.refs.pwdInput?.value);
-            console.warn('handleSubmitClick: vs ',this.refs.pwdConfirm?.value);
-            this.refs.pwdInput.setCustomValidity(PWD_MISMATCH);
-            this.refs.pwdInput.reportValidity();
-            this.refs.pwdConfirm.setCustomValidity(PWD_MISMATCH);
-            this.refs.pwdConfirm.reportValidity();
-            hasError = true;
-            if (this.isDebug) console.log('handleSubmitClick: password mismatch error set');
-        }
-        if (this.isDebug) console.log('handleSubmitClick: password inputs checked');
-
-        // Email control
         let emailInput = this.template.querySelector('lightning-input-field[data-name="PersonEmail"]');
-        if (this.isDebug) console.log('handleSubmitClick: emailInput fetched',emailInput);
-        if (this.isDebug) console.log('handleSubmitClick: emailInput value',emailInput?.value);
-        if (this.isDebug) console.log('handleSubmitClick: emailInput validity',emailInput?.validity);
-        if (this.isDebug) console.log('handleSubmitClick: emailConfirm fetched',this.refs.emailConfirm);
-        if (this.isDebug) console.log('handleSubmitClick: emailConfirm value',this.refs.emailConfirm?.value);
-        if (this.isDebug) console.log('handleSubmitClick: emailConfirm validity',this.refs.emailConfirm?.validity);
-        if (!emailInput.validity?.valid) {
-            console.warn('handleSubmitClick: invalid main email input');
-            emailInput.reportValidity();
-            hasError = true;
-        }
-        else if (!this.refs.emailConfirm.validity?.valid) {
-            console.warn('handleSubmitClick: invalid email confirm input');
-            this.refs.pwdConfirm.reportValidity();
-            hasError = true;
-        }
-        else if ((emailInput?.value) && (this.refs.emailConfirm?.value !== emailInput?.value)) {
-            console.warn('handleSubmitClick: email inputs should match, i.e.', this.refs.emailConfirm?.value);
-            console.warn('handleSubmitClick: vs ', emailInput.value);
+        if (this.isDebug) console.log('validateEmailConfirm: emailInput fetched',emailInput);
+
+        if ((this.refs.emailConfirm?.value) && (this.refs.emailConfirm?.value !== emailInput?.value)) {
+            console.warn('validateEmailConfirm: email inputs should match, i.e.', this.refs.emailConfirm?.value);
+            console.warn('validateEmailConfirm: vs ', emailInput.value);
             this.refs.emailConfirm.setCustomValidity(EMAIL_MISMATCH);
-            this.refs.emailConfirm.reportValidity();
-            hasError = true;
-            if (this.isDebug) console.log('handleSubmitClick: email mismatch error set');
         }
-        if (this.isDebug) console.log('handleSubmitClick: email inputs checked');
-
-        // mention Confirm control
-        if (this.isDebug) console.log('handleSubmitClick: mentionConfirm checked?',this.refs.mentionConfirm?.checked);
-        if (this.isDebug) console.log('handleSubmitClick: mentionConfirm validity',this.refs.mentionConfirm?.validity);
-        if (!this.refs.mentionConfirm.validity.valid) {
-            console.warn('handleSubmitClick: invalid mention Confirm input');
-            this.refs.mentionConfirm.reportValidity();
-            hasError = true;
+        else if (this.refs.emailConfirm?.value) {
+            if (this.isDebug) console.log('validateEmailConfirm: validating input ',this.refs.emailConfirm?.value);
+            this.refs.emailConfirm.setCustomValidity('');
+            this.refs.emailConfirm.validity = { valid: true };
         }
-        else if (!this.refs.mentionConfirm.checked) {
-            console.warn('handleSubmitClick: unchecked mention Confirm input');
-            this.refs.mentionConfirm.reportValidity();
-            hasError = true;
-        }
-
-        if (hasError) {
-            console.log('handleSubmitClick: KO for Register');
-            event.preventDefault();
-
-            let inputFields = this.template.querySelectorAll('lightning-input-field:not([data-name=""]');
-            if (this.isDebug) console.log('handleSubmitClick: inputFields fetched', inputFields);
-            let focusField;
-            for (const key in inputFields) {
-                if (this.isDebug) console.log('handleSubmitClick: analysing inputField ', inputFields[key]);
-                if (this.isDebug) console.log('handleSubmitClick: type', typeof inputFields[key]);
-                if (typeof inputFields[key] !== 'object') {
-                    if (this.isDebug) console.log('handleSubmitClick: ignoring non object');
-                    continue;
-                }
-                if (this.isDebug) console.log('handleSubmitClick: name ', inputFields[key]?.dataset.name);
-                if (this.isDebug) console.log('handleSubmitClick: required ', inputFields[key]?.required);
-                if (this.isDebug) console.log('handleSubmitClick: value ', inputFields[key]?.value);
-                if (this.isDebug) console.log('handleSubmitClick: valid?', inputFields[key]?.validity);
-                if (this.isDebug) console.log('handleSubmitClick: classList', inputFields[key].classList);
-                if (this.isDebug) console.log('handleSubmitClick: children', inputFields[key].children);
-                if (this.isDebug) console.log('handleSubmitClick: child #1', inputFields[key].children[0]);
-                if (this.isDebug) console.log('handleSubmitClick: child #1 classList', inputFields[key].children[0]?.classList);
-                if ((inputFields[key].required) && (inputFields[key]?.value == null)) {
-                    if (this.isDebug) console.log('handleSubmitClick: 1st null required field found');
-                    focusField = inputFields[key];
-                    break;
-                }
-                else if (inputFields[key].validity) {
-                    if (this.isDebug) console.log('handleSubmitClick: validity set',inputFields[key]?.validity);
-                    if (inputFields[key].validity.valid)  {
-                        focusField = inputFields[key];
-                        break;
-                    }
-                }
-            }
-            //let focusField = inputFields.find(item => !item.validity.valid);
-            if (this.isDebug) console.log('handleSubmitClick: focusField fetched', focusField);
-
-            if (!focusField) {
-                if (this.isDebug) console.log('handleSubmitClick: looking in inputs');
-                inputFields = this.template.querySelectorAll('lightning-input');
-                if (this.isDebug) console.log('handleSubmitClick: inputs fetched', inputFields);
-                for (const key in inputFields) {
-                    if (this.isDebug) console.log('handleSubmitClick: processing input', inputFields[key]);
-                    if (this.isDebug) console.log('handleSubmitClick: with name', inputFields[key]?.name);
-                    if (this.isDebug) console.log('handleSubmitClick: valid?', inputFields[key].validity?.valid);
-                    if (!inputFields[key].validity?.valid)  {
-                        focusField = inputFields[key];
-                        break;
-                    }
-                }
-                //focusField = inputFields.find(item => !item.validity.valid);
-                if (this.isDebug) console.log('handleSubmitClick: focusField refetched', focusField);
-            }
-
-            if (focusField) {
-                if (this.isDebug) console.log('handleSubmitClick: focusing on focusField', focusField);
-                if (this.isDebug) console.log('handleSubmitClick: focusField fetched', focusField.dataset?.name);
-                let focusName = '' + focusField.dataset?.name;
-                if (this.isDebug) console.log('handleSubmitClick: with name ', focusName);
-                setTimeout(() => {
-                    if (this.isDebug) console.log('handleSubmitClick: setting focus on ', focusName);
-                    //focusField.focus();
-                    let newFocusField = this.template.querySelector('lightning-input-field:not([data-name="' + focusName + '"]');
-                    if (this.isDebug) console.log('handleSubmitClick: newFocusField refetched', newFocusField);
-                    newFocusField?.focus();
-                    if (this.isDebug) console.log('handleSubmitClick: END / focus set on focusField', newFocusField);
-                },250);
-            }
-        }
-
-        if (this.isDebug) console.log('handleSubmitClick: END for Register');
+        this.refs.emailConfirm.reportValidity();
+        if (this.isDebug) console.log('validateEmailConfirm: END');
     }
+    validatePasswordConfirm(event) {
+        if (this.isDebug) console.log('validatePasswordConfirm: START',event);
+        if (this.refs.pwdInput?.value !==  this.refs.pwdConfirm?.value) {
+            console.warn('validatePasswordConfirm: password inputs should match',this.refs.pwdInput?.value);
+            console.warn('validatePasswordConfirm: vs ',this.refs.pwdConfirm?.value);
+            this.refs.pwdConfirm.setCustomValidity(PWD_MISMATCH);
+        }
+        else if (this.refs.pwdConfirm?.value) {
+            if (this.isDebug) console.log('validatePasswordConfirm: validating input ',this.refs.pwdInput?.value);
+            this.refs.pwdConfirm.setCustomValidity('');
+            this.refs.pwdConfirm.validity = { valid: true };
+        }
+        this.refs.pwdConfirm.reportValidity();
+        if (this.isDebug) console.log('validatePasswordConfirm: END');
+    }
+    validateMentionConfirm(event) {
+        if (this.isDebug) console.log('validateMentionConfirm: START',event);
+        if (this.isDebug) console.log('validateMentionConfirm: mentionConfirm checked?',this.refs.mentionConfirm?.checked);
+        if (!this.refs.mentionConfirm.checked) {
+            console.warn('validateMentionConfirm: unchecked mention input');
+            this.refs.mentionConfirm.setCustomValidity(MISSING_CNIL);
+        }
+        else {
+            if (this.isDebug) console.log('validateMentionConfirm: validating input');
+            this.refs.mentionConfirm.setCustomValidity('');
+            this.refs.mentionConfirm.validity = { valid: true };
+        }
+        this.refs.mentionConfirm.reportValidity();
+        if (this.isDebug) console.log('validateMentionConfirm: END');
+    }
+
     handleSubmit(event) {
         if (this.isDebug) console.log('handleSubmit: START for Register',event);
         if (this.isDebug) console.log('handleSubmit: defaultRecordTypeId ', this.defaultRecordTypeId);
@@ -340,9 +245,46 @@ export default class DsfrRegisterCmp extends LightningElement {
         event.preventDefault();
         this.toggleSpinner(true);
 
-        let hasError = false;
-        this.refs.errorMsg.setError("");
+        this.validateEmailConfirm(event);
+        this.validatePasswordConfirm(event);
+        this.validateMentionConfirm(event);
 
+        if (this.isDebug) console.log('handleSubmit: emailConfirm OK?',this.refs.emailConfirm.checkValidity());
+        if (this.isDebug) console.log('handleSubmit: pwdInput OK? ',this.refs.pwdInput.checkValidity());
+        if (this.isDebug) console.log('handleSubmit: pwdConfirm OK? ',this.refs.pwdConfirm.checkValidity());
+        if (this.isDebug) console.log('handleSubmit: mentionConfirm OK? ',this.refs.mentionConfirm.checkValidity());
+
+        let isOK = this.refs.emailConfirm.checkValidity() && this.refs.pwdInput.checkValidity() && this.refs.pwdConfirm.checkValidity() && this.refs.mentionConfirm.checkValidity();
+        this.refs.errorMsg.setError("");
+        
+        // Error handling
+        if (!isOK) {
+            console.warn('handleSubmit: invalid inputs');
+
+            if (!this.refs.emailConfirm.checkValidity()) {
+                if (this.isDebug) console.log('handleSubmit: focusing on emailConfirm');
+                this.refs.emailConfirm.focus();
+
+            }
+            else if (!this.refs.pwdInput.checkValidity()) {
+                if (this.isDebug) console.log('handleSubmit: focusing on pwdInput');
+                this.refs.pwdInput.focus();
+            }
+            else if (!this.refs.pwdConfirm.checkValidity()) {
+                if (this.isDebug) console.log('handleSubmit: focusing on pwdConfirm');
+                this.refs.pwdConfirm.focus();
+            }
+            else {
+                if (this.isDebug) console.log('handleSubmit: focusing on mentionConfirm');
+                this.refs.mentionConfirm.focus();
+            }
+
+            console.warn('handleSubmit: END KO');
+            this.toggleSpinner(false);
+            return;
+        }
+
+        // Standard case handling
         // Account Data Init
         let newAccount = {sobjectType: 'Account', RecordTypeId : this.defaultRecordTypeId};
         if (this.isDebug) console.log('handleSubmit: newAccount init ', JSON.stringify(newAccount));
@@ -354,42 +296,7 @@ export default class DsfrRegisterCmp extends LightningElement {
         }
         if (this.isDebug) console.log('handleSubmit: newAccount prepared ', JSON.stringify(newAccount));
 
-        // Password control
-        if (this.refs.pwdInput?.value !==  this.refs.pwdConfirm?.value) {
-            console.warn('handleSubmit: password inputs should match, i.e. ',this.refs.pwdInput?.value);
-            console.warn('handleSubmit: vs ',this.refs.pwdConfirm?.value);
-            this.refs.pwdInput.setCustomValidity(PWD_MISMATCH);
-            this.refs.pwdInput.reportValidity();
-            this.refs.pwdConfirm.setCustomValidity(PWD_MISMATCH);
-            this.refs.pwdConfirm.reportValidity();
-            hasError = true;
-        }
-        if (this.isDebug) console.log('handleSubmit: password inputs checked');
-
-        // Email control
-        if (this.refs.emailConfirm?.value !== newAccount.PersonEmail) {
-            console.warn('handleSubmit: email inputs should match, i.e.', this.refs.emailConfirm?.value);
-            console.warn('handleSubmit: vs ', newAccount.PersonEmail);
-            this.refs.emailConfirm.setCustomValidity(EMAIL_MISMATCH);
-            this.refs.emailConfirm.reportValidity();
-            hasError = true;
-        }
-        if (this.isDebug) console.log('handleSubmit: email inputs checked');
-
-        // Mention control
-        if (this.isDebug) console.log('handleSubmit: mentionConfirm should be checked?',this.refs.mentionConfirm?.checked);
-        if (!this.refs.pwdConfirm.checked) {
-            console.warn('handleSubmit: unchecked mention Confirm input');
-            this.refs.pwdConfirm.reportValidity();
-            hasError = true;
-        }
-
-        if (hasError) {
-            console.warn('handleSubmit: END KO / invalid inputs');
-            //this.refs.errorMsg.setError("Merci de corriger votre saisie.")
-            this.toggleSpinner(false);
-            return;
-        }
+        
         if (this.isDebug) console.log('handleSubmit: input checks OK');
         this.tmpAccount = newAccount;
         this.tmpPassword = this.refs.pwdInput.value;
@@ -468,13 +375,13 @@ export default class DsfrRegisterCmp extends LightningElement {
         if (this.isDebug) console.log('handleBack: START for Register with currentStage ',this.currentStage);
 
         document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_validate_cancel',params:{event_source:'dsfrRegisterCmp', event_site: basePathName, event_category:(this.showCaptcha ? 'captcha_register' : 'standard_register'),event_label:this.tag}}}));
-        if (this.isDebug) console.log('handleSubmit: GA notified');
+        if (this.isDebug) console.log('handleBack: GA notified');
 
         this.currentStage = 'Initialisation';
         if (this.isDebug) console.log('handleBack: currentStage updated ',this.currentStage);
         /*this.template.querySelector('.registrationForm').classList.remove('slds-hide');
         this.template.querySelector('.validationForm').classList.add('slds-hide');*/
-        if (this.isDebug) console.log('handleSubmit: form visibility switched back');
+        if (this.isDebug) console.log('handleBack: form visibility switched back');
         if (this.isDebug) console.log('handleBack: END for Register');
     }
 

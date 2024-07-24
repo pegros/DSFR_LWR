@@ -79,7 +79,8 @@
                                                         <lightning-input    lwc:ref="emailConfirm"          name="emailConfirm"
                                                                             class="dsfrInput"               variant="label-stacked"
                                                                             type="email"                    label="Confirmer l'adresse électronique"
-                                                                            autocomplete="off"              required>
+                                                                            autocomplete="off"              required
+                                                                            onblur={validateEmailConfirm} >
                                                         </lightning-input>
                                                     </div>
                                                 </div>
@@ -91,7 +92,8 @@
                                                         <lightning-input    lwc:ref="pwdInput"              name="pwdInput"
                                                                             class="dsfrInput fr-password"   variant="label-stacked"
                                                                             type="password"                 label="Saisir un mot de passe"
-                                                                            autocomplete="off"              required>
+                                                                            autocomplete="off"              required
+                                                                            onblur={validatePasswordConfirm} >
                                                         </lightning-input>
                                                         <div class="fr-password__checkbox fr-checkbox-group--sm slds-clearfix">
                                                             <lightning-input    lwc:ref="passwordToggle"    class="slds-m-bottom_none slds-float_right" 
@@ -109,8 +111,8 @@
                                                         <lightning-input    lwc:ref="pwdConfirm"            name="pwdConfirm"
                                                                             class="dsfrInput fr-password"   variant="label-stacked"
                                                                             type="password"                 label="Confirmer le mot de passe"
-                                                                            autocomplete="off"
-                                                                            required>
+                                                                            autocomplete="off"              required
+                                                                            onblur={validatePasswordConfirm} >
                                                         </lightning-input>
                                                     </div>
                                                 </div>
@@ -121,7 +123,8 @@
                                                         <div class="fr-input-group">
                                                             <lightning-input    lwc:ref="mentionConfirm"    name="mentionConfirm"
                                                                                 label={mentionLabel}        class="slds-m-bottom_none"
-                                                                                type="checkbox"             required>
+                                                                                type="checkbox"             required
+                                                                                onblur={validateMentionConfirm} >
                                                             </lightning-input>
                                                             <template lwc:if={mentionDetails}>
                                                                 <div class="fr-messages-group fr-hint-text fr-pl-8v">
@@ -143,7 +146,7 @@
                                                 <div class="fr-fieldset__element">
                                                     <!--<ul class="fr-btns-group">
                                                         <li>-->
-                                                            <button class="formButton fr-mt-2v fr-btn singleButton" aria-label="Soumettre" type="submit" onclick={handleSubmitClick}>
+                                                            <button class="formButton fr-mt-2v fr-btn singleButton" aria-label="Soumettre" type="submit" >
                                                                 Soumettre
                                                             </button>
                                                             <template lwc:if={isProcessing}>
@@ -213,6 +216,7 @@
                                                     </ul>
                                                     <template lwc:if={showBack}>
                                                         <div class="align-right">
+                                                            <!--  -->
                                                             <button class="formButton fr-btn fr-btn--tertiary-no-outline fr-icon-arrow-go-back-line fr-btn--icon-right fr-mt-2v"
                                                                     type="button" aria-label="Retour à l'étape précédente" onclick={handleBack}>
                                                                     Retour à l'étape précédente
