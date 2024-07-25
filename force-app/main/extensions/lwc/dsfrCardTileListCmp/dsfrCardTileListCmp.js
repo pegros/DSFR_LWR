@@ -737,7 +737,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
         }
 
         // Forcing Card display on mobile
-        console.log('initConfigDetails: formfactor provided ',this.formfactor);
+        if (this.isDebug) console.log('initConfigDetails: formfactor provided ',this.formfactor);
         if (this.formfactor === "Small") {
             if (this.isDebug) console.log('initConfigDetails: overriding configuration for mobile');
             this.configDetails.type = "Card"; 
