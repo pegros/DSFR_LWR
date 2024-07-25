@@ -101,6 +101,7 @@ export default class DsfrFileUploadCmp extends LightningElement {
         return (this.isError ? 'fr-error-text' : 'fr-valid-text');
     }
     
+    
     //-----------------------------------------------------
     // Initialisation
     //-----------------------------------------------------

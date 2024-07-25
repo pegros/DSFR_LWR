@@ -20,17 +20,17 @@
                         description="Explication du composant de sélection de type." />
             
             <property   name="fieldName"
-                        label="Champ de meta"
+                        label="Champ de metadonnées"
                         type="String"
-                        description="Nom du champ de metadonnées du fichier à sélectionner." />
+                        description="Nom du champ (picklist) de metadonnées du fichier à valoriser." />
             <property   name="optionLabels"
-                        label="Libellés des options"
+                        label="Libellés des options (OBSOLETE)"
                         type="String"
-                        description="Liste des libellés des optiosn possibles séparées par ;" />
+                        description="OBSOLETE (récupérés via le champ) / Liste des libellés des options possibles séparées par ;" />
             <property   name="optionValues"
                         label="Valeurs des options"
                         type="String"
-                        description="Liste des valeurs des optiosn possibles séparées par ;" />
+                        description="Liste des valeurs des options possibles séparées par ;" />
             
             <property   name="refreshUser"
                         label="MAJ Utilisateur?"
@@ -83,6 +83,7 @@
             <property   name="componentClass"
                         label="CSS additionnelle (section)"
                         type="String"
+                        default="fr-fieldset__element"
                         description="Classes pour modifier le style des composants utilisés." />
             <property   name="baseWidth"
                         label="Largeur par défaut"

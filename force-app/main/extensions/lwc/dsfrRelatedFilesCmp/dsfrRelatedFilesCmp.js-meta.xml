@@ -53,7 +53,7 @@
                         label="Upload?"
                         type="Boolean"
                         default="false"
-                        description="Désactivation de la fonction d'upload de nouvelle version sur un fichier." />
+                        description="Affichage de la fonction d'upload de nouvelle version sur un fichier." />
             <property   name="accept"
                         label="Extensions (pour upload)"
                         type="String"
@@ -63,7 +63,7 @@
                         label="Delete?"
                         type="Boolean"
                         default="false"
-                        description="Désactivation de la fonction de delete du lien fichier." />
+                        description="Affichage de la fonction de delete du lien fichier." />
 
             <property   name="disabled"
                         label="Inactif?"

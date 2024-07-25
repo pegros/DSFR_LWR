@@ -97,6 +97,9 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                 return this.label;
         }
     }
+    get showNav() {
+        return this.hasSort || this.showRefresh;
+    }
     get hasSort() {
         return (this.configDetails?.sort || false);
     }
@@ -107,10 +110,17 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
         if (this.isDebug) console.log('currentSort: currentSort found ',JSON.stringify(currentSort));
         if (currentSort) {
             if (this.isDebug) console.log('currentSort: END / returning current ');
-            return {label: SORT_PREFIX + ' ' + currentSort.label, class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line')};
+            return {
+                label: SORT_PREFIX + ' ' + currentSort.label,
+                class: (currentSort.up ? 'fr-icon-arrow-up-line': 'fr-icon-arrow-down-line'),
+                ariaLabel: this.sortTitle + '. Actuellement ' + SORT_PREFIX + ' ' + currentSort.label + (currentSort.up ? ' croissant': ' décroissant')
+            };
         }
         if (this.isDebug) console.log('currentSort: END / returning default ');
-        return {label: SORT_DEFAULT};
+        return {
+            label: SORT_DEFAULT,
+            ariaLabel: this.sortTitle + '. Actuellement ' + SORT_DEFAULT
+        };
     }
 
     get hasNoResult() {
@@ -152,7 +162,8 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
 
         // Config Details Initialization
         if (!this.configDetails) {
-            let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
+            //let listCmp = this.template.querySelector('c-sfpeg-list-cmp');
+            let listCmp = this.refs.listLoader;
             if (this.isDebug) console.log('handleRecordLoad: fetching listCmp ',listCmp);
 
             if (this.isDebug) console.log('handleRecordLoad: list configuration available ',JSON.stringify(listCmp.configuration));
@@ -211,6 +222,7 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                             sortIter.field = sortIter.fieldParts.join('.');
                             if (this.isDebug) console.log('handleRecordLoad: field init ', sortIter.field);
                         }
+                        sortIter.ariaLabel = SORT_PREFIX + ' ' + sortIter.label;
                     });
                 }
 
@@ -233,6 +245,9 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                     title: this.getValue(this.configDetails.title,item) || '???',
                     linkId: this.getValue(this.configDetails.linkId,item) || '???',
                     contentId: this.getValue(this.configDetails.contentId,item) || '???',
+                    downloadLabel: DOWNLOAD_TITLE + ' ' + (this.getValue(this.configDetails.title,item) || ''),
+                    uploadLabel: UPLOAD_TITLE + ' ' + (this.getValue(this.configDetails.title,item) || ''),
+                    deleteLabel: DELETE_TITLE + ' ' + (this.getValue(this.configDetails.title,item) || ''),
                     details: []
                 };
                 if (this.isDebug) console.log('handleRecordLoad: newItem init ',JSON.stringify(newItem));
@@ -253,9 +268,10 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                 }
 
                 if (this.configDetails.sort) {
-                    if (this.isDebug) console.log('handleRecordLoad: copying sort field values');
+                    if (this.isDebug) console.log('handleRecordLoad: copying sort field values', this.configDetails.sort);
                     this.configDetails.sort.forEach(itemSort => {
-                        if (this.isDebug) console.log('handleRecordLoad: processing sort item ',itemSort.field);
+                        //if (this.isDebug) console.log('handleRecordLoad: processing sort item ',itemSort.field);
+                        if (this.isDebug) console.log('handleRecordLoad: processing sort item ',JSON.stringify(itemSort));
                         let itemSortTgt = '_' + itemSort.field;
                         let itemSortValue = this.getValue(itemSort.fieldParts,item);
                         if (this.isDebug) console.log('handleRecordLoad: value ',itemSortValue);
@@ -337,7 +353,8 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
             if (this.isDebug) console.log('handleDownload: notifying GA');
             document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrRelatedFilesCmp', event_site: basePathName, event_category:'unlink_file',event_label:this.tag}}}));
         
-            let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
+            //let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
+            let listCmp = this.refs.listLoader;
             if (this.isDebug) console.log('handleUnlink: listCmp fetched',listCmp);
             listCmp.doRefresh();
             if (this.isDebug) console.log('handleUnlink: file list refresh triggered');
@@ -412,7 +429,8 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
     handleRefresh(event){
         if (this.isDebug) console.log('handleRefresh: START',event);
         event.preventDefault();
-        let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
+        //let listCmp = this.template.querySelector("c-sfpeg-list-cmp");
+        let listCmp = this.refs.listLoader;
         if (this.isDebug) console.log('handleRefresh: listCmp fetched',listCmp);
         listCmp.doRefresh();
         if (this.isDebug) console.log('handleRefresh: END file list refresh triggered');

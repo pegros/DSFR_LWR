@@ -1,5 +1,5 @@
 <template>
-    <!-- Component Display -->
+    <!-- COMPONENT  DISPLAY -->
     <div class={mainClass} > 
         <label class="fr-label" for="fileLoad">
             {label}
@@ -8,17 +8,17 @@
             </template>
             
         </label>
-        <input  class="fr-upload"   id="fileLoad"
+        <input  class="fr-upload"   id="fileLoad"           aria-describedby="uploadMessage"
                 type="file"         name="fileUpload"
                 accept={accept}     onchange={handleUpload}>
         <template lwc:if={message}>
-            <p class={messageClass}>
+            <p class={messageClass} id="uploadMessage">
                 {message}
             </p>
         </template>
     </div>
 
-    <!-- Debug Mode Indication -->
+    <!-- DEBUG MODE INFORMATION -->
     <template lwc:if={isDebug}>
         <div class={mainClass}>
             <!-- fr-icon-bug-line fr-text-default__warning -->

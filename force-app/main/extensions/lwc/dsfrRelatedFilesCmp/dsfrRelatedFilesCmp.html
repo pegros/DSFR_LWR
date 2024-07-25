@@ -1,15 +1,4 @@
 <template>
-    <!-- DATA LOAD UTILITY user-id={currentUserId} -->
-    <c-sfpeg-list-cmp   object-api-name={objectApiName} 
-                        record-id={recordId} 
-                        config-name={configName}
-                        parent-context={listContext}
-                        onload={handleRecordLoad}
-                        is-debug={isDebug}
-                        is-debug-fine={isDebug}
-                        class="listLoader">
-    </c-sfpeg-list-cmp>
-
     <!-- COMPONENT DISPLAY -->
     <div class={wrappingClass} >
         <lightning-layout multiple-rows="true" vertical-align="end" class="listHeader">
@@ -21,11 +10,12 @@
                     </h3>
                 </template>
             </lightning-layout-item>
-            <lightning-layout-item flexibility="auto, no-grow" alignment-bump="left">
-                <nav role="menu" class="fr-nav sortNav">
-                    <template lwc:if={hasSort} >        
+            <template lwc:if={showNav}>
+                <lightning-layout-item flexibility="auto, no-grow" alignment-bump="left">
+                    <nav role="menu" class="fr-nav sortNav">
+                        <template lwc:if={hasSort} >        
                         <div class="fr-nav__item sortDiv">
-                            <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-expanded="false" title={sortTitle} onclick={toggleSort}>
+                            <button class="fr-nav__btn fr-btn fr-btn--tertiary-no-outline sortButton" aria-label={currentSort.label} aria-expanded="false" title={sortTitle} onclick={toggleSort}>
                                 <span class={currentSort.class}>{currentSort.label}</span>
                             </button>
                             <div class="fr-collapse fr-menu sortMenu" data-menu="sort">
@@ -33,27 +23,36 @@
                                     <template for:each={configDetails.sort} for:item="iterSort">
                                         <li key={iterSort.name} class="sortItem">
                                             <template lwc:if={iterSort.selected}>
-                                                <a class="fr-nav__link sortLink" href="#" aria-current="page" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                <a  class="fr-nav__link sortLink"   href="#"
+                                                    aria-label={iterSort.ariaLabel} aria-current="page"             
+                                                    data-name={iterSort.field}      onclick={selectSort}>
+                                                    {iterSort.label}
+                                                </a>
                                             </template>
                                             <template lwc:else>
-                                                <a class="fr-nav__link sortLink" href="#" data-name={iterSort.field} onclick={selectSort}>{iterSort.label}</a>
+                                                <a  class="fr-nav__link sortLink"   href="#"
+                                                    aria-label={iterSort.ariaLabel}
+                                                    data-name={iterSort.field}      onclick={selectSort}>
+                                                    {iterSort.label}
+                                                </a>
                                             </template>
                                         </li>
                                     </template>
                                 </ul>
                             </div>
                         </div>
-                    </template>
-                    <template lwc:if={showRefresh} >
+                        </template>
+                        <template lwc:if={showRefresh} >
                         <div class="refreshDiv">
                             <button class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-noLabel fr-icon-refresh-line refreshButton"
                                     title={refreshTitle}
                                     onclick={handleRefresh}>
                             </button>
                         </div>
-                    </template>
-                </nav>
-            </lightning-layout-item>
+                        </template>
+                    </nav>
+                </lightning-layout-item>
+            </template>
         </lightning-layout>
         <!-- Actual result list case -->
         <template lwc:if={isReady}>
@@ -71,9 +70,9 @@
                             <div class={iterFile.class}>
                                 <!-- download -->
                                 <p> 
-                                    <a  href="#"  class="fr-download__link"
-                                        title={downloadTitle} name={iterFile.contentId}
-                                        onclick={handleDownload}>
+                                    <a  href="#"                    class="fr-download__link"
+                                        title={downloadTitle}       aria-label={iterFile.downloadLabel}
+                                        name={iterFile.contentId}   onclick={handleDownload}>
                                         {iterFile.title}
                                         <template lwc:if={iterFile.details}>
                                             <span class="fr-download__detail">
@@ -84,14 +83,20 @@
                                                         <template lwc:if={item.suffix}>&nbsp;{item.suffix}</template>
                                                     </span>
                                                 </template>
+                                                <!--
+                                                <span class="listItem">{downloadTitle}</span>
+                                                <span class="listItem">{iterFile.downloadLabel}</span>
+                                                <span class="listItem">{deleteTitle}</span>
+                                                <span class="listItem">{iterFile.deleteLabel}</span>
+                                                -->
                                             </span>
                                         </template>
                                     </a>
                                     <!--<lightning-formatted-number class="fr-download__detail" value={iterFile.ContentDocument.ContentSize} format-style="decimal" maximum-significant-digits="5"></lightning-formatted-number>-->
                                     <template lwc:if={showUpload}>
-                                        <button type="button"               class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-upload-line fr-py-0v"
-                                                name={iterFile.contentId}   title={uploadTitle}
-                                                onclick={triggerUpload}>
+                                        <button type="button"                   class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-upload-line fr-py-0"
+                                                title={uploadTitle}             aria-label={iterFile.uploadLabel}
+                                                name={iterFile.contentId}       onclick={triggerUpload}>
                                         </button>
                                         <c-dsfr-file-upload-cmp class="slds-hide"               data-name={iterFile.contentId}
                                                                 file-id={iterFile.contentId}    accept={accept}
@@ -101,8 +106,9 @@
                                         </c-dsfr-file-upload-cmp>
                                     </template>
                                     <template lwc:if={showDelete}>
-                                        <button class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-close-circle-line fr-py-0v"
-                                                type="button" title={deleteTitle} name={iterFile.linkId} onclick={handleUnlink}>
+                                        <button type="button"               class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-close-circle-line fr-py-0"
+                                                title={deleteTitle}         aria-label={iterFile.deleteLabel}
+                                                name={iterFile.linkId}      onclick={handleUnlink}>
                                         </button>
                                     </template>
                                 </p>
@@ -114,12 +120,15 @@
         </template>
     </div>
 
-    <!-- Debug Information Diplay -->
+    <!-- DEBUG INFORMATION DISPLAY -->
     <template lwc:if={isDebug}>
         <div class={wrappingCss}>
             <p class="fr-px-2v fr-py-4v">
                 <span class="fr-badge fr-badge--warning  fr-mr-4v">
                     Mode debug activé!
+                </span>
+                <span class="fr-badge fr-badge--new  fr-mr-4v">
+                    Configuration {configName}
                 </span>
                 <span class="fr-badge fr-badge--info">
                     <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrRelatedFilesCmp.md" target="_blank">
@@ -129,7 +138,19 @@
         </div>
     </template>
 
-    <!-- Error notification Utility -->
+    <!-- DATA LOAD UTILITY -->
+    <c-sfpeg-list-cmp   lwc:ref="listLoader"
+                        object-api-name={objectApiName} 
+                        record-id={recordId} 
+                        config-name={configName}
+                        parent-context={listContext}
+                        onload={handleRecordLoad}
+                        is-debug={isDebug}
+                        is-debug-fine={isDebug}
+                        force-hidden="true">
+    </c-sfpeg-list-cmp>
+
+    <!-- ERROR NOTIFICATION UTILITY -->
     <c-dsfr-alert-popup-dsp is-debug={isDebug} >
     </c-dsfr-alert-popup-dsp>
 </template>

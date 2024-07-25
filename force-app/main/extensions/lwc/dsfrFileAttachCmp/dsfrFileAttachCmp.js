@@ -1,5 +1,10 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getPicklistValues, getObjectInfo } from 'lightning/uiObjectInfoApi';
+
+import SELECT_MESSAGE from '@salesforce/label/c.dsfrFileAttachSelectMessage';
+import SELECT_MISSING from '@salesforce/label/c.dsfrFileAttachSelectMissing';
+import SELECT_NO_VALUE from '@salesforce/label/c.dsfrFileAttachSelectNoValue';
+
 export default class DsfrFileAttachCmp extends LightningElement {
 
     //-----------------------------------------------------
@@ -10,7 +15,8 @@ export default class DsfrFileAttachCmp extends LightningElement {
 
     @api fieldName;
 
-    _optionLabels;
+    @api optionLabels; // OBSOLETE
+    /*_optionLabels;
     @api 
     get optionLabels() {
         return this._optionLabels;
@@ -31,7 +37,7 @@ export default class DsfrFileAttachCmp extends LightningElement {
         else {
             if (this.isDebug) console.log('set: END optionLabels OK for Files Attach / no label provided');
         }
-    }
+    }*/
     _optionValues;
     @api 
     get optionValues() {
@@ -40,21 +46,23 @@ export default class DsfrFileAttachCmp extends LightningElement {
     set optionValues(value) {
         if (value) {
             if (this.isDebug) console.log('set: START optionValues for Files Attach ',value);
-            if (this.isDebug) console.log('set: optionLabels ',this.optionLabels);
+            //if (this.isDebug) console.log('set: optionLabels ',this.optionLabels);
             this._optionValues = value;
-            if (this.optionLabels) {
+            /*if (this.optionLabels) {
                 this.initOptions();
                 if (this.isDebug) console.log('set: END optionValues OK for Files Attach / options init ',this.options);
             }
-            else if (this.picklistDesc)
+            else*/ if (this.picklistDesc)
             {
                 this.initOptionsFromDesc();
                 if (this.isDebug) console.log('set: END optionValues OK for Files Attach / options init from desc ',this.options);
             }
             else {
-                if (this.isDebug) console.log('set: END optionValues OK for Files Attach / no label nor picklist desc yet ');
+                if (this.isDebug) console.log('set: END optionValues OK for Files Attach / no picklist desc yet ');
+                //if (this.isDebug) console.log('set: END optionValues OK for Files Attach / no label nor picklist desc yet ');
             }
-        } else {
+        }
+        else {
             if (this.isDebug) console.log('set: END optionValues OK for Files Attach / no value provided');
         }
     }
@@ -88,6 +96,7 @@ export default class DsfrFileAttachCmp extends LightningElement {
     @api objectApiName;
     @api recordId;
 
+    /*
     @wire(getObjectInfo, { objectApiName: 'ContentVersion' })
     wiredFileDesc({ error, data }) {;
         if (this.isDebug) console.log('wiredFileDesc: START for File Attach');
@@ -123,26 +132,33 @@ export default class DsfrFileAttachCmp extends LightningElement {
             console.warn('wiredPicklists: END KO for File Attach / Picklist fetch failed ', JSON.stringify(error));
         }
     }
-
+    */
 
     
     //-----------------------------------------------------
     // Technical parameters
     //-----------------------------------------------------
-    options;
-    isOptionSelected = false;
-    uploadMeta;
+    options;            // actual options available for selection
+    selection;          // current selection
+    isOptionSelected = false;   // Flag controlling the display of the file input / select components
+    uploadMeta;         // ContentVersion metadata prepared for file upload
     selectContext;
-    fieldFullName;
+    fieldFullName;      // Picklist field full name for value fetch
+    fieldFullNames;     // as list for picklist utility usage
     contentVersionRT;
-    picklistDesc;
-    
+    picklistDesc;       
+    selectCommentId;
+
     //-----------------------------------------------------
     // Custom Getters
     //-----------------------------------------------------
     get hasOptions() {
         return ((this.options) && (this.options.length > 0)); 
     }
+    /*get selectCommentId() {
+        if (this.isDebug) console.log('selectCommentId: returning ',this.refs?.selectComment?.id);
+        return this.refs?.selectComment?.id;
+    }*/
 
     //-----------------------------------------------------
     // Initialisation
@@ -163,46 +179,86 @@ export default class DsfrFileAttachCmp extends LightningElement {
         if (this.fieldName) {
             this.fieldFullName = 'ContentVersion.' + this.fieldName;
             if (this.isDebug) console.log('connected: fieldFullName init ', JSON.stringify(this.fieldFullName));
+            this.fieldFullNames = [this.fieldFullName];
+            if (this.isDebug) console.log('connected: fieldFullNames init ', JSON.stringify(this.fieldFullNames));
         }
 
-        if (this.optionLabels) {
+        /*if (this.optionLabels) {
             this.initOptions();
             if (this.isDebug) console.log('connected: options init ', JSON.stringify(this.options));
         }
         else {
             console.warn('connected: no options to init ');
-        }
+        }*/
         if (this.isDebug) console.log('connected: END for file attach');
+    }
+
+    renderedCallback() {
+        if (this.isDebug) {
+            console.log('rendered: START for file attach');
+            console.log('rendered: configName ', this.label);
+        }
+        if (!this.selectCommentId) {
+            console.log('rendered: selectCommentId init ', this.refs?.selectComment?.id);
+            this.selectCommentId = this.refs?.selectComment?.id;
+        }
+        if (this.isDebug) console.log('rendered: END for file attach');
     }
 
     //-----------------------------------------------------
     // Event Handlers
     //-----------------------------------------------------
+    handlePicklists(event) {
+        if (this.isDebug) console.log('handlePicklists: START for file attach');
+        
+        if (event.detail?.error) {
+            console.warn('handlePicklists: END KO for file attach / Picklist fetch failed ', JSON.stringify(event.detail.error));
+        }
+        else {
+            if (this.isDebug) console.log('handlePicklists: picklist details loaded ', JSON.stringify(event.detail));
+            this.picklistDesc = (event.detail)[0];
+            if (this.isDebug) console.log('handlePicklists: picklistDesc init ', JSON.stringify(this.picklistDesc));
+            this.initOptionsFromDesc();
+            if (this.isDebug) console.log('handlePicklists: END OK for file attach');
+        }
+    }
+
     handleSelect(event) {
         if (this.isDebug) console.log('handleSelect: START for file attach',event);
-        
-        let optionSelect = this.template.querySelector("select[name='optionSelect']");
-        if (this.isDebug) console.log('handleSelect: option selector value ',optionSelect?.value);
+        if (this.isDebug) console.log('handleSelect: event details ',JSON.stringify(event.detail));    
+
+        let optionSelect = this.refs.optionSelect;
+        if (this.isDebug) console.log('handleSelect: selection ',optionSelect.value);    
+
+        if (optionSelect?.value) {
+            if (this.isDebug) console.log('handleSelect: value properly set ',event.detail.value); 
+            optionSelect.setCustomValidity('');
+            optionSelect.reportValidity();
+            if (this.isDebug) console.log('handleSelect: validity updated'); 
+        }
+        else {
+            console.warn('handleSelect: missing value for option selector '); 
+            optionSelect.setCustomValidity(SELECT_MISSING);
+            optionSelect.reportValidity();
+            this.isOptionSelected = false;
+            console.warn('handleSelect: END KO for file attach'); 
+            return;
+        }
 
         if (this.isDebug) console.log('handleSelect: recordId ', this.recordId);
         if (this.isDebug) console.log('handleSelect: objectApiName ', this.objectApiName);
 
-        if (optionSelect?.value) {
-            let context = {};
-            context[this.fieldName] = optionSelect?.value;
-            if (this.isDebug) console.log('handleSelect: context prepared ',JSON.stringify(context));
+        let context = {};
+        context[this.fieldName] = optionSelect.value;
+        if (this.isDebug) console.log('handleSelect: context prepared ',JSON.stringify(context));
 
-            this.uploadMeta = JSON.stringify(context);
-            this.selectContext = this.uploadMeta;
-            if (this.isDebug) console.log('handleSelect: context set on file components');
-            this.isOptionSelected = true;
-        }
-        else {
-            this.isOptionSelected = false;
-        }
+        this.uploadMeta = JSON.stringify(context);
+        this.selectContext = this.uploadMeta;
+        if (this.isDebug) console.log('handleSelect: context set on file components',this.selectContext);
+        this.isOptionSelected = true;
 
-        if (this.isDebug) console.log('handleSelect: reseting file upload component');
-        this.template.querySelector('c-dsfr-file-upload-cmp')?.reset();
+        if (this.isDebug) console.log('handleSelect: resetting file upload component',this.refs.fileUpload);
+        this.refs.fileUpload?.reset();
 
         if (this.isDebug) console.log('handleSelect: END for file attach');
     }
@@ -210,7 +266,7 @@ export default class DsfrFileAttachCmp extends LightningElement {
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
-    initOptions = function() {
+    /*initOptions = function() {
         if (this.isDebug) console.log('initOptions: initializing options');
         if (this.isDebug) console.log('initOptions: recordId ', this.recordId);
         if (this.isDebug) console.log('initOptions: objectApiName ', this.objectApiName);
@@ -226,8 +282,7 @@ export default class DsfrFileAttachCmp extends LightningElement {
         });
         this.options = options;
         if (this.isDebug) console.log('initOptions: options init ', JSON.stringify(this.options));
-    }
-
+    }*/
 
     initOptionsFromDesc = function() {
         if (this.isDebug) console.log('initOptionsFromDesc: initializing options');
@@ -236,19 +291,27 @@ export default class DsfrFileAttachCmp extends LightningElement {
         if (this.isDebug) console.log('initOptionsFromDesc: optionValues ', this.optionValues);
         if (this.isDebug) console.log('initOptionsFromDesc: picklistDesc ',JSON.stringify(this.picklistDesc));
 
+
         let options = [];
-        let optionValues = this.optionValues.split(';');
-        optionValues.forEach((item) => {
-            if (this.isDebug) console.log('initOptionsFromDesc: processing item ',item);
-            let itemPicklist = this.picklistDesc.values.find((iter) => iter.value === item);
-            if (this.isDebug) console.log('initOptionsFromDesc: item Label found ',JSON.stringify(itemPicklist));
-            if (itemPicklist)  {
-                options.push({label: itemPicklist.label, value: item});
-                if (this.isDebug) console.log('initOptionsFromDesc: item registered');
-            }
-        });
+        let optionValues = this.optionValues?.split(';');
+        if (optionValues?.length > 0) {
+            optionValues.forEach((item) => {
+                if (this.isDebug) console.log('initOptionsFromDesc: processing item ',item);
+                let itemPicklist = this.picklistDesc.values.find((iter) => iter.value === item);
+                if (this.isDebug) console.log('initOptionsFromDesc: item Label found ',JSON.stringify(itemPicklist));
+                if (itemPicklist)  {
+                    options.push({label: itemPicklist.label, value: item});
+                    if (this.isDebug) console.log('initOptionsFromDesc: item registered');
+                }
+            });
+            options.unshift({label:SELECT_MESSAGE,value:""});
+        }
+        else {
+            if (this.isDebug) console.log('initOptionsFromDesc: handling no value case');
+            options.unshift({label:SELECT_NO_VALUE,value:""});
+        }
+
         this.options = options;
         if (this.isDebug) console.log('initOptionsFromDesc: END / options init ', JSON.stringify(this.options));
     }
-
 }

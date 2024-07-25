@@ -1,10 +1,28 @@
 <template>
+    <!-- COMPONENT DISPLAY -->
     <div class={wrappingClass} > 
         <lightning-layout   multiple-rows="true" vertical-align="top" horizontal-align="end" >
 
-            <!-- Type Selector -->
+            <!-- Type Selection Section -->
             <lightning-layout-item  size="12"    large-device-size={baseWidth}     padding="around-small">
                 <div class={componentClass} > 
+                    <div class="fr-input-group">
+                        <template lwc:if={hasOptions}>
+                            <lightning-select   lwc:ref="optionSelect"      aria-described-by={selectCommentId}
+                                                name="optionSelect"         label={label}
+                                                options={options}           value={selection}
+                                                onchange={handleSelect} >
+                            </lightning-select>
+                        </template>
+                        <template lwc:else>
+                            <lightning-select   lwc:ref="optionSelect"      aria-described-by={selectCommentId}
+                                                name="optionSelect"         label={label}
+                                                options={options}           disabled >
+                            </lightning-select>
+                        </template>
+                        <span class="fr-hint-text fr-mt-2v" lwc:ref="selectComment" id="selectComment" >{comment}</span>
+                    </div>
+                    <!--
                     <label class="fr-label" for="fileSelect fileSelect2">
                         {label}
                         <template lwc:if={comment}>
@@ -24,12 +42,15 @@
                         <option value="" selected disabled hidden>Aucune option disponible</option>
                     </select>
                 </template>
+                -->
                 </div>
             </lightning-layout-item>
 
             <template lwc:if={isOptionSelected}>
+                <!-- File Upload Section -->
                 <lightning-layout-item  size="12" large-device-size={baseWidth}     padding="around-small">
-                    <c-dsfr-file-upload-cmp     label={uploadLabel}         comment={uploadComment}
+                    <c-dsfr-file-upload-cmp     lwc:ref="fileUpload"
+                                                label={uploadLabel}         comment={uploadComment}
                                                 tag={uploadTag}
                                                 accept={uploadAccept}       content-meta={uploadMeta}
                                                 record-id={recordId}        record-ids={recordIds}
@@ -38,9 +59,11 @@
                     </c-dsfr-file-upload-cmp>
                 </lightning-layout-item>
 
+                <!-- File Selection Section -->
                 <template lwc:if={selectConfig}>
                     <lightning-layout-item  size="12"   large-device-size={baseWidth}   padding="around-small">
-                        <c-dsfr-file-selector-cmp   label={selectLabel}         comment={selectComment}
+                        <c-dsfr-file-selector-cmp   lwc:ref="fileSelect"
+                                                    label={selectLabel}         comment={selectComment}
                                                     tag={selectTag}
                                                     config-name={selectConfig}  context={selectContext}
                                                     wrapping-class={componentClass}
@@ -70,4 +93,10 @@
             </p>
         </div>
     </template>
+
+    <!-- PICKLIST META UTILITY -->
+    <c-dsfr-picklists-loader-utl    picklist-fields={fieldFullNames}
+                                    is-debug={isDebugFine}
+                                    onloaded={handlePicklists}>
+    </c-dsfr-picklists-loader-utl>
 </template>

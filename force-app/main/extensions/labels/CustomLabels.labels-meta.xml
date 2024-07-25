@@ -91,12 +91,68 @@
     </labels>
 
     <labels>
+        <fullName>dsfrFileSelectorMessage</fullName>
+        <categories>DSFR Component LWC Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Option par défaut invitant à choisir un fichier</shortDescription>
+        <value>Sélectionner un fichier</value>
+    </labels><labels>
+        <fullName>dsfrFileSelectorMissing</fullName>
+        <categories>DSFR Component LWC Error</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur si aucun fichier n'a été sélectionné</shortDescription>
+        <value>Merci de sélectionner un fichier à lier.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileSelectorNoValue</fullName>
+        <categories>DSFR Component LWC Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Option par défaut en cas d'absence de fichier</shortDescription>
+        <value>Aucun fichier disponible</value>
+    </labels>
+    <labels>
         <fullName>dsfrFileSelectorSuccess</fullName>
         <categories>DSFR Component LWC Message</categories>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Message affiché après rattachement d'un fichier</shortDescription>
         <value>Votre fichier {0} a bien été rattaché.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileSelectorError</fullName>
+        <categories>DSFR Component LWC Error</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message affiché après problème de rattachement d'un fichier</shortDescription>
+        <value>Un problème technique est survenu.</value>
+    </labels>
+
+    <labels>
+        <fullName>dsfrFileAttachSelectMessage</fullName>
+        <categories>DSFR Component LWC Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Option par défaut invitant à choisir un type de fichier</shortDescription>
+        <value>Sélectionner une valeur</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileAttachSelectMissing</fullName>
+        <categories>DSFR Component LWC Error</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message d'erreur si aucun type de fichier n'a été sélectionné</shortDescription>
+        <value>Merci de sélectionner une valeur à ajouter.</value>
+    </labels>
+    <labels>
+        <fullName>dsfrFileAttachSelectNoValue</fullName>
+        <categories>DSFR Component LWC Message</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Option par défaut en cas d'absence de valeurs</shortDescription>
+        <value>Aucune valeur disponible</value>
     </labels>
 
     <labels>

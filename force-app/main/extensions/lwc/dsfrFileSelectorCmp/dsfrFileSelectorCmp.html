@@ -1,20 +1,23 @@
 <template>
-
-    <!-- DATA LOAD UTILITY -->
-    <template if:false={isDisabled}>
-        <c-sfpeg-list-cmp   object-api-name={objectApiName} 
-                            record-id={recordId} user-id={currentUserId}
-                            config-name={configName}
-                            parent-context={contextJson}
-                            onload={handleRecordLoad}
-                            is-debug={isDebug}
-                            is-debug-fine={isDebug}
-                            class="listLoader">
-        </c-sfpeg-list-cmp>
-    </template>
-
     <!-- COMPONENT DISPLAY -->
     <div class={wrappingClass} > 
+        <div class="fr-input-group">
+            <template lwc:if={hasFiles}>
+                <lightning-select   lwc:ref="fileSelect"    aria-described-by={ariaDescriptions}
+                                    name="fileSelect"       label={label}
+                                    options={fileList}      value={selection}
+                                    onchange={handleSelect} >
+                </lightning-select>
+            </template>
+            <template lwc:else>
+                <lightning-select   lwc:ref="fileSelect"    aria-described-by={ariaDescriptions}
+                                    name="fileSelect"       label={label}
+                                    options={fileList}      disabled >
+                </lightning-select>
+            </template>
+            <span class="fr-hint-text fr-mt-2v" lwc:ref="selectComment" id="selectComment" >{comment}</span>
+
+        <!--
         <label class="fr-label" for="fileSelect fileSelect2">
             {label}
             <template lwc:if={comment}>
@@ -35,12 +38,13 @@
                 <option value="" selected disabled hidden>Aucun fichier disponible</option>
             </select>
         </template>
-
-        <template lwc:if={message}>
-            <p class={messageClass}>
-                {message}
-            </p>
-        </template>
+        -->
+            <template lwc:if={message}>
+                <span class={messageClass} lwc:ref="selectMessage" id="selectMessage" role="alert">
+                    {message}
+                </span>
+            </template>
+        </div>
     </div>
 
     <!-- DEBUG DISPLAY -->
@@ -56,5 +60,20 @@
                 </span>
             </p>
         </div>
+    </template>
+
+    <!-- DATA LOAD UTILITY -->
+    <template lwc:if={isEnabled}>
+        <c-sfpeg-list-cmp   lwc:ref="listLoader"
+                            object-api-name={objectApiName} 
+                            record-id={recordId} user-id={currentUserId}
+                            config-name={configName}
+                            parent-context={contextJson}
+                            onload={handleRecordLoad}
+                            is-debug={isDebug}
+                            is-debug-fine={isDebug}
+                            class="listLoader"
+                            force-hidden="true">
+        </c-sfpeg-list-cmp>
     </template>
 </template>
