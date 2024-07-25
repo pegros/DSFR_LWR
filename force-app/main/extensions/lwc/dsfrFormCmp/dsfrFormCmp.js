@@ -265,7 +265,7 @@ export default class DsfrFormCmp extends LightningElement {
                             iterField.help = objectFields[iterField.name].inlineHelpText;
                         }
                     });
-                    console.warn('handleLoad: all section fields reworked');
+                    if (this.isDebug) console.log('handleLoad: all section fields reworked');
                 }
                 else {
                     console.warn('handleLoad: section with no fields ');
