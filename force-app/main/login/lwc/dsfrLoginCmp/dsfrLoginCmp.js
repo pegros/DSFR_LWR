@@ -33,6 +33,13 @@ export default class DsfrLoginCmp extends NavigationMixin(LightningElement) {
     isProcessing = false;
 
     //-----------------------------------------------------
+    // Custom Getters
+    //-----------------------------------------------------
+    get showRegister() {
+        return this.registerTarget;
+    }
+
+    //-----------------------------------------------------
     // Custom Labels
     //-----------------------------------------------------
     @api loginHeader;

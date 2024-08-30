@@ -110,24 +110,19 @@
                                         </fieldset>
                                     </form>
                                 </div>
-                                <hr>
-                                <h2 class="fr-h2">{registerHeader}</h2>
-                                <!--
-                                <ul class="fr-btns-group">
-                                    <li>
-                                -->
-                                        <c-dsfr-button-dsp  button-label={registerLabel}
+
+                                <template lwc:if={showRegister}>
+                                    <hr>
+                                    <h2 class="fr-h2">{registerHeader}</h2>
+                                    <c-dsfr-button-dsp  button-label={registerLabel}
                                                             button-title={registerTitle}
                                                             button-variant="secondary"
                                                             button-align="spread"
                                                             button-target={registerTarget}
                                                             button-tag={registerTag}
                                                             is-debug={isDebug}>
-                                        </c-dsfr-button-dsp>
-                                <!--
-                                    </li>
-                                </ul>
-                                -->
+                                    </c-dsfr-button-dsp>
+                                </template>
                             </div>
                         </div>
                     </div>
