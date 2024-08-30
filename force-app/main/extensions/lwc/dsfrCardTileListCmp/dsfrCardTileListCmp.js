@@ -259,10 +259,10 @@ export default class DsfrCardTileListCmp extends LightningElement {
         return (this.currentPage > 1 ? this.currentPage - 1 : null);
     }
     get previousPageTitle() {
-        return 'Page ' + (this.currentPage - 1);
+        return 'Accès à la page ' + (this.currentPage - 1);
     }
     get currentPageTitle() {
-        return 'Page ' + this.currentPage;
+        return 'Accès à la page ' + this.currentPage;
     }
     get nextPage() {
         //console.log('nextPage: currentPage ',this.currentPage);
@@ -270,7 +270,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
         return (this.currentPage < this.maxPage ? this.currentPage + 1 : null);
     }
     get nextPageTitle() {
-        return 'Page ' + (this.currentPage + 1);
+        return 'Accès à la page ' + (this.currentPage + 1);
     }
 
     //-----------------------------------------------------

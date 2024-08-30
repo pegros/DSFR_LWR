@@ -237,12 +237,12 @@
                         <ul class="fr-pagination__list paginationList">
                             <!-- First pages links -->
                             <template lwc:if={isFirstPage}>
-                                <li><a class="fr-pagination__link fr-pagination__link--first"   title="Première page"   aria-label="Première page"      aria-disabled="true" disabled>Première page</a></li>
-                                <li><a class="fr-pagination__link fr-pagination__link--prev"    title="Page précédente" aria-label="Page précédente"    aria-disabled="true" disabled>Page précédente</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--first"   title="Accès à la première page"   aria-label="Accès à la première page"      aria-disabled="true" disabled>Première page</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--prev"    title="Accès à la page précédente" aria-label="Accès à la page précédente"    aria-disabled="true" disabled>Page précédente</a></li>
                             </template>
                             <template lwc:else>
-                                <li><a class="fr-pagination__link fr-pagination__link--first"   href="#" title="Première page"      data-value="1"              aria-label="Première page"      onclick={handlePagination}>Première page</a></li>
-                                <li><a class="fr-pagination__link fr-pagination__link--prev"    href="#" title="Page précédente"    data-value={previousPage}   aria-label="Page précédente"    onclick={handlePagination}>Page précédente</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--first"   href="#" title="Accès à la première page"      data-value="1"              aria-label="Accès à la première page"      onclick={handlePagination}>Première page</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--prev"    href="#" title="Accès à la page précédente"    data-value={previousPage}   aria-label="Accès à la page précédente"    onclick={handlePagination}>Page précédente</a></li>
                             </template>
 
                             <!-- Before Current page links -->
@@ -266,12 +266,12 @@
 
                             <!-- Last pages links -->
                             <template lwc:if={isLastPage}>
-                                <li><a class="fr-pagination__link fr-pagination__link--next" title="Page suivante" aria-label="Page suivante"  aria-disabled="true" disabled>Page suivante</a></li>
-                                <li><a class="fr-pagination__link fr-pagination__link--last" title="Dernière page" aria-label="Dernière page"  aria-disabled="true" disabled>Dernière page</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--next" title="Accès à la page suivante" aria-label="Accès à la page suivante"  aria-disabled="true" disabled>Page suivante</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--last" title="Accès à la dernière page" aria-label="Accès à la dernière page"  aria-disabled="true" disabled>Dernière page</a></li>
                             </template>
                             <template lwc:else>
-                                <li><a class="fr-pagination__link fr-pagination__link--next" href="#" title="Page suivante" aria-label="Page suivante" data-value={nextPage}    onclick={handlePagination}>Page suivante</a></li>
-                                <li><a class="fr-pagination__link fr-pagination__link--last" href="#" title="Dernière page" aria-label="Dernière page" data-value={maxPage}     onclick={handlePagination}>Dernière page</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--next" href="#" title="Accès à la page suivante" aria-label="Accès à la page suivante" data-value={nextPage}    onclick={handlePagination}>Page suivante</a></li>
+                                <li><a class="fr-pagination__link fr-pagination__link--last" href="#" title="Accès à la dernière page" aria-label="Accès à la dernière page" data-value={maxPage}     onclick={handlePagination}>Dernière page</a></li>
                             </template>
                         </ul>
                     </nav>
