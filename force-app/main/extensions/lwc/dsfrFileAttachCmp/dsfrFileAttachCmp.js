@@ -199,7 +199,7 @@ export default class DsfrFileAttachCmp extends LightningElement {
             console.log('rendered: configName ', this.label);
         }
         if (!this.selectCommentId) {
-            console.log('rendered: selectCommentId init ', this.refs?.selectComment?.id);
+            if (this.isDebug) console.log('rendered: selectCommentId init ', this.refs?.selectComment?.id);
             this.selectCommentId = this.refs?.selectComment?.id;
         }
         if (this.isDebug) console.log('rendered: END for file attach');

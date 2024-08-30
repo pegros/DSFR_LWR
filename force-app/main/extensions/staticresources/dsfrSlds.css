@@ -10,16 +10,20 @@
     /** set the font for headings **/
     --dxp-g-heading-font-family: 'Marianne', arial, serif;
     --dxp-s-text-heading-medium-font-family: 'Marianne', arial, sans-serif;
+    --dxp-s-text-heading-small-font-family: 'Marianne', arial, sans-serif;
 
     /** set the font for forms **/
     --dxp-s-form-element-text-font-family: 'Marianne', arial, serif;
     --dxp-s-body-font-family: 'Marianne', arial, serif;
     --dxp-s-form-element-label-font-family: 'Marianne', arial, serif;
 
+    /** set the font for buttons **/
+     --dxp-s-button-font-family: 'Marianne', arial, serif;
+
     /** set the font size for headings **/
     --dxp-s-form-element-label-font-size : 1rem;
     --dxp-s-body-small-font-size : 0.75rem;
-     
+
     /* Error color overrides */
     --slds-g-color-error-base-40 : var(--text-default-error);
     --lwc-colorTextError : var(--text-default-error);
@@ -76,31 +80,31 @@ html {
 }
 
 /* Display enhacement of richtext content */
-h6 {
+h6, .slds-rich-text-editor__output h6, .slds-rich-text-editor__textarea h6 {
     font-weight: 700;
     font-size: 1.125rem;
     line-height: 1.5rem;
     margin: var(--title-spacing);
 } 
-h5 {
+h5, .slds-rich-text-editor__output h5, .slds-rich-text-editor__textarea h5 {
     font-weight: 700;
     font-size: 1.25rem;
     line-height: 1.75rem;
     margin: var(--title-spacing);
 }  
-h4 {
+h4, .slds-rich-text-editor__output h4, .slds-rich-text-editor__textarea h4 {
     font-weight: 700;
     font-size: 1.375rem;
     line-height: 1.75rem;
     margin: var(--title-spacing);
 }  
-h3 {
+h3, .slds-rich-text-editor__output h3, .slds-rich-text-editor__textarea h3 {
     font-weight: 700;
     font-size: 1.5rem;
     line-height: 2rem;
     margin: var(--title-spacing);
 }
-h2 {
+h2, .slds-rich-text-editor__output h2, .slds-rich-text-editor__textarea h2 {
     font-weight: 700;
     font-size: 1.75rem;
     line-height: 2.25rem;
@@ -123,7 +127,7 @@ p[class*="ql-indent-"]:has(+ p[class*="ql-indent-"]) {
 p:has(+ ul){
     margin : var(--li-bottom);
 }
-p:has(+ h1, + h2, + h3, + h4, + h5) {
+p:has(+ h1, + h2, + h3, + h4, + h5), li:has(+ h1, + h2, + h3, + h4, + h5) {
     margin: var(--title-spacing);
 }
 h2.slds-text-heading_small {
@@ -255,7 +259,31 @@ a.fr-link--icon-left::before {
     color: var(--text-disabled-grey);
     box-shadow: inset 0 -2px 0 0 var(--border-disabled-grey);
 }
-
+.slds-datepicker__filter h2 {
+    margin: 0;
+    line-height: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.slds-datepicker__filter .slds-select_container {
+    /*padding: 0.5rem 0.5rem 0.25rem 0.75rem;*/
+    margin-top: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1rem;
+    box-shadow: none;
+}
+.slds-datepicker__filter .slds-select_container select {
+    font-weight: 600;
+}
+.slds-datepicker__filter .slds-button.slds-button_icon-container:focus, .slds-datepicker__filter .slds-button.slds-button_icon-container:active, .slds-dropdown-trigger .slds-input__icon
+:focus, .slds-dropdown-trigger .slds-input__icon:active {
+    box-shadow: none;
+    outline-color: rgb(10,118,246);
+    outline-style: solid;
+    outline-width: 2px;
+    outline-offset: 1px;
+}
 
 /* STANDARD picklist FIELD matched to fr-select */
 .slds-combobox__input {

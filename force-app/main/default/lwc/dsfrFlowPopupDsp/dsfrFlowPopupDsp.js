@@ -74,8 +74,8 @@ export default class DsfrFlowPopupDsp extends LightningModal {
     renderedCallback(event){
         if (this.isDebug) {
             console.log('rendered: START FlowPopup');
-            console.log('rendered: searchForm ',JSON.stringify(this.searchForm));
-            console.log('rendered: resultsConfig ',JSON.stringify(this.resultsConfig));
+            console.log('rendered: flowName ',JSON.stringify(this.flowName));
+            console.log('rendered: flowInput ',JSON.stringify(this.flowInput));
             console.log('rendered: END FlowPopup');
         }
     }

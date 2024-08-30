@@ -1,15 +1,18 @@
 <template>
     <!-- Main Button Display -->
-    <c-dsfr-button-dsp  button-icon={buttonIcon}    button-icon-position={buttonIconPosition}
+    <c-dsfr-button-dsp  lwc:ref="actionButton"
+                        button-icon={buttonIcon}    button-icon-position={buttonIconPosition}
                         button-label={buttonLabel}  button-title={buttonTitle} 
                         button-size={buttonSize}    button-variant={buttonVariant} 
                         button-align={buttonAlign}  button-inactive={buttonInactive}
                         ontrigger={handleAction}    is-debug={isDebug}>
     </c-dsfr-button-dsp>
+    <!--
     <div class="slds-hide slds-is-relative spinnerDiv">
         <lightning-spinner alternative-text="..." size="small" variant="brand" class="slds-spinner_inline">
         </lightning-spinner>
     </div>
+    -->
 
     <!-- Error notification Utility -->
     <c-dsfr-alert-popup-dsp is-debug={isDebug} >

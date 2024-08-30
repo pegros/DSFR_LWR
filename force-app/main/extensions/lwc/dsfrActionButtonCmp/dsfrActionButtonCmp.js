@@ -60,7 +60,8 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
         if (this.isDebug) console.log('handleAction: START for button ',this.buttonLabel);
         if (this.isDebug) console.log('handleAction: event ',event);
 
-        this.toggleSpinner();
+        //this.toggleSpinner();
+        this.refs.actionButton.buttonInactive = true;
 
         if (this.isDebug) console.log('handleAction: action fetched ',this.buttonAction);
         if (this.isDebug) console.log('handleAction: stringified ', JSON.stringify(this.buttonAction));
@@ -90,9 +91,10 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                     actionPromise = deleteRecord(actionDetails.params);
                     break;
                 default:
-                    console.warn('handleAction: END KO / Unsupported action type');
+                    console.error('handleAction: END KO / Unsupported action type ',actionDetails.type);
                     document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:'config_error',event_label:this.buttonTag}}}));
                     if (this.isDebug) console.log('handleAction: GA notified');
+                    this.refs.actionButton.buttonInactive = false;
                     return;
             }
 
@@ -144,7 +146,8 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                         }
                         if (this.isDebug) console.log('handleAction: END');
                     }
-                    this.toggleSpinner();
+                    //this.toggleSpinner();
+                    this.refs.actionButton.buttonInactive = false;
                 });
                 if (this.isDebug) console.log('handleAction: popup displayed');
             }).catch(error => {
@@ -169,7 +172,8 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                 popupUtil.showAlert(alertConfig).then(() => {
                     if (this.isDebug) console.log('handleAction: END / popup closed');
                 });
-                this.toggleSpinner();
+                //this.toggleSpinner();
+                this.refs.actionButton.buttonInactive = false;
             });
             
             if (this.isDebug) console.log('handleAction: action trigered');
@@ -179,7 +183,7 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
     //-----------------------------------------------------
     // Utilities
     //-----------------------------------------------------
-    toggleSpinner = function(isShown) {
+    /*toggleSpinner = function(isShown) {
         if (this.isDebug) console.log('toggleSpinner: START with',isShown);
 
         let spinner = this.template.querySelector('lightning-spinner');
@@ -201,5 +205,5 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
         }
         
         if (this.isDebug) console.log('toggleSpinner: END');
-    }
+    }*/
 }
