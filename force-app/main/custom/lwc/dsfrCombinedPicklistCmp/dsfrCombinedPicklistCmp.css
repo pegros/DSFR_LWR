@@ -1,3 +1,8 @@
+/* for proper spinner display */
+.mainWrapper {
+    position: relative;
+    display: block;
+}
 /* DSFR override to limit table bottom margin */
 .picklistTable {
     margin-bottom: 1rem;
@@ -8,4 +13,19 @@
 }
 .actionGrid {
     width: 100%;
+}
+
+.selectItem:has(.slds-has-error)::before {
+    background-image: linear-gradient(0deg, var(--border-plain-error), var(--border-plain-error));
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: .125rem 100%;
+    bottom: .75rem;
+    content: "";
+    display: block;
+    left: -.5rem;
+    pointer-events: none;
+    position: absolute;
+    right: -.5rem;
+    top: 0
 }

@@ -3,11 +3,12 @@ import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi'; 
 import basePathName from '@salesforce/community/basePath';
 
-import SELECT_LABEL from '@salesforce/label/c.dsfrCombinedPicklistSelectLabel';
-import SELECT_MESSAGE from '@salesforce/label/c.dsfrCombinedPicklistSelectMessage';
-import SELECT_MISSING from '@salesforce/label/c.dsfrCombinedPicklistSelectMissing';
-import ADD_LABEL from '@salesforce/label/c.dsfrCombinedPicklistAddLabel';
-import DELETE_TITLE from '@salesforce/label/c.dsfrCombinedPicklistDeleteTitle';
+import SELECT_LABEL     from '@salesforce/label/c.dsfrCombinedPicklistSelectLabel';
+import SELECT_MESSAGE   from '@salesforce/label/c.dsfrCombinedPicklistSelectMessage';
+import SELECT_MISSING   from '@salesforce/label/c.dsfrCombinedPicklistSelectMissing';
+import ADD_LABEL        from '@salesforce/label/c.dsfrCombinedPicklistAddLabel';
+import ADD_TITLE        from '@salesforce/label/c.dsfrCombinedPicklistAddTitle';
+import DELETE_TITLE     from '@salesforce/label/c.dsfrCombinedPicklistDeleteTitle';
 
 export default class DsfrCombinedPicklistCmp extends LightningElement {
 
@@ -43,7 +44,16 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
     //-----------------------------------------------------
     selectLabel = SELECT_LABEL;
     addLabel = ADD_LABEL;
+    addTitle = ADD_TITLE;
     deleteTitle = DELETE_TITLE;
+
+    //-----------------------------------------------------
+    // Custom getters
+    //-----------------------------------------------------
+    /*get addAriaLabel() {
+        if (this.isDebug) console.log('addAriaLabel: returning ',this.addLabel + ' ' + this.fieldValues[0].label);
+        return this.addLabel + ' ' + this.fieldValues[0].label;
+    }*/
 
     //-----------------------------------------------------
     // Context Data
@@ -401,6 +411,8 @@ export default class DsfrCombinedPicklistCmp extends LightningElement {
 
             this.template.querySelectorAll('lightning-select').forEach(selector => {
                 selector.value = '';
+                //selector.setCustomValidity('');
+                //selector.reportValidity();
             });
             this.isSaving = false;
 

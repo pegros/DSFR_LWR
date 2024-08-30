@@ -17,6 +17,14 @@
         <value>Ajouter</value>
     </labels>
     <labels>
+        <fullName>dsfrCombinedPicklistAddTitle</fullName>
+        <categories>DSFR Component LWC Button Title</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Titre / label aria du bouton d'ajout</shortDescription>
+        <value>Ajouter la sélection à la liste</value>
+    </labels>
+    <labels>
         <fullName>dsfrCombinedPicklistDeleteTitle</fullName>
         <categories>DSFR Component LWC Button Title</categories>
         <language>en_US</language>

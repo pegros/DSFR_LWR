@@ -1,5 +1,7 @@
+<!-- sldsValidatorIgnore -->
 <template>
     <div class={wrappingCss}>
+        <div class="mainWrapper">
         <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
             <div class="fr-col-12" >
                 <fieldset class="fr-fieldset" id="picklist-fieldset" aria-labelledby="fieldset-legend">
@@ -51,11 +53,12 @@
                              <fieldset class=" fr-fieldset" id="picklist-entry" >
                                 <div class="actionGrid fr-grid-row fr-grid-row-gutters fr-grid-row--top ">
                                     <template for:each={fieldValues} for:item="iterField">
-                                        <div class="fr-fieldset__element fr-col-12 fr-col-md-5 fr-px-2v fr-mb-8v" key={iterField.label}>
+                                        <div class="selectItem fr-fieldset__element fr-col-12 fr-col-md-5 fr-px-2v fr-mb-8v" key={iterField.label}>
                                             <!--  -->
                                             <lightning-select   class="fr-select-group"     value={iterField.selection}
                                                                 name={iterField.label}      label={iterField.label}
-                                                                options={iterField.values}  onchange={handleSelect} >
+                                                                aria-label={iterField.selectAriaLabel}
+                                                                options={iterField.values}  onchange={handleSelect}  >
                                             </lightning-select>
                                             <!--
                                             <div class="fr-select-group">
@@ -82,7 +85,7 @@
                                     </template>
                                     <div class="fr-fieldset__element fr-col-12 fr-col-md-2 fr-px-2v fr-mt-9v">
                                         <button class="addButton fr-btn fr-icon-add-circle-line fr-btn--icon-left fr-btn--primary"
-                                                lwc:ref="addButton"     aria-label={addLabel}
+                                                lwc:ref="addButton"     title={addTitle}    aria-label={addTitle}
                                                 onclick={handleAdd}>
                                             {addLabel}
                                         </button>
@@ -111,5 +114,6 @@
             <lightning-spinner alternative-text="..." variant="brand">
             </lightning-spinner>
        </template>
+        </div>
     </div>
 </template>
