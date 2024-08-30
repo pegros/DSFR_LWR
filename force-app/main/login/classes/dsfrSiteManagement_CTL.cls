@@ -242,7 +242,9 @@ public with sharing class dsfrSiteManagement_CTL {
         String newUsername = newAccount.FirstName.replace(' ','').left(5) + newAccount.LastName.replace(' ','').left(20) + '#' + nwUserCount;
         User newUser = new User(
             Username = newUsername + '#' + nwInfos.UrlPathPrefix.substringBefore('vforcesite') + '@' + currentDomain,
-            Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(2) + nwUserCount,
+            //Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(2) + nwUserCount,
+            //Urgent patch for more than 100 000 users !
+            Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(1) + nwUserCount,
             CommunityNickname = newUsername,
             FirstName = newAccount.FirstName,
             LastName = newAccount.LastName,
@@ -671,10 +673,20 @@ public with sharing class dsfrSiteManagement_CTL {
     **/
 	private without sharing class UserSearch_UTL {
         public List<User> getUser(final String identity, final String profileId) {
-            return [SELECT username FROM User
-                    WHERE IsActive = true
-                        AND (   (username = :identity)
-                            OR  ((ProfileId = :profileId) AND (Email = :identity)))];
+            if (String.isBlank(profileId)) {
+                System.debug('getUser: searching standard users');
+                return [    SELECT username FROM User
+                            WHERE IsActive = true
+                                AND (   (username = :identity)
+                                    OR  ((UserType = 'Standard') AND (Email = :identity)))];
+            }
+            else {
+                System.debug('getUser: searching community users with profile ' + profileId);
+                return [    SELECT username FROM User
+                            WHERE IsActive = true
+                                AND (   (username = :identity)
+                                    OR  ((ProfileId = :profileId) AND (Email = :identity)))];
+            }
         }
         public List<Account> getAccount(final String email, final String recordTypeId) {
             System.debug('getAccount: for email ' + email);
