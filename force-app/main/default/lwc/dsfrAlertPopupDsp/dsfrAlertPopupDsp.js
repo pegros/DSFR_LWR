@@ -112,8 +112,8 @@ export default class DsfrAlertPopupDsp extends LightningElement {
         if (event) event.preventDefault();
         this.isModalOpen = false;
 
-        //let modalCmp = this.template.querySelector('dialog');
-        let modalCmp = this.refs.modalDialog;
+        let modalCmp = this.template.querySelector('dialog');
+        //let modalCmp = this.refs.modalDialog;
         if (this.isDebug) console.log('closeModal: modalCmp fetched ',modalCmp);
         modalCmp.close();
         if (this.isDebug) console.log('closeModal: modalCmp closed');
