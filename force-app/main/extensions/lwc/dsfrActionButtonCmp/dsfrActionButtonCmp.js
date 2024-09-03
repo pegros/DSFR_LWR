@@ -113,7 +113,7 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                 popupUtil.showAlert(alertConfig).then(() => {
                     if (this.isDebug) console.log('handleAction: analysing next steps in action details ', JSON.stringify(actionDetails));                    
                     if (this.isDebug) console.log('handleAction: for data ', JSON.stringify(data));                    
-                    if ((actionDetails.navigate) && (data.id)) {
+                    if ((actionDetails.navigate) && (data?.id)) {
                         if (this.isDebug) console.log('handleAction: navigating to record', data.id);
                         const newRecordPageRef = {
                             type: 'standard__recordPage',
@@ -125,6 +125,10 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                         }
                         if (this.isDebug) console.log('handleAction: END / Navigating to ', JSON.stringify(newRecordPageRef));
                         this[NavigationMixin.Navigate](newRecordPageRef);
+                    }
+                    else if (actionDetails.navigate) {                        
+                        if (this.isDebug) console.log('handleAction: END / Navigating to ', JSON.stringify(actionDetails.navigate));
+                        this[NavigationMixin.Navigate](actionDetails.navigate);
                     }
                     else {
                         if (actionDetails.reload) {

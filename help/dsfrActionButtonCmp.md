@@ -54,11 +54,12 @@ Par exemple, la configuration suivante permet de modifier le champ `Etat__c` du 
 
 Il est possible de:
 * ajuster le message de confimation de l'opération au travers des propriétés textuelles `title`et `message`.
-* déclencher une navigation vers l'enregistrement créé / modifié via la propriété booléenne  `navigate`
+* déclencher une navigation vers l'enregistrement créé / modifié ou vers une page du site (en cas de `delete`)
+via la propriété  `navigate`.
 * demander un raffraichissement d'un ensemble d'enregistrements via la propriété `reload`au format attendu par le service standard [notifyRecordUpdateAvailable](https://developer.salesforce.com/docs/platform/lwc/guide/reference-notify-record-update.html?q=notifyRecordUpdateAvailable)
 * déclencher un raffraichissement spécifique aux composants [PEG_LIST](https://github.com/pegros/PEG_LIST) (utilisés dans certains composants DSFR) via la propriété booléenne `refresh`
 
-L'exemple suivant propose une action de création d'un nouvel objet avec popup de
+L'exemple suivant propose une action de création d'un nouvel enregistrement avec popup de
 confirmation personnalisée et redirection automatique vers le nouvel enregistrement créé.
 
 ```
@@ -74,10 +75,32 @@ confirmation personnalisée et redirection automatique vers le nouvel enregistre
         }
     },
     "title": "Candidature initialisée.",
-    "message": "Merci de bien founir les informations complémentaires demandées dans l'écran suivant et soumettre votre candidature pour prise en compte.",
+    "message": "Merci de fournir les informations complémentaires demandées dans l'écran suivant et soumettre votre candidature pour prise en compte.",
     "navigate": true
 }
 ```
+
+L'exemple suivant propose une action de destruction de l'enregistrement courant avec popup de
+confirmation personnalisée et redirection automatique vers la page de liste de l'objet correspondant.
+```
+{
+    "type": "delete",
+    "params": "{!Route.recordId}",
+    "title": "Enregistrement supprimé",
+    "navigate": {
+        "type": "standard__objectPage",
+        "attributes": {
+            "objectApiName": "TEST_PEG__c",
+            "actionName": "home"
+        }
+    }
+}
+```
+
+⚠️ La propriété `navigate` est booléenne dans le cas des opérations `create`et `update` (et doit être valorisée à
+`true` pour déclencher la redirection vers l'enregistrement créé/modifié) et de type objet JSON dans le cas d'un `delete`
+(avec une [référence de page](https://developer.salesforce.com/docs/platform/lwc/guide/reference-page-reference-type.html) 
+standard Salesforce).
 
 
 ## Précisions techniques
