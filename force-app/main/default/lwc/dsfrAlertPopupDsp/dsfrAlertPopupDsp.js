@@ -72,8 +72,8 @@ export default class DsfrAlertPopupDsp extends LightningElement {
         this.alertConfig = alertConfig;
         this.isModalOpen = true;
 
-        //let modalCmp = this.template.querySelector('dialog');
-        let modalCmp = this.refs.modalDialog;
+        let modalCmp = this.template.querySelector('dialog');
+        //let modalCmp = this.refs.modalDialog;
         if (this.isDebug) console.log('showAlert: modalCmp fetched ',modalCmp);
         modalCmp.showModal();
         if (this.isDebug) console.log('showAlert: modalCmp shown');
