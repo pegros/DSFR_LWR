@@ -1,6 +1,9 @@
-import { api } from 'lwc';
+import { api, wire } from 'lwc';
 import LightningModal from 'lightning/modal';
 import basePathName from '@salesforce/community/basePath';
+
+// To propagate notification to parent page
+import { MessageContext } from 'lightning/messageService';
 
 import CLOSE_TITLE from '@salesforce/label/c.dsfrFlowPopupCloseTitle';
 import CLOSE_LABEL from '@salesforce/label/c.dsfrFlowPopupCloseLabel';
@@ -27,6 +30,11 @@ export default class DsfrFlowPopupDsp extends LightningModal {
     //----------------------------------------------------------------
     errorMsg;  
     flowInput;
+
+    // To notify the utility bar handler if required / receive notification    
+     //notificationSubscription = null;
+     @wire(MessageContext)
+     messageContext;
 
     //-----------------------------------
     // Custom Labels
@@ -76,6 +84,7 @@ export default class DsfrFlowPopupDsp extends LightningModal {
             console.log('rendered: START FlowPopup');
             console.log('rendered: flowName ',JSON.stringify(this.flowName));
             console.log('rendered: flowInput ',JSON.stringify(this.flowInput));
+            console.log('rendered: messageContext ',this.messageContext);
             console.log('rendered: END FlowPopup');
         }
     }
