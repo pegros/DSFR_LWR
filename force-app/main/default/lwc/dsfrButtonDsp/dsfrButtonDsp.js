@@ -14,6 +14,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonTarget;
+    @api buttonName;
     
     //@api buttonInactive = 'false';
     @api
@@ -57,6 +58,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
             console.log('connected: button variant ',this.buttonVariant);
             console.log('connected: button size ',this.buttonSize);
             console.log('connected: button target ',this.buttonTarget);
+            console.log('connected: button name ',this.buttonName);
             console.log('connected: button inactive? ', this.buttonInactive);
         }
 
@@ -148,8 +150,8 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
             }
         }
         else {
-            if (this.isDebug) console.log('openTarget: END / notifying parent (if any via action)');
-            this.dispatchEvent(new CustomEvent('trigger',null));
+            if (this.isDebug) console.log('openTarget: END / notifying parent (if any via action) with button name ', this.buttonName);
+            this.dispatchEvent(new CustomEvent('trigger', {detail: {name: this.buttonName}}));
         }
     }
 }

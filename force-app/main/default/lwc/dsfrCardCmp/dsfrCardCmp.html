@@ -205,6 +205,18 @@
                                         </c-dsfr-form-button-cmp>
                                     </li>
                                 </template>
+                                <template lwc:elseif={iter.name}>
+                                    <li key={iter.label}  >
+                                        <c-dsfr-button-dsp  button-icon={iter.icon}     button-icon-position={iter.iconPosition}
+                                                            button-label={iter.label}   button-title={iter.title}
+                                                            button-tag={iter.tag}
+                                                            button-size={iter.size}     button-variant={iter.variant}
+                                                            button-align="left"         button-inactive={iter.inactive}
+                                                            button-name={iter.name}     ontrigger={handlRowAction}
+                                                            is-debug={isDebug}>
+                                        </c-dsfr-button-dsp>
+                                    </li>
+                                </template>
                                 <template lwc:else>
                                     <li key={iter.label}>⚠️ {iter.label}</li>
                                 </template>

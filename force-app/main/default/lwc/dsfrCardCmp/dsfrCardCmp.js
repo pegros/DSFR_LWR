@@ -61,6 +61,7 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
     @api iconClass;
     @api fitImage = false;
     @api isVertical = false; 
+    @api value; // Row value for card list implementation and custom row actions
     @api isDebug = false;       // Flag to activate debug information
 
     //-----------------------------------------------------
@@ -278,6 +279,21 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
 
             if (this.isDebug) console.log('openTarget: END ignoring navigation');
         }
+    }
+
+
+    handlRowAction(event) {
+        if (this.isDebug) console.log('handlRowAction: START on card with event',event)
+        if (this.isDebug) console.log('handlRowAction: event detail',JSON.stringify(event.detail));
+        if (this.isDebug) console.log('handlRowAction: on row',JSON.stringify(this.value));
+
+        let propagationEvent = new CustomEvent('action', { detail: {
+            action : event.detail,
+            row: this.value
+        }});
+        console.log('handlRowAction: propagationEvent prepared ',JSON.stringify(propagationEvent));
+        this.dispatchEvent(propagationEvent);
+        console.log('handlRowAction: END on card');
     }
 
     //-----------------------------------------------------

@@ -2,7 +2,7 @@
     color: var(--text-default-grey) !important;
 }
 .cardImage-small {
-    max-height: 200px;
+    max-height: 175px;
 }
 .cardImage-medium {
     max-height: 250px;

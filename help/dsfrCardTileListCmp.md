@@ -136,6 +136,12 @@ La configuration de la query **sfpegList** n'est pas présentée ici.
 }
 ```
 
+Il est également possible d'exploiter toutes les capacités du framework **sfpegAction** et 
+d'appeler une action définie comme _row action_ dans la configuration **sfpegList** utilisée.
+Il suffit de remplacer la propriété `target` par la propriété `name` avec le nom de la
+_row action_ à déclencher.
+
+
 ### Exemple de liste d'icônes et textes
 
 Cet exemple permet d'afficher le résultat d'une query SOQL `count()` avec un résultat nommé NBR sous la forme d'un texte accompagné d'une icône (`camera-line`) et d'un préfixe (`Number`).

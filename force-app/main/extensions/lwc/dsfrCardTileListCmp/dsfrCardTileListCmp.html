@@ -177,7 +177,9 @@
                                                             card-css={elementCss}                   field-class={cardFieldClass}
                                                             icon-class={cardIconClass}              fit-image={fitImage}
                                                             card-tag={item.tag}                     card-target={item.target}
-                                                            card-buttons={item.buttons}             is-debug={isDebug}>
+                                                            card-buttons={item.buttons}
+                                                            value={item.row}                        onaction={handleAction}
+                                                            is-debug={isDebug}>
                                         </c-dsfr-card-cmp>
                                     </div>
                                 </template>

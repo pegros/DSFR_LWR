@@ -361,6 +361,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
                 baseRecordList.forEach(item => {
                     if (this.isDebug) console.log('handleRecordLoad: processing row ',JSON.stringify(item));
                     let newItem = {... (this.configDetails?.display?.base)};
+                    newItem.row = item;
                     //newItem._source = item;
 
                     if (this.configDetails?.display?.row) {
