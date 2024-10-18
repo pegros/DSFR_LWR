@@ -83,7 +83,7 @@ public with sharing class dsfrSiteManagement_CTL {
     public static String loginViaIdentity(final String identity, final String password, String startUrl) {
         System.debug('loginViaIdentity: START for identity ' + identity);
         System.debug('loginViaIdentity: for startUrl ' + startUrl);
-        System.debug('loginViaIdentity: with password ' + password);
+        //System.debug('loginViaIdentity: with password ' + password);
 
         if (String.isEmpty(identity) || String.isEmpty(password)) {
             System.debug(LoggingLevel.ERROR,'loginViaIdentity: END KO / Missing information');
@@ -208,11 +208,7 @@ public with sharing class dsfrSiteManagement_CTL {
 
         Site siteInfos = searchUtl.getSiteInfos(Site.getSiteId());
         System.debug('registerUser: siteInfos fetched ' + siteInfos);
-        /*System.debug('registerUser: site ID ' + Site.getSiteId());
-        System.debug('registerUser: site Domain ' + Site.getDomain());
-        System.debug('registerUser: site Path Prefix ' + Site.getPathPrefix());
-        System.debug('registerUser: site isRegistrationEnabled? ' + Site.isRegistrationEnabled());*/
-
+        
         System.debug('registerUser: site Profile ID ' + nwInfos.SelfRegProfileId);
         integer nwUserCount = searchUtl.getUserCount(nwInfos.SelfRegProfileId);
         System.debug('registerUser: nwUserCount fetched ' + nwUserCount);
@@ -221,25 +217,16 @@ public with sharing class dsfrSiteManagement_CTL {
         String currentDomain = Site.getDomain();
         System.debug('registerUser: currentDomain fetched ' + currentDomain);
 
-        /*UserRole siteRole = searchUtl.getPortalRole();
-        System.debug('registerUser: userRole fetched ' + siteRole);*/
-
         System.debug('registerUser: guestUser ID ' + UserInfo.getUserId());
         User guestUser = [SELECT EmailEncodingKey, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
         System.debug('registerUser: guestUser data fetched ' + guestUser);
 
 
         // Step #2 - Data Preparation
-        /*System.debug('registerUser: startUrl provided ' + startUrl);
-        if (String.isEmpty(startUrl)) {
-            startUrl = Site.getPathPrefix();
-            System.debug('registerUser: default startUrl set ' + startUrl);
-        }*/
-
         newAccount.OwnerId = siteInfos.GuestRecordDefaultOwnerId;
         System.debug('registerUser: newAccount OwnerId updated ' + newAccount.OwnerId);
 
-        String newUsername = newAccount.FirstName.replace(' ','').left(5) + newAccount.LastName.replace(' ','').left(20) + '#' + nwUserCount;
+        String newUsername = newAccount.FirstName.replaceAll('\\W','').left(5) + newAccount.LastName.replaceAll('\\W','').left(20) + '#' + nwUserCount;
         User newUser = new User(
             Username = newUsername + '#' + nwInfos.UrlPathPrefix.substringBefore('vforcesite') + '@' + currentDomain,
             //Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(2) + nwUserCount,
@@ -262,7 +249,8 @@ public with sharing class dsfrSiteManagement_CTL {
         }*/
         System.debug('registerUser: newUser init ' + newUser);
 
-        System.debug('registerUser: password provided ' + password);
+        //System.debug('registerUser: password provided ' + password);
+        System.debug('registerUser: validating password provided');
         try {
             Site.validatePassword(newUser, password, password);
             System.debug('registerUser: password format checked');
@@ -280,7 +268,6 @@ public with sharing class dsfrSiteManagement_CTL {
                 //System.debug('registerUser: new Account inserted ' + newAccount);
                 System.debug('registerUser: new Account inserted with ID ' + newAccount.Id);
                 ID contactID = searchUtl.getContactId(newAccount.Id);
-                //newUser.AccountId = newAccount.Id;
                 newUser.ContactId = contactID;
                 System.debug('registerUser: user linked to new Contact ID ' + newUser.ContactId);
             }
@@ -295,47 +282,9 @@ public with sharing class dsfrSiteManagement_CTL {
             System.debug(LoggingLevel.ERROR,'registerUser: KO upon PersonAccount creation ' + e);
             //throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
             throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
-        }
+        }        
 
-        // Step #4 - User Registration
-        /*ID userId;
-        try {
-            userId = common.exception.ApiException: Unable to create/update fields: ProfileId. Please check the security settings of this field and verify that it is read/write for your profile or permission set.newUser, newAccount.Id, password, false);
-            //ID userId = Site.createExternalUser(newUser, newAccount.Id, password);
-            //String userId = Site.createPortalUser(newUser, newAccount.Id, password);
-            System.debug('registerUser: new User created ' + userId);            
-        }
-        catch (Site.ExternalUserCreateException e) {
-            System.debug(LoggingLevel.ERROR,'registerUser: KO upon Site User registration ' + e);
-            for (String iter : e.getDisplayMessages()) {
-                System.debug(LoggingLevel.ERROR,'registerUser: error ' + iter);
-            }
-            //throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
-            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
-        }
-        catch (exception e) {
-            System.debug(LoggingLevel.ERROR,'registerUser: KO upon User registration ' + e);
-            //throw new AuraHandledException('Problème de création de votre compte. ' + e.getMessage());
-            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationProcessingError + ' ' + e.getMessage());
-        }*/
-
-        /*
-        // Step #5 - User login
-        System.PageReference targetPage;
-        try {
-            targetPage = Site.login(newUser.username, password, startUrl);
-            System.debug('registerUser: login OK and targetPage evaluated ' + targetPage);
-        }
-        catch(Exception e) {
-            System.debug(LoggingLevel.ERROR,'registerUser: END KO / login failed ' + e.getMessage());
-            //throw new AuraHandledException('Problème de connexion à votre nouveau compte. ' + e.getMessage());
-            throw new AuraHandledException(Label.dsfrSiteMgtRegistrationLoginError + ' ' + e.getMessage());
-        }
-            
-        System.debug('registerUser: END OK with ' + targetPage.getUrl());
-        return targetPage.getUrl();*/
-
-        // Step #5 - User Email Challenge
+        // Step #4 - User Email Challenge
         try {
             System.debug('registerUser: controlling registration by Email for ' + newUser);   
             String verificationId;
@@ -367,7 +316,7 @@ public with sharing class dsfrSiteManagement_CTL {
         System.debug('validateUser: START for verification ID ' + verificationId);
         System.debug('validateUser: with input validation code ' + validationCode);
         System.debug('validateUser: email ' + email);
-        System.debug('validateUser: password ' + password);
+        //System.debug('validateUser: password ' + password);
         System.debug('validateUser: and start URL ' + startUrl);
 
         // Step #1 - Controls and Context fetch
@@ -444,7 +393,8 @@ public with sharing class dsfrSiteManagement_CTL {
     ***/
     @AuraEnabled
     public static String changePassword(final String newPassword, final String verifyNewPassword, final String oldPassword) {
-        System.debug('changePassword: START for new Password ' + newPassword);
+        //System.debug('changePassword: START for new Password ' + newPassword);
+        System.debug('changePassword: START for new Password');
 
         // Step #1 - Controls and Context fetch
         if (String.isBlank(newPassword) || String.isBlank(verifyNewPassword) || String.isBlank(oldPassword)) {
@@ -454,7 +404,8 @@ public with sharing class dsfrSiteManagement_CTL {
         }
 
         try {
-            System.debug('changePassword: replacing old password ' + oldPassword);
+            System.debug('changePassword: replacing old password');
+            //System.debug('changePassword: replacing old password ' + oldPassword);
             System.PageReference targetPage = Site.changePassword(newPassword, verifyNewPassword, oldPassword);
             System.debug('changePassword: END OK / returning ' + targetPage.getUrl());
             return targetPage.getUrl();
@@ -511,7 +462,7 @@ public with sharing class dsfrSiteManagement_CTL {
         }
 
         try {
-            System.debug('sendLostPassword: using forgot email template to replace pwd ' + nwInfos.ForgotPasswordEmailTemplateId);
+            System.debug('sendLostPassword: using forgot email template to replace pwd ' + nwInfos.ForgotPasswordEmailTemplateId); //NOPMD No real issue ?
             System.debug('sendLostPassword: username ' + userNames[0].username);
             Boolean emailStatus = searchUtl.resetPassword(userNames[0].username, (String)(nwInfos.ForgotPasswordEmailTemplateId));
             System.debug('sendLostPassword: lost password email sent ' + emailStatus);   
@@ -607,7 +558,7 @@ public with sharing class dsfrSiteManagement_CTL {
                     else {
                         System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / Google check score too low ' + score);
                         //throw new AuraHandledException('Captcha non suffisamment valide (enterprise)');
-                        if (isDebug) {
+                        if (isDebug) { //NOPMD ignore nesting warning
                             throw new AuraHandledException(Label.dsfrSiteMgtCaptchaValidationError + ' [' + score + ']');
                         }
                         else {
@@ -625,7 +576,7 @@ public with sharing class dsfrSiteManagement_CTL {
                 System.debug('validateCaptcha: analysing Developer API result');
                 if (result.containsKey('success')) {
                     if (result.get('success') == true) {
-                        if (result.containsKey('score')) {
+                        if (result.containsKey('score')) { //NOPMD ignore nesting warning
                             //score logic is only needed/returned for v3 (0.0 - 1.0)
                             //https://developers.google.com/recaptcha/docs/v3
 
@@ -678,14 +629,16 @@ public with sharing class dsfrSiteManagement_CTL {
                 return [    SELECT username FROM User
                             WHERE IsActive = true
                                 AND (   (username = :identity)
-                                    OR  ((UserType = 'Standard') AND (Email = :identity)))];
+                                    OR  ((UserType = 'Standard') AND (Email = :identity)))
+                            WITH SYSTEM_MODE];
             }
             else {
                 System.debug('getUser: searching community users with profile ' + profileId);
                 return [    SELECT username FROM User
                             WHERE IsActive = true
                                 AND (   (username = :identity)
-                                    OR  ((ProfileId = :profileId) AND (Email = :identity)))];
+                                    OR  ((ProfileId = :profileId) AND (Email = :identity)))
+                            WITH SYSTEM_MODE];
             }
         }
         public List<Account> getAccount(final String email, final String recordTypeId) {
@@ -693,12 +646,18 @@ public with sharing class dsfrSiteManagement_CTL {
             System.debug('getAccount: and RT ' + recordTypeId);
             //return [SELECT LastName, FirstName, Utilisateur__c, (select Id from Users) FROM Account
             //        WHERE recordTypeId = :recordTypeId AND PersonEmail = :email];
-            return [SELECT LastName, FirstName, PersonContactId, (select Id from Users) FROM Account
-                    WHERE isPersonAccount = true AND recordTypeId = :recordTypeId AND PersonEmail = :email];
+            return [    SELECT LastName, FirstName, PersonContactId, (select Id from Users)
+                        FROM Account
+                        WHERE isPersonAccount = true AND recordTypeId = :recordTypeId AND PersonEmail = :email
+                        WITH SYSTEM_MODE];
         }
         public ID getContactId(final ID accountID) {
             System.debug('getContactId: for PersonAccount ID ' + accountID);
-            Account tmpAccount = [SELECT PersonContactId FROM Account WHERE isPersonAccount = true  AND Id = :accountID LIMIT 1];
+            Account tmpAccount = [  SELECT PersonContactId
+                                    FROM Account
+                                    WHERE isPersonAccount = true  AND Id = :accountID
+                                    WITH SYSTEM_MODE
+                                    LIMIT 1];
             if (tmpAccount == null) {
                 System.debug(LoggingLevel.ERROR,'getContactId: PersonAccount not found for ID ' + accountID);
                 throw new HandledException('Compte personnel non trouvé');
@@ -739,7 +698,7 @@ public with sharing class dsfrSiteManagement_CTL {
         }
         public void setPassword(final ID userId, final String password) {
             System.debug('setPassword: START for User Id ' + userId);
-            System.debug('setPassword: with password ' + password);
+            //System.debug('setPassword: with password ' + password);
             system.setPassword(userId,password);
             System.debug('validateUser: END');
         }
