@@ -3,6 +3,7 @@ import { LightningElement, api, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { CurrentPageReference } from 'lightning/navigation';
 import getNavigations from '@salesforce/apex/dsfrNavigationMenu_CTL.getNavigations';
+import dsfrAlertPopupDsp from "c/dsfrAlertPopupDsp";
 
 import isGuest from '@salesforce/user/isGuest';
 import userId from '@salesforce/user/Id';
@@ -25,6 +26,23 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     @api siteTitle = 'Titre du Site';
     @api siteTagline = 'Précisions sur l\'organisation';
     @api tag = 'site_header'; // for GA4 tracking
+    //@api isMourning; // set mourning mode
+    _isMourning; // set mourning mode
+    @api 
+    get isMourning() {
+        return this._isMourning;
+    }
+    set isMourning(value) {
+        if (this.isDebug) console.log('set header isMourning: value provided ', value);
+        this._isMourning = value;
+        if ((this._isMourning) && (this._isMourning === "true")){
+            console.log('set header isMourning: setting mourning theme');
+            document.documentElement.setAttribute("data-fr-mourning",'');
+        }
+        else {
+            console.log('set header isMourning: leaving standard theme');
+        }
+    }
 
     @api topMenu;
     @api mainMenu;
@@ -83,82 +101,6 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     @wire(CurrentPageReference)
     pageRef;
     // Not working properly --> removed for now
-    /*@wire(CurrentPageReference) 
-    wiredPageRef(data) {
-        if (this.isDebug) console.log('wiredPageRef: START for header');
-        if (data) {
-            if (this.isDebug) console.log('wiredPageRef: data  received ', JSON.stringify(data));
-            this.pageRef = data;
-            if (this.isDebug) console.log('wiredPageRef: new pageRef ',this.pageRef);
-            this[NavigationMixin.GenerateUrl](this.pageRef)
-            .then((url) => {
-                if (this.isDebug) console.log('wiredPageRef: new url generated ',url);
-                if (this.isDebug) console.log('wiredPageRef: current mainMenuItems ', JSON.stringify(this.mainMenuItems));
-
-                if (this.mainMenuItems) {
-                    if (this.isDebug) console.log('wiredPageRef: searching tab likeliness');
-                    let selectedTab = (this.mainMenuItems ?
-                        this.mainMenuItems.reduce((bestMatch, item) => {
-                            if (this.isDebug) console.log('wiredPageRef: processing item ',item);
-                            if (this.isDebug) console.log('wiredPageRef: previous bestMatch ',bestMatch);
-
-                            if (url.startsWith(item.actionValue)) {
-                                if (this.isDebug) console.log('wiredPageRef: matching item found');
-                                if (bestMatch) {
-                                    if (bestMatch.actionValue.length > item.actionValue.length) {
-                                        if (this.isDebug) console.log('wiredPageRef: keeping previous best match');
-                                        return bestMatch;
-                                    }
-                                    else {
-                                        if (this.isDebug) console.log('wiredPageRef: matching item found');
-                                        return item;
-                                    }
-                                }
-                                else {
-                                    if (this.isDebug) console.log('wiredPageRef: no previous best match');
-                                    return item;
-                                }
-                            }
-                            else {
-                                if (this.isDebug) console.log('wiredPageRef: no match');
-                                return bestMatch;
-                            }
-                        }) : null);
-                    if (this.isDebug) console.log('wiredPageRef: tab searched ',selectedTab);
-
-                    if ((selectedTab == this.mainMenuItems[0]) && (url !== selectedTab.actionValue)) {
-                        if (this.isDebug) console.log('wiredPageRef: ignoring home page');
-                        selectedTab = null;
-                    }
-
-                    if (this.isDebug) console.log('wiredPageRef: tab selected ',selectedTab);
-
-                    let tabItems = this.template.querySelectorAll('a.fr-nav__link');
-                    if (this.isDebug) console.log('wiredPageRef: tabs fetched ',tabItems);
-
-                    tabItems?.forEach(item => {
-                        if (this.isDebug) console.log('wiredPageRef: processing tab ',item);
-                        if (this.isDebug) console.log('wiredPageRef: with name ',item.dataset.value);
-                        if (item.dataset.value === selectedTab?.label) {
-                            item.setAttribute('aria-current','page');
-                        }
-                        else {
-                            item.removeAttribute('aria-current');
-                        }
-                    });
-                    if (this.isDebug) console.log('wiredPageRef: tabs selection updated ',tabItems);
-                }
-                else {
-                    if (this.isDebug) console.log('wiredPageRef: no tab yet ');
-                }
-
-                if (this.isDebug) console.log('wiredPageRef: END ');
-            });
-        }
-        else {
-            if (this.isDebug) console.log('wiredPageRef: END no data ');
-        }
-    }*/
 
 
     //----------------------------------------------------------------
@@ -256,115 +198,24 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         }
     }
 
-    // Add userId
-    /*@wire(getMenuItems, { navLabel: '$topMenu', showHome: false })
-    wiredTopMenu({ error, data }) {
-        if (this.isDebug) console.log('wiredTopMenu: START for header top menu ',this.topMenu);
-        if (data) {
-            if (this.isDebug) console.log('wiredTopMenu: data  received ', JSON.stringify(data));
-            this.topMenuItems = [];
-            data.forEach(item => {
-                let newItem = {... item};
-                if (item.label?.includes('#')) {
-                    let labelParts = item.label.split('#');
-                    if (this.isDebug) console.log('wiredTopMenu: extracting icon name ', labelParts);
-                    newItem.class = 'fr-btn fr-icon-' + labelParts[1];
-                    newItem.label = labelParts[0];
-                }
-                else {
-                    newItem.class = 'fr-btn';
-                }
-                this.topMenuItems.push(newItem);
-            });
-            if (this.isDebug) console.log('wiredTopMenu: END / using data as menuItems',this.topMenuItems);
-        }
-        else if (error) {
-            console.warn('wiredTopMenu: END KO for header top menu / error  received ', JSON.stringify(error));
-            this.topMenuItems = [];
-        }
-        else {
-            if (this.isDebug) console.log('wiredTopMenu: END / no response');
-        }
-    }
-
-    @wire(getMenuItems, { navLabel: '$mainMenu', showHome: true })
-    wiredMainMenu({ error, data }) {
-        if (this.isDebug) console.log('wiredMainMenu: START for header main menu ',this.mainMenu);
-        if (data) {
-            if (this.isDebug) console.log('wiredMainMenu: data  received ', JSON.stringify(data));
-            this.mainMenuItems = [];
-            data.forEach(item => {
-                let newItem = {... item};
-                this.mainMenuItems.push(newItem);
-            });
-            //this.mainMenuItems[0].isCurrent = 'page';
-            if (this.isDebug) console.log('wiredMainMenu: END / using data as menuItems',this.mainMenuItems);
-        }
-        else if (error) {
-            console.warn('wiredMainMenu: END KO for header main menu / error  received ', JSON.stringify(error));
-            this.mainMenuItems = [];
-        }
-        else {
-            if (this.isDebug) console.log('wiredMainMenu: END / no response');
-        }
-    }*/
-
     renderedCallback() {
-        if (this.isDebug) console.log('rendered: header START');
+        if (this.isDebug) {
+            console.log('rendered: header START');
 
-        if (this.isDebug) console.log('rendered: top Menu ',this.topMenu);
-        if (this.isDebug) console.log('rendered: main Menu', this.mainMenu);
-        if (this.isDebug) console.log('rendered: complexMenu', this.complexMenu);
+            console.log('rendered: top Menu ',this.topMenu);
+            console.log('rendered: main Menu', this.mainMenu);
+            console.log('rendered: complexMenu', this.complexMenu);
 
-        if (this.isDebug) console.log('rendered: title ',document?.title);
-        if (this.isDebug) console.log('rendered: head title ',document?.head?.title);
+            console.log('rendered: title ',document?.title);
+            console.log('rendered: head title ',document?.head?.title);
 
-        if (this.isDebug) console.log('rendered: current pageRef ',JSON.stringify(this.pageRef));
-        if (this.isDebug) console.log('rendered: location ',JSON.stringify(window.location));
+            console.log('rendered: current pageRef ',JSON.stringify(this.pageRef));
+            console.log('rendered: location ',JSON.stringify(window.location));
 
-        /*console.log('rendered: head list ',document?.head);
-        console.log('rendered: head navigation meta ',document?.head?.querySelector('meta[name="navigation"]'));
-        console.log('rendered: header head navigation meta value ',document?.head?.querySelector('meta[name="navigation"]')?.content);
-        console.log('rendered: header head navigation meta ',document?.querySelector('meta[name="navigation"]'));
-        console.log('rendered: header head navigation meta value ',document?.querySelector('meta[name="navigation"]')?.content);
-        console.log('rendered: header head navigation meta ',document.querySelector('meta[name=navigation]'));
+            console.log('rendered: isMourning ',this._isMourning);
 
-        console.log('rendered: meta ',document?.querySelectorAll('meta'));
-
-        console.log('rendered: meta #children ',document.head.childNodes.length);
-        console.log('rendered: meta children ',document.head.childNodes);
-
-        document.head.childNodes.forEach(item => {
-            if (item.nodeName === 'META') {
-                console.log('rendered: head item ',item);
-                console.log('rendered: head item node type ',item.nodeType);
-                console.log('rendered: head item node name ',item.nodeName);
-                console.log('rendered: head item name ',item.name);
-                console.log('rendered: head item content ',item.content);
-            }
-            else {
-                console.log('rendered: ignoring head item node name ',item.nodeName);
-            }
-        })
-
-        setTimeout(() => {
-            console.log('rendered: head START DELAY ');
-            console.log('rendered: head #children ',document.head.children.length);
-            console.log('rendered: head children ',document.head.children);
-            let countMeta = 0;
-            for (let iter = 0 ; iter < document.head.children.length; iter++) {
-                console.log('rendered: node ' + iter,document.head.children[iter]);
-            }
-
-            console.log('rendered: head countMeta ',countMeta);
-            console.log('rendered: head children navigation ',document.head.children['navigation']);
-            console.log('rendered: head children navigation ',document.head.children['navigation']);
-            console.log('rendered: head END DELAY ');
-        },500);   
-
-        console.log('rendered: header head meta ',document.head.meta);*/
-
-        if (this.isDebug) console.log('rendered: header END');
+            console.log('rendered: header END');
+        }
     }
 
     //----------------------------------------------------------------
@@ -772,7 +623,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         catch (error) {
             console.warn('handleActionTrigger: action execution failed!', JSON.stringify(error));
             
-            let alertConfig = {alerts:[],size:'small'};
+            let alertConfig = {alerts:[],size:'small',label:"Modale d'alerte"};
             if (error.body?.output?.errors) {
                 alertConfig.header = error.body?.message;
                 error.body.output.errors.forEach(item => {
@@ -784,11 +635,15 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
             }
             console.warn('handleActionTrigger: alertConfig init ', JSON.stringify(alertConfig));
 
-            let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+            dsfrAlertPopupDsp.open(alertConfig)
+            .then((result) => {
+                if (this.isDebug) console.log('handleActionTrigger: END KO / popup closed',result);
+            });
+            /*let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
             console.warn('handleActionTrigger: opening popupUtil ', popupUtil);
             popupUtil.showAlert(alertConfig).then(() => {
                 if (this.isDebug) console.log('handleActionTrigger: END KO / popup closed');
-            });
+            });*/
         }
     }
     handleActionDone(event) {

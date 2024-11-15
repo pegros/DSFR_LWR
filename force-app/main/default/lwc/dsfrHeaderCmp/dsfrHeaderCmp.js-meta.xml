@@ -43,6 +43,10 @@
                         type="String"
                         default=""
                         description="Master Label du menu de navigation du site fournissant le menu supérieur" />
+            <property   name="isMourning"
+                        label="Deuil national?"
+                        type="String"
+                        description='Bascule du thème DSFR en deuil national (si valeur positionnée à "true").' />               
             <property   name="showModes"
                         label="Bascule de thème ?"
                         type="Boolean"
