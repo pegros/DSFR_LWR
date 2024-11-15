@@ -4,6 +4,8 @@ import updateRecord     from '@salesforce/apex/sfpegCard_CTL.updateRecord';
 //import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import basePathName from '@salesforce/community/basePath';
+import dsfrAlertPopupDsp from "c/dsfrAlertPopupDsp";
+
 
 import CANCEL_LABEL from '@salesforce/label/c.dsfrRecordFormCancel';
 import CANCEL_TITLE from '@salesforce/label/c.dsfrRecordFormCancelTitle';
@@ -353,14 +355,18 @@ export default class DsfrFormCmp extends LightningElement {
         document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_success',params:{event_source:'dsfrFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.formTag}}}));
         if (this.isDebug) console.log('handleSuccess: GA notified');
 
-        let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
-        console.warn('handleSuccess: popupUtil fetched ', popupUtil);
+        //let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+        //console.warn('handleSuccess: popupUtil fetched ', popupUtil);
         let alertConfig = {
             alerts:[{type: "success", title: "Mise à jour effectuée", message: "La sauvegarde de vos modifications a été réalisée."}],
-            size:'small'};
-        popupUtil.showAlert(alertConfig).then(() => {
+            size:'small',label:"Modale d'alerte"};
+        dsfrAlertPopupDsp.open(alertConfig)
+        .then((result) => {
             if (this.isDebug) console.log('handleSuccess: END /for form popup closed');
         });
+        /*popupUtil.showAlert(alertConfig).then(() => {
+            if (this.isDebug) console.log('handleSuccess: END /for form popup closed');
+        });*/
         if (this.isDebug) console.log('handleSuccess: popup opened');
     }
  

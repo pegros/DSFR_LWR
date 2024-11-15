@@ -2,6 +2,7 @@ import { LightningElement, api, wire } from 'lwc';
 import { createRecord, updateRecord, deleteRecord, notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import { NavigationMixin } from 'lightning/navigation';
 import basePathName from '@salesforce/community/basePath';
+import dsfrAlertPopupDsp from "c/dsfrAlertPopupDsp";
 
 import { publish, MessageContext } from 'lightning/messageService';
 import sfpegCustomNotification  from '@salesforce/messageChannel/sfpegCustomNotification__c';
@@ -98,19 +99,26 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                     return;
             }
 
+            let msgCtx = this.messageContext;
             actionPromise.then(data => {
                 if (this.isDebug) console.log('handleAction: operation executed ', JSON.stringify(data));
                 document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_success',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:actionDetails.type+'_record',event_label:this.buttonTag}}}));
                 if (this.isDebug) console.log('handleAction: GA re-notified');
 
-                let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
-                if (this.isDebug) console.log('handleAction: popupUtil fetched ', popupUtil);
                 let alertConfig = {
                     alerts:[{type: "success", title: actionDetails.title || "Opération effectuée",  message: actionDetails.message }],
-                    size:'small'};
+                    size:'small', label:"Modale d'alerte"
+                };
+                dsfrAlertPopupDsp.open(alertConfig)
+                .then((result) => {
+                    if (this.isDebug) console.log('handleAction: popup closed ', result);                    
+                    
+                /*let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+                if (this.isDebug) console.log('handleAction: popupUtil fetched ', popupUtil);
+                
                     //alerts:[{type: "success", title: actionDetails.title || "Opération effectuée", actionDetails.title message: "Vos changements ont bien été sauvegardés."}],
                 //event.preventDefault();
-                popupUtil.showAlert(alertConfig).then(() => {
+                popupUtil.showAlert(alertConfig).then(() => {*/
                     if (this.isDebug) console.log('handleAction: analysing next steps in action details ', JSON.stringify(actionDetails));                    
                     if (this.isDebug) console.log('handleAction: for data ', JSON.stringify(data));                    
                     if ((actionDetails.navigate) && (data?.id)) {
@@ -145,8 +153,9 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                                 'context': null
                             };
                             if (this.isDebug) console.log('handleAction: actionNotif prepared ',JSON.stringify(actionNotif));
-                            if (this.isDebug) console.log('handleAction: Publishing page refresh notification');
-                            publish(this.messageContext, sfpegCustomNotification, actionNotif);
+                            if (this.isDebug) console.log('handleAction: Publishing page refresh notification on ',msgCtx);
+                            //publish(this.messageContext, sfpegCustomNotification, actionNotif);
+                            publish(msgCtx, sfpegCustomNotification, actionNotif);
                         }
                         if (this.isDebug) console.log('handleAction: END');
                     }
@@ -157,9 +166,9 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
             }).catch(error => {
                 console.warn('handleAction: action failed ',error);
                 document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_action_error',params:{event_source:'dsfrActionButtonDsp',event_site: basePathName,event_category:'submit_error',event_label:this.buttonTag}}}));
-                if (this.isDebug) console.log('handleAction: GA re-notified');
+                if (this.isDebug) console.log('handleAction: GA re-notified with error');
 
-                let alertConfig = {alerts:[],size:'small'};
+                let alertConfig = {alerts:[],size:'small',label:"Modale d'alerte"};
                 if (error.body?.output?.errors) {
                     alertConfig.header = error.body?.message;
                     error.body.output.errors.forEach(item => {
@@ -171,11 +180,16 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
                 }
                 if (this.isDebug) console.log('handleAction: alertConfig init ', JSON.stringify(alertConfig));
 
-                let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+                dsfrAlertPopupDsp.open(alertConfig)
+                .then((result) => {
+                    if (this.isDebug) console.log('handleAction: popup closed ', result);
+                });
+
+                /*let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
                 if (this.isDebug) console.log('handleAction: popupUtil fetched ', popupUtil);
                 popupUtil.showAlert(alertConfig).then(() => {
                     if (this.isDebug) console.log('handleAction: END / popup closed');
-                });
+                });*/
                 //this.toggleSpinner();
                 this.refs.actionButton.buttonInactive = false;
             });

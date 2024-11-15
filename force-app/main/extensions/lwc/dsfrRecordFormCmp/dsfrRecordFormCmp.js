@@ -4,6 +4,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import basePathName from '@salesforce/community/basePath';
+import dsfrAlertPopupDsp from "c/dsfrAlertPopupDsp";
 
 import CANCEL_LABEL from '@salesforce/label/c.dsfrRecordFormCancel';
 import SAVE_LABEL   from '@salesforce/label/c.dsfrRecordFormSave';
@@ -308,14 +309,18 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleSuccess: notifying GA');
         document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_success',params:{event_source:'dsfrRecordFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.tag}}}));
         
-        let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
-        if (this.isDebug) console.log('handleSuccess: popupUtil fetched ', popupUtil);
+        //let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+        //if (this.isDebug) console.log('handleSuccess: popupUtil fetched ', popupUtil);
         let alertConfig = {
             alerts:[{type: "success", title: "Opération effectuée", message: "Vos changements ont bien été sauvegardés."}],
-            size:'small'};
-        popupUtil.showAlert(alertConfig).then(() => {
-            if (this.isDebug) console.log('handleSuccess: END / popup closed');
+            size:'small',label:"Modale d'alerte"};
+        dsfrAlertPopupDsp.open(alertConfig)
+        .then((result) => {
+            if (this.isDebug) console.log('handleSuccess: popup closed ', result); 
         });
+        //popupUtil.showAlert(alertConfig).then(() => {
+        //    if (this.isDebug) console.log('handleSuccess: END / popup closed');
+        //});
         /*this.message = {
             type: "info",
             title: "Opération effectuée",
@@ -330,17 +335,21 @@ export default class DsfrRecordFormCmp extends LightningElement {
         if (this.isDebug) console.log('handleError: event detail received ',JSON.stringify(event.detail));
         this.toggleSpinner(false);
 
-        if (this.isDebug) console.log('handleSuccess: notifying GA');
+        if (this.isDebug) console.log('handleError: notifying GA');
         document.dispatchEvent(new CustomEvent('gaEvent',{detail:{label:'dsfr_form_error',params:{event_source:'dsfrRecordFormCmp', event_site: basePathName, event_category:(this.recordId ? 'update_record' : 'create_record'),event_label:this.tag}}}));
         
-        let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
-        console.warn('handleError: popupUtil fetched ', popupUtil);
+        //let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+        //console.warn('handleError: popupUtil fetched ', popupUtil);
         let alertConfig = {
             alerts:[{type: "error", title: "Echec de l'opération", message: "La sauvegarde de vos modifications n'a pas pu être réalisée."}],
-            size:'small'};
-        popupUtil.showAlert(alertConfig).then(() => {
-            if (this.isDebug) console.log('handleError: END / popup closed');
+            size:'small',label:"Modale d'alerte"};
+        dsfrAlertPopupDsp.open(alertConfig)
+        .then((result) => {
+            if (this.isDebug) console.log('handleError: popup closed ', result); 
         });
+        //popupUtil.showAlert(alertConfig).then(() => {
+        //    if (this.isDebug) console.log('handleError: END / popup closed');
+        //});
         /*this.message = {
             type: "error",
             title: "Echec de l'opération",

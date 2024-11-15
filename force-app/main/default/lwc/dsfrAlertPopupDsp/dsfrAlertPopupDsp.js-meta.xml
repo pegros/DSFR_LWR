@@ -2,6 +2,6 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>56.0</apiVersion>
     <isExposed>false</isExposed>
-    <masterLabel>DSFR Popup d'alerte</masterLabel>
-    <description>Affichage d'une Alerte du DSFR dans une Popup</description>
+    <masterLabel>DSFR Popup d'alertes</masterLabel>
+    <description>Affichage d'alertes du DSFR dans une Popup</description>
 </LightningComponentBundle>

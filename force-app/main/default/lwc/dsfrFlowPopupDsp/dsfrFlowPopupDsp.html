@@ -48,7 +48,13 @@
     </lightning-modal-body>
     <template lwc:if={showClose}>
         <lightning-modal-footer>
-            <lightning-button label={closeLabel} title={closeTitle} onclick={handleClose}></lightning-button>
+            <c-dsfr-button-dsp  button-label={closeLabel}   button-title={closeTitle} 
+                                button-icon="close-line"    button-icon-position="right"
+                                button-size="small"         button-variant="tertiary-no-outline"
+                                button-align="right"
+                                ontrigger={handleClose}     is-debug={isDebug}>
+            </c-dsfr-button-dsp>
+            <!--<lightning-button label={closeLabel} title={closeTitle} onclick={handleClose}></lightning-button>-->
         </lightning-modal-footer>
     </template>
 </template>

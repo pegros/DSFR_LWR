@@ -1,38 +1,40 @@
 <template>
-    <dialog lwc:ref="modalDialog"
-            role="alertdialog"                  class="fr-modal"
-            aria-labelledby="fr-modal-title"    aria-describedby="fr-modal-content">
-        <template lwc:if={isModalOpen}>
-            <div class="fr-container fr-container--fluid fr-container-md">
-                <div class="fr-grid-row fr-grid-row--center">
-                    <div class="fr-col-12 fr-col-md-8">
-                        <div class="fr-modal__body">
-                            <div class="fr-modal__header">
-                                <button class="fr-link--close fr-link"  title={closeTitle}
-                                        onclick={closeModal}            onkeypressed={handleEnter}>
-                                    {closeLabel}
-                                </button>
-                            </div>
-                            <div class="fr-modal__content">
-                                <template lwc:if={titleLabel}>
-                                    <h3 class={titleClass} id="fr-modal-title">{titleLabel}</h3>
-                                </template>
-                                <div id="fr-modal-content">
-                                    <template lwc:if={isModalOpen}>
-                                        <template for:each={alertConfig.alerts} for:item="iter">
-                                            <c-dsfr-alert-cmp   key={iter.title}
-                                                                alert-type={iter.type}      alert-size={alertConfig.size}
-                                                                alert-title={iter.title}    alert-message={iter.message}
-                                                                alert-css="fr-my-4v"        is-debug={isDebug}>
-                                            </c-dsfr-alert-cmp>
-                                        </template>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <lightning-modal-body>
+        <c-dsfr-button-dsp  button-label={closeLabel}   button-title={closeTitle} 
+                            button-icon="close-line"    button-icon-position="right"
+                            button-size="small"         button-variant="tertiary-no-outline"
+                            button-align="right"
+                            ontrigger={handleClose}    is-debug={isDebug}>
+        </c-dsfr-button-dsp>
+        <template lwc:if={showAlerts}>
+            <template for:each={alerts} for:item="iter">
+                <c-dsfr-alert-cmp   key={iter.title}
+                                    alert-type={iter.type}      alert-size={iter.size}
+                                    alert-title={iter.title}    alert-message={iter.message}
+                                    alert-css="fr-m-2v"         is-debug={isDebug}>
+                </c-dsfr-alert-cmp>
+            </template>
+        </template>
+
+        <template lwc:if={isDebug}>
+            <div class="fr-p-4v slds-border_top">
+                <div>
+                    <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                        Mode debug activé!
+                    </span>
+                    <span class="fr-badge fr-badge--info">
+                        <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrAlertPopupDsp.md" target="_blank">
+                            Voir la documentation</a>
+                    </span>
+                </div>
+                <div class="fr-text--sm fr-mt-2v">
+                    <ul>
+                        <li><b>showTitle</b>: {showTitle} / <b>modalTitle</b>: {modalTitle}</li>
+                        <li><b>(aria-)description</b>: {description}</li>
+                        <li><b>alerts</b>: {alertsStr}</li>
+                    </ul>
                 </div>
             </div>
         </template>
-    </dialog>
+    </lightning-modal-body>
 </template>
