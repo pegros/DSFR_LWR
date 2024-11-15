@@ -116,6 +116,9 @@ h1 {
     line-height: 2.5rem;
     margin: var(--title-spacing);
 }
+h1.slds-modal__title {
+    margin-bottom: 0;
+}
 p {
     font-size: 1rem;
     line-height: 1.5rem;
@@ -1002,6 +1005,9 @@ li.dxp-tab[data-active=true]  {
 }
 .dxp-more-tab {
     color: var(--text-active-blue-france);
+}
+.dxp-more-tab p {
+    margin-block-end: 0;
 }
 
 

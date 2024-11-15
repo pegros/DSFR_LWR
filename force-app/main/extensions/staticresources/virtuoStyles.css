@@ -1,0 +1,82 @@
+/***************************/
+/* VIRTUO SPECIFIC CLASSES */
+/***************************/
+
+/* Enforce white DSFR background */
+.virtuo-theme-white  {
+    background-color: var(--background-default-grey);
+    color: var(--text-default-grey) !important;
+}
+.virtuo-theme-white .slds-form-element__label, .virtuo-theme-white .slds-select  {
+    color: var(--text-default-grey);
+}
+.virtuo-theme-white .slds-has-error .slds-form-element__label  {
+    color: var(--text-default-error);
+}
+/*
+.virtuo-theme-white .fr-valid-text {
+    color: var(--text-default-success);
+}*/
+.virtuo-theme-white .fr-input-group--disabled .slds-form-element__label {
+    color: var(--text-disabled-grey);
+}
+
+/* horizontal lists e.g. for iconFields */
+ul.virtuo-horizontal li {
+	display: inline-block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding-right: 1em;   
+}
+ul.virtuo-horizontal li:last-child {
+    padding-right: 0em; 
+}
+    
+/* icon lists */
+.virtuo-icon-label {
+	display: inline-block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding-right: 1em;   
+}
+.virtuo-icon-label:last-child {
+    padding-right: 0em; 
+}
+    
+/* VIRTUO Flow styling */
+.dsfrFlowHeader {
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--dxp-g-neutral);
+    margin-bottom: 1em;
+}
+.dsfrStepper {
+    margin-bottom: 1.5em;        
+}
+.dsfrCmp {
+    margin-bottom: 1em;        
+}
+
+/* VIRTUO Home Tile and Card styling */
+.virtuo-tile {
+    min-height: 250px !important;        
+}
+.virtuo-home-card {
+    min-height: 150px !important;
+}
+.virtuo-home-card .cardImage-small.cardImageFit {
+    max-height: 100px;
+}
+@media (min-width: 48em) {
+    .virtuo-home-card {
+        min-height: 300px !important;
+    }
+}
+
+/* VIRTUO CMS Content Overrides */
+/*p + ul {
+    margin-top : -18px;
+}*/
