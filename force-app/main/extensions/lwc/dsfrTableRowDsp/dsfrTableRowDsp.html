@@ -2,7 +2,8 @@
     <template for:each={fields} for:item="item">
         <td key={item.fieldName} style="display:table-cell;">
             <c-dsfr-table-cell-dsp  field={item} value={value} 
-                                    onaction={handleAction}>
+                                    onaction={handleAction}
+                                    is-debug={isDebug}>
             </c-dsfr-table-cell-dsp>
         </td>
     </template>
