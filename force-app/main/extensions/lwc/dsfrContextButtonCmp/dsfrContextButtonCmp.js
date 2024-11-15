@@ -1,5 +1,6 @@
 import { LightningElement, api } from 'lwc';
 import currentUserId        from '@salesforce/user/Id';
+import sfpegMergeUtl from 'c/sfpegMergeUtl';
 
 export default class DsfrContextButtonCmp extends LightningElement {
 
@@ -24,10 +25,10 @@ export default class DsfrContextButtonCmp extends LightningElement {
     @api isDebug = false;
 
     //-----------------------------------------------------
-    // Configuration parameters
+    // Technical parameters
     //-----------------------------------------------------
     userId = currentUserId;     // ID of current User
-
+    isReady = false;
 
     //-----------------------------------------------------
     // Initialization
@@ -50,7 +51,25 @@ export default class DsfrContextButtonCmp extends LightningElement {
         this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
         if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
 
-        if (this.isDebug) console.log('connected: END action button');
+        if (this.recordId.includes('{{{')) {
+            if (this.isDebug) console.log('connected: merge required for recordId');
+            sfpegMergeUtl.sfpegMergeUtl.isDebug = this.isDebug;
+            sfpegMergeUtl.sfpegMergeUtl.mergeString(this.recordId,this.userId,null,this.objectApiName,null,null,null,null)
+            .then( value => {
+                if (this.isDebug) console.log('connected: context merged within recordId ',value);
+                this.recordId = value;
+                if (this.isDebug) console.log('connected: END action button OK / recordId init ',this.recordId);    
+                this.isReady = true;
+            }).catch( error => {
+                console.warn('connected: END action button KO / ',JSON.stringify(error));
+                this.displayMsg = JSON.stringify(error);
+            });
+            sfpegMergeUtl.sfpegMergeUtl.isDebug = false;
+        }
+        else {
+            if (this.isDebug) console.log('connected: END action button OK / no  merge required for recordId');
+            this.isready = true;
+        }
     }
 
 

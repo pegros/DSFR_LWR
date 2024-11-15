@@ -1,4 +1,5 @@
 <template>
+    <template lwc:if={isReady}>
     <!-- Main Button Display -->
     <c-dsfr-button-dsp  button-icon={buttonIcon}    button-icon-position={buttonIconPosition}
                         button-label={buttonLabel}  button-title={buttonTitle} 
@@ -17,4 +18,5 @@
                             is-hidden="true"
                             is-debug={isDebug}>
     </c-sfpeg-action-bar-cmp>
+    </template>
 </template>
