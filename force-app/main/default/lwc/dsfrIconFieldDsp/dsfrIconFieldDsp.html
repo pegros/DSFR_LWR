@@ -1,6 +1,6 @@
 <template>
     <template lwc:if={doShowValue}>
-        <div class={wrappingClass}>
+        <div class={wrappingClass} >
             <span class={iconClass}>&nbsp;</span>
             <template lwc:if={valuePrefix}>
                 <lightning-formatted-rich-text class="fr-text iconFieldText" value={valuePrefix}>
@@ -13,6 +13,13 @@
                 &nbsp;
                 <lightning-formatted-rich-text class="fr-text iconFieldText" value={valueSuffix}>
                 </lightning-formatted-rich-text>
+            </template>
+            <template lwc:if={action}>
+                <c-dsfr-button-dsp  class="iconFieldAction"
+                                    button-icon={action.icon}           button-title={action.title} 
+                                    button-size="small"                 button-variant="tertiary-no-outline"
+                                    button-inactive={disabled}          ontrigger={handleAction} >
+                </c-dsfr-button-dsp>
             </template>
         </div>
     </template>

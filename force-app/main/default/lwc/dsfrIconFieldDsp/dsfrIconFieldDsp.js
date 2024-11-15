@@ -46,6 +46,11 @@ export default class DsfrIconFieldDsp extends LightningElement {
     @api iconClass;
     @api wrappingClass;
 
+    @api action;
+    @api row;
+    @api disabled;
+
+
     @api isDebug = false;
 
     //-----------------------------------------------------
@@ -60,7 +65,7 @@ export default class DsfrIconFieldDsp extends LightningElement {
     //-----------------------------------------------------
     connectedCallback() {
         if (this.isDebug) {
-            console.log('connected: START for icon field', this.iconName);
+            console.log('connected: START for icon field ', this.iconName);
             console.log('connected: value ', this.value);
             console.log('connected: showEmpty ', this.showEmpty);
             console.log('connected: isMpl ', this.isMpl);
@@ -88,6 +93,27 @@ export default class DsfrIconFieldDsp extends LightningElement {
             console.log('rendered: END for icon field');
         }
     }*/
+
+    //-----------------------------------------------------
+    // Event Handlers
+    //-----------------------------------------------------
+
+    handleAction(event) {
+        if (this.isDebug) console.log('handleAction: START for icon field with event',event);
+        event.stopPropagation();
+        event.preventDefault();
+        if (this.isDebug) console.log('handleAction: action triggered ',JSON.stringify(this.action));
+        if (this.isDebug) console.log('handleAction: row context used ',JSON.stringify(this.row));
+
+        const actionEvent = new CustomEvent('action', { detail: {
+            action : this.action,
+            row: this.row
+        }});
+        if (this.isDebug) console.log('handleAction actionEvent prepared ',JSON.stringify(actionEvent));
+        this.dispatchEvent(actionEvent);
+
+        if (this.isDebug) console.log('handleAction: END for icon field');
+    }
 
     //-----------------------------------------------------
     // Component Utilities

@@ -157,6 +157,7 @@ ul.horizontalUL {
 /* DSFR Rework for Sticky table header */
 .tableContainer {
     position: relative;
+    overflow-x: scroll;
 }
 .tableContainer table {
     display: table;

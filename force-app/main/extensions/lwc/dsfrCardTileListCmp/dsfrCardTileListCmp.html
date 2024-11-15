@@ -149,7 +149,8 @@
                                     <template for:each={displayList} for:item="iter">
                                         <c-dsfr-table-row-dsp   key={iter.Id}   class="fr-table-row"
                                                                 fields={configDetails.display.columns}
-                                                                value={iter}    onaction={handleAction}>
+                                                                value={iter}    onaction={handleAction}
+                                                                is-debug={isDebug}>
                                         </c-dsfr-table-row-dsp>
                                     </template>
                                 </tbody>
@@ -193,7 +194,7 @@
                                                             tile-description={item.description}
                                                             is-vertical={item.isVertical}   tile-css={elementCss}
                                                             fit-image={fitImage}
-                                                            tile-tag={item.tag}              tile-target={item.target}
+                                                            tile-tag={item.tag}             tile-target={item.target}
                                                             is-debug={isDebug} >
                                         </c-dsfr-tile-cmp>
                                     </div>
@@ -215,11 +216,12 @@
                             <template lwc:elseif={isIconField}>
                                 <ul class={iconFieldWrappingClass}>
                                     <template for:each={displayList} for:item="item">
-                                        <li key={item.icon}  >
-                                            <c-dsfr-icon-field-dsp  value={item.value}          icon-name={item.icon}
-                                                                    value-prefix={item.prefix}  value-suffix={item.suffix}
-                                                                    wrapping-class={configDetails.display.fieldClass} icon-class={configDetails.display.iconClass}
-                                                                    is-debug={isDebug}>
+                                        <li key={item.Id}  >
+                                            <c-dsfr-icon-field-dsp  value={item.value}                                  icon-name={item.icon}
+                                                                    value-prefix={item.prefix}                          value-suffix={item.suffix}
+                                                                    wrapping-class={configDetails.display.fieldClass}   icon-class={configDetails.display.iconClass}
+                                                                    row={item.row}                                      action={configDetails.display.action}
+                                                                    onaction={handleAction}                             is-debug={isDebug}>
                                             </c-dsfr-icon-field-dsp>
                                         </li>
                                     </template>
