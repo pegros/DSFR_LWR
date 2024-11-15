@@ -2,6 +2,7 @@ import { LightningElement, api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import { notifyRecordUpdateAvailable } from 'lightning/uiRecordApi';
 import basePathName from '@salesforce/community/basePath';
+import dsfrAlertPopupDsp from "c/dsfrAlertPopupDsp";
 
 import unlinkFile from '@salesforce/apex/dsfrFileUpload_CTL.unlinkFile';
 import sfpegJsonUtl from 'c/sfpegJsonUtl';
@@ -379,15 +380,19 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
                 if (this.isDebug) console.log('handleUnlink: hiding spinner');
                 spinner.classList.add('slds-hide');
             }
-            let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
-            if (this.isDebug) console.log('handleUnlink: popupUtil fetched ', popupUtil);
+            //let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+            //if (this.isDebug) console.log('handleUnlink: popupUtil fetched ', popupUtil);
 
-            let alertConfig = {alerts:[],size:'small'};
+            let alertConfig = {alerts:[],size:'small',label:"Modale d'alerte"};
             alertConfig.alerts.push({type:'error', message: (error.body?.message || error.statusText)});
 
-            popupUtil.showAlert(alertConfig).then(() => {
-                if (this.isDebug) console.log('handleUnlink: END for RelatedFile / popup closed');
+            dsfrAlertPopupDsp.open(alertConfig)
+            .then((result) => {
+                if (this.isDebug) console.log('handleUnlink:  END for RelatedFile / popup closed ', result); 
             });
+            //popupUtil.showAlert(alertConfig).then(() => {
+            //    if (this.isDebug) console.log('handleUnlink: END for RelatedFile / popup closed');
+            //});
         });
         if (this.isDebug) console.log('handleUnlink: unlink triggered');
     }
@@ -417,10 +422,16 @@ export default class DsfrRelatedFilesCmp extends NavigationMixin(LightningElemen
         if (this.isDebug) console.log('handleUpload: START for RelatedFile');
         if (this.isDebug) console.log('handleUpload: event detail received ',JSON.stringify(event.detail));
 
-        let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
+        /*let popupUtil = this.template.querySelector('c-dsfr-alert-popup-dsp');
         if (this.isDebug) console.log('handleUpload: popupUtil fetched ', popupUtil);
         popupUtil.showAlert(event.detail).then(() => {
             if (this.isDebug) console.log('handleUpload: END for RelatedFile / popup closed');
+        });*/
+        let alertConfig = JSON.parse(JSON.stringify(event.detail));
+        alertConfig.label ="Modale d'alerte";
+        dsfrAlertPopupDsp.open(alertConfig)
+        .then((result) => {
+            if (this.isDebug) console.log('handleUpload: END for RelatedFile / popup closed ', result); 
         });
 
         if (this.isDebug) console.log('handleUpload: opening alert popup');
