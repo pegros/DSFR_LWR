@@ -9,6 +9,7 @@ export default class DsfrSearchPopupDsp extends LightningModal {
     @api resultsConfig;
     @api popupLabel = "Formulaire de recherche";
     @api closeLabel = 'Fermer';
+    @api closeTitle = 'Fermer la fenêtre modale de recherche';
     @api searchLabel = 'Rechercher';
     @api fieldsize = 6;
     @api isDebug;
