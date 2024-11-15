@@ -1,9 +1,0 @@
-.hiddenTitle {
-    display:none;
-}
-.fr-modal {
-    background-color: transparent !important;
-}
-.fr-modal::backdrop {
-    background-color: hsla(0,0%,9%,.64);
-}
