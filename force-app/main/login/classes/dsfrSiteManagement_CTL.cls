@@ -33,11 +33,25 @@
 
 public with sharing class dsfrSiteManagement_CTL {
 
+    //#########################################################
+    // STATIC VARIABLES
+    //#########################################################
+
     /***
     * @description  Captcha score theshold above which evaluations are validated
     ***/
     private final static Decimal MIN_CAPTCHA_SCORE = (dsfrSiteManagement__c.getInstance().minRecapatchaScore__c == null ? .3 : dsfrSiteManagement__c.getInstance().minRecapatchaScore__c);
 
+    /***
+    * @description  Base reference of chararcters used to compress a new user alias sequence number
+    ***/
+    private final static String BASE_36_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+
+    //#########################################################
+    // PUBLIC METHODS
+    //#########################################################
+    
     /***
     * @description  Method to fetch the default Account RecordType ID for self-registration on the 
     *               current Network.
@@ -229,9 +243,7 @@ public with sharing class dsfrSiteManagement_CTL {
         String newUsername = newAccount.FirstName.replaceAll('\\W','').left(5) + newAccount.LastName.replaceAll('\\W','').left(20) + '#' + nwUserCount;
         User newUser = new User(
             Username = newUsername + '#' + nwInfos.UrlPathPrefix.substringBefore('vforcesite') + '@' + currentDomain,
-            //Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(2) + nwUserCount,
-            //Urgent patch for more than 100 000 users !
-            Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(1) + nwUserCount,
+            Alias = newAccount.FirstName.left(1) + newAccount.LastName.left(1) + base36encode(nwUserCount),
             CommunityNickname = newUsername,
             FirstName = newAccount.FirstName,
             LastName = newAccount.LastName,
@@ -617,6 +629,27 @@ public with sharing class dsfrSiteManagement_CTL {
         System.debug(LoggingLevel.ERROR,'validateCaptcha: END KO / technical problem  ' + httpResponse.getBody());
         //throw new AuraHandledException('Problème technique de validation Captcha');
         throw new AuraHandledException(Label.dsfrSiteMgtCaptchaProcessingError);
+    }
+
+    /**
+    * @description	Private utility Class to compress a user alias sequence number
+    **/
+    @TestVisible
+    private static String base36encode(Integer sequence) {
+        System.debug('base36encode: START for sequence ' + sequence);
+
+        String encoding = '';
+        Integer iterNbr = sequence;
+        Integer iterMod;
+
+        while (iterNbr > 0) {
+            iterMod = Math.mod(iterNbr,36);
+            encoding = BASE_36_CHARS.substring(iterMod,iterMod + 1) + encoding;
+            iterNbr = (Integer) Math.floor(iterNbr / 36);
+        }
+        
+        System.debug('base36encode: END with encoding ' + encoding);
+        return encoding;
     }
 
     /**

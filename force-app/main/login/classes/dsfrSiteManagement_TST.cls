@@ -224,6 +224,44 @@ public class  dsfrSiteManagement_TST {
 		System.debug('testRegisterUser: END');
 	}
 
+	/***
+	* @description  Test method for the dsfrSiteManagement_CTL class, checking the "changePassword" method
+	*               including all error cases.
+	* @see          dsfrSiteManagement_CTL
+	***/
+
+	@isTest
+	static void testChangePassword() {
+		System.debug('testChangePassword: START');
+
+		Test.startTest();
+
+        // Testing passing case
+        /*System.debug('testChangePassword: TEST 1 - testing passing case');
+		try {
+            String output = dsfrSiteManagement_CTL.changePassword('new', 'new','old');
+			System.debug('testChangePassword: returning output ' + output);
+			Assert.isNotNull(output,'Change password should return ');
+		}
+		catch (Exception e) {
+			System.debug(LoggingLevel.ERROR,'testChangePassword: error raised with correct passwords ' + e.getMessage());
+			Assert.fail('Change password should not raise exception');
+		}*/
+
+        // Testing error case
+        System.debug('testChangePassword: TEST 2 - testing missing input');
+		try {
+            dsfrSiteManagement_CTL.changePassword(null,null,null);
+			System.debug(LoggingLevel.ERROR,'testChangePassword: returning with missing input ');
+			Assert.fail('Missing input should raise exception');
+		}
+		catch (Exception e) {
+			System.debug('testChangePassword: error properly raised with missing input ' + e.getMessage());
+		}
+
+		Test.stopTest();
+		System.debug('testChangePassword: END');
+	}
 
 	/***
 	* @description  Test method for the dsfrSiteManagement_CTL class, checking the "sendLostPassword" method
@@ -237,17 +275,16 @@ public class  dsfrSiteManagement_TST {
 
 		Test.startTest();
 
-
         // Testing passing case
-        /*System.debug('testLoginViaIdentity: TEST 1 - testing passing case');
+        /*System.debug('testSendLostPassword: TEST 1 - testing passing case');
 		try {
-            String output = dsfrSiteManagement_CTL.loginViaIdentity('Identity', 'password','/test');
-			System.debug('testLoginViaIdentity: returning output ' + output);
-			Assert.isNotNull(output,'Login should return ');
+            String output = dsfrSiteManagement_CTL.sendLostPassword('Identity');
+			System.debug('testSendLostPassword: returning output ' + output);
+			Assert.isNotNull(output,'Sending Lost Password should return ');
 		}
 		catch (Exception e) {
-			System.debug(LoggingLevel.ERROR,'testLoginViaIdentity: error raised with correct file ' + e.getMessage());
-			Assert.fail('Linking correct file should not raise exception');
+			System.debug(LoggingLevel.ERROR,'testSendLostPassword: error raised with correct identity ' + e.getMessage());
+			Assert.fail('Sending Lost Password should not raise exception');
 		}*/
 
         // Testing error case
@@ -263,6 +300,59 @@ public class  dsfrSiteManagement_TST {
 
 		Test.stopTest();
 		System.debug('testSendLostPassword: END');
+	}
+
+	/***
+	* @description  Test method for the dsfrSiteManagement_CTL class, checking the "validateCaptcha" method
+	*               including all error cases.
+	* @see          dsfrSiteManagement_CTL
+	***/
+
+	@isTest
+	static void testValidateCaptcha() {
+		System.debug('testValidateCaptcha: START');
+
+		Test.startTest();
+
+        // Testing passing case
+        /*System.debug('testValidateCaptcha: TEST 1 - testing passing case');
+		try {
+            String output = dsfrSiteManagement_CTL.validateCaptcha(response,site, action, isEnterprise, isDebug);
+			System.debug('testValidateCaptcha: returning output ' + output);
+			Assert.isNotNull(output,'Captcha validation should return ');
+		}
+		catch (Exception e) {
+			System.debug(LoggingLevel.ERROR,'testValidateCaptcha: error raised with correct inputs ' + e.getMessage());
+			Assert.fail('Correct inputs should not raise exception');
+		}*/
+
+        // Testing error case
+        System.debug('testValidateCaptcha: TEST 2 - testing missing input');
+		try {
+            dsfrSiteManagement_CTL.validateCaptcha(null,null, null, true, true);
+			System.debug(LoggingLevel.ERROR,'testValidateCaptcha: returning with missing input ');
+			Assert.fail('Missing input should raise exception');
+		}
+		catch (Exception e) {
+			System.debug('testValidateCaptcha: error properly raised with missing input ' + e.getMessage());
+		}
+
+		Test.stopTest();
+		System.debug('testValidateCaptcha: END');
+	}
+
+	/***
+	* @description  Test method for the dsfrSiteManagement_CTL class, checking the "base36encode" method
+	* @see          dsfrSiteManagement_CTL
+	***/
+
+	@isTest
+	static void testBase36() {
+		System.debug('testBase36: START');
+		Test.startTest();
+		dsfrSiteManagement_CTL.base36encode(123456);
+		Test.stopTest();
+		System.debug('testBase36: END');
 	}
 
     /***
