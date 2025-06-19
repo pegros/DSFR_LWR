@@ -23,7 +23,26 @@ export default class DsfrIconFieldListDsp extends LightningElement {
                 if (this.isDebug) console.log('set iconFieldList values: data array used ',JSON.stringify(values));
             }
             else {
-                values = JSON.parse(data);
+                let dataString = data;
+                if (data.includes('ESCAPE(((')) {
+                    if (this.isDebug) console.log('set iconFieldList values: quote escaping required ');
+
+                    let escapeMatches = [...data.matchAll(/ESCAPE(\(\(\()(.*?)(\)\)\))/gms)];
+                    if (this.isDebug) console.log('set iconFieldList values: quote escapeMatches found ',escapeMatches);
+    
+                    escapeMatches.forEach(matchIter => {
+                        if (this.isDebug) console.log('set iconFieldList values: processing matchIter ',matchIter);
+                        let newMatchValue = (matchIter[2]).replace(/"/gms,'\\"');
+                        newMatchValue = (newMatchValue).replace(/[\r\n\t]/gms,' ');
+                        if (this.isDebug) console.log('set iconFieldList values: newMatchValue ', newMatchValue);
+                        dataString = dataString.replace(matchIter[0],newMatchValue);
+                    });
+                    if (this.isDebug) console.log('set iconFieldList values: mergeResult HTML escaped');
+                }
+                else {
+                    if (this.isDebug) console.log('set iconFieldList values: no HTML escaping required ');
+                }
+                values = JSON.parse(dataString);
                 if (this.isDebug) console.log('set iconFieldList values: data string parsed ',JSON.stringify(values));
             }
 
