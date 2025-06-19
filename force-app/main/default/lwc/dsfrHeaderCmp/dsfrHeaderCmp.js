@@ -36,11 +36,11 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
         if (this.isDebug) console.log('set header isMourning: value provided ', value);
         this._isMourning = value;
         if ((this._isMourning) && (this._isMourning === "true")){
-            console.log('set header isMourning: setting mourning theme');
+            if (this.isDebug) console.log('set header isMourning: setting mourning theme');
             document.documentElement.setAttribute("data-fr-mourning",'');
         }
         else {
-            console.log('set header isMourning: leaving standard theme');
+            if (this.isDebug) console.log('set header isMourning: leaving standard theme');
         }
     }
 

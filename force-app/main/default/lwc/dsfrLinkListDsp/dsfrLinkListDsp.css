@@ -1,0 +1,17 @@
+.fr-links-group {
+    align-items: stretch;
+    display: flex;
+    flex-wrap: wrap;
+}
+.fr-links-group > li {
+    display: flex;
+    white-space:normal;
+    /*overflow:hidden;
+    text-overflow: ellipsis;*/
+    overflow-wrap: break-word;
+    max-width: 100%;
+    /*padding-right: 1em;*/
+}
+.fr-links-group--inline > li {
+    line-height: 1.5rem;
+}

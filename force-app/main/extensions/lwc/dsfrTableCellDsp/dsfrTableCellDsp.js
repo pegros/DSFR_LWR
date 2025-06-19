@@ -62,7 +62,7 @@ export default class DsfrTableCellDsp extends LightningElement {
         if (this.isDebug)console.log('connected: isButton init ',this.isButton);
         if (this.isButton) {
             this.buttonDesc = (this.field.type == 'action' ? this.field.typeAttributes.rowActions[0] : this.field.typeAttributes);
-            console.log('connected: buttonDesc init',JSON.stringify(this.buttonDesc));
+            if (this.isDebug) console.log('connected: buttonDesc init',JSON.stringify(this.buttonDesc));
         }
         if (this.isDebug) console.log('connected: END on CELL');
     }

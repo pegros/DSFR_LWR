@@ -14,6 +14,7 @@ export default class DsfrLinkDsp extends NavigationMixin(LightningElement) {
     @api linkTag; // for GA4 tracking
     @api linkSize = 'medium';
     @api linkAlign = 'left';
+    @api linkCss;
     @api linkPageRef;
     @api linkTarget = '_self';
     
@@ -40,7 +41,7 @@ export default class DsfrLinkDsp extends NavigationMixin(LightningElement) {
     // Custom Getters
     //-----------------------------------------------------
     get alignClass() {
-        return 'align-' + this.linkAlign;
+        return (this.linkCss  || '') + ' align-' + this.linkAlign;
     }
 
     //-----------------------------------------------------

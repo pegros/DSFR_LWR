@@ -1,0 +1,38 @@
+<template>
+    <!-- ACTUAL CONTENT DISPLAY -->
+    <template lwc:if={linkList}>
+        <ul class="fr-links-group fr-links-group--inline fr-links-group--inline-sm">
+            <template for:each={linkList} for:item="iter">
+                <template lwc:if={iter.hidden}>
+                </template>                
+                <template lwc:elseif={iter.target}>
+                    <li key={iter.label} >
+                        <c-dsfr-link-dsp    link-icon={iter.icon}           link-icon-position={iter.iconPosition}
+                                            link-label={iter.label}         link-title={iter.title}
+                                            link-tag={iter.tag}             link-inactive={iter.inactive}
+                                            link-page-ref={iter.target}     link-target={iter.targetType}
+                                            is-debug={isDebug}>
+                        </c-dsfr-link-dsp>
+                        <!--link-css="fr-link"-->
+                    </li>
+                </template>
+                <template lwc:else>
+                    <li key={iter.label}>⚠️ {iter.label}</li>
+                </template>
+            </template>
+        </ul>
+    </template>
+
+    <!-- DEBUG INFO -->
+    <template lwc:if={isDebug}>
+        <p class="fr-py-2v">
+            <span class="fr-badge fr-badge--warning  fr-mr-4v">
+                Mode debug activé!
+            </span>
+            <span class="fr-badge fr-badge--info">
+                <a href="https://github.com/pegros/DSFR_LWR/blob/master/help/dsfrLinkListCmp.md" target="_blank">
+                    Voir la documentation</a>
+            </span>
+        </p>
+    </template>
+</template>

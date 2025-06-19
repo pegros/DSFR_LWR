@@ -172,6 +172,9 @@ export default class DsfrCardCmp extends NavigationMixin(LightningElement) {
         //return (this.isDebug || this.cardEndDetails);
         return  this.cardEndDetails;
     }
+    get cardButtonsStr() {
+        return JSON.stringify(this.cardButtons);
+    }
 
 
     //-----------------------------------------------------

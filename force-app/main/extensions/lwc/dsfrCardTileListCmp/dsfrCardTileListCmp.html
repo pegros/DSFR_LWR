@@ -216,7 +216,7 @@
                             <template lwc:elseif={isIconField}>
                                 <ul class={iconFieldWrappingClass}>
                                     <template for:each={displayList} for:item="item">
-                                        <li key={item.Id}  >
+                                        <li key={item.Id} class="fr-pt-2v fr-pr-2v">
                                             <c-dsfr-icon-field-dsp  value={item.value}                                  icon-name={item.icon}
                                                                     value-prefix={item.prefix}                          value-suffix={item.suffix}
                                                                     wrapping-class={configDetails.display.fieldClass}   icon-class={configDetails.display.iconClass}

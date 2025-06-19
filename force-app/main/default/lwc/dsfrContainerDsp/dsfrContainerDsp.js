@@ -162,7 +162,7 @@ export default class DsfrContainerDsp extends LightningElement {
                 if (this.isDebug) console.log('resetInput: < and > replaced ',this.message);
                 
                 // replace xxxx="yyy" HTML escaped text
-                let propertyRegEx = new RegExp(`(\S*)&#61;&#34;(\S*)&#34;`,"g");
+                let propertyRegEx = new RegExp(`(\\S*)&#61;&#34;(\\S*)&#34;`,"g");
                 if (this.isDebug) console.log('resetInput: property matches ',this.message.match(propertyRegEx));
                 this.message = this.message.replace(propertyRegEx, "$1" + '="' + "$2" + '"');
                 if (this.isDebug) console.log('resetInput: properties replaced ',this.message);

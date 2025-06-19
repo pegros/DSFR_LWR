@@ -1,4 +1,3 @@
-
 import { LightningElement, api, wire } from 'lwc';
 import userId from '@salesforce/user/Id';
 import isGuestUser from '@salesforce/user/isGuest';

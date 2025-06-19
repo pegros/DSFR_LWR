@@ -21,7 +21,7 @@ export default class DsfrContextButtonCmp extends LightningElement {
     @api buttonAction;
     @api objectApiName;
     @api recordId;
-
+   
     @api isDebug = false;
 
     //-----------------------------------------------------
@@ -45,33 +45,50 @@ export default class DsfrContextButtonCmp extends LightningElement {
             console.log('connected: button action ',this.buttonAction);
             console.log('connected: button object name ',this.objectApiName);
             console.log('connected: button record ID ',this.recordId);
+            console.log('connected: button user ID ',this.userId);
             console.log('connected: button inactive? ', this.buttonInactive);
         }
 
         this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
         if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
 
-        if (this.recordId.includes('{{{')) {
-            if (this.isDebug) console.log('connected: merge required for recordId');
-            sfpegMergeUtl.sfpegMergeUtl.isDebug = this.isDebug;
-            sfpegMergeUtl.sfpegMergeUtl.mergeString(this.recordId,this.userId,null,this.objectApiName,null,null,null,null)
-            .then( value => {
-                if (this.isDebug) console.log('connected: context merged within recordId ',value);
-                this.recordId = value;
-                if (this.isDebug) console.log('connected: END action button OK / recordId init ',this.recordId);    
+        if (this.recordId) {
+            if (this.recordId.includes('{{{')) {
+                if (this.isDebug) console.log('connected: merge required for recordId');
+                sfpegMergeUtl.sfpegMergeUtl.isDebug = this.isDebug;
+                sfpegMergeUtl.sfpegMergeUtl.mergeString(this.recordId,this.userId,null,this.objectApiName,null,null,null,null)
+                .then( value => {
+                    if (this.isDebug) console.log('connected: context merged within recordId ',value);
+                    this.recordId = value;
+                    if (this.isDebug) console.log('connected: END action button OK / recordId init ',this.recordId);    
+                    this.isReady = true;
+                }).catch( error => {
+                    console.warn('connected: END action button KO / ',JSON.stringify(error));
+                    this.displayMsg = JSON.stringify(error);
+                });
+                sfpegMergeUtl.sfpegMergeUtl.isDebug = false;
+            }
+            else {
+                if (this.isDebug) console.log('connected: END action button OK / no merge required for recordId');
                 this.isReady = true;
-            }).catch( error => {
-                console.warn('connected: END action button KO / ',JSON.stringify(error));
-                this.displayMsg = JSON.stringify(error);
-            });
-            sfpegMergeUtl.sfpegMergeUtl.isDebug = false;
+            }
         }
         else {
-            if (this.isDebug) console.log('connected: END action button OK / no  merge required for recordId');
-            this.isready = true;
+            if (this.isDebug) console.log('connected: END action button OK / waiting for recordId');
+            this.isReady = true;
         }
     }
 
+
+    renderedCallback() {
+        if (this.isDebug) {
+            console.log('rendered: START action button for ',this.buttonLabel);
+            console.log('rendered: button title ',this.buttonTitle);
+            console.log('rendered: button object name ',this.objectApiName);
+            console.log('rendered: button record ID ',this.recordId);
+            console.log('rendered: button user ID ',this.userId);
+        }
+    }
 
     //-----------------------------------------------------
     // Event Handling

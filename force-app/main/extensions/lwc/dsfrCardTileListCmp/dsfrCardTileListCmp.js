@@ -5,11 +5,11 @@ import sfpegJsonUtl from 'c/sfpegJsonUtl';
 import FORM_FACTOR          from '@salesforce/client/formFactor';
 
 //import DefaultGroupNotificationFrequency from '@salesforce/schema/User.DefaultGroupNotificationFrequency';
-import SORT_TITLE from '@salesforce/label/c.dsfrCardTileListSortTitle';
-import REFRESH_TITLE from '@salesforce/label/c.dsfrCardTileListRefreshTitle';
-import TYPE_ERROR from '@salesforce/label/c.dsfrCardTileListError';
-import SORT_DEFAULT from '@salesforce/label/c.dsfrCardTileListSortDefault';
-import SORT_PREFIX from '@salesforce/label/c.dsfrCardTileListSortPrefix';
+import SORT_TITLE       from '@salesforce/label/c.dsfrCardTileListSortTitle';
+import REFRESH_TITLE    from '@salesforce/label/c.dsfrCardTileListRefreshTitle';
+import TYPE_ERROR       from '@salesforce/label/c.dsfrCardTileListError';
+import SORT_DEFAULT     from '@salesforce/label/c.dsfrCardTileListSortDefault';
+import SORT_PREFIX      from '@salesforce/label/c.dsfrCardTileListSortPrefix';
 import {
     registerRefreshContainer,
     unregisterRefreshContainer,
@@ -30,7 +30,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
     @api listTitle;
     @api configName;
     _listContext;
-    @api 
+    @api
     get listContext() {
         return this._listContext;
     }
@@ -49,7 +49,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
             }
         }
         catch(error) {
-            console.warn('set Card/Tile listContext: value parsing failed ', error);
+            console.warn('set Card/Tile listContext: value parsing failed ', JSON.stringify(error));
             this._listContext = null;
             return;
         }
@@ -123,9 +123,9 @@ export default class DsfrCardTileListCmp extends LightningElement {
     //-----------------------------------
     // Custom Labels
     //-----------------------------------
-    sortTitle = SORT_TITLE;
-    refreshTitle = REFRESH_TITLE;
-    typeError = TYPE_ERROR;
+    sortTitle =     SORT_TITLE;
+    refreshTitle =  REFRESH_TITLE;
+    typeError =     TYPE_ERROR;
 
     //-----------------------------------------------------
     // Custom Getters
@@ -347,7 +347,7 @@ export default class DsfrCardTileListCmp extends LightningElement {
         }
 
         let baseRecordList = event.detail;
-        if (this.isDebug) console.log('handleRecordLoad: #records loaded ',baseRecordList.length);
+        if (this.isDebug) console.log('handleRecordLoad: #records loaded ',baseRecordList?.length);
         if (this.isDebug) console.log('handleRecordLoad: list loaded ',JSON.stringify(event.detail));
 
         let targetRecordList = [];
@@ -497,10 +497,10 @@ export default class DsfrCardTileListCmp extends LightningElement {
         if (this.isDebug) console.log('handleRecordLoad: recordList init ',JSON.stringify(this.recordList));
         if (this.isDebug) console.log('handleRecordLoad: #records init ',this.recordList.length);
 
-        if (this.pageSize) {
+        if (this.pageSize){
             if (this.isDebug) console.log('handleRecordLoad: paginating by pageSize ',this.pageSize);
             this.currentPage = 1;
-            this.maxPage = Math.ceil(baseRecordList.length / this.pageSize);
+            this.maxPage = Math.ceil(this.recordList.length / this.pageSize);
             if (this.isDebug) console.log('handleRecordLoad: maxPage determined ',this.maxPage);
             this.displayList = this.recordList.slice(0, this.pageSize);
             if (this.isDebug) console.log('handleRecordLoad: #records kept for page 1 ',this.displayList.length);    
