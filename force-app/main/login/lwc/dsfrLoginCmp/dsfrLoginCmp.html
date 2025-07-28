@@ -10,12 +10,16 @@
                                 <div>
                                     <form >
                                         <fieldset class="fr-fieldset" aria-labelledby="login-legend login-messages">
-                                            <legend class="fr-fieldset__legend" id="login-legend">
-                                                <h2 class="fr-h2">{loginHeader}</h2>
-                                            </legend>
-                                            <div class="fr-fieldset__element">
-                                                <p class="fr-text--sm">{mainDescription}</p>
-                                            </div>
+                                            <template lwc:if={loginHeader}>
+                                                <legend class="fr-fieldset__legend" id="login-legend">
+                                                    <h2 class="fr-h2">{loginHeader}</h2>
+                                                </legend>
+                                            </template>
+                                            <template lwc:if={mainDescription}>
+                                                <div class="fr-fieldset__element">
+                                                    <p class="fr-text--sm">{mainDescription}</p>
+                                                </div>
+                                            </template>
                                             <div class="fr-fieldset__element">
                                                 <fieldset class="fr-fieldset" id="credentials" aria-labelledby="credentials-messages">
                                                     <div class="fr-fieldset__element">
