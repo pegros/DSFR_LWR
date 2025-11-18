@@ -45,6 +45,8 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
     criteriaList;           // additional criteria values
     criteriaSelected;       // list of selected additional criteria
 
+    openAccordion = null;   // Track the currently open accordion
+
     isReady = false;
 
     //-----------------------------------------------------
@@ -259,21 +261,47 @@ export default class DsfrSearchCmp extends NavigationMixin(LightningElement) {
         let currentStatus =  event.target?.ariaExpanded;
         if (this.isDebug) console.log('expandCollapse: current status fetched ', currentStatus);
 
-        let currentSection = this.template.querySelector("div.fr-collapse[data-name='" + currentTarget + "']");
-        if (this.isDebug) console.log('expandCollapse: current section fetched ', currentSection);
-        
-        if (currentStatus == "true") {
-            if (this.isDebug) console.log('expandCollapse: collapsing section');
-            currentSection.classList?.remove("fr-collapse--expanded");
-            event.target.ariaExpanded = "false";
+        if (currentStatus == "true" && currentTarget) {
+            this.closeList(currentTarget);
         }
         else {
+            let currentSection = this.template.querySelector("div.fr-collapse[data-name='" + currentTarget + "']");
+            if (this.isDebug) console.log('expandCollapse: current section fetched ', currentSection);
             if (this.isDebug) console.log('expandCollapse: expanding section');
             currentSection.classList.add("fr-collapse--expanded");
             event.target.ariaExpanded = "true";
+            this.openAccordion = currentTarget;
+
+            document.addEventListener('keydown',this.handleEscape, false);
         }
 
         if (this.isDebug) console.log('expandCollapse: END');
+    }
+
+    handleEscape = event => {
+        if (this.isDebug) console.log('handleEscape: START');
+        if (event?.key === 'Escape' && this.openAccordion) {
+            this.closeList(this.openAccordion);
+        }
+        else {
+            if (this.isDebug) console.log('handleEscape: END / ignoring key ',event.key);
+        }
+    }
+
+    closeList(currentTarget){
+        const currentSection = this.template.querySelector("div.fr-collapse[data-name='" + currentTarget + "']");
+        const buttonTarget = this.template.querySelector("button[value='" + currentTarget + "']");
+
+        if (this.isDebug) console.log('closeList: currentSection ',currentSection);
+        if (this.isDebug) console.log('closeList: currentTarget ',buttonTarget);
+
+        if (this.isDebug) console.log('closeList: collapsing section');
+        currentSection.classList?.remove("fr-collapse--expanded");
+        if (buttonTarget) {
+            buttonTarget.ariaExpanded = "false";
+        }
+        this.openAccordion = null;
+        document.removeEventListener('keydown',this.handleEscape);
     }
 
     // Search term input events
