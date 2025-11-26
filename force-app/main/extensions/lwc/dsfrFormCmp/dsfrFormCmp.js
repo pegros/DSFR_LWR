@@ -213,6 +213,7 @@ export default class DsfrFormCmp extends LightningElement {
             });
             if (this.isDebug) console.log('connected: config request sent');
         }
+        this.toggleSpinner(true);
     }
 
 
