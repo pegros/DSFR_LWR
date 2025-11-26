@@ -22,8 +22,12 @@ style standard Salesforce components (if used).
 
 <!-- Salesforce Styling Overrides (with DSFR values)-->
 <link rel="stylesheet" href="{ basePath }/sfsites/c/resource/dsfrSlds?{ versionKey }" />
+```
 
-</style>
+ℹ️ You may also add the following stylesheet at the end to include additional CSS, like
+```
+<!-- VIRTUO Specific Styling -->
+<link rel="stylesheet" href="{ basePath }/sfsites/c/resource/virtuoStyles?{ versionKey }">
 ```
 
 
