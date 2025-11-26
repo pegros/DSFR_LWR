@@ -11,6 +11,7 @@ export default class DsfrContextButtonCmp extends LightningElement {
     @api buttonIconPosition = 'left';
     @api buttonLabel;
     @api buttonTitle;
+    @api buttonName;
     @api buttonTag; // for GA4
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
@@ -49,7 +50,7 @@ export default class DsfrContextButtonCmp extends LightningElement {
             console.log('connected: button inactive? ', this.buttonInactive);
         }
 
-        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
+        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonName || this.buttonTitle  || 'Undefined';
         if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
 
         if (this.recordId) {

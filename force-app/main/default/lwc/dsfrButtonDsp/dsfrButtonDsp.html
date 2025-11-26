@@ -1,12 +1,14 @@
 <template>
     <div class={alignClass}>
         <template lwc:if={isInactive}>
-            <button type="button" class={buttonClass} aria-label={buttonAriaLabel} title={buttonTitle} disabled >
+            <button type="button" class={buttonClass} aria-label={buttonAriaLabel}
+                    title={buttonTitle} name={buttonName} disabled >
                 {buttonLabel}
             </button>
         </template>
         <template lwc:else>
-            <button type="button" class={buttonClass} aria-label={buttonAriaLabel} title={buttonTitle} onclick={openTarget} >
+            <button type="button" class={buttonClass} aria-label={buttonAriaLabel}
+                    title={buttonTitle} name={buttonName} onclick={openTarget} >
                 {buttonLabel}
             </button>
         </template>

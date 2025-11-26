@@ -17,6 +17,7 @@ Toute la configuration du composant s'effectue directement dans **Site Builder**
 * propriétés de bouton
     * `Libellé` : libellé du bouton
     * `Titre` : titre du bouton (en cas de survol du bouton)
+    * `Nom` : nom du bouton (pour identification HTML)
     * `Taille` : taille du bouton (small, medium, large)
     * `Variante` : Variante d'affichage du bouton (primùary, secondary...)
     * `Icône` : Nom de l'icone DFSR à afficher dans le bouton (e.g. `checkbox-circle-line`)

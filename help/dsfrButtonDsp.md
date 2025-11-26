@@ -15,6 +15,7 @@ La configuration de la navigation repose sur le format des references de page du
 Toute la configuration du composant s'effectue directement dans **Site Builder** au travers des propriétés proposées:
 * `Libellé` : libellé du bouton
 * `Titre` : titre du bouton (en cas de survol du bouton)
+* `Nom` : nom du bouton (pour identification HTML)
 * `Taille` : taille du bouton (small, medium, large)
 * `Variante` : Variante d'affichage du bouton (primary, secondary...)
 * `Icône` : Nom de l'icone DFSR à afficher dans le bouton (e.g. `checkbox-circle-line`)

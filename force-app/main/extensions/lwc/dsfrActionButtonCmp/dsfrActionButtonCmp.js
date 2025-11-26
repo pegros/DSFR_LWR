@@ -16,7 +16,8 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
     @api buttonIconPosition = 'left';
     @api buttonLabel;
     @api buttonTitle;
-    @api buttonTag; // for GA4
+    @api buttonName;
+    @api buttonTag; // for GA4 tracking
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonInactive = 'false';
@@ -48,7 +49,7 @@ export default class DsfrActionButtonCmp extends  NavigationMixin(LightningEleme
             console.log('connected: button inactive? ', this.buttonInactive);
         }
 
-        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
+        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonName || this.buttonTitle  || 'Undefined';
         if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
 
         if (this.isDebug) console.log('connected: END action button');

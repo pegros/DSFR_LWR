@@ -10,11 +10,11 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
     @api buttonIconPosition = 'left';
     @api buttonLabel;
     @api buttonTitle;
+    @api buttonName;
     @api buttonTag; // for GA4 tracking
     @api buttonSize = 'medium';
     @api buttonVariant = 'primary';
     @api buttonTarget;
-    @api buttonName;
     
     //@api buttonInactive = 'false';
     @api
@@ -62,7 +62,7 @@ export default class DsfrButtonDsp extends NavigationMixin(LightningElement) {
             console.log('connected: button inactive? ', this.buttonInactive);
         }
 
-        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonTitle || 'Undefined';
+        this.buttonTag = this.buttonTag || this.buttonLabel || this.buttonName || this.buttonTitle || 'Undefined';
         if (this.isDebug) console.log('connected: buttonTag evaluated ', this.buttonTag);
 
         //this.isInactive = ((typeof this.buttonInactive == 'boolean') ? this.buttonInactive : (this.buttonInactive === 'true'));

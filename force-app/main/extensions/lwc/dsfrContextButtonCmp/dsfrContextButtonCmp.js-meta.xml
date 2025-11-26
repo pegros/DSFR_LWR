@@ -18,6 +18,10 @@
                         label="Titre"
                         type="String"
                         description="Titre du bouton" />
+            <property   name="buttonName"
+                        label="Nom"
+                        type="String"
+                        description="Nom du bouton" />
             <property   name="buttonTag"
                         label="Tag Google Analytics"
                         type="String"
