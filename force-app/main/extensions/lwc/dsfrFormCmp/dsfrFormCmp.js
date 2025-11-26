@@ -216,6 +216,20 @@ export default class DsfrFormCmp extends LightningElement {
         this.toggleSpinner(true);
     }
 
+    renderedCallback() {
+        if (this.isDebug) console.log('rendered: START for form');
+
+        if (!this.isLoaded) {
+            if (this.isDebug) console.log('rendered: form not yet loaded, disabling buttons');
+            let buttons = this.template.querySelectorAll('button.formButton');
+            if (this.isDebug) console.log('rendered: #buttons found',buttons?.length);
+            buttons.forEach(item => {
+                item.disabled = true;
+            });
+            if (this.isDebug) console.log('rendered: form buttons disabled');
+        }
+        if (this.isDebug) console.log('rendered: END for form');
+    }
 
     //----------------------------------------------------------------
     // Event Handlers  
@@ -420,38 +434,11 @@ export default class DsfrFormCmp extends LightningElement {
         this.isSaving = isShown;
 
         let buttons = this.template.querySelectorAll('button.formButton');
-        if (this.isDebug) console.log('toggleSpinner: buttons found',buttons);
+        if (this.isDebug) console.log('toggleSpinner: #buttons found',buttons?.length);
         buttons.forEach(item => {
             item.disabled = isShown;
-        });
-
-        /*let spinner = this.template.querySelector('lightning-spinner');
-        if (this.isDebug) console.log('toggleSpinner: spinner found',spinner);
-
-        let buttons = this.template.querySelectorAll('button.formButton');
-        if (this.isDebug) console.log('toggleSpinner: buttons found',buttons);
-
-        if (spinner) {
-            if (isShown) {
-                if (this.isDebug) console.log('toggleSpinner: showing spinner');
-                spinner.classList.remove('slds-hide');
-                buttons.forEach(item => {
-                    item.disabled = true;
-                });
-            }
-            else {
-                if (this.isDebug) console.log('toggleSpinner: hiding spinner');
-                spinner.classList.add('slds-hide');
-                buttons.forEach(item => {
-                    item.disabled = false;
-                });
-            }
-        }
-        else {
-            if (this.isDebug) console.log('toggleSpinner: no spinner displayed');
-        }*/
-        
-        if (this.isDebug) console.log('toggleSpinner: END for form');
+        }); 
+        if (this.isDebug) console.log('toggleSpinner: END for form / buttons disable state reset');        
     }
 
     focusFirstInput = function(isShown) {
