@@ -529,18 +529,41 @@ export default class DsfrCardTileListCmp extends LightningElement {
             if (this.isDebug) console.log('toggleSort: current Menu classList ',sortMenu.classList);
             if (sortMenu.classList.contains('fr-collapse--expanded')) {
                 if (this.isDebug) console.log('toggleSort: closing menu');
-                sortMenu.classList.remove('fr-collapse--expanded');
-                sortButton.setAttribute('aria-expanded',false);
+                this.closeList();
             }
             else {
                 if (this.isDebug) console.log('toggleSort: opening menu');
                 sortMenu.classList.add('fr-collapse--expanded');
                 sortButton.setAttribute('aria-expanded',true);
+                document.addEventListener('keydown',this.handleEscape, false);
             }
             if (this.isDebug) console.log('toggleSort: Menu classList updated ',sortMenu.classList);
         }
 
         if (this.isDebug) console.log('toggleSort: END for card/tile list');
+    }
+
+    handleEscape = event => {
+        if (this.isDebug) console.log('handleEscape: START');
+        if (event?.key === 'Escape') {
+            this.closeList();
+        }
+        else {
+            if (this.isDebug) console.log('handleEscape: END / ignoring key ',event.key);
+        }
+    }
+
+    closeList(){
+        const sortMenu = this.refs.sortMenu;
+        if (this.isDebug) console.log('closeList: sortMenu found ',sortMenu);
+        const sortButton = this.refs.sortButton;
+        if (this.isDebug) console.log('closeList: sortButton found ',sortButton);
+
+        if (this.isDebug) console.log('closeList: closing menu');
+        sortMenu.classList.remove('fr-collapse--expanded');
+        sortButton.setAttribute('aria-expanded',false);
+
+        document.removeEventListener('keydown',this.handleEscape);
     }
 
     selectSort(event){

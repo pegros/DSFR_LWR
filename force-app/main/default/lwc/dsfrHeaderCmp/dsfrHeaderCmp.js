@@ -74,6 +74,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
     mainMenuItems;
     complexMenuItems;
     currentIndex = -1;
+    openAccordion = null;   // Track the currently open accordion
 
     //-----------------------------------
     // Custom Labels
@@ -682,8 +683,7 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
 
         if (currentStatus == "true") {
             if (this.isDebug) console.log('toggleMenu: collapsing menu');
-            currentMenu.classList?.remove("fr-collapse--expanded");
-            event.target.ariaExpanded = "false";
+            this.closeList(currentTargetId);
         }
         else {
             if (this.isDebug) console.log('toggleMenu: collapsing previous menu (if any)');
@@ -691,9 +691,38 @@ export default class DsfrHeaderCmp extends NavigationMixin(LightningElement) {
             if (this.isDebug) console.log('toggleMenu: expanding new menu');
             currentMenu.classList.add("fr-collapse--expanded");
             event.target.ariaExpanded = "true";
+            this.openAccordion = currentTargetId;
+            document.addEventListener('keydown',this.handleEscape, false);
         }
 
         if (this.isDebug) console.log('toggleMenu: END for Header');
+    }
+
+    handleEscape = event => {
+        if (this.isDebug) console.log('handleEscape: START');
+        if (event?.key === 'Escape') {
+            this.closeList(this.openAccordion);
+        }
+        else {
+            if (this.isDebug) console.log('handleEscape: END / ignoring key ',event.key);
+        }
+    }
+
+    closeList(currentTarget){
+        const currentMenu = this.template.querySelector("div.fr-collapse[id='" + currentTarget + "']")
+                        || this.template.querySelector("div.fr-collapse[data-name='" + currentTarget + "']");
+        const buttonTarget = this.template.querySelector("button[value='" + currentTarget + "']");
+
+        if (this.isDebug) console.log('closeList: currentMenu ',currentMenu);
+        if (this.isDebug) console.log('closeList: currentTarget ',buttonTarget);
+
+        if (this.isDebug) console.log('closeList: collapsing menu');
+        currentMenu.classList?.remove("fr-collapse--expanded");
+        if (buttonTarget) {
+            buttonTarget.ariaExpanded = "false";
+        }
+        this.openAccordion = null;
+        document.removeEventListener('keydown',this.handleEscape);
     }
 
     //----------------------------------------------------------------
